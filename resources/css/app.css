@@ -12,15 +12,46 @@
     /* Hero Slider Styles */
     .hero-slider-container {
         @apply relative overflow-hidden;
+        width: 100%;
+        height: 100%;
+        min-height: 600px;
+    }
+    
+    .slider-wrapper {
+        width: 100%;
+        height: 100%;
+        min-height: 600px;
     }
 
     .slider-track {
         @apply flex transition-transform duration-700 ease-in-out;
         will-change: transform;
+        height: 100%;
+        min-height: 600px;
     }
 
     .slider-slide {
         @apply min-w-full flex-shrink-0;
+        min-height: 600px;
+        height: 100%;
+        position: relative;
+    }
+    
+    /* Ensure background images fully cover hero section with no gaps */
+    .slider-slide > div[style*="background-image"] {
+        background-size: cover !important;
+        background-position: center center !important;
+        background-repeat: no-repeat !important;
+        width: 100% !important;
+        height: 100% !important;
+        min-height: 600px !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
     }
 
     /* Modern Card Styles */

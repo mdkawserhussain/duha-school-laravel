@@ -23,9 +23,14 @@
 
     <!-- Modern Hero Slider Section -->
     @if($heroSlides->count() > 0)
-    <section class="relative animated-bg text-white overflow-hidden min-h-[600px] md:min-h-[700px] flex items-center" aria-label="Hero slider">
-        <!-- Decorative Background Elements -->
-        <div class="absolute inset-0 opacity-20 z-0">
+    @php
+        $hasAnyImages = $heroSlides->contains(function($slide) {
+            return $slide->hasMedia('images');
+        });
+    @endphp
+    <section class="relative text-white overflow-hidden min-h-[600px] md:min-h-[700px] flex items-center {{ !$hasAnyImages ? 'animated-bg' : '' }}" aria-label="Hero slider" style="{{ $hasAnyImages ? 'background: transparent;' : '' }}">
+        <!-- Decorative Background Elements (only shown when no images) -->
+        <div class="absolute inset-0 opacity-20 z-0 hero-decorative-elements" style="display: none;">
             <div class="absolute top-20 left-10 w-32 h-32 float-animation">
                 <svg viewBox="0 0 100 100" class="w-full h-full text-white" aria-hidden="true">
                     <rect x="20" y="30" width="60" height="50" rx="5" fill="currentColor"/>
@@ -46,8 +51,8 @@
             </div>
         </div>
 
-        <!-- Cityscape Silhouette -->
-        <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-gray-900 to-transparent opacity-30 z-0" aria-hidden="true">
+        <!-- Cityscape Silhouette (only shown when no images) -->
+        <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-gray-900 to-transparent opacity-30 z-0 hero-cityscape" style="display: none;" aria-hidden="true">
             <svg class="w-full h-full" viewBox="0 0 1200 200" preserveAspectRatio="none" aria-hidden="true">
                 <polygon points="0,200 50,150 100,170 150,120 200,140 250,100 300,130 350,90 400,110 450,80 500,100 550,70 600,90 650,60 700,80 750,50 800,70 850,40 900,60 950,30 1000,50 1050,20 1100,40 1150,10 1200,30 1200,200 0,200" fill="currentColor"/>
             </svg>
@@ -69,10 +74,13 @@
                     @endphp
                     <div class="slider-slide min-w-full flex items-center relative" data-slide-index="{{ $index }}" role="group" aria-roledescription="slide" aria-label="Slide {{ $index + 1 }} of {{ $heroSlides->count() }}">
                         @if($slideImage)
-                        <!-- Background Image for this slide -->
-                        <div class="absolute inset-0 bg-cover bg-center bg-no-repeat z-0" style="background-image: url('{{ $slideImage }}');"></div>
+                        <!-- Background Image for this slide - fully covers the area with no gaps -->
+                        <div class="absolute inset-0 z-0" style="background-image: url('{{ $slideImage }}'); background-size: cover; background-position: center center; background-repeat: no-repeat; position: absolute; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%;"></div>
                         <!-- Dark overlay for text readability -->
                         <div class="absolute inset-0 bg-black bg-opacity-50 z-0"></div>
+                        @else
+                        <!-- Fallback gradient background when no image -->
+                        <div class="absolute inset-0 animated-bg z-0"></div>
                         @endif
                         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 w-full z-10">
                             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
