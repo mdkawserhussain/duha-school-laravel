@@ -1,0 +1,194 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Modern Homepage Styles */
+@layer components {
+    /* Smooth animations and transitions */
+    * {
+        @apply transition-colors duration-200;
+    }
+
+    /* Hero Slider Styles */
+    .hero-slider-container {
+        @apply relative overflow-hidden;
+    }
+
+    .slider-track {
+        @apply flex transition-transform duration-700 ease-in-out;
+        will-change: transform;
+    }
+
+    .slider-slide {
+        @apply min-w-full flex-shrink-0;
+    }
+
+    /* Modern Card Styles */
+    .modern-card {
+        @apply bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300;
+        @apply transform hover:-translate-y-2;
+    }
+
+    .modern-card-icon {
+        @apply w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4;
+        @apply shadow-md transition-transform duration-300 hover:scale-110;
+    }
+
+    /* Animated Background Elements */
+    .animated-bg {
+        background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #2563eb 100%);
+        background-size: 200% 200%;
+        animation: gradientShift 15s ease infinite;
+    }
+
+    @keyframes gradientShift {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+    }
+
+    /* Floating Animation */
+    @keyframes float {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-20px) rotate(5deg); }
+    }
+
+    .float-animation {
+        animation: float 6s ease-in-out infinite;
+    }
+
+    /* Fade In Animation - Only applies when class is added */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .fade-in-up {
+        animation: fadeInUp 0.6s ease-out forwards;
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+    }
+
+    /* Pulse Animation */
+    @keyframes pulse-glow {
+        0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
+        50% { box-shadow: 0 0 40px rgba(255, 215, 0, 0.6); }
+    }
+
+    .pulse-glow {
+        animation: pulse-glow 2s ease-in-out infinite;
+    }
+
+    /* Modern Button Styles */
+    .btn-modern {
+        @apply px-8 py-4 rounded-lg font-semibold text-white;
+        @apply bg-gradient-to-r from-blue-600 to-blue-700;
+        @apply hover:from-blue-700 hover:to-blue-800;
+        @apply transform hover:scale-105 active:scale-95;
+        @apply transition-all duration-300 shadow-lg hover:shadow-xl;
+        @apply focus:outline-none focus:ring-4 focus:ring-blue-300 focus:ring-offset-2;
+    }
+
+    .btn-modern-secondary {
+        @apply px-8 py-4 rounded-lg font-semibold text-blue-900;
+        @apply bg-gradient-to-r from-yellow-400 to-yellow-500;
+        @apply hover:from-yellow-500 hover:to-yellow-600;
+        @apply transform hover:scale-105 active:scale-95;
+        @apply transition-all duration-300 shadow-lg hover:shadow-xl;
+        @apply focus:outline-none focus:ring-4 focus:ring-yellow-300 focus:ring-offset-2;
+    }
+
+    /* Value Card Hover Effect */
+    .value-card {
+        @apply bg-white rounded-lg p-6 text-center;
+        @apply border-2 border-gray-200 hover:border-blue-500;
+        @apply transition-all duration-300 transform hover:-translate-y-2;
+        @apply shadow-md hover:shadow-xl;
+    }
+
+    /* Advisor Card Styles */
+    .advisor-card-modern {
+        @apply bg-white rounded-xl p-6 text-center;
+        @apply shadow-lg hover:shadow-2xl transition-all duration-300;
+        @apply transform hover:-translate-y-3;
+    }
+
+    .advisor-image-modern {
+        @apply w-32 h-32 rounded-full mx-auto mb-4;
+        @apply ring-4 ring-blue-100 hover:ring-blue-300;
+        @apply transition-all duration-300 transform hover:scale-110;
+        @apply shadow-lg;
+    }
+
+    /* Section Spacing */
+    .section-modern {
+        @apply py-16 md:py-24;
+    }
+
+    /* Typography Enhancements */
+    .heading-modern {
+        @apply text-4xl md:text-5xl lg:text-6xl font-bold;
+        @apply bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900;
+        @apply bg-clip-text text-transparent;
+        @apply leading-tight;
+    }
+
+    .subheading-modern {
+        @apply text-2xl md:text-3xl font-bold text-yellow-400;
+        @apply tracking-wide;
+    }
+
+    /* Accessibility: Focus Styles */
+    .focus-visible-modern {
+        @apply focus-visible:outline-none focus-visible:ring-4;
+        @apply focus-visible:ring-blue-500 focus-visible:ring-offset-2;
+        @apply focus-visible:rounded-lg;
+    }
+
+    /* Loading States */
+    .skeleton-loader {
+        @apply animate-pulse bg-gray-200 rounded;
+    }
+
+    /* Image Optimization - using native loading="lazy" attribute */
+
+    /* Smooth Scroll */
+    html {
+        scroll-behavior: smooth;
+    }
+
+    /* Reduced Motion Support */
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+}
+
+/* Custom Scrollbar */
+@layer utilities {
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+        @apply bg-gray-100;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        @apply bg-blue-500 rounded-full;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        @apply bg-blue-600;
+    }
+}
