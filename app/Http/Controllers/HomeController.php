@@ -39,6 +39,7 @@ class HomeController extends Controller
                 'heroSlides' => \App\Models\HomePageSection::active()
                     ->where('section_type', 'hero')
                     ->ordered()
+                    ->with('media')
                     ->get(),
             ];
         });

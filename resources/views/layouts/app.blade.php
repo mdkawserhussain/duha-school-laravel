@@ -81,10 +81,14 @@
         <!-- Lightbox2 JS -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.5/js/lightbox.min.js"></script>
         <script>
-            lightbox.option({
-                'resizeDuration': 200,
-                'wrapAround': true,
-                'albumLabel': 'Image %1 of %2'
+            document.addEventListener('DOMContentLoaded', function() {
+                if (typeof lightbox !== 'undefined') {
+                    lightbox.option({
+                        'resizeDuration': 200,
+                        'wrapAround': true,
+                        'albumLabel': 'Image %1 of %2'
+                    });
+                }
             });
         </script>
         

@@ -156,6 +156,7 @@ class HomePageSectionForm
                                 '1:1',
                             ])
                             ->dehydrated(false)
+                            ->storeFileNamesIn('image_filenames')
                             ->helperText('Upload images for this section. Images can be used in the section display.')
                             ->columnSpanFull(),
                     ])

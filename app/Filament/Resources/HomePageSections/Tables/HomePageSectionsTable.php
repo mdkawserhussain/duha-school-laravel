@@ -71,7 +71,11 @@ class HomePageSectionsTable
             ->defaultSort('sort_order')
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()
+                        ->after(function () {
+                            // Clear homepage cache so deleted sliders are removed immediately
+                            cache()->forget('homepage_data');
+                        }),
                 ]),
             ]);
     }

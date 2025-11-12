@@ -58,8 +58,23 @@
             <div class="slider-wrapper relative overflow-hidden">
                 <div class="slider-track flex transition-transform duration-700 ease-in-out" style="transform: translateX(0%)" role="region" aria-label="Hero slideshow">
                     @foreach($heroSlides as $index => $slide)
-                    <div class="slider-slide min-w-full flex items-center" data-slide-index="{{ $index }}" role="group" aria-roledescription="slide" aria-label="Slide {{ $index + 1 }} of {{ $heroSlides->count() }}">
-                        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 w-full">
+                    @php
+                        $slideImage = null;
+                        if ($slide->hasMedia('images')) {
+                            $media = $slide->getFirstMedia('images');
+                            // Use request()->getSchemeAndHttpHost() to get current host (works with localhost or 127.0.0.1)
+                            $baseUrl = request()->getSchemeAndHttpHost();
+                            $slideImage = $media ? $baseUrl . '/storage/' . $media->id . '/' . $media->file_name : null;
+                        }
+                    @endphp
+                    <div class="slider-slide min-w-full flex items-center relative" data-slide-index="{{ $index }}" role="group" aria-roledescription="slide" aria-label="Slide {{ $index + 1 }} of {{ $heroSlides->count() }}">
+                        @if($slideImage)
+                        <!-- Background Image for this slide -->
+                        <div class="absolute inset-0 bg-cover bg-center bg-no-repeat z-0" style="background-image: url('{{ $slideImage }}');"></div>
+                        <!-- Dark overlay for text readability -->
+                        <div class="absolute inset-0 bg-black bg-opacity-50 z-0"></div>
+                        @endif
+                        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 w-full z-10">
                             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
                                 <!-- Main Hero Content -->
                                 <div class="lg:col-span-2">
