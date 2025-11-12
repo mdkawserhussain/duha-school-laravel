@@ -143,7 +143,7 @@ php artisan test --filter NewsletterTest
 # Result: 5 passed (9 assertions)
 ```
 
----
+----
 
 **All high-priority code items are now complete!** 🎉
 
