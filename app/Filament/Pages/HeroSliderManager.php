@@ -94,7 +94,7 @@ class HeroSliderManager extends Page
             $slide->delete();
             $this->loadSlides();
             $this->clearCache();
-            
+
             Notification::make()
                 ->title('Slide deleted successfully')
                 ->success()
@@ -121,7 +121,7 @@ class HeroSliderManager extends Page
 
             $this->loadSlides();
             $this->clearCache();
-            
+
             Notification::make()
                 ->title('Slide duplicated successfully')
                 ->success()
@@ -171,7 +171,7 @@ class HeroSliderManager extends Page
         $slide->button_text = $data['button_text'] ?? null;
         $slide->button_link = $data['button_link'] ?? null;
         $slide->is_active = $data['is_active'] ?? true;
-        
+
         $slideData = $slide->data ?? [];
         if (isset($data['badge'])) {
             $slideData['badge'] = $data['badge'];
@@ -183,7 +183,7 @@ class HeroSliderManager extends Page
         // Handle image upload
         if ($this->image) {
             $slide->clearMediaCollection('images');
-            $slide->addMediaFromDisk($this->image, 'public')
+            $slide->addMedia($this->image)
                 ->toMediaCollection('images');
             $this->image = null;
         }
