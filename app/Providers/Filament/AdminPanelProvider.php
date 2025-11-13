@@ -71,9 +71,11 @@ class AdminPanelProvider extends PanelProvider
                 'Dashboard',
                 'Site Settings',
                 'Homepage Settings',
-                'Content',
+                'Pages',
+                'Events',
+                'Notices',
+                'Staff',
                 'Applications',
-                'Media',
                 'Users',
             ])
             ->sidebarCollapsibleOnDesktop()

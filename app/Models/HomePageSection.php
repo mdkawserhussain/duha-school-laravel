@@ -13,6 +13,8 @@ class HomePageSection extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia;
 
+    protected $table = 'home_page_sections';
+
     protected $fillable = [
         'section_key',
         'section_type',

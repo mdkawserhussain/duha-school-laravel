@@ -8,21 +8,21 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Pages\Page;
 use UnitEnum;
 
-class CTABannerSection extends Page implements HasForms
+class CallToActionSection extends Page implements HasForms
 {
     use ManagesHomePageSection;
 
-    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-megaphone';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-arrow-right-circle';
 
-    protected static ?string $navigationLabel = 'CTA Banner';
+    protected static ?string $navigationLabel = 'Call to Action';
 
-    protected static ?string $title = 'Call-to-Action Banner Section';
+    protected static ?string $title = 'Call to Action Section';
 
     protected static string|UnitEnum|null $navigationGroup = 'Homepage Settings';
 
-    protected static ?int $navigationSort = 5;
+    protected static ?int $navigationSort = 12;
 
-    protected string $view = 'filament.pages.c-t-a-banner-section';
+    protected string $view = 'filament.pages.call-to-action-section';
 
     protected function getSectionKey(): string
     {
@@ -36,6 +36,7 @@ class CTABannerSection extends Page implements HasForms
 
     protected function getSectionTitle(): string
     {
-        return 'Call-to-Action Banner Section';
+        return 'Call to Action Section';
     }
 }
+
