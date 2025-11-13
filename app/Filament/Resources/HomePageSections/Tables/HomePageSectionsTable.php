@@ -8,6 +8,7 @@ use Filament\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Cache;
 
 class HomePageSectionsTable
 {
@@ -69,9 +70,14 @@ class HomePageSectionsTable
                 EditAction::make(),
             ])
             ->defaultSort('sort_order')
+            ->reorderable('sort_order')
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()
+                        ->after(function () {
+                            // Clear homepage cache after bulk deletion
+                            Cache::forget('homepage_v2_data');
+                        }),
                 ]),
             ]);
     }

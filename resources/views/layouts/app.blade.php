@@ -6,7 +6,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>@yield('title', config('app.name', 'Al-Maghrib International School'))</title>
-        
+
         @hasSection('meta-description')
             <meta name="description" content="@yield('meta-description')">
         @else
@@ -73,22 +73,10 @@
         <!-- End Google Tag Manager -->
         @endif
 
-        <!-- Lightbox2 CSS -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.5/css/lightbox.min.css" />
-        
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-        
-        <!-- Lightbox2 JS -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.5/js/lightbox.min.js"></script>
-        <script>
-            lightbox.option({
-                'resizeDuration': 200,
-                'wrapAround': true,
-                'albumLabel': 'Image %1 of %2'
-            });
-        </script>
-        
+
+        @stack('styles')
         @stack('scripts')
     </head>
     <body class="font-sans antialiased">
@@ -99,11 +87,11 @@
         <!-- End Google Tag Manager (noscript) -->
         @endif
 
-        <div class="min-h-screen bg-gray-100">
-            <x-header />
+        <div class="min-h-screen bg-gray-100" style="margin: 0; padding: 0;">
+            <x-navbar :transparent="request()->routeIs('home')" />
 
             <!-- Page Content -->
-            <main>
+            <main class="{{ request()->routeIs('home') ? '' : 'pt-20 lg:pt-24' }}" style="{{ request()->routeIs('home') ? 'margin-top: 0 !important; padding-top: 0 !important;' : '' }}">
                 @yield('content')
             </main>
 

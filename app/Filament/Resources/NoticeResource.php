@@ -20,7 +20,7 @@ class NoticeResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-bell-alert';
 
-    protected static string|UnitEnum|null $navigationGroup = 'Content Management';
+    protected static string|UnitEnum|null $navigationGroup = 'Content';
 
     protected static ?int $navigationSort = 3;
 

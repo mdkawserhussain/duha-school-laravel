@@ -21,6 +21,7 @@ Route::get('/lang/{locale}', [\App\Http\Controllers\LanguageController::class, '
 
 // Search
 Route::get('/search', [SearchController::class, 'search'])->name('search');
+Route::get('/api/search/autocomplete', [SearchController::class, 'autocomplete'])->name('search.autocomplete');
 
 // Events
 Route::get('/events', [EventController::class, 'index'])->name('events.index');
@@ -71,7 +72,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         return redirect('/admin');
     })->name('dashboard');
-    
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

@@ -35,7 +35,7 @@ class HomePageSectionForm
                             ])
                             ->helperText('Unique identifier for this section')
                             ->live()
-                            ->afterStateUpdated(function (FormComponents\Set $set, $state) {
+                            ->afterStateUpdated(function ($set, $state) {
                                 // Auto-set section type based on key
                                 $typeMap = [
                                     'hero' => 'hero',
