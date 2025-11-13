@@ -33,19 +33,72 @@
     }
 
     .btn-primary {
-        @apply inline-flex items-center gap-2 rounded-full bg-brand-600 px-6 py-3 text-sm font-semibold text-white shadow-soft transition hover:bg-brand-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 focus-visible:ring-offset-2;
+        @apply inline-flex items-center gap-2 rounded-full bg-brand-600 px-6 py-3 text-sm font-semibold text-white shadow-soft transition-all duration-300 hover:bg-brand-500 hover:shadow-lg hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 focus-visible:ring-offset-2;
     }
 
     .btn-secondary {
-        @apply inline-flex items-center gap-2 rounded-full border border-brand-200 bg-white px-6 py-3 text-sm font-semibold text-brand-700 shadow-sm transition hover:border-brand-400 hover:text-brand-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 focus-visible:ring-offset-2;
+        @apply inline-flex items-center gap-2 rounded-full border border-brand-200 bg-white px-6 py-3 text-sm font-semibold text-brand-700 shadow-sm transition-all duration-300 hover:border-brand-400 hover:text-brand-800 hover:shadow-md hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 focus-visible:ring-offset-2;
     }
 
     .card {
-        @apply rounded-3xl bg-white p-8 shadow-card transition hover:-translate-y-1 hover:shadow-soft;
+        @apply rounded-3xl bg-white p-8 shadow-card transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl border border-gray-100;
     }
 
     .card-muted {
         @apply rounded-3xl bg-gradient-to-b from-white/90 to-brand-50/35 p-8 shadow-soft;
+    }
+
+    /* Homepage Modern Styles */
+    .section-modern {
+        @apply py-16 md:py-20 lg:py-24;
+    }
+
+    .heading-modern {
+        @apply text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight;
+    }
+
+    .modern-card {
+        @apply bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden;
+    }
+
+    .animated-bg {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background-size: 400% 400%;
+        animation: gradientShift 8s ease infinite;
+    }
+
+    @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    .btn-modern {
+        @apply inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300;
+    }
+
+    .play-button-large {
+        @apply transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-white/50;
+    }
+
+    .value-card {
+        @apply bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 text-center border border-gray-100;
+    }
+
+    .advisor-card-modern {
+        @apply bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden;
+    }
+
+    .advisor-image-modern {
+        @apply w-full h-64 transition-transform duration-300;
+    }
+
+    .advisor-card-modern:hover .advisor-image-modern {
+        transform: scale(1.05);
+    }
+
+    .focus-visible-modern:focus-visible {
+        @apply outline-none ring-4 ring-blue-300 ring-opacity-50;
     }
 
     .stat-pill {
@@ -59,7 +112,7 @@
     }
 
     .hero-panel {
-        @apply relative overflow-hidden rounded-[2.75rem] bg-hero-gradient text-white shadow-[0_45px_80px_-35px_rgba(8,19,54,0.65)];
+        @apply relative overflow-hidden rounded-[2.75rem] bg-hero-gradient text-white shadow-[0_45px_80px_-35px_rgba(8,19,54,0.65)] border border-white/10;
     }
 
     .blurred-spot {
@@ -70,7 +123,7 @@
     }
 
     .badge-soft {
-        @apply inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-medium text-white; 
+        @apply inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-medium text-white;
     }
 
     .link-underline {
@@ -115,6 +168,19 @@
 
     .fade-up {
         animation: fade-up 0.7s ease-out forwards;
+    }
+
+    .section-fade-in {
+        opacity: 0;
+        transform: translateY(30px);
+        animation: sectionFadeIn 0.8s ease-out forwards;
+    }
+
+    @keyframes sectionFadeIn {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 }
 

@@ -26,7 +26,7 @@
 
     <!-- Upcoming Events Section -->
     @if($upcomingEvents && $upcomingEvents->count() > 0)
-    <section class="section-modern bg-white" aria-labelledby="upcoming-events-heading">
+    <section class="section-modern bg-white section-fade-in" aria-labelledby="upcoming-events-heading">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 id="upcoming-events-heading" class="heading-modern text-center mb-12">Upcoming Events</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -34,8 +34,8 @@
                 <article class="modern-card overflow-hidden group" tabindex="0">
                     <a href="{{ route('events.show', $event) }}" class="block focus-visible-modern">
                         @if($event->hasMedia('cover_image'))
-                            <img src="{{ $event->getFirstMediaUrl('cover_image', 'medium') }}" 
-                                 alt="{{ $event->title }}" 
+                            <img src="{{ $event->getFirstMediaUrl('cover_image', 'medium') }}"
+                                 alt="{{ $event->title }}"
                                  class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
                                  loading="lazy">
                         @else
@@ -66,7 +66,7 @@
         $visionPage = $visionPage ?? \App\Models\Page::where('slug', 'vision')->published()->first();
     @endphp
     @if($visionPage)
-    <section class="section-modern bg-gradient-to-b from-gray-50 to-white" aria-labelledby="vision-heading">
+    <section class="section-modern bg-gradient-to-b from-gray-50 to-white section-fade-in" aria-labelledby="vision-heading">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div>
@@ -77,8 +77,8 @@
                 </div>
                 <div class="flex gap-4 flex-col">
                     @if($visionPage->hasMedia('featured_image'))
-                        <img src="{{ $visionPage->getFirstMediaUrl('featured_image', 'medium') }}" 
-                             alt="{{ $visionPage->title }}" 
+                        <img src="{{ $visionPage->getFirstMediaUrl('featured_image', 'medium') }}"
+                             alt="{{ $visionPage->title }}"
                              class="rounded-xl shadow-2xl w-full h-64 object-cover"
                              loading="lazy">
                     @else
@@ -100,7 +100,7 @@
     @php
         $competitionSection = $homePageSections['video_2'] ?? null;
     @endphp
-    <section class="section-modern animated-bg text-white" aria-labelledby="competition-heading">
+    <section class="section-modern animated-bg text-white section-fade-in" aria-labelledby="competition-heading">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div class="relative rounded-xl overflow-hidden shadow-2xl">
@@ -141,7 +141,7 @@
         $whyChoose = $homePageSections['why_choose'] ?? null;
     @endphp
     @if($whyChoose)
-    <section class="section-modern bg-white" aria-labelledby="why-choose-heading">
+    <section class="section-modern bg-white section-fade-in" aria-labelledby="why-choose-heading">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div>
@@ -152,8 +152,8 @@
                 </div>
                 <div class="relative rounded-xl overflow-hidden shadow-2xl">
                     @if($whyChoose->hasMedia('images'))
-                        <img src="{{ $whyChoose->getFirstMediaUrl('images', 'large') }}" 
-                             alt="{{ $whyChoose->title }}" 
+                        <img src="{{ $whyChoose->getFirstMediaUrl('images', 'large') }}"
+                             alt="{{ $whyChoose->title }}"
                              class="w-full h-auto transition-transform duration-300 hover:scale-105"
                              loading="lazy">
                     @else
@@ -170,13 +170,13 @@
         $childrenResponsibility = $homePageSections['children_responsibility'] ?? null;
     @endphp
     @if($childrenResponsibility)
-    <section class="section-modern animated-bg text-white" aria-labelledby="responsibility-heading">
+    <section class="section-modern animated-bg text-white section-fade-in" aria-labelledby="responsibility-heading">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div class="relative rounded-xl overflow-hidden shadow-2xl order-2 lg:order-1">
                     @if($childrenResponsibility->hasMedia('images'))
-                        <img src="{{ $childrenResponsibility->getFirstMediaUrl('images', 'large') }}" 
-                             alt="{{ $childrenResponsibility->title }}" 
+                        <img src="{{ $childrenResponsibility->getFirstMediaUrl('images', 'large') }}"
+                             alt="{{ $childrenResponsibility->title }}"
                              class="w-full h-auto transition-transform duration-300 hover:scale-105"
                              loading="lazy">
                     @else
@@ -202,7 +202,7 @@
         $values = $valuesSection && isset($valuesSection->data['values']) ? $valuesSection->data['values'] : [];
     @endphp
     @if($valuesSection && count($values) > 0)
-    <section class="section-modern bg-gradient-to-b from-white to-gray-50" aria-labelledby="values-heading">
+    <section class="section-modern bg-gradient-to-b from-white to-gray-50 section-fade-in" aria-labelledby="values-heading">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
                 <h2 id="values-heading" class="heading-modern mb-4">{{ $valuesSection->title ?? 'Our Values' }}</h2>
@@ -227,7 +227,7 @@
         $advisors = $advisorsSection && isset($advisorsSection->data['advisors']) ? $advisorsSection->data['advisors'] : [];
     @endphp
     @if($advisorsSection && count($advisors) > 0)
-    <section class="section-modern bg-white" aria-labelledby="advisors-heading">
+    <section class="section-modern bg-white section-fade-in" aria-labelledby="advisors-heading">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 id="advisors-heading" class="heading-modern text-center mb-4">{{ $advisorsSection->title ?? 'Here are Our Advisors' }}</h2>
             @if($advisorsSection->subtitle)
@@ -238,8 +238,8 @@
                 <article class="advisor-card-modern" tabindex="0">
                     <div class="advisor-image-modern overflow-hidden bg-gradient-to-br from-blue-300 to-blue-500">
                         @if(isset($advisor['photo_url']))
-                            <img src="{{ $advisor['photo_url'] }}" 
-                                 alt="{{ $advisor['name'] ?? 'Advisor photo' }}" 
+                            <img src="{{ $advisor['photo_url'] }}"
+                                 alt="{{ $advisor['name'] ?? 'Advisor photo' }}"
                                  class="w-full h-full object-cover"
                                  loading="lazy">
                         @else
@@ -266,7 +266,7 @@
         $boardMembers = $boardSection && isset($boardSection->data['members']) ? $boardSection->data['members'] : [];
         $featuredStaff = $featuredStaff ?? collect();
     @endphp
-    <section class="section-modern bg-gradient-to-b from-gray-50 to-white" aria-labelledby="board-heading">
+    <section class="section-modern bg-gradient-to-b from-gray-50 to-white section-fade-in" aria-labelledby="board-heading">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 id="board-heading" class="heading-modern text-center mb-12">{{ $boardSection->title ?? 'Board of Management' }}</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -275,8 +275,8 @@
                     <article class="advisor-card-modern" tabindex="0">
                         <div class="advisor-image-modern overflow-hidden bg-gradient-to-br from-blue-300 to-blue-500">
                             @if(isset($member['photo_url']))
-                                <img src="{{ $member['photo_url'] }}" 
-                                     alt="{{ $member['name'] ?? 'Board member photo' }}" 
+                                <img src="{{ $member['photo_url'] }}"
+                                     alt="{{ $member['name'] ?? 'Board member photo' }}"
                                      class="w-full h-full object-cover"
                                      loading="lazy">
                             @else
@@ -297,8 +297,8 @@
                     <article class="advisor-card-modern" tabindex="0">
                         <div class="advisor-image-modern overflow-hidden bg-gradient-to-br from-blue-300 to-blue-500">
                             @if($staff->hasMedia('photo'))
-                                <img src="{{ $staff->getFirstMediaUrl('photo', 'medium') }}" 
-                                     alt="{{ $staff->name }}" 
+                                <img src="{{ $staff->getFirstMediaUrl('photo', 'medium') }}"
+                                     alt="{{ $staff->name }}"
                                      class="w-full h-full object-cover"
                                      loading="lazy">
                             @else
@@ -346,22 +346,22 @@
         document.addEventListener('DOMContentLoaded', function() {
             const slider = document.getElementById('heroSlider');
             if (!slider) return;
-            
+
             const track = slider.querySelector('.slider-track');
             const slides = slider.querySelectorAll('.slider-slide');
             const prevBtn = document.getElementById('sliderPrev');
             const nextBtn = document.getElementById('sliderNext');
             const indicators = slider.querySelectorAll('.slider-indicator');
-            
+
             let currentSlide = 0;
             const totalSlides = slides.length;
             let autoPlayInterval = null;
             const autoPlayDelay = 5000;
-            
+
             function updateSlider() {
                 const translateX = -currentSlide * 100;
                 track.style.transform = `translateX(${translateX}%)`;
-                
+
                 indicators.forEach((indicator, index) => {
                     if (index === currentSlide) {
                         indicator.classList.add('bg-yellow-400', 'w-8');
@@ -374,7 +374,7 @@
                     }
                 });
             }
-            
+
             function goToSlide(index) {
                 if (index < 0) {
                     currentSlide = totalSlides - 1;
@@ -386,65 +386,65 @@
                 updateSlider();
                 resetAutoPlay();
             }
-            
+
             function nextSlide() {
                 goToSlide(currentSlide + 1);
             }
-            
+
             function prevSlide() {
                 goToSlide(currentSlide - 1);
             }
-            
+
             function startAutoPlay() {
                 if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
                 autoPlayInterval = setInterval(nextSlide, autoPlayDelay);
             }
-            
+
             function stopAutoPlay() {
                 if (autoPlayInterval) {
                     clearInterval(autoPlayInterval);
                     autoPlayInterval = null;
                 }
             }
-            
+
             function resetAutoPlay() {
                 stopAutoPlay();
                 startAutoPlay();
             }
-            
+
             if (nextBtn) nextBtn.addEventListener('click', nextSlide);
             if (prevBtn) prevBtn.addEventListener('click', prevSlide);
-            
+
             indicators.forEach((indicator, index) => {
                 indicator.addEventListener('click', () => goToSlide(index));
             });
-            
+
             slider.addEventListener('mouseenter', stopAutoPlay);
             slider.addEventListener('mouseleave', startAutoPlay);
-            
+
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'ArrowLeft') prevSlide();
                 else if (e.key === 'ArrowRight') nextSlide();
             });
-            
+
             let touchStartX = 0;
             let touchEndX = 0;
-            
+
             slider.addEventListener('touchstart', (e) => {
                 touchStartX = e.changedTouches[0].screenX;
             }, { passive: true });
-            
+
             slider.addEventListener('touchend', (e) => {
                 touchEndX = e.changedTouches[0].screenX;
                 const swipeThreshold = 50;
                 const diff = touchStartX - touchEndX;
-                
+
                 if (Math.abs(diff) > swipeThreshold) {
                     if (diff > 0) nextSlide();
                     else prevSlide();
                 }
             }, { passive: true });
-            
+
             updateSlider();
             startAutoPlay();
         });
