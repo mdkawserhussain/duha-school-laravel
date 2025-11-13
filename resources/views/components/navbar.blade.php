@@ -13,7 +13,7 @@ $locales = [
 <nav
     x-data="navbarComponent({{ $transparent ? 'true' : 'false' }})"
     class="navbar {{ $transparent ? 'navbar-transparent' : 'navbar-scrolled' }}"
-    :class="{ 'navbar-scrolled': scrolled && !transparent, 'navbar-transparent': !transparent && !scrolled }"
+    :class="{ 'navbar-scrolled': scrolled && !transparent, 'navbar-transparent': transparent && !scrolled }"
     x-init="init()"
     role="navigation"
     aria-label="Main navigation"
@@ -31,7 +31,7 @@ $locales = [
 
     {{-- Main Navbar --}}
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16 lg:h-20">
+        <div class="flex items-center justify-between h-16 lg:h-20 transition-all duration-300">
 
             {{-- Logo --}}
             <div class="flex-shrink-0">
@@ -57,8 +57,9 @@ $locales = [
                 {{-- Home --}}
                 <a
                     href="{{ route('home') }}"
-                    class="nav-link px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 hover:bg-indigo-50 hover:text-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    :class="{ 'bg-indigo-100 text-indigo-700 font-semibold': isActive('home') }"
+                    class="nav-link px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2"
+                    :class="transparent && !scrolled ? 'text-white/90 hover:text-white hover:bg-white/10 focus:ring-white/50' : 'text-gray-700 hover:text-indigo-700 hover:bg-indigo-50 focus:ring-indigo-500'"
+                    :class="transparent && !scrolled && isActive('home') ? 'bg-white/10 text-white font-semibold' : (!transparent || scrolled) && isActive('home') ? 'bg-indigo-100 text-indigo-700 font-semibold' : ''"
                     aria-current="{{ request()->routeIs('home') ? 'page' : null }}"
                 >
                     Home
@@ -69,7 +70,8 @@ $locales = [
                     <button
                         @click="open = !open"
                         @keydown.escape="open = false"
-                        class="nav-link flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 hover:bg-indigo-50 hover:text-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        class="nav-link flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2"
+                        :class="transparent && !scrolled ? 'text-white/90 hover:text-white hover:bg-white/10 focus:ring-white/50' : 'text-gray-700 hover:text-indigo-700 hover:bg-indigo-50 focus:ring-indigo-500'"
                         :aria-expanded="open"
                         aria-haspopup="true"
                     >
@@ -126,7 +128,8 @@ $locales = [
                     <button
                         @click="open = !open"
                         @keydown.escape="open = false"
-                        class="nav-link flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 hover:bg-indigo-50 hover:text-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        class="nav-link flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2"
+                        :class="transparent && !scrolled ? 'text-white/90 hover:text-white hover:bg-white/10 focus:ring-white/50' : 'text-gray-700 hover:text-indigo-700 hover:bg-indigo-50 focus:ring-indigo-500'"
                         :aria-expanded="open"
                         aria-haspopup="true"
                     >
@@ -181,8 +184,9 @@ $locales = [
                 {{-- Admission --}}
                 <a
                     href="{{ route('admission.index') }}"
-                    class="nav-link px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 hover:bg-indigo-50 hover:text-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    :class="{ 'bg-indigo-100 text-indigo-700 font-semibold': isActive('admission.*') }"
+                    class="nav-link px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2"
+                    :class="transparent && !scrolled ? 'text-white/90 hover:text-white hover:bg-white/10 focus:ring-white/50' : 'text-gray-700 hover:text-indigo-700 hover:bg-indigo-50 focus:ring-indigo-500'"
+                    :class="transparent && !scrolled && isActive('admission.*') ? 'bg-white/10 text-white font-semibold' : (!transparent || scrolled) && isActive('admission.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : ''"
                     aria-current="{{ request()->routeIs('admission.*') ? 'page' : null }}"
                 >
                     Admission
@@ -193,7 +197,8 @@ $locales = [
                     <button
                         @click="open = !open"
                         @keydown.escape="open = false"
-                        class="nav-link flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 hover:bg-indigo-50 hover:text-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        class="nav-link flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2"
+                        :class="transparent && !scrolled ? 'text-white/90 hover:text-white hover:bg-white/10 focus:ring-white/50' : 'text-gray-700 hover:text-indigo-700 hover:bg-indigo-50 focus:ring-indigo-500'"
                         :aria-expanded="open"
                         aria-haspopup="true"
                     >
@@ -248,8 +253,9 @@ $locales = [
                 {{-- Career --}}
                 <a
                     href="{{ route('careers.index') }}"
-                    class="nav-link px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 hover:bg-indigo-50 hover:text-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    :class="{ 'bg-indigo-100 text-indigo-700 font-semibold': isActive('careers.*') }"
+                    class="nav-link px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2"
+                    :class="transparent && !scrolled ? 'text-white/90 hover:text-white hover:bg-white/10 focus:ring-white/50' : 'text-gray-700 hover:text-indigo-700 hover:bg-indigo-50 focus:ring-indigo-500'"
+                    :class="transparent && !scrolled && isActive('careers.*') ? 'bg-white/10 text-white font-semibold' : (!transparent || scrolled) && isActive('careers.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : ''"
                     aria-current="{{ request()->routeIs('careers.*') ? 'page' : null }}"
                 >
                     Career
@@ -258,8 +264,9 @@ $locales = [
                 {{-- Contact --}}
                 <a
                     href="{{ route('contact.index') }}"
-                    class="nav-link px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 hover:bg-indigo-50 hover:text-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    :class="{ 'bg-indigo-100 text-indigo-700 font-semibold': isActive('contact.*') }"
+                    class="nav-link px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2"
+                    :class="transparent && !scrolled ? 'text-white/90 hover:text-white hover:bg-white/10 focus:ring-white/50' : 'text-gray-700 hover:text-indigo-700 hover:bg-indigo-50 focus:ring-indigo-500'"
+                    :class="transparent && !scrolled && isActive('contact.*') ? 'bg-white/10 text-white font-semibold' : (!transparent || scrolled) && isActive('contact.*') ? 'bg-indigo-100 text-indigo-700 font-semibold' : ''"
                     aria-current="{{ request()->routeIs('contact.*') ? 'page' : null }}"
                 >
                     Contact
@@ -272,7 +279,8 @@ $locales = [
                 <div class="relative" x-data="searchComponent()">
                     <button
                         @click="toggleSearch()"
-                        class="search-button navbar-focus"
+                        class="search-button navbar-focus transition-all duration-300"
+                        :class="transparent && !scrolled ? 'text-white/90 hover:text-white hover:bg-white/10' : 'text-gray-600 hover:text-indigo-600 hover:bg-indigo-50'"
                         aria-label="Open search"
                         :aria-expanded="isOpen"
                     >
@@ -387,7 +395,8 @@ $locales = [
                     <button
                         @click="open = !open"
                         @keydown.escape="open = false"
-                        class="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium text-gray-600 hover:text-indigo-600 hover:bg-indigo-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        class="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2"
+                        :class="transparent && !scrolled ? 'text-white/90 hover:text-white hover:bg-white/10 focus:ring-white/50' : 'text-gray-600 hover:text-indigo-600 hover:bg-indigo-50 focus:ring-indigo-500'"
                         :aria-expanded="open"
                         aria-label="Change language"
                     >

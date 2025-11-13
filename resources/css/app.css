@@ -9,6 +9,13 @@
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
         background-color: #F8FAFC;
         color: #1E293B;
+        margin: 0;
+        padding: 0;
+    }
+
+    html {
+        margin: 0;
+        padding: 0;
     }
 
     h1,
@@ -449,37 +456,157 @@
         transform: translateY(0);
     }
 
-    /* Navbar Styles */
+    /* Navbar Styles - Enhanced to match Hero Slider */
     .navbar {
         position: fixed;
         top: 0;
         left: 0;
         right: 0;
         z-index: 50;
-        transition: all 0.3s ease-in-out;
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+    }
+
+    /* Account for navbar height */
+    /* Navbar height: h-16 (4rem) mobile, h-20 (5rem) desktop */
+    
+    /* Remove all spacing on homepage - hero starts at absolute top */
+    body:has(.hero-section) main,
+    main:has(.hero-section) {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+    }
+
+    /* Hero section starts at absolute top (navbar overlays it) */
+    .hero-section,
+    section[role="banner"] {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+        margin-bottom: 0 !important;
+    }
+
+    /* Ensure no gap between navbar and hero */
+    .navbar + main .hero-section,
+    .navbar + main section[role="banner"],
+    main .hero-section,
+    main section[role="banner"] {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+        margin-bottom: 0 !important;
+    }
+
+    /* Remove any default spacing from body/container */
+    body > div > main:has(.hero-section) {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+    }
+
+    /* Main content - add padding for non-hero pages */
+    main {
+        padding-top: 0;
+    }
+
+    /* Pages without hero section need top padding */
+    body:not(:has(.hero-section)) main,
+    main:not(:has(.hero-section)) {
+        padding-top: 5rem; /* 80px for desktop navbar */
+    }
+
+    /* Mobile: smaller padding */
+    @media (max-width: 1023px) {
+        body:not(:has(.hero-section)) main,
+        main:not(:has(.hero-section)) {
+            padding-top: 4rem; /* 64px for mobile navbar */
+        }
+    }
+
+    /* Sections after hero need scroll margin for anchor links */
+    section:not([role="banner"]) {
+        scroll-margin-top: 5rem;
+    }
+
+    @media (max-width: 1023px) {
+        section:not([role="banner"]) {
+            scroll-margin-top: 4rem;
+        }
+    }
+
+    /* Ensure sections after hero have proper spacing */
+    .hero-section + section,
+    section[role="banner"] + section {
+        margin-top: 0;
+        padding-top: 0;
     }
 
     .navbar-transparent {
-        background: transparent;
-        box-shadow: none;
-        border-bottom: none;
+        background: rgba(0, 0, 0, 0.2) !important;
+        box-shadow: none !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
+    }
+
+    .navbar-transparent .navbar-logo img {
+        filter: brightness(0) invert(1);
+        transition: filter 0.3s ease;
     }
 
     .navbar-scrolled {
-        background: rgba(255, 255, 255, 0.95);
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+        background: rgba(255, 255, 255, 0.98);
+        box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.1), 0 2px 8px -2px rgba(0, 0, 0, 0.06);
+        border-bottom: 1px solid rgba(226, 232, 240, 0.8);
     }
 
-    /* Announcement Bar */
+    .navbar-scrolled .navbar-logo img {
+        filter: none;
+    }
+
+    /* Smooth navbar transitions */
+    .nav-link {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .nav-link::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(79, 70, 229, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        border-radius: 0.75rem;
+    }
+
+    .nav-link:hover::before {
+        opacity: 1;
+    }
+
+    /* Enhanced dropdown menu for transparent navbar */
+    .navbar-transparent .dropdown-menu {
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-scrolled .dropdown-menu {
+        background: white;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Announcement Bar - Enhanced */
     .announcement-bar {
-        background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #EC4899 100%);
+        background: linear-gradient(135deg, rgba(79, 70, 229, 0.9) 0%, rgba(124, 58, 237, 0.9) 50%, rgba(236, 72, 153, 0.9) 100%);
         color: white;
         padding: 0.5rem 0;
         overflow: hidden;
         position: relative;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .marquee-wrapper {

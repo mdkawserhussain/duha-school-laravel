@@ -87,11 +87,11 @@
         <!-- End Google Tag Manager (noscript) -->
         @endif
 
-        <div class="min-h-screen bg-gray-100">
-            <x-navbar />
+        <div class="min-h-screen bg-gray-100" style="margin: 0; padding: 0;">
+            <x-navbar :transparent="request()->routeIs('home')" />
 
             <!-- Page Content -->
-            <main>
+            <main class="{{ request()->routeIs('home') ? '' : 'pt-20 lg:pt-24' }}" style="{{ request()->routeIs('home') ? 'margin-top: 0 !important; padding-top: 0 !important;' : '' }}">
                 @yield('content')
             </main>
 

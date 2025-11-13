@@ -9,7 +9,7 @@
 @endpush
 
 @section('content')
-<main id="main-content" role="main">
+<main id="main-content" role="main" style="margin-top: 0; padding-top: 0;">
     <x-home.hero
         :badge="$hero['badge'] ?? null"
         :heading="$hero['heading'] ?? null"

@@ -24,9 +24,10 @@
     x-init="init()"
     @mouseenter="pause()"
     @mouseleave="play()"
-    class="relative h-screen overflow-hidden"
+    class="relative h-screen overflow-hidden hero-section"
     role="banner"
     aria-label="Hero slider"
+    style="margin-top: 0; padding-top: 0;"
 >
     <!-- Slider Container -->
     <div class="relative h-full w-full">
