@@ -38,7 +38,6 @@ trait ManagesHomePageSection
                 'is_active' => $section->is_active,
                 'sort_order' => $section->sort_order,
                 'data' => $section->data ?? [],
-                'image_url' => $section->getMediaUrl('images', 'large') ?: $section->getMediaUrl('images'),
             ];
         } else {
             $this->data = [
@@ -51,10 +50,10 @@ trait ManagesHomePageSection
                 'is_active' => true,
                 'sort_order' => 0,
                 'data' => [],
-                'image_url' => null,
             ];
         }
 
+        // Don't populate image field - it's handled by Spatie Media Library
         $this->form->fill($this->data);
     }
 
@@ -117,6 +116,7 @@ trait ManagesHomePageSection
                             ->maxSize(51200)
                             ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/jpg'])
                             ->helperText('Upload an image for this section')
+                            ->dehydrated(false)
                             ->columnSpanFull(),
                     ]),
             ])
@@ -126,6 +126,7 @@ trait ManagesHomePageSection
     public function save(): void
     {
         $data = $this->form->getState();
+        $formState = $this->form->getRawState();
 
         $section = HomePageSection::where('section_key', $this->getSectionKey())->first();
 
@@ -147,21 +148,29 @@ trait ManagesHomePageSection
 
         $section->save();
 
-        // Handle image upload
-        if (isset($data['image']) && is_array($data['image']) && !empty($data['image'])) {
+        // Handle image upload from form state
+        // Filament FileUpload stores files in the raw state
+        $imageData = $formState['image'] ?? null;
+        
+        if ($imageData) {
+            // Clear existing images when new ones are uploaded
             $section->clearMediaCollection('images');
-            foreach ($data['image'] as $imagePath) {
-                if (is_string($imagePath) && !filter_var($imagePath, FILTER_VALIDATE_URL)) {
-                    if (str_starts_with($imagePath, 'livewire-tmp/')) {
-                        $fullPath = storage_path('app/public/' . $imagePath);
-                        if (file_exists($fullPath)) {
-                            $section->addMedia($fullPath)->toMediaCollection('images');
-                        }
-                    } else {
-                        $section->addMediaFromDisk($imagePath, 'public')->toMediaCollection('images');
+            
+            // Handle array of images (if multiple uploads)
+            if (is_array($imageData)) {
+                foreach ($imageData as $imagePath) {
+                    if (!empty($imagePath)) {
+                        $this->processImageUpload($section, $imagePath);
                     }
                 }
+            } 
+            // Handle single image string
+            elseif (is_string($imageData) && !empty($imageData)) {
+                $this->processImageUpload($section, $imageData);
             }
+            
+            // Reload section to get fresh media relationship
+            $section->refresh();
         }
 
         $this->clearCache();
@@ -170,6 +179,70 @@ trait ManagesHomePageSection
             ->title('Section saved successfully')
             ->success()
             ->send();
+    }
+
+    protected function processImageUpload(HomePageSection $section, string $imagePath): void
+    {
+        if (filter_var($imagePath, FILTER_VALIDATE_URL)) {
+            // Skip URLs
+            return;
+        }
+
+        $added = false;
+
+        // Handle Livewire temporary files
+        if (str_starts_with($imagePath, 'livewire-tmp/')) {
+            $fullPath = storage_path('app/public/' . $imagePath);
+            if (file_exists($fullPath) && is_file($fullPath)) {
+                try {
+                    $section->addMedia($fullPath)->toMediaCollection('images');
+                    $added = true;
+                } catch (\Exception $e) {
+                    \Log::error('Failed to add media from livewire-tmp: ' . $e->getMessage());
+                }
+            }
+            
+            // Also try using Storage disk
+            if (!$added && \Illuminate\Support\Facades\Storage::disk('public')->exists($imagePath)) {
+                try {
+                    $section->addMediaFromDisk($imagePath, 'public')->toMediaCollection('images');
+                    $added = true;
+                } catch (\Exception $e) {
+                    \Log::error('Failed to add media from disk: ' . $e->getMessage());
+                }
+            }
+        } else {
+            // Handle files in homepage-sections directory or other paths
+            $possiblePaths = [
+                storage_path('app/public/' . $imagePath),
+                storage_path('app/public/homepage-sections/' . basename($imagePath)),
+                storage_path('app/' . $imagePath),
+                public_path('storage/' . $imagePath),
+                $imagePath,
+            ];
+            
+            foreach ($possiblePaths as $testPath) {
+                if (file_exists($testPath) && is_file($testPath)) {
+                    try {
+                        $section->addMedia($testPath)->toMediaCollection('images');
+                        $added = true;
+                        break;
+                    } catch (\Exception $e) {
+                        continue;
+                    }
+                }
+            }
+            
+            // Try Storage disk as fallback
+            if (!$added && \Illuminate\Support\Facades\Storage::disk('public')->exists($imagePath)) {
+                try {
+                    $section->addMediaFromDisk($imagePath, 'public')->toMediaCollection('images');
+                    $added = true;
+                } catch (\Exception $e) {
+                    \Log::error('Failed to add media from storage disk: ' . $e->getMessage());
+                }
+            }
+        }
     }
 
     protected function clearCache(): void

@@ -192,11 +192,15 @@
                     </div>
                 </div>
                 <div class="relative rounded-3xl overflow-hidden shadow-2xl">
-                    @if($whyChoose->hasMedia('images'))
-                        <img src="{{ $whyChoose->getFirstMediaUrl('images', 'large') }}"
+                    @php
+                        $whyChooseImage = $whyChoose->getMediaUrl('images', 'large') ?: $whyChoose->getMediaUrl('images');
+                    @endphp
+                    @if($whyChooseImage)
+                        <img src="{{ asset($whyChooseImage) }}"
                              alt="{{ $whyChoose->title }}"
                              class="w-full h-auto transition-transform duration-500 hover:scale-105"
-                             loading="lazy">
+                             loading="lazy"
+                             onerror="this.onerror=null; this.src='{{ asset('/images/placeholder.jpg') }}';">
                     @else
                         <div class="gradient-pink-amber w-full h-96"></div>
                     @endif
@@ -215,11 +219,15 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div class="relative rounded-3xl overflow-hidden shadow-2xl order-2 lg:order-1">
-                    @if($childrenResponsibility->hasMedia('images'))
-                        <img src="{{ $childrenResponsibility->getFirstMediaUrl('images', 'large') }}"
+                    @php
+                        $childrenImage = $childrenResponsibility->getMediaUrl('images', 'large') ?: $childrenResponsibility->getMediaUrl('images');
+                    @endphp
+                    @if($childrenImage)
+                        <img src="{{ asset($childrenImage) }}"
                              alt="{{ $childrenResponsibility->title }}"
                              class="w-full h-auto transition-transform duration-500 hover:scale-105"
-                             loading="lazy">
+                             loading="lazy"
+                             onerror="this.onerror=null; this.src='{{ asset('/images/placeholder.jpg') }}';">
                     @else
                         <div class="gradient-amber-emerald w-full h-96"></div>
                     @endif

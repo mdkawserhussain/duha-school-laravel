@@ -93,9 +93,9 @@ class HomePageSection extends Model implements HasMedia
             return null;
         }
 
-        // Build relative path manually to avoid absolute URL issues
+        // Use asset() for proper URL generation with cache busting
         // This ensures URLs work regardless of APP_URL or domain/port
-        $basePath = '/storage/' . $media->id;
+        $basePath = 'storage/' . $media->id;
         
         if ($conversionName) {
             // Check if conversion exists on disk
@@ -103,7 +103,7 @@ class HomePageSection extends Model implements HasMedia
             if ($conversionPath && file_exists($conversionPath)) {
                 // Get the actual conversion file name
                 $conversionFileName = basename($conversionPath);
-                // Return relative path that works with current request
+                // Return path for asset() helper
                 return $basePath . '/conversions/' . $conversionFileName;
             }
             // Fallback to original if conversion doesn't exist
