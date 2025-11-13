@@ -9,6 +9,7 @@ use App\Filament\Resources\HomePageContents\Schemas\HomePageContentForm;
 use App\Filament\Resources\HomePageContents\Tables\HomePageContentsTable;
 use App\Models\HomePageContent;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -19,6 +20,10 @@ class HomePageContentResource extends Resource
     protected static ?string $model = HomePageContent::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+
+    protected static string|UnitEnum|null $navigationGroup = 'Content Management';
+
+    protected static ?int $navigationSort = 5;
 
     public static function form(Schema $schema): Schema
     {
@@ -44,5 +49,25 @@ class HomePageContentResource extends Resource
             'create' => CreateHomePageContent::route('/create'),
             'edit' => EditHomePageContent::route('/{record}/edit'),
         ];
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->hasAnyRole(['admin', 'editor']) ?? false;
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()?->hasAnyRole(['admin', 'editor']) ?? false;
+    }
+
+    public static function canEdit($record): bool
+    {
+        return auth()->user()?->hasAnyRole(['admin', 'editor']) ?? false;
+    }
+
+    public static function canDelete($record): bool
+    {
+        return auth()->user()?->hasRole('admin') ?? false;
     }
 }

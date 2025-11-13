@@ -21,6 +21,7 @@ class Event extends Model implements HasMedia
         'location',
         'category',
         'is_featured',
+        'status',
         'is_published',
         'published_at',
     ];
@@ -101,5 +102,15 @@ class Event extends Model implements HasMedia
     public function getIsPastAttribute()
     {
         return $this->event_date->isPast();
+    }
+
+    public function getStatusAttribute()
+    {
+        return $this->is_published ? 'published' : 'draft';
+    }
+
+    public function setStatusAttribute($value)
+    {
+        $this->is_published = $value === 'published';
     }
 }

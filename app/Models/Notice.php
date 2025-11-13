@@ -16,6 +16,7 @@ class Notice extends Model
         'content',
         'category',
         'is_important',
+        'status',
         'is_published',
         'published_at',
     ];
@@ -57,5 +58,15 @@ class Notice extends Model
     public function scopeByCategory($query, $category)
     {
         return $query->where('category', $category);
+    }
+
+    public function getStatusAttribute()
+    {
+        return $this->is_published ? 'published' : 'draft';
+    }
+
+    public function setStatusAttribute($value)
+    {
+        $this->is_published = $value === 'published';
     }
 }

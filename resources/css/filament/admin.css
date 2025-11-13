@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import 'filament/support/resources/css/index.css';
+
+body.fi-body {
+    background-color: #f8fafc;
+    color: #0f172a;
+}
+
+.fi-layout {
+    background-color: #f1f5f9;
+}
+
+.fi-main {
+    background-color: transparent;
+}
+
+.fi-sidebar {
+    background-color: #ffffff;
+    border-right: 1px solid #e2e8f0;
+}
+
+.fi-sidebar-item a,
+.fi-sidebar-group > button {
+    border-radius: 0.75rem;
+}
+
+.fi-sidebar-item-active > a,
+.fi-sidebar-group > button[data-state="open"] {
+    background-color: #e2e8f0;
+    color: #0f172a;
+}
+
+.fi-header,
+.fi-topbar {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+    color: #0f172a;
+}
+
+.fi-page {
+    padding: 1.5rem 1rem;
+}
+
+@media (min-width: 768px) {
+    .fi-page {
+        padding: 1.5rem;
+    }
+}
+
+.fi-widget-card,
+.fi-widgets-stats-overview-stat {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    box-shadow: none;
+}
+
+.fi-widgets-stats-overview-stat-value {
+    font-size: 1.875rem;
+    font-weight: 600;
+}
+
+.fi-btn,
+.fi-input,
+.fi-select {
+    border-radius: 0.75rem;
+}
+
+.fi-section {
+    gap: 1.5rem;
+}

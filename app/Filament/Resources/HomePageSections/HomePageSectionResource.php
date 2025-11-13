@@ -23,7 +23,7 @@ class HomePageSectionResource extends Resource
 
     protected static string|UnitEnum|null $navigationGroup = 'Content Management';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 6;
 
     public static function form(Schema $schema): Schema
     {
@@ -49,5 +49,25 @@ class HomePageSectionResource extends Resource
             'create' => CreateHomePageSection::route('/create'),
             'edit' => EditHomePageSection::route('/{record}/edit'),
         ];
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->hasAnyRole(['admin', 'editor']) ?? false;
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()?->hasAnyRole(['admin', 'editor']) ?? false;
+    }
+
+    public static function canEdit($record): bool
+    {
+        return auth()->user()?->hasAnyRole(['admin', 'editor']) ?? false;
+    }
+
+    public static function canDelete($record): bool
+    {
+        return auth()->user()?->hasRole('admin') ?? false;
     }
 }

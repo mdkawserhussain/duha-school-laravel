@@ -6,6 +6,7 @@ use App\Filament\Resources\PageResource\Pages;
 use App\Models\Page;
 use Filament\Actions;
 use Filament\Resources\Resource;
+use Filament\Forms\Components as FormComponents;
 use Filament\Schemas\Components;
 use Filament\Schemas\Schema;
 use Filament\Tables;
@@ -30,56 +31,28 @@ class PageResource extends Resource
             ->schema([
                 Components\Section::make('Page Information')
                     ->schema([
-                        Components\TextInput::make('title')
+                        FormComponents\TextInput::make('title')
                             ->required()
                             ->maxLength(255)
                             ->live(onBlur: true)
-                            ->afterStateUpdated(function (string $state, Components\Set $set) {
+                            ->afterStateUpdated(function (string $state, $set) {
                                 $set('slug', str($state)->slug());
                             }),
 
-                        Components\TextInput::make('slug')
+                        FormComponents\TextInput::make('slug')
                             ->required()
                             ->unique(ignoreRecord: true)
-                            ->maxLength(255)
-                            ->rules(['alpha_dash']),
+                            ->maxLength(255),
 
-                        Components\RichEditor::make('content')
+                        FormComponents\RichEditor::make('content')
                             ->required()
                             ->columnSpanFull(),
-
-                        Components\FileUpload::make('featured_image')
-                            ->image()
-                            ->directory('pages')
-                            ->visibility('public')
-                            ->imageEditor()
-                            ->imageEditorAspectRatios([
-                                '16:9',
-                                '4:3',
-                                '1:1',
-                            ]),
                     ])
                     ->columns(2),
 
-                Components\Section::make('SEO Settings')
-                    ->schema([
-                        Components\TextInput::make('meta_title')
-                            ->maxLength(60)
-                            ->helperText('Recommended: 50-60 characters'),
-
-                        Components\Textarea::make('meta_description')
-                            ->maxLength(160)
-                            ->rows(3)
-                            ->helperText('Recommended: 150-160 characters'),
-
-                        Components\TextInput::make('og_image')
-                            ->url()
-                            ->helperText('Open Graph image URL for social sharing'),
-                    ]),
-
                 Components\Section::make('Publishing')
                     ->schema([
-                        Components\Select::make('status')
+                        FormComponents\Select::make('status')
                             ->options([
                                 'draft' => 'Draft',
                                 'published' => 'Published',
@@ -87,7 +60,7 @@ class PageResource extends Resource
                             ->default('draft')
                             ->required(),
 
-                        Components\DateTimePicker::make('published_at')
+                        FormComponents\DateTimePicker::make('published_at')
                             ->label('Publish At')
                             ->default(now())
                             ->required(),
@@ -100,17 +73,9 @@ class PageResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\ImageColumn::make('featured_image')
-                    ->circular()
-                    ->defaultImageUrl('/images/placeholder.png'),
-
                 Tables\Columns\TextColumn::make('title')
                     ->searchable()
                     ->sortable(),
-
-                Tables\Columns\TextColumn::make('slug')
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
 
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
@@ -122,13 +87,7 @@ class PageResource extends Resource
 
                 Tables\Columns\TextColumn::make('published_at')
                     ->dateTime()
-                    ->sortable()
-                    ->toggleable(),
-
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->sortable(),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
@@ -140,7 +99,6 @@ class PageResource extends Resource
             ->actions([
                 Actions\ViewAction::make(),
                 Actions\EditAction::make(),
-                Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Actions\BulkActionGroup::make([

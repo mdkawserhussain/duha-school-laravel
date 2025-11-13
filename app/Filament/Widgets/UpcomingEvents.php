@@ -8,7 +8,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
 
-class UpcomingEvents extends BaseWidget
+class UpcomingEvents_disabled extends BaseWidget
 {
     protected static ?string $heading = 'Upcoming Events';
 
@@ -20,7 +20,7 @@ class UpcomingEvents extends BaseWidget
             ->query(
                 Event::published()
                     ->upcoming()
-                    ->orderBy('start_at')
+                    ->orderBy('event_date')
                     ->limit(5)
             )
             ->columns([
@@ -43,9 +43,9 @@ class UpcomingEvents extends BaseWidget
                         default => 'gray',
                     }),
 
-                Tables\Columns\TextColumn::make('start_at')
-                    ->label('Date & Time')
-                    ->dateTime('M j, Y \a\t g:i A'),
+                Tables\Columns\TextColumn::make('event_date')
+                    ->label('Event Date')
+                    ->dateTime('M j, Y g:i A'),
 
                 Tables\Columns\TextColumn::make('location')
                     ->searchable()

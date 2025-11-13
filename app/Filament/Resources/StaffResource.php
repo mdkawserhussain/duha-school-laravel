@@ -6,6 +6,7 @@ use App\Filament\Resources\StaffResource\Pages;
 use App\Models\Staff;
 use Filament\Actions;
 use Filament\Resources\Resource;
+use Filament\Forms\Components as FormComponents;
 use Filament\Schemas\Components;
 use Filament\Schemas\Schema;
 use Filament\Tables;
@@ -30,76 +31,37 @@ class StaffResource extends Resource
             ->schema([
                 Components\Section::make('Staff Information')
                     ->schema([
-                        Components\TextInput::make('name')
+                        FormComponents\TextInput::make('name')
                             ->required()
                             ->maxLength(255),
 
-                        Components\TextInput::make('role_title')
+                        FormComponents\TextInput::make('role_title')
                             ->required()
-                            ->maxLength(255)
-                            ->label('Role/Title'),
+                            ->maxLength(255),
 
-                        Components\Textarea::make('bio')
-                            ->maxLength(1000)
-                            ->rows(4)
+                        FormComponents\RichEditor::make('bio')
+                            ->required()
                             ->columnSpanFull(),
 
-                        Components\FileUpload::make('photo')
-                            ->image()
-                            ->directory('staff')
-                            ->visibility('public')
-                            ->imageEditor()
-                            ->imageEditorAspectRatios([
-                                '1:1',
-                                '3:4',
-                            ])
-                            ->helperText('Upload a professional headshot (square or portrait orientation recommended)'),
-                    ])
-                    ->columns(2),
-
-                Components\Section::make('Contact Information')
-                    ->schema([
-                        Components\TextInput::make('email')
+                        FormComponents\TextInput::make('email')
                             ->email()
                             ->maxLength(255),
 
-                        Components\TextInput::make('phone')
+                        FormComponents\TextInput::make('phone')
                             ->tel()
-                            ->maxLength(20),
-
-                        Components\Repeater::make('social_links')
-                            ->schema([
-                                Components\Select::make('platform')
-                                    ->options([
-                                        'facebook' => 'Facebook',
-                                        'twitter' => 'Twitter',
-                                        'linkedin' => 'LinkedIn',
-                                        'instagram' => 'Instagram',
-                                    ])
-                                    ->required(),
-                                Components\TextInput::make('url')
-                                    ->url()
-                                    ->required()
-                                    ->label('Profile URL'),
-                            ])
-                            ->columns(2)
-                            ->columnSpanFull()
-                            ->defaultItems(0)
-                            ->helperText('Add social media profiles for this staff member'),
+                            ->maxLength(255),
                     ])
                     ->columns(2),
 
-                Components\Section::make('Display Settings')
+                Components\Section::make('Publishing')
                     ->schema([
-                        Components\TextInput::make('order')
-                            ->numeric()
-                            ->default(0)
-                            ->helperText('Lower numbers appear first. Use this to control display order.'),
-
-                        Components\Toggle::make('is_active')
+                        FormComponents\Toggle::make('is_active')
                             ->label('Active')
-                            ->default(true)
-                            ->helperText('Inactive staff members won\'t appear on the public website'),
+                            ->default(true),
+
+                        FormComponents\TextInput::make('order')
+                            ->numeric()
+                            ->default(0),
                     ])
                     ->columns(2),
             ]);
@@ -109,53 +71,30 @@ class StaffResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\ImageColumn::make('photo')
-                    ->circular()
-                    ->defaultImageUrl('/images/placeholder.png')
-                    ->size(40),
-
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('role_title')
-                    ->searchable()
-                    ->label('Role'),
-
-                Tables\Columns\TextColumn::make('email')
-                    ->searchable()
-                    ->toggleable(),
-
-                Tables\Columns\TextColumn::make('phone')
-                    ->searchable()
-                    ->toggleable(),
+                    ->searchable(),
 
                 Tables\Columns\IconColumn::make('is_active')
                     ->boolean()
                     ->label('Active'),
 
                 Tables\Columns\TextColumn::make('order')
+                    ->numeric()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->label('Display Order'),
             ])
             ->filters([
                 Tables\Filters\Filter::make('is_active')
                     ->label('Active Staff')
                     ->query(fn (Builder $query): Builder => $query->where('is_active', true)),
-
-                Tables\Filters\Filter::make('has_social_links')
-                    ->label('Has Social Media')
-                    ->query(fn (Builder $query): Builder => $query->whereNotNull('social_links')),
             ])
             ->actions([
                 Actions\ViewAction::make(),
                 Actions\EditAction::make(),
-                Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Actions\BulkActionGroup::make([

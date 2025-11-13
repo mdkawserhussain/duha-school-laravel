@@ -20,6 +20,7 @@ class Page extends Model implements HasMedia
         'meta_title',
         'meta_description',
         'seo_keywords',
+        'status',
         'is_published',
         'published_at',
     ];
@@ -78,6 +79,16 @@ class Page extends Model implements HasMedia
     {
         return $query->where('is_published', true)
                     ->where('published_at', '<=', now());
+    }
+
+    public function getStatusAttribute()
+    {
+        return $this->is_published ? 'published' : 'draft';
+    }
+
+    public function setStatusAttribute($value)
+    {
+        $this->is_published = $value === 'published';
     }
 
     public function getRouteKeyName()

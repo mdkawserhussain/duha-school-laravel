@@ -9,7 +9,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
 
-class RecentApplications extends BaseWidget
+class RecentApplications_disabled extends BaseWidget
 {
     protected static ?string $heading = 'Recent Applications';
 

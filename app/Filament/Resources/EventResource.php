@@ -6,6 +6,7 @@ use App\Filament\Resources\EventResource\Pages;
 use App\Models\Event;
 use Filament\Actions;
 use Filament\Resources\Resource;
+use Filament\Forms\Components as FormComponents;
 use Filament\Schemas\Components;
 use Filament\Schemas\Schema;
 use Filament\Tables;
@@ -28,76 +29,40 @@ class EventResource extends Resource
     {
         return $schema
             ->schema([
-                Components\Section::make('Event Information')
+                Components\Section::make('Basic Information')
                     ->schema([
-                        Components\TextInput::make('title')
+                        FormComponents\TextInput::make('title')
                             ->required()
-                            ->maxLength(255)
-                            ->live(onBlur: true)
-                            ->afterStateUpdated(function (string $state, Components\Set $set) {
-                                $set('slug', str($state)->slug());
-                            }),
-
-                        Components\TextInput::make('slug')
-                            ->required()
-                            ->unique(ignoreRecord: true)
-                            ->maxLength(255)
-                            ->rules(['alpha_dash']),
-
-                        Components\RichEditor::make('content')
-                            ->required()
-                            ->columnSpanFull(),
-
-                        Components\TextInput::make('location')
                             ->maxLength(255),
 
-                        Components\FileUpload::make('featured_image')
-                            ->image()
-                            ->directory('events')
-                            ->visibility('public')
-                            ->imageEditor()
-                            ->imageEditorAspectRatios([
-                                '16:9',
-                                '4:3',
-                                '1:1',
-                            ]),
+                        FormComponents\RichEditor::make('description')
+                            ->required()
+                            ->columnSpanFull(),
                     ])
                     ->columns(2),
 
-                Components\Section::make('Event Schedule')
+                Components\Section::make('Event Details')
                     ->schema([
-                        Components\DateTimePicker::make('start_at')
+                        FormComponents\DateTimePicker::make('event_date')
                             ->required()
-                            ->label('Start Date & Time'),
+                            ->label('Event Date & Time'),
 
-                        Components\DateTimePicker::make('end_at')
-                            ->label('End Date & Time')
-                            ->after('start_at'),
+                        FormComponents\TextInput::make('location')
+                            ->maxLength(255),
 
-                        Components\TextInput::make('category')
-                            ->maxLength(100)
-                            ->placeholder('e.g., Academic, Social, Islamic, Sports'),
-
-                        Components\Toggle::make('is_featured')
-                            ->label('Featured Event')
-                            ->helperText('Featured events appear prominently on the homepage'),
+                        FormComponents\Toggle::make('is_featured')
+                            ->label('Featured Event'),
                     ])
                     ->columns(2),
 
                 Components\Section::make('Publishing')
                     ->schema([
-                        Components\Select::make('status')
+                        FormComponents\Select::make('status')
                             ->options([
                                 'draft' => 'Draft',
                                 'published' => 'Published',
-                                'archived' => 'Archived',
                             ])
                             ->default('draft')
-                            ->required(),
-
-                        Components\DateTimePicker::make('published_at')
-                            ->label('Publish At')
-                            ->default(now())
                             ->required(),
                     ])
                     ->columns(2),
@@ -108,32 +73,14 @@ class EventResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\ImageColumn::make('featured_image')
-                    ->circular()
-                    ->defaultImageUrl('/images/placeholder.png'),
-
                 Tables\Columns\TextColumn::make('title')
                     ->searchable()
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('category')
-                    ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'Academic' => 'success',
-                        'Social' => 'info',
-                        'Islamic' => 'warning',
-                        'Sports' => 'danger',
-                        default => 'gray',
-                    }),
-
-                Tables\Columns\TextColumn::make('start_at')
+                Tables\Columns\TextColumn::make('event_date')
                     ->dateTime()
                     ->sortable()
-                    ->label('Start Date'),
-
-                Tables\Columns\TextColumn::make('location')
-                    ->searchable()
-                    ->toggleable(),
+                    ->label('Event Date'),
 
                 Tables\Columns\IconColumn::make('is_featured')
                     ->boolean()
@@ -144,50 +91,25 @@ class EventResource extends Resource
                     ->color(fn (string $state): string => match ($state) {
                         'draft' => 'secondary',
                         'published' => 'success',
-                        'archived' => 'gray',
                         default => 'gray',
                     }),
-
-                Tables\Columns\TextColumn::make('published_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
                     ->options([
                         'draft' => 'Draft',
                         'published' => 'Published',
-                        'archived' => 'Archived',
                     ]),
-
-                Tables\Filters\SelectFilter::make('category')
-                    ->options([
-                        'Academic' => 'Academic',
-                        'Social' => 'Social',
-                        'Islamic' => 'Islamic',
-                        'Sports' => 'Sports',
-                    ]),
-
-                Tables\Filters\Filter::make('is_featured')
-                    ->label('Featured Events')
-                    ->query(fn (Builder $query): Builder => $query->where('is_featured', true)),
-
-                Tables\Filters\Filter::make('upcoming')
-                    ->label('Upcoming Events')
-                    ->query(fn (Builder $query): Builder => $query->where('start_at', '>', now())),
             ])
             ->actions([
-                Actions\ViewAction::make(),
                 Actions\EditAction::make(),
-                Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Actions\BulkActionGroup::make([
                     Actions\DeleteBulkAction::make(),
                 ]),
             ])
-            ->defaultSort('start_at', 'desc');
+            ->defaultSort('event_date', 'desc');
     }
 
     public static function getRelations(): array
@@ -202,7 +124,6 @@ class EventResource extends Resource
         return [
             'index' => Pages\ListEvents::route('/'),
             'create' => Pages\CreateEvent::route('/create'),
-            'view' => Pages\ViewEvent::route('/{record}'),
             'edit' => Pages\EditEvent::route('/{record}/edit'),
         ];
     }
