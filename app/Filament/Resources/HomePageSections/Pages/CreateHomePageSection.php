@@ -5,6 +5,7 @@ namespace App\Filament\Resources\HomePageSections\Pages;
 use App\Filament\Resources\HomePageSections\HomePageSectionResource;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 class CreateHomePageSection extends CreateRecord
@@ -65,6 +66,9 @@ class CreateHomePageSection extends CreateRecord
                 }
             }
         }
+
+        // Clear homepage cache after creation
+        Cache::forget('homepage_v2_data');
 
         Notification::make()
             ->title('Home page section created successfully')

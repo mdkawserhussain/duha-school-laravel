@@ -6,7 +6,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>@yield('title', config('app.name', 'Al-Maghrib International School'))</title>
-        
+
         @hasSection('meta-description')
             <meta name="description" content="@yield('meta-description')">
         @else
@@ -75,10 +75,10 @@
 
         <!-- Lightbox2 CSS -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.5/css/lightbox.min.css" />
-        
+
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-        
+
         <!-- Lightbox2 JS -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.5/js/lightbox.min.js"></script>
         <script>
@@ -88,7 +88,7 @@
                 'albumLabel': 'Image %1 of %2'
             });
         </script>
-        
+
         @stack('scripts')
     </head>
     <body class="font-sans antialiased">
@@ -100,7 +100,7 @@
         @endif
 
         <div class="min-h-screen bg-gray-100">
-            <x-header />
+            <x-navbar />
 
             <!-- Page Content -->
             <main>

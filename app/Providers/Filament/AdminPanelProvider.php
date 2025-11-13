@@ -66,11 +66,18 @@ class AdminPanelProvider extends PanelProvider
             ->authPasswordBroker('users')
             ->brandName('Al-Maghrib International School')
             ->favicon(asset('favicon.ico'))
+            ->viteTheme('resources/css/filament/admin/theme.css')
             ->navigationGroups([
-                'Content Management',
+                'Dashboard Overview',
+                'Homepage Sections',
+                'Content',
                 'Applications',
+                'Site Settings',
+                'Media Library',
+                'Users & Roles',
             ])
             ->sidebarCollapsibleOnDesktop()
-            ->topNavigation();
+            ->spa()
+            ->maxContentWidth('full');
     }
 }

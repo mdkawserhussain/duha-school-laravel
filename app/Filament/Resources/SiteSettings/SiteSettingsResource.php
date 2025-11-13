@@ -22,7 +22,7 @@ class SiteSettingsResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCog6Tooth;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Settings';
+    protected static string|UnitEnum|null $navigationGroup = 'Site Settings';
 
     protected static ?int $navigationSort = 100;
 

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -67,5 +68,18 @@ class HomePageSection extends Model implements HasMedia
     public function scopeByKey($query, string $key)
     {
         return $query->where('section_key', $key);
+    }
+
+    /**
+     * Boot the model and add event listeners for cache clearing.
+     */
+    protected static function booted(): void
+    {
+        // Clear cache when sort_order changes (drag-and-drop reordering)
+        static::updating(function ($section) {
+            if ($section->isDirty('sort_order')) {
+                Cache::forget('homepage_v2_data');
+            }
+        });
     }
 }

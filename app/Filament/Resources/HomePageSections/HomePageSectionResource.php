@@ -21,7 +21,7 @@ class HomePageSectionResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Content Management';
+    protected static string|UnitEnum|null $navigationGroup = 'Homepage Sections';
 
     protected static ?int $navigationSort = 2;
 
