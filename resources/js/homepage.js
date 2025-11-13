@@ -11,45 +11,42 @@
 
     /**
      * Intersection Observer for subtle fade-in animations
-     * Disabled by default to prevent flickering - can be enabled if needed
      */
     function initScrollAnimations() {
-        // Disabled to prevent flickering - elements remain visible
-        // Uncomment below to enable subtle animations (only for elements below viewport)
-        return;
-        
-        /*
         if (prefersReducedMotion) return;
 
         const observerOptions = {
             threshold: 0.1,
-            rootMargin: '0px 0px -100px 0px'
+            rootMargin: '0px 0px -50px 0px'
         };
 
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('fade-in-up');
+                    entry.target.classList.remove('scroll-fade-in');
                     observer.unobserve(entry.target);
                 }
             });
         }, observerOptions);
 
-        // Wait for page to be fully loaded before checking positions
+        // Observe sections with scroll-fade-in class
+        document.querySelectorAll('.scroll-fade-in').forEach(element => {
+            observer.observe(element);
+        });
+
+        // Also observe sections that are below viewport on load
         setTimeout(() => {
             const viewportHeight = window.innerHeight;
             
-            document.querySelectorAll('section').forEach(section => {
+            document.querySelectorAll('section.section-fade-in').forEach(section => {
                 const rect = section.getBoundingClientRect();
-                if (rect.top > viewportHeight + 100) {
-                    section.style.opacity = '0';
-                    section.style.transform = 'translateY(20px)';
-                    section.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+                if (rect.top > viewportHeight) {
+                    section.classList.add('scroll-fade-in');
                     observer.observe(section);
                 }
             });
         }, 100);
-        */
     }
 
     /**
