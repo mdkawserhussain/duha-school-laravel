@@ -28,12 +28,12 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->colors([
-                'primary' => Color::Blue,
-                'secondary' => Color::Green,
+                'primary' => Color::Indigo,
+                'secondary' => Color::Violet,
                 'success' => Color::Emerald,
                 'warning' => Color::Orange,
                 'danger' => Color::Red,
-                'gray' => Color::Gray,
+                'gray' => Color::Slate,
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
@@ -68,13 +68,13 @@ class AdminPanelProvider extends PanelProvider
             ->favicon(asset('favicon.ico'))
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->navigationGroups([
-                'Dashboard Overview',
-                'Homepage Sections',
+                'Dashboard',
+                'Site Settings',
+                'Homepage Settings',
                 'Content',
                 'Applications',
-                'Site Settings',
-                'Media Library',
-                'Users & Roles',
+                'Media',
+                'Users',
             ])
             ->sidebarCollapsibleOnDesktop()
             ->spa()

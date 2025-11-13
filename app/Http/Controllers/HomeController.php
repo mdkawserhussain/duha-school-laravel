@@ -68,9 +68,6 @@ class HomeController extends Controller
         $badge = data_get($primary, 'data.badge')
             ?: 'One School Serving the Purposes of Here & Hereafter';
 
-        $backgroundImage = $primary?->getFirstMediaUrl('images', 'large')
-            ?: $primary?->getFirstMediaUrl('images');
-
         return [
             'badge' => $badge,
             'heading' => $headline ?: 'Welcome to Al-Maghrib International School',
@@ -84,7 +81,6 @@ class HomeController extends Controller
                 'url' => route('about.show', ['page' => 'vision']),
             ],
             'stats' => $this->mapHeroStats($sections),
-            'background' => $backgroundImage,
         ];
     }
 

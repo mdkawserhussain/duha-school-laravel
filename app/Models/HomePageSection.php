@@ -53,6 +53,13 @@ class HomePageSection extends Model implements HasMedia
             ->sharpen(10)
             ->format('webp')
             ->quality(85);
+
+        $this->addMediaConversion('large')
+            ->width(1920)
+            ->height(1080)
+            ->format('webp')
+            ->quality(90)
+            ->nonQueued();
     }
 
     public function scopeActive($query)
@@ -68,6 +75,42 @@ class HomePageSection extends Model implements HasMedia
     public function scopeByKey($query, string $key)
     {
         return $query->where('section_key', $key);
+    }
+
+    /**
+     * Get media URL with proper path handling and conversion support.
+     * Returns relative paths that work with any domain/port.
+     *
+     * @param string $collectionName
+     * @param string|null $conversionName
+     * @return string|null
+     */
+    public function getMediaUrl(string $collectionName = 'images', ?string $conversionName = null): ?string
+    {
+        $media = $this->getFirstMedia($collectionName);
+        
+        if (!$media) {
+            return null;
+        }
+
+        // Build relative path manually to avoid absolute URL issues
+        // This ensures URLs work regardless of APP_URL or domain/port
+        $basePath = '/storage/' . $media->id;
+        
+        if ($conversionName) {
+            // Check if conversion exists on disk
+            $conversionPath = $media->getPath($conversionName);
+            if ($conversionPath && file_exists($conversionPath)) {
+                // Get the actual conversion file name
+                $conversionFileName = basename($conversionPath);
+                // Return relative path that works with current request
+                return $basePath . '/conversions/' . $conversionFileName;
+            }
+            // Fallback to original if conversion doesn't exist
+            return $basePath . '/' . $media->file_name;
+        }
+
+        return $basePath . '/' . $media->file_name;
     }
 
     /**

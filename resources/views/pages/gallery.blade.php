@@ -3,6 +3,27 @@
 @section('title', 'Media Gallery - Al-Maghrib International School')
 @section('meta-description', 'Browse our media gallery showcasing school events, activities, and campus life at Al-Maghrib International School')
 
+@push('styles')
+    <!-- Lightbox2 CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.5/css/lightbox.min.css" />
+@endpush
+
+@push('scripts')
+    <!-- Lightbox2 JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.5/js/lightbox.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof lightbox !== 'undefined') {
+                lightbox.option({
+                    'resizeDuration': 200,
+                    'wrapAround': true,
+                    'albumLabel': 'Image %1 of %2'
+                });
+            }
+        });
+    </script>
+@endpush
+
 @section('content')
     <!-- Page Header -->
     <section class="bg-gray-50 py-16">

@@ -11,9 +11,9 @@ $locales = [
 @endphp
 
 <nav
-    x-data="navbarComponent()"
+    x-data="navbarComponent({{ $transparent ? 'true' : 'false' }})"
     class="navbar {{ $transparent ? 'navbar-transparent' : 'navbar-scrolled' }}"
-    :class="{ 'navbar-scrolled': scrolled && !$transparent, 'navbar-transparent': !$transparent && !scrolled }"
+    :class="{ 'navbar-scrolled': scrolled && !transparent, 'navbar-transparent': !transparent && !scrolled }"
     x-init="init()"
     role="navigation"
     aria-label="Main navigation"
@@ -391,8 +391,8 @@ $locales = [
                         :aria-expanded="open"
                         aria-label="Change language"
                     >
-                        <span class="text-lg" x-text="$wire.get('locales.{{ $currentLocale }}.flag', '{{ $locales[$currentLocale]['flag'] ?? '🌐' }}')"></span>
-                        <span class="hidden sm:inline" x-text="$wire.get('locales.{{ $currentLocale }}.name', '{{ $locales[$currentLocale]['name'] ?? strtoupper($currentLocale) }}')"></span>
+                        <span class="text-lg">{{ $locales[$currentLocale]['flag'] ?? '🌐' }}</span>
+                        <span class="hidden sm:inline">{{ $locales[$currentLocale]['name'] ?? strtoupper($currentLocale) }}</span>
                         <svg class="h-4 w-4 transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
@@ -630,9 +630,9 @@ $locales = [
                         :class="{ 'bg-indigo-100 text-indigo-700 font-semibold': isActive('careers.*') }"
                     >
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745
-
-Career
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                        Career
                     </a>
 
                     <a
@@ -740,8 +740,9 @@ Career
 
 {{-- Alpine.js Components --}}
 <script>
-function navbarComponent() {
+function navbarComponent(transparent = false) {
     return {
+        transparent: transparent,
         scrolled: false,
         mobileMenuOpen: false,
 

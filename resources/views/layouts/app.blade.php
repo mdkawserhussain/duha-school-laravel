@@ -73,22 +73,10 @@
         <!-- End Google Tag Manager -->
         @endif
 
-        <!-- Lightbox2 CSS -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.5/css/lightbox.min.css" />
-
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-        <!-- Lightbox2 JS -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.5/js/lightbox.min.js"></script>
-        <script>
-            lightbox.option({
-                'resizeDuration': 200,
-                'wrapAround': true,
-                'albumLabel': 'Image %1 of %2'
-            });
-        </script>
-
+        @stack('styles')
         @stack('scripts')
     </head>
     <body class="font-sans antialiased">

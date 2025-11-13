@@ -5,7 +5,6 @@
     'primaryAction' => null,
     'secondaryAction' => null,
     'stats' => [],
-    'background' => null,
     'heroSlides' => null,
 ])
 
@@ -40,7 +39,7 @@
                     'label' => $slide->button_text ?: ($primaryAction['label'] ?? 'Apply Now'),
                     'url' => $slide->button_link ?: ($primaryAction['url'] ?? route('admission.index')),
                 ];
-                $slideBackground = $slide->getFirstMediaUrl('images', 'large') ?: $slide->getFirstMediaUrl('images') ?: $background;
+                $slideImageUrl = $slide->getMediaUrl('images', 'large') ?: $slide->getMediaUrl('images');
             @endphp
             
             <div 
@@ -51,14 +50,22 @@
                 x-transition:leave="transition ease-in duration-700"
                 x-transition:leave-start="opacity-100"
                 x-transition:leave-end="opacity-0"
-                class="absolute inset-0 parallax"
-                style="background-image: url('{{ $slideBackground }}'); background-size: cover; background-position: center;"
+                class="absolute inset-0"
             >
+                @if($slideImageUrl)
+                    <img 
+                        src="{{ $slideImageUrl }}" 
+                        alt="{{ $slideHeading }}"
+                        class="hero-image absolute inset-0 w-full h-full object-cover"
+                        {{ $index === 0 ? 'loading="eager"' : 'loading="lazy"' }}
+                    />
+                @endif
+                
                 <!-- Overlay Gradient -->
-                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent z-10"></div>
                 
                 <!-- Content -->
-                <div class="relative h-full flex items-center">
+                <div class="relative h-full flex items-center z-20">
                     <div class="container mx-auto px-4 sm:px-6 lg:px-8 z-10">
                         <div class="max-w-4xl">
                             <!-- Badge with staggered animation -->

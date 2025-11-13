@@ -17,7 +17,6 @@
         :primary-action="$hero['primaryAction'] ?? null"
         :secondary-action="$hero['secondaryAction'] ?? null"
         :stats="$hero['stats'] ?? []"
-        :background="$hero['background'] ?? null"
         :hero-slides="$heroSlides ?? null"
     />
 
