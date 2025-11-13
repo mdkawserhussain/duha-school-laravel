@@ -6,6 +6,7 @@ use App\Filament\Resources\HomePageSections\HomePageSectionResource;
 use Filament\Actions\DeleteAction;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 class EditHomePageSection extends EditRecord
@@ -82,6 +83,9 @@ class EditHomePageSection extends EditRecord
             }
         }
 
+        // Clear homepage cache after update
+        Cache::forget('homepage_v2_data');
+
         Notification::make()
             ->title('Home page section updated successfully')
             ->success()
@@ -91,7 +95,11 @@ class EditHomePageSection extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            DeleteAction::make(),
+            DeleteAction::make()
+                ->after(function () {
+                    // Clear homepage cache after deletion
+                    Cache::forget('homepage_v2_data');
+                }),
         ];
     }
 }

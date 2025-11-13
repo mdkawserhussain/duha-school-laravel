@@ -10,46 +10,59 @@
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     /**
-     * Intersection Observer for subtle fade-in animations
-     * Disabled by default to prevent flickering - can be enabled if needed
+     * Intersection Observer for subtle fade-in animations with stagger
      */
     function initScrollAnimations() {
-        // Disabled to prevent flickering - elements remain visible
-        // Uncomment below to enable subtle animations (only for elements below viewport)
-        return;
-        
-        /*
         if (prefersReducedMotion) return;
 
         const observerOptions = {
             threshold: 0.1,
-            rootMargin: '0px 0px -100px 0px'
+            rootMargin: '0px 0px -50px 0px'
         };
 
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
+            entries.forEach((entry) => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('fade-in-up');
+                    entry.target.classList.add('visible');
+                    entry.target.classList.remove('scroll-fade-in');
                     observer.unobserve(entry.target);
                 }
             });
         }, observerOptions);
 
-        // Wait for page to be fully loaded before checking positions
+        // Observe sections with scroll-fade-in class
+        document.querySelectorAll('.scroll-fade-in').forEach(element => {
+            observer.observe(element);
+        });
+
+        // Observe stagger items individually for proper animation
+        document.querySelectorAll('.stagger-item').forEach((item, index) => {
+            const itemObserver = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        const delay = index * 100;
+                        setTimeout(() => {
+                            entry.target.classList.add('visible');
+                        }, delay);
+                        itemObserver.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            itemObserver.observe(item);
+        });
+
+        // Also observe sections that are below viewport on load
         setTimeout(() => {
             const viewportHeight = window.innerHeight;
             
-            document.querySelectorAll('section').forEach(section => {
+            document.querySelectorAll('section').forEach((section) => {
                 const rect = section.getBoundingClientRect();
-                if (rect.top > viewportHeight + 100) {
-                    section.style.opacity = '0';
-                    section.style.transform = 'translateY(20px)';
-                    section.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+                if (rect.top > viewportHeight && !section.classList.contains('scroll-fade-in')) {
+                    section.classList.add('scroll-fade-in');
                     observer.observe(section);
                 }
             });
         }, 100);
-        */
     }
 
     /**

@@ -9,255 +9,65 @@
 @endpush
 
 @section('content')
-<main id="main-content" role="main">
-    @php
-        $heroSlides = $heroSlides ?? collect();
-        $defaultHighlights = [
-            'Academic: Cambridge Early Years Foundation Stage (Play, Nursery and Reception)',
-            'Islamic Studies',
-            'Cambridge Primary - Key Stage 1 & 2 (Class 1 to 6)',
-            'Character Development Curriculum',
-            'Hifz Curriculum',
-        ];
-    @endphp
+<main id="main-content" role="main" style="margin-top: 0; padding-top: 0;">
+    <x-home.hero
+        :badge="$hero['badge'] ?? null"
+        :heading="$hero['heading'] ?? null"
+        :description="$hero['description'] ?? null"
+        :primary-action="$hero['primaryAction'] ?? null"
+        :secondary-action="$hero['secondaryAction'] ?? null"
+        :stats="$hero['stats'] ?? []"
+        :hero-slides="$heroSlides ?? null"
+    />
 
-    <!-- Modern Hero Slider Section -->
-    @if($heroSlides->count() > 0)
-    <section class="relative animated-bg text-white overflow-hidden min-h-[600px] md:min-h-[700px] flex items-center" aria-label="Hero slider">
-        <!-- Decorative Background Elements -->
-        <div class="absolute inset-0 opacity-20 z-0">
-            <div class="absolute top-20 left-10 w-32 h-32 float-animation">
-                <svg viewBox="0 0 100 100" class="w-full h-full text-white" aria-hidden="true">
-                    <rect x="20" y="30" width="60" height="50" rx="5" fill="currentColor"/>
-                    <circle cx="35" cy="50" r="5" fill="#1e40af"/>
-                    <circle cx="65" cy="50" r="5" fill="#1e40af"/>
-                    <rect x="30" y="80" width="15" height="20" rx="2" fill="currentColor"/>
-                    <rect x="55" y="80" width="15" height="20" rx="2" fill="currentColor"/>
-                </svg>
-            </div>
-            <div class="absolute top-40 right-20 w-24 h-24 float-animation" style="animation-delay: 2s;">
-                <svg viewBox="0 0 100 100" class="w-full h-full text-white" aria-hidden="true">
-                    <rect x="25" y="35" width="50" height="45" rx="5" fill="currentColor"/>
-                    <circle cx="40" cy="55" r="4" fill="#1e40af"/>
-                    <circle cx="60" cy="55" r="4" fill="#1e40af"/>
-                    <rect x="30" y="80" width="12" height="18" rx="2" fill="currentColor"/>
-                    <rect x="58" y="80" width="12" height="18" rx="2" fill="currentColor"/>
-                </svg>
-            </div>
-        </div>
+    <x-home.info-panels :panels="$featurePanels" />
 
-        <!-- Cityscape Silhouette -->
-        <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-gray-900 to-transparent opacity-30 z-0" aria-hidden="true">
-            <svg class="w-full h-full" viewBox="0 0 1200 200" preserveAspectRatio="none" aria-hidden="true">
-                <polygon points="0,200 50,150 100,170 150,120 200,140 250,100 300,130 350,90 400,110 450,80 500,100 550,70 600,90 650,60 700,80 750,50 800,70 850,40 900,60 950,30 1000,50 1050,20 1100,40 1150,10 1200,30 1200,200 0,200" fill="currentColor"/>
-            </svg>
-        </div>
-
-        <!-- Slider Container -->
-        <div id="heroSlider" class="hero-slider-container relative w-full h-full z-10">
-            <div class="slider-wrapper relative overflow-hidden">
-                <div class="slider-track flex transition-transform duration-700 ease-in-out" style="transform: translateX(0%)" role="region" aria-label="Hero slideshow">
-                    @foreach($heroSlides as $index => $slide)
-                    <div class="slider-slide min-w-full flex items-center" data-slide-index="{{ $index }}" role="group" aria-roledescription="slide" aria-label="Slide {{ $index + 1 }} of {{ $heroSlides->count() }}">
-                        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 w-full">
-                            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
-                                <!-- Main Hero Content -->
-                                <div class="lg:col-span-2">
-                                    <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight">
-                                        {{ $slide->title ?? 'AL-MAGHRIB' }}<br>
-                                        <span class="text-yellow-400 font-black tracking-wider" style="font-family: 'Arial Black', sans-serif; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
-                                            {{ $slide->subtitle ?? 'INTERNATIONAL SCHOOL' }}
-                                        </span>
-                                    </h1>
-                                    @if($slide->description)
-                                    <p class="text-lg md:text-xl mb-6 text-blue-100">{{ $slide->description }}</p>
-                                    @elseif($slide->content)
-                                    <div class="text-lg md:text-xl mb-6 text-blue-100">{!! Str::limit(strip_tags($slide->content), 150) !!}</div>
-                                    @endif
-                                    @if($slide->button_text && $slide->button_link)
-                                    <a href="{{ $slide->button_link }}" class="btn-modern-secondary inline-block mt-4" aria-label="{{ $slide->button_text }}">
-                                        {{ $slide->button_text }}
-                                    </a>
-                                    @endif
-                                </div>
-
-                                <!-- Academic Highlights Sidebar -->
-                                @php
-                                    $academicHighlights = isset($slide->data['academic_highlights']) ? $slide->data['academic_highlights'] : $defaultHighlights;
-                                @endphp
-                                <div class="lg:col-span-1 bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-6 border border-white border-opacity-20 shadow-xl">
-                                    <h3 class="text-xl font-bold mb-4 text-yellow-400">Academic Highlights</h3>
-                                    <ul class="space-y-3" role="list">
-                                        @foreach($academicHighlights as $highlight)
-                                        <li class="flex items-start gap-3">
-                                            <div class="w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 pulse-glow" aria-hidden="true">
-                                                <span class="text-blue-900 font-bold text-sm">{{ strtoupper(substr($highlight, 0, 1)) }}</span>
-                                            </div>
-                                            <span class="text-sm text-white">{{ $highlight }}</span>
-                                        </li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    @endforeach
-                </div>
-            </div>
-
-            <!-- Navigation Arrows -->
-            @if($heroSlides->count() > 1)
-            <button id="sliderPrev" class="absolute left-4 top-1/2 transform -translate-y-1/2 z-20 w-12 h-12 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full flex items-center justify-center transition duration-300 focus-visible-modern" aria-label="Previous slide">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-                </svg>
-            </button>
-            <button id="sliderNext" class="absolute right-4 top-1/2 transform -translate-y-1/2 z-20 w-12 h-12 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full flex items-center justify-center transition duration-300 focus-visible-modern" aria-label="Next slide">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                </svg>
-            </button>
-
-            <!-- Slider Indicators -->
-            <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex gap-2" role="tablist" aria-label="Slide indicators">
-                @foreach($heroSlides as $index => $slide)
-                <button class="slider-indicator w-3 h-3 rounded-full transition-all duration-300 {{ $index === 0 ? 'bg-yellow-400 w-8' : 'bg-white bg-opacity-50 hover:bg-opacity-75' }}" 
-                        data-slide-to="{{ $index }}" 
-                        role="tab"
-                        aria-label="Go to slide {{ $index + 1 }}"
-                        aria-selected="{{ $index === 0 ? 'true' : 'false' }}"></button>
-                @endforeach
-            </div>
-            @endif
-        </div>
-    </section>
-    @else
-    <!-- Fallback Hero Section -->
-    <section class="relative animated-bg text-white overflow-hidden min-h-[600px] flex items-center" aria-label="Hero section">
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 w-full">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
-                <div class="lg:col-span-2">
-                    <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight">
-                        AL-MAGHRIB<br>
-                        <span class="text-yellow-400 font-black tracking-wider">INTERNATIONAL SCHOOL</span>
-                    </h1>
-                </div>
-                <div class="lg:col-span-1 bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-6 border border-white border-opacity-20">
-                    <h3 class="text-xl font-bold mb-4 text-yellow-400">Academic Highlights</h3>
-                    <ul class="space-y-3" role="list">
-                        @foreach($defaultHighlights as $highlight)
-                        <li class="flex items-start gap-3">
-                            <div class="w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                                <span class="text-blue-900 font-bold text-sm">{{ strtoupper(substr($highlight, 0, 1)) }}</span>
-                            </div>
-                            <span class="text-sm">{{ $highlight }}</span>
-                        </li>
-                        @endforeach
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-    @endif
-
-    <!-- Modern Information Cards Section -->
-    @php
-        $infoEnrollment = $homePageSections['info_enrollment'] ?? null;
-        $infoEvents = $homePageSections['info_events'] ?? null;
-        $infoNotice = $homePageSections['info_notice'] ?? null;
-    @endphp
-    <section class="section-modern bg-gradient-to-b from-white to-gray-50" aria-labelledby="info-cards-heading">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Enrollment News Card -->
-                <article class="modern-card p-8 text-center group" tabindex="0">
-                    <div class="modern-card-icon bg-gradient-to-br from-green-500 to-green-600 text-white">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4" id="enrollment-heading">
-                        {{ $infoEnrollment->title ?? 'Enrollment News' }}
-                    </h3>
-                    <p class="text-gray-600 leading-relaxed mb-6">
-                        {{ $infoEnrollment->description ?? 'Admissions are open for all classes. Apply now for the upcoming academic year.' }}
-                    </p>
-                    @if($infoEnrollment && $infoEnrollment->button_link)
-                    <a href="{{ $infoEnrollment->button_link }}" class="btn-modern inline-block" aria-describedby="enrollment-heading">
-                        {{ $infoEnrollment->button_text ?? 'Apply Now' }}
-                    </a>
-                    @endif
-                </article>
-
-                <!-- Regular Events Card -->
-                <article class="modern-card p-8 text-center group" tabindex="0">
-                    <div class="modern-card-icon bg-gradient-to-br from-blue-500 to-blue-600 text-white">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4" id="events-heading">
-                        {{ $infoEvents->title ?? 'Regular Events' }}
-                    </h3>
-                    <p class="text-gray-600 leading-relaxed mb-6">
-                        {{ $infoEvents->description ?? 'Join us for various educational and cultural events throughout the year.' }}
-                    </p>
-                    @if($infoEvents && $infoEvents->button_link)
-                    <a href="{{ $infoEvents->button_link }}" class="btn-modern inline-block" aria-describedby="events-heading">
-                        {{ $infoEvents->button_text ?? 'View Events' }}
-                    </a>
-                    @endif
-                </article>
-
-                <!-- Notice Board Card -->
-                <article class="modern-card p-8 text-center group" tabindex="0">
-                    <div class="modern-card-icon bg-gradient-to-br from-purple-500 to-purple-600 text-white">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4" id="notice-heading">
-                        {{ $infoNotice->title ?? 'Notice Board' }}
-                    </h3>
-                    <p class="text-gray-600 leading-relaxed mb-6">
-                        {{ $infoNotice->description ?? 'Stay updated with the latest announcements and important notifications.' }}
-                    </p>
-                    @if($infoNotice && $infoNotice->button_link)
-                    <a href="{{ $infoNotice->button_link }}" class="btn-modern inline-block" aria-describedby="notice-heading">
-                        {{ $infoNotice->button_text ?? 'View Notices' }}
-                    </a>
-                    @endif
-                </article>
-            </div>
-        </div>
-    </section>
+    <x-home.stat-highlight :items="$statHighlights" />
 
     <!-- Upcoming Events Section -->
     @if($upcomingEvents && $upcomingEvents->count() > 0)
-    <section class="section-modern bg-white" aria-labelledby="upcoming-events-heading">
+    <section class="section-modern bg-gradient-to-br from-slate-50 to-indigo-50/30 scroll-fade-in section-bg-tilt-right" aria-labelledby="upcoming-events-heading">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 id="upcoming-events-heading" class="heading-modern text-center mb-12">Upcoming Events</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                @foreach($upcomingEvents->take(3) as $event)
-                <article class="modern-card overflow-hidden group" tabindex="0">
-                    <a href="{{ route('events.show', $event) }}" class="block focus-visible-modern">
-                        @if($event->hasMedia('cover_image'))
-                            <img src="{{ $event->getFirstMediaUrl('cover_image', 'medium') }}" 
-                                 alt="{{ $event->title }}" 
-                                 class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
-                                 loading="lazy">
-                        @else
-                            <div class="w-full h-48 bg-gradient-to-r from-blue-400 to-blue-600"></div>
-                        @endif
-                        <div class="p-6">
-                            <h3 class="text-xl font-bold text-gray-900 mb-2 line-clamp-2">{{ $event->title }}</h3>
-                            <p class="text-gray-600 text-sm mb-4 line-clamp-2">{{ strip_tags($event->description) }}</p>
-                            <div class="flex items-center text-sm text-gray-500">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                </svg>
-                                <time datetime="{{ $event->event_date->format('Y-m-d') }}">
-                                    {{ $event->event_date->format('M d, Y') }}
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-12">
+                <div class="mb-6 md:mb-0">
+                    <h2 id="upcoming-events-heading" class="heading-modern text-gradient mb-2">Upcoming Events</h2>
+                    <p class="heading-modern-subtitle">Stay connected with our latest activities and celebrations</p>
+                </div>
+                <a href="{{ route('events.index') }}" class="btn-modern-primary self-start md:self-auto">
+                    View All Events
+                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </a>
+            </div>
+            
+            <!-- Desktop Grid - Show 3-5 events -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
+                @foreach($upcomingEvents->take(5) as $index => $event)
+                <article class="event-card stagger-item group" style="transition-delay: {{ $index * 100 }}ms" tabindex="0">
+                    <a href="{{ route('events.show', $event) }}" class="block focus-visible-modern h-full flex flex-col">
+                        <div class="relative overflow-hidden rounded-t-2xl">
+                            @if($event->hasMedia('cover_image'))
+                                <img src="{{ $event->getFirstMediaUrl('cover_image', 'medium') }}"
+                                     alt="{{ $event->title }}"
+                                     class="w-full h-48 md:h-56 object-cover transition-transform duration-500 group-hover:scale-110"
+                                     loading="lazy">
+                            @else
+                                <div class="w-full h-48 md:h-56 gradient-indigo-violet"></div>
+                            @endif
+                            <div class="event-date-badge">
+                                <div class="text-xs font-normal opacity-90">{{ $event->event_date->format('M') }}</div>
+                                <div class="text-xl font-bold">{{ $event->event_date->format('d') }}</div>
+                                <div class="text-xs font-normal opacity-90">{{ $event->event_date->format('Y') }}</div>
+                            </div>
+                        </div>
+                        <div class="p-6 flex-1 flex flex-col bg-white">
+                            <h3 class="text-xl font-bold text-slate-900 mb-3 line-clamp-2 group-hover:text-indigo-600 transition-colors">{{ $event->title }}</h3>
+                            <p class="text-slate-600 text-sm mb-4 line-clamp-2 flex-1">{{ strip_tags($event->description) }}</p>
+                            <div class="flex items-center justify-between mt-auto pt-4 border-t border-slate-100">
+                                <span class="text-sm font-semibold text-indigo-600">Learn More →</span>
+                                <time datetime="{{ $event->event_date->format('Y-m-d') }}" class="text-xs text-slate-500">
+                                    {{ $event->event_date->format('F j, Y') }}
                                 </time>
                             </div>
                         </div>
@@ -269,34 +79,57 @@
     </section>
     @endif
 
-    <!-- Vision Section -->
+    <!-- Vision & Mission Section -->
     @php
         $visionPage = $visionPage ?? \App\Models\Page::where('slug', 'vision')->published()->first();
     @endphp
     @if($visionPage)
-    <section class="section-modern bg-gradient-to-b from-gray-50 to-white" aria-labelledby="vision-heading">
+    <section class="section-modern vision-section scroll-fade-in section-bg-angle-right" aria-labelledby="vision-heading">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div>
-                    <h2 id="vision-heading" class="heading-modern mb-6">{{ $visionPage->title }}</h2>
-                    <div class="text-gray-700 leading-relaxed text-lg">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+                <!-- Left Column: Content -->
+                <div class="space-y-6">
+                    <div class="vision-icon">
+                        <svg class="w-10 h-10 md:w-12 md:h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                    </div>
+                    <h2 id="vision-heading" class="heading-modern text-slate-900" style="letter-spacing: -0.02em; line-height: 1.3;">{{ $visionPage->title }}</h2>
+                    <div class="text-slate-700 leading-relaxed text-lg md:text-xl" style="letter-spacing: 0.01em; line-height: 1.8;">
                         {!! $visionPage->content !!}
                     </div>
+                    <div class="flex items-center gap-4 pt-4">
+                        <div class="vision-icon">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-900 mb-1">Our Mission</h3>
+                            <p class="text-slate-600 text-sm">Empowering students with knowledge, character, and faith</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="flex gap-4 flex-col">
+                
+                <!-- Right Column: Image & Video -->
+                <div class="space-y-6">
                     @if($visionPage->hasMedia('featured_image'))
-                        <img src="{{ $visionPage->getFirstMediaUrl('featured_image', 'medium') }}" 
-                             alt="{{ $visionPage->title }}" 
-                             class="rounded-xl shadow-2xl w-full h-64 object-cover"
-                             loading="lazy">
+                        <div class="relative rounded-3xl overflow-hidden shadow-2xl">
+                            <img src="{{ $visionPage->getFirstMediaUrl('featured_image', 'large') }}"
+                                 alt="{{ $visionPage->title }}"
+                                 class="w-full h-64 md:h-80 object-cover"
+                                 loading="lazy">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                        </div>
                     @else
-                        <div class="bg-gradient-to-r from-blue-400 to-blue-600 rounded-xl shadow-2xl w-full h-64"></div>
+                        <div class="w-full h-64 md:h-80 rounded-3xl shadow-2xl gradient-violet-pink"></div>
                     @endif
-                    <button class="btn-modern w-full flex items-center justify-between" aria-label="Watch our vision video">
-                        <span class="font-semibold">Watch Our Vision Video</span>
+                    <button class="btn-modern-primary w-full flex items-center justify-center gap-3" aria-label="Watch our vision video">
                         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                             <path d="M8 5v14l11-7z"/>
                         </svg>
+                        <span class="font-semibold">Watch Our Vision Video</span>
                     </button>
                 </div>
             </div>
@@ -308,28 +141,28 @@
     @php
         $competitionSection = $homePageSections['video_2'] ?? null;
     @endphp
-    <section class="section-modern animated-bg text-white" aria-labelledby="competition-heading">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section class="section-modern animated-bg text-white scroll-fade-in relative section-bg-skew-left" aria-labelledby="competition-heading">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div class="relative rounded-xl overflow-hidden shadow-2xl">
+                <div class="relative rounded-3xl overflow-hidden shadow-2xl">
                     @if($competitionSection && isset($competitionSection->data['youtube_url']))
-                        <div class="aspect-video bg-gray-900 flex items-center justify-center">
+                        <div class="aspect-video bg-slate-900 flex items-center justify-center">
                             <button class="play-button-large w-20 h-20 bg-white bg-opacity-90 rounded-full flex items-center justify-center hover:bg-opacity-100 transition focus-visible-modern" aria-label="Play competition video">
-                                <svg class="w-10 h-10 text-blue-600" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <svg class="w-10 h-10 text-indigo-600" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                     <path d="M8 5v14l11-7z"/>
                                 </svg>
                             </button>
                         </div>
                     @else
-                        <div class="aspect-video bg-gradient-to-r from-purple-600 to-blue-600"></div>
+                        <div class="aspect-video gradient-violet-pink"></div>
                     @endif
                 </div>
                 <div>
-                    <h2 id="competition-heading" class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+                    <h2 id="competition-heading" class="heading-modern text-white mb-6">
                         {{ $competitionSection->title ?? 'Relieve the Spirit of Inter-School Quran Competition' }}
                     </h2>
                     @if($competitionSection && $competitionSection->subtitle)
-                    <p class="text-xl text-blue-100 mb-6">{{ $competitionSection->subtitle }}</p>
+                    <p class="text-xl text-indigo-100 mb-6 leading-relaxed">{{ $competitionSection->subtitle }}</p>
                     @endif
                     <div class="flex items-center gap-4">
                         <div class="w-12 h-12 border-2 border-white rounded-full flex items-center justify-center animate-bounce">
@@ -349,23 +182,27 @@
         $whyChoose = $homePageSections['why_choose'] ?? null;
     @endphp
     @if($whyChoose)
-    <section class="section-modern bg-white" aria-labelledby="why-choose-heading">
+    <section class="section-modern bg-white scroll-fade-in section-bg-tilt-left" aria-labelledby="why-choose-heading">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div>
-                    <h2 id="why-choose-heading" class="heading-modern mb-6">{{ $whyChoose->title ?? 'Why Choose Al-Maghrib' }}</h2>
-                    <div class="text-gray-700 leading-relaxed text-lg space-y-4">
+                    <h2 id="why-choose-heading" class="heading-modern text-gradient mb-6">{{ $whyChoose->title ?? 'Why Choose Al-Maghrib' }}</h2>
+                    <div class="text-slate-700 leading-relaxed text-lg md:text-xl space-y-4" style="letter-spacing: 0.01em; line-height: 1.8;">
                         {!! $whyChoose->content ?? $whyChoose->description !!}
                     </div>
                 </div>
-                <div class="relative rounded-xl overflow-hidden shadow-2xl">
-                    @if($whyChoose->hasMedia('images'))
-                        <img src="{{ $whyChoose->getFirstMediaUrl('images', 'large') }}" 
-                             alt="{{ $whyChoose->title }}" 
-                             class="w-full h-auto transition-transform duration-300 hover:scale-105"
-                             loading="lazy">
+                <div class="relative rounded-3xl overflow-hidden shadow-2xl">
+                    @php
+                        $whyChooseImage = $whyChoose->getMediaUrl('images', 'large') ?: $whyChoose->getMediaUrl('images');
+                    @endphp
+                    @if($whyChooseImage)
+                        <img src="{{ asset($whyChooseImage) }}"
+                             alt="{{ $whyChoose->title }}"
+                             class="w-full h-auto transition-transform duration-500 hover:scale-105"
+                             loading="lazy"
+                             onerror="this.onerror=null; this.src='{{ asset('/images/placeholder.jpg') }}';">
                     @else
-                        <div class="bg-gradient-to-r from-blue-400 to-blue-600 w-full h-96"></div>
+                        <div class="gradient-pink-amber w-full h-96"></div>
                     @endif
                 </div>
             </div>
@@ -378,24 +215,28 @@
         $childrenResponsibility = $homePageSections['children_responsibility'] ?? null;
     @endphp
     @if($childrenResponsibility)
-    <section class="section-modern animated-bg text-white" aria-labelledby="responsibility-heading">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section class="section-modern animated-bg text-white scroll-fade-in relative" aria-labelledby="responsibility-heading">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div class="relative rounded-xl overflow-hidden shadow-2xl order-2 lg:order-1">
-                    @if($childrenResponsibility->hasMedia('images'))
-                        <img src="{{ $childrenResponsibility->getFirstMediaUrl('images', 'large') }}" 
-                             alt="{{ $childrenResponsibility->title }}" 
-                             class="w-full h-auto transition-transform duration-300 hover:scale-105"
-                             loading="lazy">
+                <div class="relative rounded-3xl overflow-hidden shadow-2xl order-2 lg:order-1">
+                    @php
+                        $childrenImage = $childrenResponsibility->getMediaUrl('images', 'large') ?: $childrenResponsibility->getMediaUrl('images');
+                    @endphp
+                    @if($childrenImage)
+                        <img src="{{ asset($childrenImage) }}"
+                             alt="{{ $childrenResponsibility->title }}"
+                             class="w-full h-auto transition-transform duration-500 hover:scale-105"
+                             loading="lazy"
+                             onerror="this.onerror=null; this.src='{{ asset('/images/placeholder.jpg') }}';">
                     @else
-                        <div class="bg-gradient-to-r from-blue-300 to-blue-400 w-full h-96"></div>
+                        <div class="gradient-amber-emerald w-full h-96"></div>
                     @endif
                 </div>
                 <div class="order-1 lg:order-2">
-                    <h2 id="responsibility-heading" class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+                    <h2 id="responsibility-heading" class="heading-modern text-white mb-6">
                         {{ $childrenResponsibility->title ?? 'Your Children, Our Responsibility' }}
                     </h2>
-                    <div class="leading-relaxed space-y-4 text-blue-50 text-lg">
+                    <div class="leading-relaxed space-y-4 text-indigo-100 text-lg md:text-xl" style="letter-spacing: 0.01em; line-height: 1.8;">
                         {!! $childrenResponsibility->content ?? $childrenResponsibility->description !!}
                     </div>
                 </div>
@@ -410,18 +251,18 @@
         $values = $valuesSection && isset($valuesSection->data['values']) ? $valuesSection->data['values'] : [];
     @endphp
     @if($valuesSection && count($values) > 0)
-    <section class="section-modern bg-gradient-to-b from-white to-gray-50" aria-labelledby="values-heading">
+    <section class="section-modern bg-gradient-to-br from-slate-50 to-emerald-50/20 scroll-fade-in section-bg-angle-left" aria-labelledby="values-heading">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
-                <h2 id="values-heading" class="heading-modern mb-4">{{ $valuesSection->title ?? 'Our Values' }}</h2>
+                <h2 id="values-heading" class="heading-modern text-gradient mb-4">{{ $valuesSection->title ?? 'Our Values' }}</h2>
                 @if($valuesSection->description)
-                <p class="text-gray-600 text-lg max-w-2xl mx-auto">{{ $valuesSection->description }}</p>
+                <p class="heading-modern-subtitle max-w-2xl mx-auto">{{ $valuesSection->description }}</p>
                 @endif
             </div>
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                @foreach($values as $value)
-                <div class="value-card" tabindex="0">
-                    <p class="text-gray-900 font-semibold">{{ $value }}</p>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                @foreach($values as $index => $value)
+                <div class="modern-card text-center stagger-item" style="transition-delay: {{ $index * 50 }}ms" tabindex="0">
+                    <p class="text-slate-900 font-semibold text-base md:text-lg">{{ $value }}</p>
                 </div>
                 @endforeach
             </div>
@@ -435,32 +276,47 @@
         $advisors = $advisorsSection && isset($advisorsSection->data['advisors']) ? $advisorsSection->data['advisors'] : [];
     @endphp
     @if($advisorsSection && count($advisors) > 0)
-    <section class="section-modern bg-white" aria-labelledby="advisors-heading">
+    <section class="section-modern bg-white scroll-fade-in section-bg-skew-right" aria-labelledby="advisors-heading">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 id="advisors-heading" class="heading-modern text-center mb-4">{{ $advisorsSection->title ?? 'Here are Our Advisors' }}</h2>
-            @if($advisorsSection->subtitle)
-            <p class="text-center text-gray-600 mb-12 text-lg max-w-3xl mx-auto">{{ $advisorsSection->subtitle }}</p>
-            @endif
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                @foreach($advisors as $advisor)
-                <article class="advisor-card-modern" tabindex="0">
-                    <div class="advisor-image-modern overflow-hidden bg-gradient-to-br from-blue-300 to-blue-500">
-                        @if(isset($advisor['photo_url']))
-                            <img src="{{ $advisor['photo_url'] }}" 
-                                 alt="{{ $advisor['name'] ?? 'Advisor photo' }}" 
-                                 class="w-full h-full object-cover"
-                                 loading="lazy">
-                        @else
-                            <div class="w-full h-full flex items-center justify-center">
-                                <svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                                </svg>
-                            </div>
-                        @endif
+            <div class="text-center mb-12">
+                <h2 id="advisors-heading" class="heading-modern text-gradient mb-4">{{ $advisorsSection->title ?? 'Here are Our Advisors' }}</h2>
+                @if($advisorsSection->subtitle)
+                <p class="heading-modern-subtitle max-w-3xl mx-auto">{{ $advisorsSection->subtitle }}</p>
+                @endif
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+                @foreach($advisors as $index => $advisor)
+                <article class="profile-card stagger-item" style="transition-delay: {{ $index * 100 }}ms" tabindex="0">
+                    <div class="relative p-6 text-center">
+                        <!-- Avatar -->
+                        <div class="mb-4">
+                            @if(isset($advisor['photo_url']))
+                                <img src="{{ $advisor['photo_url'] }}"
+                                     alt="{{ $advisor['name'] ?? 'Advisor photo' }}"
+                                     class="profile-avatar mx-auto"
+                                     loading="lazy">
+                            @else
+                                <div class="profile-avatar mx-auto gradient-indigo-violet flex items-center justify-center">
+                                    <svg class="w-16 h-16 md:w-20 md:h-20 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                    </svg>
+                                </div>
+                            @endif
+                        </div>
+                        
+                        <!-- Default Content -->
+                        <div class="profile-default">
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">{{ $advisor['name'] ?? '' }}</h3>
+                            <p class="text-indigo-600 font-semibold mb-3">{{ $advisor['title'] ?? '' }}</p>
+                        </div>
+                        
+                        <!-- Hover Reveal -->
+                        <div class="profile-hover-reveal">
+                            <h3 class="text-xl font-bold mb-2">{{ $advisor['name'] ?? '' }}</h3>
+                            <p class="text-indigo-200 font-semibold mb-3">{{ $advisor['title'] ?? '' }}</p>
+                            <p class="text-white/90 text-sm leading-relaxed">{{ $advisor['description'] ?? 'Dedicated advisor committed to excellence in education.' }}</p>
+                        </div>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">{{ $advisor['name'] ?? '' }}</h3>
-                    <p class="text-blue-600 font-semibold mb-3">{{ $advisor['title'] ?? '' }}</p>
-                    <p class="text-gray-600 text-sm leading-relaxed">{{ $advisor['description'] ?? '' }}</p>
                 </article>
                 @endforeach
             </div>
@@ -474,189 +330,184 @@
         $boardMembers = $boardSection && isset($boardSection->data['members']) ? $boardSection->data['members'] : [];
         $featuredStaff = $featuredStaff ?? collect();
     @endphp
-    <section class="section-modern bg-gradient-to-b from-gray-50 to-white" aria-labelledby="board-heading">
+    <section class="section-modern bg-gradient-to-br from-slate-50 to-violet-50/20 scroll-fade-in section-bg-tilt-right" aria-labelledby="board-heading">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 id="board-heading" class="heading-modern text-center mb-12">{{ $boardSection->title ?? 'Board of Management' }}</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="text-center mb-12">
+                <h2 id="board-heading" class="heading-modern text-gradient mb-4">{{ $boardSection->title ?? 'Board of Management' }}</h2>
+                <p class="heading-modern-subtitle max-w-2xl mx-auto">Leading with vision, integrity, and dedication</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
                 @if(count($boardMembers) > 0)
-                    @foreach($boardMembers as $member)
-                    <article class="advisor-card-modern" tabindex="0">
-                        <div class="advisor-image-modern overflow-hidden bg-gradient-to-br from-blue-300 to-blue-500">
-                            @if(isset($member['photo_url']))
-                                <img src="{{ $member['photo_url'] }}" 
-                                     alt="{{ $member['name'] ?? 'Board member photo' }}" 
-                                     class="w-full h-full object-cover"
-                                     loading="lazy">
-                            @else
-                                <div class="w-full h-full flex items-center justify-center">
-                                    <svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                                    </svg>
-                                </div>
-                            @endif
+                    @foreach($boardMembers as $index => $member)
+                    <article class="profile-card stagger-item" style="transition-delay: {{ $index * 100 }}ms" tabindex="0">
+                        <div class="relative p-6 text-center">
+                            <!-- Avatar -->
+                            <div class="mb-4">
+                                @if(isset($member['photo_url']))
+                                    <img src="{{ $member['photo_url'] }}"
+                                         alt="{{ $member['name'] ?? 'Board member photo' }}"
+                                         class="profile-avatar mx-auto"
+                                         loading="lazy">
+                                @else
+                                    <div class="profile-avatar mx-auto gradient-violet-pink flex items-center justify-center">
+                                        <svg class="w-16 h-16 md:w-20 md:h-20 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                        </svg>
+                                    </div>
+                                @endif
+                            </div>
+                            
+                            <!-- Default Content -->
+                            <div class="profile-default">
+                                <h3 class="text-xl font-bold text-slate-900 mb-2">{{ $member['name'] ?? '' }}</h3>
+                                <p class="text-violet-600 font-semibold mb-2">{{ $member['title'] ?? '' }}</p>
+                                <p class="text-slate-600 text-sm">{{ $member['organization'] ?? 'AL-MAGHRIB INTERNATIONAL SCHOOL' }}</p>
+                            </div>
+                            
+                            <!-- Hover Reveal -->
+                            <div class="profile-hover-reveal" style="background: linear-gradient(135deg, #7C3AED 0%, #EC4899 100%);">
+                                <h3 class="text-xl font-bold mb-2">{{ $member['name'] ?? '' }}</h3>
+                                <p class="text-violet-200 font-semibold mb-3">{{ $member['title'] ?? '' }}</p>
+                                <p class="text-white/90 text-sm mb-2">{{ $member['organization'] ?? 'AL-MAGHRIB INTERNATIONAL SCHOOL' }}</p>
+                                @if(isset($member['bio']) && $member['bio'])
+                                <p class="text-white/80 text-xs leading-relaxed mt-3">{{ $member['bio'] }}</p>
+                                @endif
+                            </div>
                         </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">{{ $member['name'] ?? '' }}</h3>
-                        <p class="text-blue-600 font-semibold mb-2">{{ $member['title'] ?? '' }}</p>
-                        <p class="text-gray-600 text-sm">{{ $member['organization'] ?? 'AL-MAGHRIB INTERNATIONAL SCHOOL' }}</p>
                     </article>
                     @endforeach
                 @elseif($featuredStaff->count() > 0)
-                    @foreach($featuredStaff->take(3) as $staff)
-                    <article class="advisor-card-modern" tabindex="0">
-                        <div class="advisor-image-modern overflow-hidden bg-gradient-to-br from-blue-300 to-blue-500">
-                            @if($staff->hasMedia('photo'))
-                                <img src="{{ $staff->getFirstMediaUrl('photo', 'medium') }}" 
-                                     alt="{{ $staff->name }}" 
-                                     class="w-full h-full object-cover"
-                                     loading="lazy">
-                            @else
-                                <div class="w-full h-full flex items-center justify-center">
-                                    <svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                                    </svg>
-                                </div>
-                            @endif
+                    @foreach($featuredStaff->take(3) as $index => $staff)
+                    <article class="profile-card stagger-item" style="transition-delay: {{ $index * 100 }}ms" tabindex="0">
+                        <div class="relative p-6 text-center">
+                            <div class="mb-4">
+                                @if($staff->hasMedia('photo'))
+                                    <img src="{{ $staff->getFirstMediaUrl('photo', 'medium') }}"
+                                         alt="{{ $staff->name }}"
+                                         class="profile-avatar mx-auto"
+                                         loading="lazy">
+                                @else
+                                    <div class="profile-avatar mx-auto gradient-violet-pink flex items-center justify-center">
+                                        <svg class="w-16 h-16 md:w-20 md:h-20 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                        </svg>
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="profile-default">
+                                <h3 class="text-xl font-bold text-slate-900 mb-2">{{ $staff->name }}</h3>
+                                <p class="text-violet-600 font-semibold mb-2">{{ $staff->position }}</p>
+                                <p class="text-slate-600 text-sm">AL-MAGHRIB INTERNATIONAL SCHOOL</p>
+                            </div>
+                            <div class="profile-hover-reveal" style="background: linear-gradient(135deg, #7C3AED 0%, #EC4899 100%);">
+                                <h3 class="text-xl font-bold mb-2">{{ $staff->name }}</h3>
+                                <p class="text-violet-200 font-semibold mb-3">{{ $staff->position }}</p>
+                                <p class="text-white/90 text-sm">AL-MAGHRIB INTERNATIONAL SCHOOL</p>
+                            </div>
                         </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">{{ $staff->name }}</h3>
-                        <p class="text-blue-600 font-semibold mb-2">{{ $staff->position }}</p>
-                        <p class="text-gray-600 text-sm">AL-MAGHRIB INTERNATIONAL SCHOOL</p>
                     </article>
                     @endforeach
                 @else
-                    <!-- Default Board Members -->
                     @foreach([
                         ['name' => 'MD MOHIBULLAH HELAL', 'title' => 'CHAIRMAN & PRINCIPAL'],
                         ['name' => 'MD NEAZUL HOQUE', 'title' => 'CEO & ACADEMIC DIRECTOR'],
                         ['name' => 'MOHAMMAD EMDAD ULLAH', 'title' => 'VICE PRINCIPAL']
-                    ] as $member)
-                    <article class="advisor-card-modern" tabindex="0">
-                        <div class="advisor-image-modern overflow-hidden bg-gradient-to-br from-blue-300 to-blue-500">
-                            <div class="w-full h-full flex items-center justify-center">
-                                <svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                                </svg>
+                    ] as $index => $member)
+                    <article class="profile-card stagger-item" style="transition-delay: {{ $index * 100 }}ms" tabindex="0">
+                        <div class="relative p-6 text-center">
+                            <div class="mb-4">
+                                <div class="profile-avatar mx-auto gradient-violet-pink flex items-center justify-center">
+                                    <svg class="w-16 h-16 md:w-20 md:h-20 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="profile-default">
+                                <h3 class="text-xl font-bold text-slate-900 mb-2">{{ $member['name'] }}</h3>
+                                <p class="text-violet-600 font-semibold mb-2">{{ $member['title'] }}</p>
+                                <p class="text-slate-600 text-sm">AL-MAGHRIB INTERNATIONAL SCHOOL</p>
+                            </div>
+                            <div class="profile-hover-reveal" style="background: linear-gradient(135deg, #7C3AED 0%, #EC4899 100%);">
+                                <h3 class="text-xl font-bold mb-2">{{ $member['name'] }}</h3>
+                                <p class="text-violet-200 font-semibold mb-3">{{ $member['title'] }}</p>
+                                <p class="text-white/90 text-sm">AL-MAGHRIB INTERNATIONAL SCHOOL</p>
                             </div>
                         </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">{{ $member['name'] }}</h3>
-                        <p class="text-blue-600 font-semibold mb-2">{{ $member['title'] }}</p>
-                        <p class="text-gray-600 text-sm">AL-MAGHRIB INTERNATIONAL SCHOOL</p>
                     </article>
                     @endforeach
                 @endif
             </div>
         </div>
     </section>
+
+    <!-- Call-to-Action Section -->
+    <section class="section-modern gradient-indigo-violet text-white scroll-fade-in relative overflow-hidden" aria-labelledby="cta-heading">
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
+            <h2 id="cta-heading" class="heading-modern text-white mb-6">Ready to Begin Your Journey?</h2>
+            <p class="text-xl text-indigo-100 mb-8 max-w-2xl mx-auto leading-relaxed">
+                Join Al-Maghrib International School and give your child the gift of balanced education that nurtures both mind and soul.
+            </p>
+            <div 
+                x-data="{ loading: false, success: false }"
+                class="flex flex-col sm:flex-row gap-4 justify-center items-center"
+            >
+                <a 
+                    href="{{ route('admission.index') }}"
+                    @click="loading = true; setTimeout(() => { loading = false; success = true; setTimeout(() => success = false, 3000); }, 1500)"
+                    class="btn-modern bg-white text-indigo-600 hover:bg-indigo-50 min-w-[200px]"
+                >
+                    <span x-show="!loading && !success">Apply for Admission</span>
+                    <span x-show="loading" class="flex items-center gap-2">
+                        <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Processing...
+                    </span>
+                    <span x-show="success && !loading" class="flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Redirecting...
+                    </span>
+                </a>
+                <a 
+                    href="{{ route('contact.index') }}"
+                    class="btn-modern bg-transparent border-2 border-white text-white hover:bg-white/10"
+                >
+                    Contact Us
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Back to Top Button -->
+    <div 
+        x-data="{ show: false }"
+        x-init="
+            window.addEventListener('scroll', () => {
+                show = (window.pageYOffset || document.documentElement.scrollTop) > 300;
+            });
+        "
+        x-show="show"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 translate-y-4"
+        x-transition:enter-end="opacity-100 translate-y-0"
+        x-transition:leave="transition ease-in duration-300"
+        x-transition:leave-start="opacity-100 translate-y-0"
+        x-transition:leave-end="opacity-0 translate-y-4"
+        @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
+        class="fixed bottom-8 right-8 z-50 gradient-indigo-violet text-white rounded-full p-4 shadow-2xl hover:shadow-3xl transition-all duration-300 cursor-pointer focus:outline-none focus:ring-4 focus:ring-indigo-300 min-w-[48px] min-h-[48px] flex items-center justify-center"
+        role="button"
+        tabindex="0"
+        aria-label="Back to top"
+        @keydown.enter="window.scrollTo({ top: 0, behavior: 'smooth' })"
+        @keydown.space.prevent="window.scrollTo({ top: 0, behavior: 'smooth' })"
+    >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+        </svg>
+    </div>
 </main>
 
-@push('scripts')
-    @if(isset($heroSlides) && $heroSlides->count() > 1)
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const slider = document.getElementById('heroSlider');
-            if (!slider) return;
-            
-            const track = slider.querySelector('.slider-track');
-            const slides = slider.querySelectorAll('.slider-slide');
-            const prevBtn = document.getElementById('sliderPrev');
-            const nextBtn = document.getElementById('sliderNext');
-            const indicators = slider.querySelectorAll('.slider-indicator');
-            
-            let currentSlide = 0;
-            const totalSlides = slides.length;
-            let autoPlayInterval = null;
-            const autoPlayDelay = 5000;
-            
-            function updateSlider() {
-                const translateX = -currentSlide * 100;
-                track.style.transform = `translateX(${translateX}%)`;
-                
-                indicators.forEach((indicator, index) => {
-                    if (index === currentSlide) {
-                        indicator.classList.add('bg-yellow-400', 'w-8');
-                        indicator.classList.remove('bg-white', 'bg-opacity-50');
-                        indicator.setAttribute('aria-selected', 'true');
-                    } else {
-                        indicator.classList.remove('bg-yellow-400', 'w-8');
-                        indicator.classList.add('bg-white', 'bg-opacity-50');
-                        indicator.setAttribute('aria-selected', 'false');
-                    }
-                });
-            }
-            
-            function goToSlide(index) {
-                if (index < 0) {
-                    currentSlide = totalSlides - 1;
-                } else if (index >= totalSlides) {
-                    currentSlide = 0;
-                } else {
-                    currentSlide = index;
-                }
-                updateSlider();
-                resetAutoPlay();
-            }
-            
-            function nextSlide() {
-                goToSlide(currentSlide + 1);
-            }
-            
-            function prevSlide() {
-                goToSlide(currentSlide - 1);
-            }
-            
-            function startAutoPlay() {
-                if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-                autoPlayInterval = setInterval(nextSlide, autoPlayDelay);
-            }
-            
-            function stopAutoPlay() {
-                if (autoPlayInterval) {
-                    clearInterval(autoPlayInterval);
-                    autoPlayInterval = null;
-                }
-            }
-            
-            function resetAutoPlay() {
-                stopAutoPlay();
-                startAutoPlay();
-            }
-            
-            if (nextBtn) nextBtn.addEventListener('click', nextSlide);
-            if (prevBtn) prevBtn.addEventListener('click', prevSlide);
-            
-            indicators.forEach((indicator, index) => {
-                indicator.addEventListener('click', () => goToSlide(index));
-            });
-            
-            slider.addEventListener('mouseenter', stopAutoPlay);
-            slider.addEventListener('mouseleave', startAutoPlay);
-            
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'ArrowLeft') prevSlide();
-                else if (e.key === 'ArrowRight') nextSlide();
-            });
-            
-            let touchStartX = 0;
-            let touchEndX = 0;
-            
-            slider.addEventListener('touchstart', (e) => {
-                touchStartX = e.changedTouches[0].screenX;
-            }, { passive: true });
-            
-            slider.addEventListener('touchend', (e) => {
-                touchEndX = e.changedTouches[0].screenX;
-                const swipeThreshold = 50;
-                const diff = touchStartX - touchEndX;
-                
-                if (Math.abs(diff) > swipeThreshold) {
-                    if (diff > 0) nextSlide();
-                    else prevSlide();
-                }
-            }, { passive: true });
-            
-            updateSlider();
-            startAutoPlay();
-        });
-    </script>
-    @endif
-@endpush
 @endsection
