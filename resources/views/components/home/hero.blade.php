@@ -113,7 +113,7 @@
                                 @if($slidePrimaryAction['url'])
                                     <a 
                                         href="{{ $slidePrimaryAction['url'] }}" 
-                                        class="btn-primary bg-white text-brand-700 hover:text-brand-800 animate-pulse-on-hover"
+                                        class="btn-modern-primary animate-pulse-on-hover"
                                     >
                                         {{ $slidePrimaryAction['label'] }}
                                     </a>
@@ -122,7 +122,7 @@
                                 @if($secondaryAction)
                                     <a 
                                         href="{{ $secondaryAction['url'] ?? '#' }}" 
-                                        class="btn-secondary bg-transparent border-white/50 text-white hover:bg-white/10"
+                                        class="btn-modern bg-transparent border-2 border-white text-white hover:bg-white/10"
                                     >
                                         {{ $secondaryAction['label'] ?? 'Discover More' }}
                                     </a>

@@ -10,7 +10,7 @@
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     /**
-     * Intersection Observer for subtle fade-in animations
+     * Intersection Observer for subtle fade-in animations with stagger
      */
     function initScrollAnimations() {
         if (prefersReducedMotion) return;
@@ -21,9 +21,9 @@
         };
 
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
+            entries.forEach((entry) => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('fade-in-up');
+                    entry.target.classList.add('visible');
                     entry.target.classList.remove('scroll-fade-in');
                     observer.unobserve(entry.target);
                 }
@@ -35,13 +35,29 @@
             observer.observe(element);
         });
 
+        // Observe stagger items individually for proper animation
+        document.querySelectorAll('.stagger-item').forEach((item, index) => {
+            const itemObserver = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        const delay = index * 100;
+                        setTimeout(() => {
+                            entry.target.classList.add('visible');
+                        }, delay);
+                        itemObserver.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            itemObserver.observe(item);
+        });
+
         // Also observe sections that are below viewport on load
         setTimeout(() => {
             const viewportHeight = window.innerHeight;
             
-            document.querySelectorAll('section.section-fade-in').forEach(section => {
+            document.querySelectorAll('section').forEach((section) => {
                 const rect = section.getBoundingClientRect();
-                if (rect.top > viewportHeight) {
+                if (rect.top > viewportHeight && !section.classList.contains('scroll-fade-in')) {
                     section.classList.add('scroll-fade-in');
                     observer.observe(section);
                 }

@@ -1,5 +1,5 @@
 <!-- Top Announcement Bar with Scrolling Text -->
-<div class="bg-blue-600 text-white py-2 text-sm overflow-hidden relative">
+<div class="gradient-indigo-violet text-white py-2 text-sm overflow-hidden relative">
     <div class="marquee-wrapper">
         <div class="marquee-content">
             <span>Admission ongoing on Al-Maghrib International School. Visit our campus to know more.</span>
@@ -37,7 +37,7 @@
 }
 </style>
 
-<header class="bg-white shadow-lg sticky top-0 z-40 border-b border-blue-100">
+<header class="bg-white shadow-md sticky top-0 z-40 border-b border-indigo-100 transition-all duration-300" x-data="{ scrolled: false }" x-init="window.addEventListener('scroll', () => { scrolled = window.pageYOffset > 50; })" :class="{ 'shadow-xl': scrolled }">
     <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center h-20">
             <!-- Logo - Left -->

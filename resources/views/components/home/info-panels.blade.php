@@ -3,12 +3,12 @@
 ])
 
 @if(!empty($panels))
-    <section class="section-modern bg-white" aria-labelledby="features-heading">
+    <section class="section-modern bg-gradient-to-br from-slate-50 to-indigo-50/20 scroll-fade-in" aria-labelledby="features-heading">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                @foreach($panels as $panel)
-                    <article class="card group h-full hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
-                        <div class="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-brand-700 transition-all duration-300 group-hover:bg-brand-100 group-hover:rotate-12 icon-bounce">
+                @foreach($panels as $index => $panel)
+                    <article class="modern-card-elevated group h-full stagger-item" style="transition-delay: {{ $index * 100 }}ms" tabindex="0">
+                        <div class="mb-6 inline-flex h-14 w-14 md:h-16 md:w-16 items-center justify-center rounded-2xl gradient-indigo-violet text-white transition-all duration-300 group-hover:scale-110 icon-bounce shadow-lg">
                             @switch($panel['icon'] ?? null)
                                 @case('calendar')
                                     <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -27,20 +27,20 @@
                             @endswitch
                         </div>
 
-                        <h3 class="text-xl font-semibold text-ink-900">
+                        <h3 class="text-xl md:text-2xl font-bold text-slate-900 mb-3">
                             {{ $panel['title'] }}
                         </h3>
 
                         @if(!empty($panel['description']))
-                            <p class="mt-3 text-sm leading-relaxed text-ink-500">
+                            <p class="mt-3 text-base leading-relaxed text-slate-600" style="letter-spacing: 0.01em; line-height: 1.7;">
                                 {{ $panel['description'] }}
                             </p>
                         @endif
 
                         @if(!empty($panel['button']))
                             <div class="mt-6">
-                                <a href="{{ $panel['button']['url'] }}" class="link-underline text-sm">
-                                    {{ $panel['button']['label'] }}
+                                <a href="{{ $panel['button']['url'] }}" class="underline-draw text-indigo-600 font-semibold text-sm md:text-base">
+                                    {{ $panel['button']['label'] }} →
                                 </a>
                             </div>
                         @endif
