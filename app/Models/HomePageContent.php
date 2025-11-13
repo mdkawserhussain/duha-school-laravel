@@ -12,6 +12,27 @@ class HomePageContent extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia;
 
+    protected $table = 'home_page_contents';
+
+    /**
+     * Prevent saving without required fields
+     */
+    protected static function booted(): void
+    {
+        static::creating(function ($content) {
+            if (empty($content->section_key) || empty($content->section_type)) {
+                // Log the stack trace to identify where this is being called from
+                \Log::error('Attempted to create HomePageContent without required fields', [
+                    'section_key' => $content->section_key ?? 'null',
+                    'section_type' => $content->section_type ?? 'null',
+                    'attributes' => $content->getAttributes(),
+                    'trace' => debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 10)
+                ]);
+                throw new \Exception('Cannot create HomePageContent without section_key and section_type. Check logs for details.');
+            }
+        });
+    }
+
     protected $fillable = [
         'section_key',
         'section_type',

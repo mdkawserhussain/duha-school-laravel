@@ -307,7 +307,6 @@ class PageSeeder extends Seeder
                         <li>Name and contact information (email, phone number, address)</li>
                         <li>Student information for admission applications</li>
                         <li>Employment information for career applications</li>
-                        <li>Newsletter subscription information</li>
                         <li>Any other information you choose to provide</li>
                     </ul>
                     
@@ -315,7 +314,6 @@ class PageSeeder extends Seeder
                     <p>We use the information we collect to:</p>
                     <ul>
                         <li>Process admission and career applications</li>
-                        <li>Send newsletters and school updates</li>
                         <li>Respond to your inquiries and requests</li>
                         <li>Improve our website and services</li>
                         <li>Comply with legal obligations</li>
@@ -339,7 +337,6 @@ class PageSeeder extends Seeder
                         <li>Access your personal information</li>
                         <li>Correct inaccurate information</li>
                         <li>Request deletion of your information</li>
-                        <li>Unsubscribe from newsletters</li>
                     </ul>
                     
                     <h3>Contact Us</h3>

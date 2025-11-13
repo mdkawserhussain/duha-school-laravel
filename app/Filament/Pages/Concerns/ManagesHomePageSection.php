@@ -28,7 +28,8 @@ trait ManagesHomePageSection
         $section = HomePageSection::where('section_key', $this->getSectionKey())->first();
 
         if ($section) {
-            $this->data = [
+            // Merge section data with standard fields for statePath('data') forms
+            $this->data = array_merge([
                 'title' => $section->title,
                 'subtitle' => $section->subtitle,
                 'description' => $section->description,
@@ -37,8 +38,7 @@ trait ManagesHomePageSection
                 'button_link' => $section->button_link,
                 'is_active' => $section->is_active,
                 'sort_order' => $section->sort_order,
-                'data' => $section->data ?? [],
-            ];
+            ], $section->data ?? []);
         } else {
             $this->data = [
                 'title' => null,
@@ -49,7 +49,6 @@ trait ManagesHomePageSection
                 'button_link' => null,
                 'is_active' => true,
                 'sort_order' => 0,
-                'data' => [],
             ];
         }
 
@@ -93,6 +92,16 @@ trait ManagesHomePageSection
                             ->maxLength(255)
                             ->url(),
 
+                        FormComponents\Select::make('data.icon')
+                            ->label('Icon')
+                            ->options([
+                                'plus' => 'Plus',
+                                'calendar' => 'Calendar',
+                                'megaphone' => 'Megaphone',
+                            ])
+                            ->helperText('Icon to display for this info block')
+                            ->default('plus'),
+
                         FormComponents\TextInput::make('sort_order')
                             ->label('Sort Order')
                             ->numeric()
@@ -128,25 +137,105 @@ trait ManagesHomePageSection
         $data = $this->form->getState();
         $formState = $this->form->getRawState();
 
-        $section = HomePageSection::where('section_key', $this->getSectionKey())->first();
+        $sectionKey = $this->getSectionKey();
+        $sectionType = $this->getSectionType();
+        
+        // Validate section key and type are not empty
+        if (empty($sectionKey) || empty($sectionType)) {
+            throw new \Exception('Section key and type must not be empty. Key: ' . ($sectionKey ?? 'null') . ', Type: ' . ($sectionType ?? 'null'));
+        }
+        
+        $section = HomePageSection::where('section_key', $sectionKey)->first();
 
         if (!$section) {
             $section = new HomePageSection();
-            $section->section_key = $this->getSectionKey();
-            $section->section_type = $this->getSectionType();
+            // Set required fields immediately
+            $section->section_key = $sectionKey;
+            $section->section_type = $sectionType;
+            $section->is_active = true;
+            $section->sort_order = 0;
+            
+            // Verify the model is using the correct table
+            if ($section->getTable() !== 'home_page_sections') {
+                throw new \Exception('Model is using wrong table: ' . $section->getTable() . ' instead of home_page_sections');
+            }
         }
 
-        $section->title = $data['title'] ?? null;
-        $section->subtitle = $data['subtitle'] ?? null;
-        $section->description = $data['description'] ?? null;
-        $section->content = $data['content'] ?? null;
-        $section->button_text = $data['button_text'] ?? null;
-        $section->button_link = $data['button_link'] ?? null;
-        $section->is_active = $data['is_active'] ?? true;
-        $section->sort_order = $data['sort_order'] ?? 0;
-        $section->data = $data['data'] ?? [];
-
-        $section->save();
+        // Handle data structure - if statePath is 'data', the form state IS the data
+        // Otherwise, data is nested under 'data' key
+        $sectionData = [];
+        if (isset($data['data']) && is_array($data['data'])) {
+            // Standard structure: data is nested
+            $sectionData = $data['data'];
+            $section->title = $data['title'] ?? null;
+            $section->subtitle = $data['subtitle'] ?? null;
+            $section->description = $data['description'] ?? null;
+            $section->content = $data['content'] ?? null;
+            $section->button_text = $data['button_text'] ?? null;
+            $section->button_link = $data['button_link'] ?? null;
+            $section->is_active = $data['is_active'] ?? true;
+            $section->sort_order = $data['sort_order'] ?? 0;
+        } else {
+            // statePath('data') structure: form state is the data itself
+            // Extract standard fields and put the rest in data
+            $section->title = $data['title'] ?? null;
+            $section->subtitle = $data['subtitle'] ?? null;
+            $section->description = $data['description'] ?? null;
+            $section->content = $data['content'] ?? null;
+            $section->button_text = $data['button_text'] ?? null;
+            $section->button_link = $data['button_link'] ?? null;
+            $section->is_active = $data['is_active'] ?? true;
+            $section->sort_order = $data['sort_order'] ?? null;
+            
+            // Everything else goes into data
+            $sectionData = array_diff_key($data, [
+                'title' => true,
+                'subtitle' => true,
+                'description' => true,
+                'content' => true,
+                'button_text' => true,
+                'button_link' => true,
+                'is_active' => true,
+                'sort_order' => true,
+            ]);
+        }
+        
+        $section->data = $sectionData;
+        
+        // Always set required fields explicitly before saving
+        $section->section_key = $this->getSectionKey();
+        $section->section_type = $this->getSectionType();
+        
+        // Ensure defaults are set
+        if (is_null($section->is_active)) {
+            $section->is_active = true;
+        }
+        if (is_null($section->sort_order)) {
+            $section->sort_order = 0;
+        }
+        
+        // Validate required fields before saving
+        if (empty($section->section_key) || empty($section->section_type)) {
+            throw new \Exception('Section key and type are required. Key: ' . ($section->section_key ?? 'null') . ', Type: ' . ($section->section_type ?? 'null'));
+        }
+        
+        // Ensure we're using the correct model instance
+        if (!($section instanceof HomePageSection)) {
+            throw new \Exception('Invalid model instance. Expected HomePageSection, got: ' . get_class($section));
+        }
+        
+        // Save the section
+        try {
+            $section->save();
+        } catch (\Exception $e) {
+            \Log::error('Failed to save HomePageSection', [
+                'section_key' => $section->section_key,
+                'section_type' => $section->section_type,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            throw $e;
+        }
 
         // Handle image upload from form state
         // Filament FileUpload stores files in the raw state

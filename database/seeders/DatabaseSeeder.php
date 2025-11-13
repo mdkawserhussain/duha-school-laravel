@@ -24,7 +24,6 @@ class DatabaseSeeder extends Seeder
             EventSeeder::class,
             NoticeSeeder::class,
             StaffSeeder::class,
-            SubscriberSeeder::class,
         ]);
     }
 }

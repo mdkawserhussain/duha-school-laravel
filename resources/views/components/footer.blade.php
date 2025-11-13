@@ -1,6 +1,6 @@
 <footer class="bg-gradient-to-br from-slate-50 to-indigo-50/30 text-slate-900 border-t border-indigo-100">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
             <!-- Contact Us -->
             <div>
                 <h3 class="text-xl font-bold mb-6 text-slate-900">Contact Us</h3>
@@ -38,12 +38,6 @@
                 </div>
             </div>
 
-            <!-- Newsletter -->
-            <div>
-                <h3 class="text-xl font-bold mb-6 text-slate-900">Newsletter</h3>
-                <p class="text-slate-700 mb-4">Get informed whenever a publication is online.</p>
-                <x-newsletter-signup />
-            </div>
         </div>
 
         <!-- Bottom Bar with Copyright and Social Media -->

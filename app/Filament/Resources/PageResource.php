@@ -6,6 +6,7 @@ use App\Filament\Resources\PageResource\Pages;
 use App\Models\Page;
 use Filament\Actions;
 use Filament\Resources\Resource;
+use Filament\Forms\Components as FormComponents;
 use Filament\Schemas\Components;
 use Filament\Schemas\Schema;
 use Filament\Tables;
@@ -20,7 +21,7 @@ class PageResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-document-text';
 
-    protected static string|UnitEnum|null $navigationGroup = 'Content';
+    protected static string|UnitEnum|null $navigationGroup = 'Pages';
 
     protected static ?int $navigationSort = 1;
 
@@ -30,25 +31,25 @@ class PageResource extends Resource
             ->schema([
                 Components\Section::make('Page Information')
                     ->schema([
-                        Components\TextInput::make('title')
+                        FormComponents\TextInput::make('title')
                             ->required()
                             ->maxLength(255)
                             ->live(onBlur: true)
-                            ->afterStateUpdated(function (string $state, Components\Set $set) {
+                            ->afterStateUpdated(function (string $state, $set) {
                                 $set('slug', str($state)->slug());
                             }),
 
-                        Components\TextInput::make('slug')
+                        FormComponents\TextInput::make('slug')
                             ->required()
                             ->unique(ignoreRecord: true)
                             ->maxLength(255)
                             ->rules(['alpha_dash']),
 
-                        Components\RichEditor::make('content')
+                        FormComponents\RichEditor::make('content')
                             ->required()
                             ->columnSpanFull(),
 
-                        Components\FileUpload::make('featured_image')
+                        FormComponents\FileUpload::make('featured_image')
                             ->image()
                             ->directory('pages')
                             ->visibility('public')
@@ -63,23 +64,23 @@ class PageResource extends Resource
 
                 Components\Section::make('SEO Settings')
                     ->schema([
-                        Components\TextInput::make('meta_title')
+                        FormComponents\TextInput::make('meta_title')
                             ->maxLength(60)
                             ->helperText('Recommended: 50-60 characters'),
 
-                        Components\Textarea::make('meta_description')
+                        FormComponents\Textarea::make('meta_description')
                             ->maxLength(160)
                             ->rows(3)
                             ->helperText('Recommended: 150-160 characters'),
 
-                        Components\TextInput::make('og_image')
+                        FormComponents\TextInput::make('og_image')
                             ->url()
                             ->helperText('Open Graph image URL for social sharing'),
                     ]),
 
                 Components\Section::make('Publishing')
                     ->schema([
-                        Components\Select::make('status')
+                        FormComponents\Select::make('status')
                             ->options([
                                 'draft' => 'Draft',
                                 'published' => 'Published',
@@ -87,7 +88,7 @@ class PageResource extends Resource
                             ->default('draft')
                             ->required(),
 
-                        Components\DateTimePicker::make('published_at')
+                        FormComponents\DateTimePicker::make('published_at')
                             ->label('Publish At')
                             ->default(now())
                             ->required(),
@@ -170,6 +171,11 @@ class PageResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->withoutGlobalScopes();
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return true;
     }
 
     public static function canViewAny(): bool

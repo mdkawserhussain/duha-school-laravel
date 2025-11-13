@@ -8,7 +8,6 @@ use App\Models\Event;
 use App\Models\Notice;
 use App\Models\Page;
 use App\Models\Staff;
-use App\Models\Subscriber;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
@@ -57,13 +56,6 @@ class StatsOverview extends BaseWidget
                 ->url(route('filament.admin.resources.career-applications.index'));
         }
 
-        // Newsletter stats (admin only)
-        if ($user?->hasRole('admin')) {
-            $stats[] = Stat::make('Newsletter Subscribers', Subscriber::whereNotNull('subscribed_at')->count())
-                ->description('Active email subscribers')
-                ->descriptionIcon('heroicon-m-envelope')
-                ->color('success');
-        }
 
         return $stats;
     }

@@ -6,6 +6,7 @@ use App\Filament\Resources\EventResource\Pages;
 use App\Models\Event;
 use Filament\Actions;
 use Filament\Resources\Resource;
+use Filament\Forms\Components as FormComponents;
 use Filament\Schemas\Components;
 use Filament\Schemas\Schema;
 use Filament\Tables;
@@ -20,7 +21,7 @@ class EventResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-calendar-days';
 
-    protected static string|UnitEnum|null $navigationGroup = 'Content';
+    protected static string|UnitEnum|null $navigationGroup = 'Events';
 
     protected static ?int $navigationSort = 2;
 
@@ -30,28 +31,28 @@ class EventResource extends Resource
             ->schema([
                 Components\Section::make('Event Information')
                     ->schema([
-                        Components\TextInput::make('title')
+                        FormComponents\TextInput::make('title')
                             ->required()
                             ->maxLength(255)
                             ->live(onBlur: true)
-                            ->afterStateUpdated(function (string $state, Components\Set $set) {
+                            ->afterStateUpdated(function (string $state, $set) {
                                 $set('slug', str($state)->slug());
                             }),
 
-                        Components\TextInput::make('slug')
+                        FormComponents\TextInput::make('slug')
                             ->required()
                             ->unique(ignoreRecord: true)
                             ->maxLength(255)
                             ->rules(['alpha_dash']),
 
-                        Components\RichEditor::make('content')
+                        FormComponents\RichEditor::make('content')
                             ->required()
                             ->columnSpanFull(),
 
-                        Components\TextInput::make('location')
+                        FormComponents\TextInput::make('location')
                             ->maxLength(255),
 
-                        Components\FileUpload::make('featured_image')
+                        FormComponents\FileUpload::make('featured_image')
                             ->image()
                             ->directory('events')
                             ->visibility('public')
@@ -66,19 +67,19 @@ class EventResource extends Resource
 
                 Components\Section::make('Event Schedule')
                     ->schema([
-                        Components\DateTimePicker::make('start_at')
+                        FormComponents\DateTimePicker::make('start_at')
                             ->required()
                             ->label('Start Date & Time'),
 
-                        Components\DateTimePicker::make('end_at')
+                        FormComponents\DateTimePicker::make('end_at')
                             ->label('End Date & Time')
                             ->after('start_at'),
 
-                        Components\TextInput::make('category')
+                        FormComponents\TextInput::make('category')
                             ->maxLength(100)
                             ->placeholder('e.g., Academic, Social, Islamic, Sports'),
 
-                        Components\Toggle::make('is_featured')
+                        FormComponents\Toggle::make('is_featured')
                             ->label('Featured Event')
                             ->helperText('Featured events appear prominently on the homepage'),
                     ])
@@ -86,7 +87,7 @@ class EventResource extends Resource
 
                 Components\Section::make('Publishing')
                     ->schema([
-                        Components\Select::make('status')
+                        FormComponents\Select::make('status')
                             ->options([
                                 'draft' => 'Draft',
                                 'published' => 'Published',
@@ -95,7 +96,7 @@ class EventResource extends Resource
                             ->default('draft')
                             ->required(),
 
-                        Components\DateTimePicker::make('published_at')
+                        FormComponents\DateTimePicker::make('published_at')
                             ->label('Publish At')
                             ->default(now())
                             ->required(),
@@ -210,6 +211,11 @@ class EventResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->withoutGlobalScopes();
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return true;
     }
 
     public static function canViewAny(): bool

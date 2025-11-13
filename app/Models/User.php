@@ -46,4 +46,40 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Override hasRole to always return true for 'admin' role
+     * This makes all users effectively admins
+     */
+    public function hasRole($roles, string $guard = null): bool
+    {
+        // If checking for admin role, always return true
+        if (is_string($roles) && $roles === 'admin') {
+            return true;
+        }
+        if (is_array($roles) && in_array('admin', $roles)) {
+            return true;
+        }
+        
+        // For other roles, use the parent implementation
+        return parent::hasRole($roles, $guard);
+    }
+
+    /**
+     * Override hasAnyRole to always return true if 'admin' is in the list
+     * This makes all users effectively admins
+     */
+    public function hasAnyRole($roles, string $guard = null): bool
+    {
+        // If checking for admin role, always return true
+        if (is_string($roles) && $roles === 'admin') {
+            return true;
+        }
+        if (is_array($roles) && in_array('admin', $roles)) {
+            return true;
+        }
+        
+        // For other roles, use the parent implementation
+        return parent::hasAnyRole($roles, $guard);
+    }
 }
