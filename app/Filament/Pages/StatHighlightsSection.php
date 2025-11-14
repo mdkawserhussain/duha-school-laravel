@@ -11,62 +11,57 @@ use Filament\Schemas\Schema;
 use Filament\Pages\Page;
 use UnitEnum;
 
-class StatsHeadingSection extends Page implements HasForms
+class StatHighlightsSection extends Page implements HasForms
 {
     use ManagesHomePageSection;
 
-    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-chart-bar';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-sparkles';
 
-    protected static ?string $navigationLabel = 'Stats Heading';
+    protected static ?string $navigationLabel = 'Stat Highlights';
 
-    protected static ?string $title = 'Stats Heading Section';
+    protected static ?string $title = 'Stat Highlights Section';
 
     protected static string|UnitEnum|null $navigationGroup = 'Homepage Settings';
 
     protected static ?int $navigationSort = 6;
 
-    public static function shouldRegisterNavigation(): bool
-    {
-        return false;
-    }
-
-    protected string $view = 'filament.pages.stats-heading-section';
+    protected string $view = 'filament.pages.stat-highlights-section';
 
     protected function getSectionKey(): string
     {
-        return 'hero_stats';
+        return 'stat_highlights';
     }
 
     protected function getSectionType(): string
     {
-        return 'stats';
+        return 'stat_highlights';
     }
 
     protected function getSectionTitle(): string
     {
-        return 'Stats Heading Section';
+        return 'Stat Highlights Section';
     }
 
     public function form(Schema $schema): Schema
     {
         return $schema
             ->schema([
-                Components\Section::make('Stats Configuration')
+                Components\Section::make('Stat Highlights Configuration')
                     ->schema([
-                        FormComponents\Repeater::make('stats')
-                            ->label('Statistics')
+                        FormComponents\Repeater::make('highlights')
+                            ->label('Highlights')
                             ->schema([
                                 FormComponents\TextInput::make('value')
                                     ->label('Value')
                                     ->required()
-                                    ->maxLength(50)
-                                    ->placeholder('e.g., 2012, 750+, 120+'),
+                                    ->maxLength(100)
+                                    ->placeholder('e.g., Cambridge | Edexcel, Hifzul Qur\'an, STEAM Labs'),
                                 
                                 FormComponents\TextInput::make('label')
                                     ->label('Label')
                                     ->required()
-                                    ->maxLength(100)
-                                    ->placeholder('e.g., Founded, Students, Expert Faculty'),
+                                    ->maxLength(200)
+                                    ->placeholder('e.g., Dual International Curriculum Tracks'),
                             ])
                             ->defaultItems(4)
                             ->minItems(1)

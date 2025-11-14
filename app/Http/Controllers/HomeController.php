@@ -37,7 +37,7 @@ class HomeController extends Controller
             return [
                 'hero' => $this->mapHeroBlock($heroSlides, $sectionsByKey),
                 'featurePanels' => $this->mapFeaturePanels($sectionsByKey),
-                'statHighlights' => $this->mapStatHighlights(),
+                'statHighlights' => $this->mapStatHighlights($sectionsByKey),
                 'featuredEvents' => $this->eventService->getFeaturedEvents(),
                 'recentNotices' => $this->noticeService->getRecentNotices(),
                 'featuredStaff' => $this->staffService->getFeaturedStaff(),
@@ -130,15 +130,33 @@ class HomeController extends Controller
             ->all();
     }
 
-    protected function mapStatHighlights(): array
+    protected function mapStatHighlights(Collection $sections): array
     {
+        $section = $sections->get('stat_highlights');
+
+        if ($section && $section->is_active) {
+            $highlights = data_get($section, 'data.highlights', []);
+
+            if (is_array($highlights) && count($highlights)) {
+                return collect($highlights)
+                    ->map(fn ($highlight) => [
+                        'value' => Arr::get($highlight, 'value'),
+                        'label' => Arr::get($highlight, 'label'),
+                    ])
+                    ->filter(fn ($highlight) => filled($highlight['value']) && filled($highlight['label']))
+                    ->values()
+                    ->all();
+            }
+        }
+
+        // Fallback to default values if no section found
         return [
             [
                 'value' => 'Cambridge | Edexcel',
                 'label' => 'Dual International Curriculum Tracks',
             ],
             [
-                'value' => 'Hifzul Qur’an',
+                'value' => 'Hifzul Qur\'an',
                 'label' => 'Structured memorisation with daily coaching',
             ],
             [

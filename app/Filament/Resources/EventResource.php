@@ -36,14 +36,38 @@ class EventResource extends Resource
                             ->maxLength(255)
                             ->live(onBlur: true)
                             ->afterStateUpdated(function (string $state, $set) {
-                                $set('slug', str($state)->slug());
+                                if (!empty($state)) {
+                                    $set('slug', str($state)->slug()->lower());
+                                }
                             }),
 
                         FormComponents\TextInput::make('slug')
                             ->required()
                             ->unique(ignoreRecord: true)
                             ->maxLength(255)
-                            ->rules(['alpha_dash']),
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(function ($state, $set) {
+                                if (!empty($state) && is_string($state)) {
+                                    $slug = str(trim($state))->slug()->lower()->toString();
+                                    $set('slug', $slug);
+                                }
+                            })
+                            ->dehydrateStateUsing(function ($state) {
+                                if (empty($state)) {
+                                    return '';
+                                }
+                                if (!is_string($state)) {
+                                    return (string) $state;
+                                }
+                                return str(trim($state))->slug()->lower()->toString();
+                            })
+                            ->rules([
+                                'required',
+                                'string',
+                                'max:255',
+                                'regex:/^[a-z0-9_-]+$/',
+                            ])
+                            ->helperText('Only lowercase letters, numbers, dashes, and underscores are allowed'),
 
                         FormComponents\RichEditor::make('content')
                             ->required()
