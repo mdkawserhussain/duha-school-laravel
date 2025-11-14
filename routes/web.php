@@ -11,6 +11,7 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\NewsletterController;
 
 // Public Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -43,6 +44,11 @@ Route::post('/careers', [CareerController::class, 'store'])->name('careers.store
 // Contact
 Route::get('/contact-us', [ContactController::class, 'index'])->name('contact.index');
 Route::post('/contact-us', [ContactController::class, 'send'])->name('contact.send')->middleware('throttle:10,1');
+
+// Newsletter
+Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])
+    ->name('newsletter.subscribe')
+    ->middleware('throttle:3,1');
 
 
 // Dynamic Pages

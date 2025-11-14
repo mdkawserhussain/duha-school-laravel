@@ -12,6 +12,7 @@ use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use BackedEnum;
 use UnitEnum;
 
@@ -112,7 +113,7 @@ class StaffResource extends Resource
             ->columns([
                 Tables\Columns\ImageColumn::make('photo')
                     ->circular()
-                    ->defaultImageUrl('/images/placeholder.png')
+                    ->defaultImageUrl('/images/placeholder.svg')
                     ->size(40),
 
                 Tables\Columns\TextColumn::make('name')
@@ -195,21 +196,21 @@ class StaffResource extends Resource
 
     public static function canViewAny(): bool
     {
-        return auth()->user()?->hasAnyRole(['admin', 'editor']) ?? false;
+        return Auth::user()?->hasAnyRole(['admin', 'editor']) ?? false;
     }
 
     public static function canCreate(): bool
     {
-        return auth()->user()?->hasAnyRole(['admin', 'editor']) ?? false;
+        return Auth::user()?->hasAnyRole(['admin', 'editor']) ?? false;
     }
 
     public static function canEdit($record): bool
     {
-        return auth()->user()?->hasAnyRole(['admin', 'editor']) ?? false;
+        return Auth::user()?->hasAnyRole(['admin', 'editor']) ?? false;
     }
 
     public static function canDelete($record): bool
     {
-        return auth()->user()?->hasRole('admin') ?? false;
+        return Auth::user()?->hasRole('admin') ?? false;
     }
 }

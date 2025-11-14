@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\NoticeResource\Pages;
 use App\Models\Notice;
+use App\Models\User;
 use Filament\Actions;
 use Filament\Resources\Resource;
 use Filament\Forms\Components as FormComponents;
@@ -12,6 +13,7 @@ use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use BackedEnum;
 use UnitEnum;
 
@@ -98,7 +100,7 @@ class NoticeResource extends Resource
             ->columns([
                 Tables\Columns\ImageColumn::make('featured_image')
                     ->circular()
-                    ->defaultImageUrl('/images/placeholder.png'),
+                    ->defaultImageUrl('/images/placeholder.svg'),
 
                 Tables\Columns\TextColumn::make('title')
                     ->searchable()
@@ -200,21 +202,29 @@ class NoticeResource extends Resource
 
     public static function canViewAny(): bool
     {
-        return auth()->user()?->hasAnyRole(['admin', 'editor']) ?? false;
+        return static::currentUser()?->hasAnyRole(['admin', 'editor']) ?? false;
     }
 
     public static function canCreate(): bool
     {
-        return auth()->user()?->hasAnyRole(['admin', 'editor']) ?? false;
+        return static::currentUser()?->hasAnyRole(['admin', 'editor']) ?? false;
     }
 
     public static function canEdit($record): bool
     {
-        return auth()->user()?->hasAnyRole(['admin', 'editor']) ?? false;
+        return static::currentUser()?->hasAnyRole(['admin', 'editor']) ?? false;
     }
 
     public static function canDelete($record): bool
     {
-        return auth()->user()?->hasRole('admin') ?? false;
+        return static::currentUser()?->hasRole('admin') ?? false;
+    }
+
+    protected static function currentUser(): ?User
+    {
+        /** @var User|null $user */
+        $user = Auth::user();
+
+        return $user;
     }
 }
