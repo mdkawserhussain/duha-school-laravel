@@ -1,20 +1,12 @@
 <!-- Competitions Section - AISD Style with Skewed Cards -->
 <section class="py-24" id="competitions" style="background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);">
     <div class="container mx-auto px-6 lg:px-12">
-        <!-- Section Header -->
-        <div class="flex flex-col gap-6 text-center mb-16">
-            <div class="inline-flex items-center justify-center gap-2 mx-auto rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.5em]" style="background-color: #FFF8E7; color: #173B7A; border: 1px solid #F4C430;">
-                <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20" style="color: #F4C430;">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
-                Competitions
-            </div>
-            <h2 class="text-3xl font-bold md:text-4xl lg:text-5xl" style="color: #0C1B3D;">Excellence in Academic & Islamic Pursuits</h2>
-            <p class="mx-auto max-w-3xl leading-relaxed" style="color: #4a5568;">Celebrating our students' achievements in tournaments, Olympiads, and Qur'anic competitions that showcase both knowledge and character.</p>
-        </div>
-
         @php
-            $competitions = [
+            $section = $homePageSections['competitions'] ?? null;
+            $sectionData = $section && $section->is_active ? $section->data : [];
+            $title = $sectionData['title'] ?? $section?->title ?? 'Excellence in Academic & Islamic Pursuits';
+            $description = $sectionData['description'] ?? $section?->description ?? 'Celebrating our students\' achievements in tournaments, Olympiads, and Qur\'anic competitions that showcase both knowledge and character.';
+            $competitions = $sectionData['competitions'] ?? [
                 [
                     'title' => 'Arabic Oratory League',
                     'copy' => 'Students deliver khutbah-style speeches judged by scholars, developing eloquence and understanding of Islamic principles.',
@@ -38,6 +30,19 @@
                 ],
             ];
         @endphp
+
+        @if($section && $section->is_active && count($competitions) > 0)
+        <!-- Section Header -->
+        <div class="flex flex-col gap-6 text-center mb-16">
+            <div class="inline-flex items-center justify-center gap-2 mx-auto rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.5em]" style="background-color: #FFF8E7; color: #173B7A; border: 1px solid #F4C430;">
+                <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20" style="color: #F4C430;">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+                Competitions
+            </div>
+            <h2 class="text-3xl font-bold md:text-4xl lg:text-5xl" style="color: #0C1B3D;">{{ $title }}</h2>
+            <p class="mx-auto max-w-3xl leading-relaxed" style="color: #4a5568;">{{ $description }}</p>
+        </div>
 
         <!-- Competitions Grid with Skew -->
         <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -80,5 +85,6 @@
                 </article>
             @endforeach
         </div>
+        @endif
     </div>
 </section>

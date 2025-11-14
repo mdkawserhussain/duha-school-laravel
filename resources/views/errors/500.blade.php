@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Server Error - Al-Maghrib International School')
+@section('title', 'Server Error - {{ $siteName ?? \App\Helpers\SiteHelper::getSiteName() }}')
 @section('meta-description', 'We encountered an error processing your request. Please try again or contact us for assistance.')
 
 @section('content')

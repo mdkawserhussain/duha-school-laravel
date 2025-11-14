@@ -17,7 +17,7 @@ class HomePageSectionSeeder extends Seeder
             [
                 'section_key' => 'hero',
                 'section_type' => 'hero',
-                'title' => 'AL-MAGHRIB',
+                'title' => 'DUHA',
                 'subtitle' => 'INTERNATIONAL SCHOOL',
                 'content' => null,
                 'description' => 'Join us for an exciting week of robotics and innovation',
@@ -107,8 +107,8 @@ class HomePageSectionSeeder extends Seeder
                 'section_key' => 'info_notice',
                 'section_type' => 'info_block',
                 'title' => 'Notice Board',
-                'content' => 'Stay informed with the latest announcements and upcoming news at Al-Maghrib International School.',
-                'description' => 'Stay informed with the latest announcements and upcoming news at Al-Maghrib International School.',
+                'content' => 'Stay informed with the latest announcements and upcoming news at Duha International School.',
+                'description' => 'Stay informed with the latest announcements and upcoming news at Duha International School.',
                 'button_text' => 'View Notices',
                 'button_link' => '/notices',
                 'data' => ['icon' => 'megaphone'],
@@ -118,7 +118,7 @@ class HomePageSectionSeeder extends Seeder
             [
                 'section_key' => 'why_choose',
                 'section_type' => 'content',
-                'title' => 'Why Choose Al-Maghrib',
+                'title' => 'Why Choose Duha',
                 'content' => 'Our comprehensive curriculum combines Cambridge education with Islamic values, ensuring students receive a well-rounded education that prepares them for the challenges of the 21st century while maintaining strong Islamic principles. We are committed to fostering global citizens who are grounded in faith and equipped with modern knowledge.',
                 'description' => 'Our comprehensive curriculum combines Cambridge education with Islamic values, ensuring students receive a well-rounded education that prepares them for the challenges of the 21st century while maintaining strong Islamic principles.',
                 'data' => [
@@ -131,8 +131,8 @@ class HomePageSectionSeeder extends Seeder
                 'section_key' => 'children_responsibility',
                 'section_type' => 'content',
                 'title' => 'Your Children, Our Responsibility',
-                'content' => '<p>Welcome to Al-Maghrib International School, established in 2012 in Chittagong, Bangladesh. We are dedicated to providing holistic education that combines academic excellence with moral development.</p><p>Our commitment extends beyond the classroom, focusing on Islamic values and Cambridge curriculum integration to nurture well-rounded individuals who excel both academically and spiritually.</p>',
-                'description' => 'Welcome to Al-Maghrib International School, established in 2012 in Chittagong, Bangladesh. We are dedicated to providing holistic education that combines academic excellence with moral development.',
+                'content' => '<p>Welcome to Duha International School, established in 2012 in Chittagong, Bangladesh. We are dedicated to providing holistic education that combines academic excellence with moral development.</p><p>Our commitment extends beyond the classroom, focusing on Islamic values and Cambridge curriculum integration to nurture well-rounded individuals who excel both academically and spiritually.</p>',
+                'description' => 'Welcome to Duha International School, established in 2012 in Chittagong, Bangladesh. We are dedicated to providing holistic education that combines academic excellence with moral development.',
                 'data' => [
                     'image_url' => 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=600&h=400&fit=crop',
                 ],

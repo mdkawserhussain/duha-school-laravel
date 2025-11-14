@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Career Application Received - Al-Maghrib International School</title>
+    <title>Career Application Received - {{ $siteName ?? \App\Helpers\SiteHelper::getSiteName() }}</title>
     <style>
         body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
         .container { max-width: 600px; margin: 0 auto; padding: 20px; }
@@ -24,7 +24,7 @@
         <div class="content">
             <p>Dear {{ $application->applicant_name }},</p>
 
-            <p>We have successfully received your application for the <strong>{{ $application->job_title }}</strong> position at Al-Maghrib International School. Thank you for your interest in joining our dedicated team of educators and professionals.</p>
+            <p>We have successfully received your application for the <strong>{{ $application->job_title }}</strong> position at {{ $siteName ?? \App\Helpers\SiteHelper::getSiteName() }}. Thank you for your interest in joining our dedicated team of educators and professionals.</p>
 
             <div class="info-box">
                 <h3>Application Details:</h3>
@@ -59,16 +59,16 @@
                 <a href="{{ route('careers.index') }}" class="button">View Other Opportunities</a>
             </div>
 
-            <p>We appreciate your interest in contributing to the mission of Al-Maghrib International School. Our institution is committed to providing quality education in a supportive Islamic environment, and we value team members who share this vision.</p>
+            <p>We appreciate your interest in contributing to the mission of {{ $siteName ?? \App\Helpers\SiteHelper::getSiteName() }}. Our institution is committed to providing quality education in a supportive Islamic environment, and we value team members who share this vision.</p>
 
             <p>Best regards,<br>
             <strong>Human Resources Team</strong><br>
-            Al-Maghrib International School</p>
+            {{ $siteName ?? \App\Helpers\SiteHelper::getSiteName() }}</p>
         </div>
 
         <div class="footer">
             <p>This is an automated message. Please do not reply to this email.</p>
-            <p>© {{ date('Y') }} Al-Maghrib International School. All rights reserved.</p>
+            <p>© {{ date('Y') }} {{ $siteName ?? \App\Helpers\SiteHelper::getSiteName() }}. All rights reserved.</p>
         </div>
     </div>
 </body>

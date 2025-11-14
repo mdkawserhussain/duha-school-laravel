@@ -17,7 +17,7 @@ class NoticeSeeder extends Seeder
             [
                 'title' => 'Admission Open for Academic Year 2025-2026',
                 'excerpt' => 'We are now accepting applications for the academic year 2025-2026. Limited seats available.',
-                'content' => '<p>Al-Maghrib International School is pleased to announce that admissions are now open for the academic year 2025-2026. We welcome applications from students seeking quality Islamic and Cambridge curriculum education.</p>
+                'content' => '<p>Duha International School is pleased to announce that admissions are now open for the academic year 2025-2026. We welcome applications from students seeking quality Islamic and Cambridge curriculum education.</p>
                 
                 <h3>Admission Process:</h3>
                 <ol>
@@ -46,7 +46,7 @@ class NoticeSeeder extends Seeder
             [
                 'title' => 'School Holiday - Eid al-Fitr',
                 'excerpt' => 'School will be closed for Eid al-Fitr celebrations. Classes will resume on the following week.',
-                'content' => '<p>In observance of Eid al-Fitr, Al-Maghrib International School will be closed from <strong>April 10, 2025 to April 14, 2025</strong>.</p>
+                'content' => '<p>In observance of Eid al-Fitr, Duha International School will be closed from <strong>April 10, 2025 to April 14, 2025</strong>.</p>
                 
                 <p>Classes will resume on <strong>Monday, April 15, 2025</strong>.</p>
                 
@@ -106,7 +106,7 @@ class NoticeSeeder extends Seeder
             [
                 'title' => 'Career Opportunities - Teaching Positions Available',
                 'excerpt' => 'We are seeking qualified and dedicated teachers to join our team. Multiple positions available.',
-                'content' => '<p>Al-Maghrib International School is looking for passionate and qualified educators to join our teaching team.</p>
+                'content' => '<p>Duha International School is looking for passionate and qualified educators to join our teaching team.</p>
                 
                 <h3>Available Positions:</h3>
                 <ul>
@@ -125,7 +125,7 @@ class NoticeSeeder extends Seeder
                     <li>Excellent communication skills</li>
                 </ul>
                 
-                <p>Interested candidates should submit their applications through our careers portal or email to career@almaghribschool.com</p>
+                <p>Interested candidates should submit their applications through our careers portal or email to career@duhaschool.com</p>
                 
                 <p><strong>Application Deadline:</strong> March 15, 2025</p>',
                 'category' => 'Career',

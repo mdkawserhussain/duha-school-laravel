@@ -20,7 +20,7 @@
     @endif
     "organizer": {
         "@type": "EducationalOrganization",
-        "name": "Al-Maghrib International School",
+        "name": "{{ $siteName ?? \App\Helpers\SiteHelper::getSiteName() }}",
         "url": "{{ config('app.url') }}"
     },
     "url": "{{ route('events.show', $event) }}"

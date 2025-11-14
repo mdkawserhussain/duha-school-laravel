@@ -19,15 +19,60 @@ $locales = [
     aria-label="Main navigation"
 >
     {{-- Top Announcement Bar --}}
+    @php
+        // Completely disable announcements during exception rendering
+        $announcements = collect([]);
+        try {
+            // Only load if we're absolutely sure we're not in an error context
+            if (!app()->bound('exception') && 
+                !str_contains(request()->path() ?? '', 'errors') &&
+                !str_contains(request()->path() ?? '', '_dusk') &&
+                !str_contains(request()->path() ?? '', 'telescope')) {
+                $announcements = \App\Helpers\AnnouncementHelper::getSafe();
+            }
+        } catch (\Throwable $e) {
+            // Silently fail - never break the page
+            $announcements = collect([]);
+        }
+    @endphp
+    
+    @if($announcements->isNotEmpty())
     <div class="announcement-bar" x-show="!scrolled">
         <div class="marquee-wrapper">
             <div class="marquee-content">
-                <span>🎓 Admission ongoing on Al-Maghrib International School. Visit our campus to know more.</span>
-                <span>🎓 Admission ongoing on Al-Maghrib International School. Visit our campus to know more.</span>
-                <span>🎓 Admission ongoing on Al-Maghrib International School. Visit our campus to know more.</span>
+                @foreach($announcements as $announcement)
+                    @if($announcement && !empty($announcement->message))
+                    <span>
+                        @if(!empty($announcement->link))
+                            <a href="{{ e($announcement->link ?? '') }}" class="hover:underline text-white" {{ empty($announcement->link_text) ? 'style="text-decoration: underline;"' : '' }}>
+                                {{ e($announcement->message ?? '') }}
+                                @if(!empty($announcement->link_text))
+                                    <span class="ml-2 font-semibold">{{ e($announcement->link_text ?? '') }} &rarr;</span>
+                                @endif
+                            </a>
+                        @else
+                            {{ e($announcement->message ?? '') }}
+                        @endif
+                    </span>
+                    {{-- Repeat for seamless loop --}}
+                    <span>
+                        @if(!empty($announcement->link))
+                            <a href="{{ e($announcement->link ?? '') }}" class="hover:underline text-white" {{ empty($announcement->link_text) ? 'style="text-decoration: underline;"' : '' }}>
+                                {{ e($announcement->message ?? '') }}
+                                @if(!empty($announcement->link_text))
+                                    <span class="ml-2 font-semibold">{{ e($announcement->link_text ?? '') }} &rarr;</span>
+                                @endif
+                            </a>
+                        @else
+                            {{ e($announcement->message ?? '') }}
+                        @endif
+                    </span>
+                    @endif
+                @endforeach
             </div>
         </div>
     </div>
+    @endif
 
     {{-- Main Navbar --}}
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -46,7 +91,10 @@ $locales = [
                     <img
                         class="h-10 lg:h-12 w-auto"
                         src="{{ $logoUrl }}"
-                        alt="AlMaghrib International School Logo"
+                        @php
+                            $siteName = \App\Helpers\SiteHelper::getSiteName();
+                        @endphp
+                        alt="{{ $siteName }} Logo"
                         onerror="this.onerror=null; this.src='{{ asset('images/logo.svg') }}'"
                     >
                 </a>

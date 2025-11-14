@@ -1,11 +1,13 @@
 @php
+$siteName = \App\Helpers\SiteHelper::getSiteName();
+$siteDescription = \App\Helpers\SiteHelper::getSiteDescription();
 $organization = [
     '@context' => 'https://schema.org',
     '@type' => 'EducationalOrganization',
-    'name' => config('app.name', 'Al-Maghrib International School'),
+    'name' => $siteName,
     'url' => url('/'),
-    'logo' => asset('images/logo.png'),
-    'description' => 'Al-Maghrib International School - Providing quality Islamic and Cambridge curriculum education for students from Kindergarten to Grade 12 in Chattogram, Bangladesh',
+    'logo' => \App\Models\SiteSettings::getLogoUrl(),
+    'description' => $siteName . ' - ' . $siteDescription,
     'address' => [
         '@type' => 'PostalAddress',
         'addressLocality' => 'Chattogram',

@@ -29,7 +29,7 @@ class ContactMessageReceived extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'New Contact Message - AlMaghrib International School',
+            subject: 'New Contact Message - ' . \App\Helpers\SiteHelper::getSiteName(),
         );
     }
 

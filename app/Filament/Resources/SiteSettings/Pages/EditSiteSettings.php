@@ -51,165 +51,85 @@ class EditSiteSettings extends EditRecord
     protected function afterSave(): void
     {
         $settings = $this->record;
-        $logo = $this->logoPath;
         
-        // If no logo in saved state, try to get from raw form state
-        if (!$logo) {
-            try {
-                $formState = $this->form->getRawState();
-                $logo = $formState['logo'] ?? null;
-            } catch (\Exception $e) {
-                // Form state might not be available, continue
+        // Get logo from form raw state (FileUpload stores it here when dehydrated=false)
+        try {
+            $formState = $this->form->getRawState();
+            $logo = $formState['logo'] ?? null;
+            
+            // Also check stored filename
+            if (!$logo) {
+                $logo = $formState['logo_filename'] ?? null;
             }
-        }
-        
-        // Also check if there's a file in the request (for Livewire file uploads)
-        if (!$logo && request()->hasFile('data.logo')) {
-            $uploadedFile = request()->file('data.logo');
-            if ($uploadedFile && $uploadedFile->isValid()) {
+            
+            // Handle logo upload
+            if ($logo) {
+                // Clear existing logo
                 $settings->clearMediaCollection('logo');
-                $settings->addMediaFromRequest('data.logo')
-                    ->toMediaCollection('logo');
                 
-                Notification::make()
-                    ->title('Settings saved successfully')
-                    ->success()
-                    ->send();
-                return;
-            }
-        }
-        
-        // Handle file upload from path
-        if ($logo || $this->logoFilename) {
-            $settings->clearMediaCollection('logo');
-            
-            // Use filename if available, otherwise use logo path
-            $filePath = $this->logoFilename ?? $logo;
-            
-            // Handle array of file paths
-            if (is_array($filePath)) {
-                $filePath = (isset($filePath[0]) && !empty($filePath[0])) ? $filePath[0] : null;
-            }
-            
-            // Skip if no valid file path
-            if (!$filePath) {
-                Notification::make()
-                    ->title('Settings saved successfully')
-                    ->success()
-                    ->send();
-                return;
-            }
-            
-            // If it's a string path, try to add the media
-            if (is_string($filePath) && !filter_var($filePath, FILTER_VALIDATE_URL)) {
-                $added = false;
+                // Handle array of file paths
+                if (is_array($logo)) {
+                    $logo = !empty($logo[0]) ? $logo[0] : null;
+                }
                 
-                // Handle Livewire temporary files - try to get the actual file
-                if (str_starts_with($filePath, 'livewire-tmp/')) {
-                    // Try to get the file from storage
-                    $fullPath = storage_path('app/public/' . $filePath);
-                    if (file_exists($fullPath) && is_file($fullPath)) {
-                        try {
-                            $settings->addMedia($fullPath)
-                                ->toMediaCollection('logo');
-                            $added = true;
-                        } catch (\Exception $e) {
-                            \Log::error('Failed to add media from livewire-tmp path: ' . $e->getMessage());
-                        }
-                    }
+                if ($logo && is_string($logo) && !filter_var($logo, FILTER_VALIDATE_URL)) {
+                    $added = false;
                     
-                    // Also try using Storage disk
-                    if (!$added && Storage::disk('public')->exists($filePath)) {
-                        try {
-                            $settings->addMediaFromDisk($filePath, 'public')
-                                ->toMediaCollection('logo');
-                            $added = true;
-                        } catch (\Exception $e) {
-                            \Log::error('Failed to add media from disk: ' . $e->getMessage());
-                        }
-                    }
-                } else {
-                    // Handle files in logos directory (after Filament moves them)
-                    // Try with and without 'logos/' prefix
+                    // Try different path formats
                     $possiblePaths = [];
                     
-                    if (str_starts_with($filePath, 'logos/')) {
-                        $possiblePaths[] = $filePath;
-                        $possiblePaths[] = str_replace('logos/', '', $filePath);
-                    } else {
-                        $possiblePaths[] = 'logos/' . $filePath;
-                        $possiblePaths[] = $filePath;
+                    // Livewire temporary files
+                    if (str_starts_with($logo, 'livewire-tmp/')) {
+                        $possiblePaths[] = storage_path('app/public/' . $logo);
+                        $possiblePaths[] = $logo;
+                    } 
+                    // Files in logos directory
+                    else {
+                        if (str_starts_with($logo, 'logos/')) {
+                            $possiblePaths[] = storage_path('app/public/' . $logo);
+                            $possiblePaths[] = $logo;
+                        } else {
+                            $possiblePaths[] = storage_path('app/public/logos/' . $logo);
+                            $possiblePaths[] = storage_path('app/public/' . $logo);
+                            $possiblePaths[] = 'logos/' . $logo;
+                            $possiblePaths[] = $logo;
+                        }
                     }
                     
+                    // Try each path
                     foreach ($possiblePaths as $testPath) {
-                        $fullPath = storage_path('app/public/' . $testPath);
-                        if (file_exists($fullPath) && is_file($fullPath)) {
+                        // Try direct file path
+                        if (is_string($testPath) && file_exists($testPath) && is_file($testPath)) {
                             try {
-                                $settings->addMedia($fullPath)
-                                    ->toMediaCollection('logo');
+                                $settings->addMedia($testPath)->toMediaCollection('logo');
                                 $added = true;
-                                \Log::info('Successfully added logo from: ' . $fullPath);
+                                \Log::info('Successfully added logo from: ' . $testPath);
                                 break;
                             } catch (\Exception $e) {
-                                \Log::error('Failed to add media from path ' . $fullPath . ': ' . $e->getMessage());
+                                \Log::debug('Failed to add media from path: ' . $testPath . ' - ' . $e->getMessage());
                             }
                         }
                         
-                        // Also try using Storage disk
-                        if (!$added && Storage::disk('public')->exists($testPath)) {
+                        // Try Storage disk
+                        if (!$added && is_string($testPath) && Storage::disk('public')->exists($testPath)) {
                             try {
-                                $settings->addMediaFromDisk($testPath, 'public')
-                                    ->toMediaCollection('logo');
+                                $settings->addMediaFromDisk($testPath, 'public')->toMediaCollection('logo');
                                 $added = true;
                                 \Log::info('Successfully added logo from disk: ' . $testPath);
                                 break;
                             } catch (\Exception $e) {
-                                \Log::error('Failed to add media from disk ' . $testPath . ': ' . $e->getMessage());
+                                \Log::debug('Failed to add media from disk: ' . $testPath . ' - ' . $e->getMessage());
                             }
                         }
                     }
-                }
-                
-                // If not added yet, try different path formats
-                if (!$added) {
-                    $paths = [
-                        storage_path('app/public/' . $filePath),
-                        storage_path('app/' . $filePath),
-                        public_path('storage/' . $filePath),
-                        $filePath,
-                    ];
                     
-                    foreach ($paths as $path) {
-                        if (file_exists($path) && is_file($path)) {
-                            try {
-                                $settings->addMedia($path)
-                                    ->toMediaCollection('logo');
-                                $added = true;
-                                break;
-                            } catch (\Exception $e) {
-                                \Log::error('Failed to add media from path ' . $path . ': ' . $e->getMessage());
-                                continue;
-                            }
-                        }
+                    if (!$added) {
+                        \Log::warning('Logo file not found. Attempted paths: ' . implode(', ', $possiblePaths));
                     }
-                }
-                
-                // If file exists in storage disk (for non-livewire-tmp files)
-                if (!$added && Storage::disk('public')->exists($filePath)) {
-                    try {
-                        $settings->addMediaFromDisk($filePath, 'public')
-                            ->toMediaCollection('logo');
-                        $added = true;
-                    } catch (\Exception $e) {
-                        \Log::error('Failed to add media from storage disk: ' . $e->getMessage());
-                    }
-                }
-                
-                // Log if still not added
-                if (!$added) {
-                    \Log::warning('Logo file not found or could not be added to media library. File path: ' . $filePath);
                 }
             }
+        } catch (\Exception $e) {
+            \Log::error('Error handling logo upload: ' . $e->getMessage());
         }
 
         Notification::make()

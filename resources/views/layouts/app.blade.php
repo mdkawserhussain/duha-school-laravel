@@ -5,12 +5,16 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>@yield('title', config('app.name', 'Al-Maghrib International School'))</title>
+        @php
+            $siteName = \App\Helpers\SiteHelper::getSiteName();
+            $siteDescription = \App\Helpers\SiteHelper::getSiteDescription();
+        @endphp
+        <title>@yield('title', $siteName)</title>
         
         @hasSection('meta-description')
             <meta name="description" content="@yield('meta-description')">
         @else
-            <meta name="description" content="Al-Maghrib International School - Providing quality Islamic and Cambridge curriculum education for students from Kindergarten to Grade 12 in Chattogram, Bangladesh">
+            <meta name="description" content="{{ $siteName }} - {{ $siteDescription }}">
         @endif
 
         @hasSection('meta-keywords')
@@ -20,7 +24,7 @@
         <!-- Open Graph / Facebook -->
         <meta property="og:type" content="website">
         <meta property="og:url" content="{{ url()->current() }}">
-        <meta property="og:title" content="@yield('title', config('app.name', 'Al-Maghrib International School'))">
+        <meta property="og:title" content="@yield('title', $siteName)">
         @hasSection('meta-description')
             <meta property="og:description" content="@yield('meta-description')">
         @endif
@@ -29,12 +33,12 @@
         @else
             <meta property="og:image" content="{{ asset('images/og-default.jpg') }}">
         @endif
-        <meta property="og:site_name" content="{{ config('app.name', 'Al-Maghrib International School') }}">
+        <meta property="og:site_name" content="{{ $siteName }}">
 
         <!-- Twitter -->
         <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:url" content="{{ url()->current() }}">
-        <meta name="twitter:title" content="@yield('title', config('app.name', 'Al-Maghrib International School'))">
+        <meta name="twitter:title" content="@yield('title', $siteName)">
         @hasSection('meta-description')
             <meta name="twitter:description" content="@yield('meta-description')">
         @endif
@@ -92,7 +96,7 @@
         <!-- End Google Tag Manager (noscript) -->
         @endif
 
-        <div class="min-h-screen bg-gray-100">
+        <div class="min-h-screen">
             <x-header />
 
             <!-- Page Content -->

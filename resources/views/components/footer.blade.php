@@ -12,15 +12,31 @@
             <div>
                 <h3 class="text-xl font-bold mb-6" style="color: #F4C430;">Contact Us</h3>
                 <div class="space-y-4">
+                    @php
+                        $settings = \App\Models\SiteSettings::first();
+                    @endphp
+                    @if($settings?->address)
                     <div>
-                        <p class="mb-1" style="color: rgba(255, 255, 255, 0.95);">{{ config('contact.address.full') }}</p>
+                        <p class="mb-1" style="color: rgba(255, 255, 255, 0.95);">{{ $settings->address }}</p>
                     </div>
+                    @endif
+                    @if($settings?->contact_phone)
                     <div>
-                        <p class="mb-1" style="color: rgba(255, 255, 255, 0.95);">{{ config('contact.phone_display') }}</p>
+                        <p class="mb-1" style="color: rgba(255, 255, 255, 0.95);">{{ $settings->contact_phone }}</p>
                     </div>
+                    @endif
+                    @if($settings?->contact_email)
                     <div>
-                        <p style="color: rgba(255, 255, 255, 0.95);">{{ config('contact.email.info') }}</p>
+                        <p style="color: rgba(255, 255, 255, 0.95);">{{ $settings->contact_email }}</p>
                     </div>
+                    @endif
+                    @if(!$settings || (!$settings->address && !$settings->contact_phone && !$settings->contact_email))
+                    <div>
+                        <p class="mb-1" style="color: rgba(255, 255, 255, 0.95);">{{ config('contact.address.full', 'Not set') }}</p>
+                        <p class="mb-1" style="color: rgba(255, 255, 255, 0.95);">{{ config('contact.phone_display', 'Not set') }}</p>
+                        <p style="color: rgba(255, 255, 255, 0.95);">{{ config('contact.email.info', 'Not set') }}</p>
+                    </div>
+                    @endif
                 </div>
             </div>
 
@@ -51,7 +67,10 @@
         <div class="mt-12 pt-8" style="border-top: 1px solid rgba(255, 255, 255, 0.15);">
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <p class="text-sm mb-4 md:mb-0" style="color: rgba(255, 255, 255, 0.85);">
-                    © {{ date('Y') }} Al-Maghrib International School. All rights reserved.
+                    @php
+                        $siteName = \App\Helpers\SiteHelper::getSiteName();
+                    @endphp
+                    © {{ date('Y') }} {{ $siteName }}. All rights reserved.
                 </p>
                 <div class="flex space-x-4">
                     <a href="#" class="transition-colors duration-300 min-w-[48px] min-h-[48px] flex items-center justify-center" style="color: rgba(255, 255, 255, 0.85);" onmouseover="this.style.color='#F4C430'" onmouseout="this.style.color='rgba(255, 255, 255, 0.85)'" aria-label="Facebook">

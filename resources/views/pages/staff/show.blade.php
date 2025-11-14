@@ -1,7 +1,10 @@
 @extends('layouts.app')
 
-@section('title', $staff->name . ' - Al-Maghrib International School')
-@section('meta-description', $staff->bio ? Str::limit(strip_tags($staff->bio), 160) : 'Staff member at Al-Maghrib International School')
+@php
+    $siteName = \App\Helpers\SiteHelper::getSiteName();
+@endphp
+@section('title', $staff->name . ' - ' . $siteName)
+@section('meta-description', $staff->bio ? Str::limit(strip_tags($staff->bio), 160) : 'Staff member at ' . $siteName)
 
 @section('content')
     <!-- Page Header -->

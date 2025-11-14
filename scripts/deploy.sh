@@ -2,7 +2,7 @@
 
 set -e
 
-echo "🚀 Deploying Al-Maghrib International School Application..."
+echo "🚀 Deploying Duha International School Application..."
 
 # Maintenance mode
 echo "🔧 Enabling maintenance mode..."

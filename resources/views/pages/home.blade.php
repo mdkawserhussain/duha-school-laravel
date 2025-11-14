@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'Welcome to Al-Maghrib International School')
+@php
+    $siteName = \App\Helpers\SiteHelper::getSiteName();
+@endphp
+@section('title', 'Welcome to ' . $siteName)
 @section('meta-description', 'Islamic and Cambridge curriculum school providing quality education in Chattogram, Bangladesh')
 
 @push('scripts')

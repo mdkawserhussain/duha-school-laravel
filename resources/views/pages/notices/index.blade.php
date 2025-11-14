@@ -1,7 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Notices - Al-Maghrib International School')
-@section('meta-description', 'Stay updated with important announcements and notices from Al-Maghrib International School')
+@php
+    $siteName = \App\Helpers\SiteHelper::getSiteName();
+@endphp
+@section('title', 'Notices - ' . $siteName)
+@section('meta-description', 'Stay updated with important announcements and notices from ' . $siteName)
 
 @section('content')
 

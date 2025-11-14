@@ -19,6 +19,15 @@ class SiteSettings extends Model implements HasMedia
         'address',
     ];
 
+    /**
+     * Resolve the current site settings record.
+     * Uses the most recently updated record to avoid issues when multiple rows exist.
+     */
+    public static function current(): ?self
+    {
+        return static::query()->orderByDesc('updated_at')->first();
+    }
+
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('logo')->singleFile();
@@ -42,12 +51,12 @@ class SiteSettings extends Model implements HasMedia
     }
 
     /**
-     * Get the logo URL with fallback to SVG
+     * Get the logo URL with a robust fallback.
      */
     public static function getLogoUrl(?string $conversion = null): string
     {
-        $settings = static::first();
-        
+        $settings = static::current();
+
         if ($settings && $settings->hasMedia('logo')) {
             $url = $settings->getFirstMediaUrl('logo', $conversion ?? '');
             if ($url) {
@@ -55,7 +64,7 @@ class SiteSettings extends Model implements HasMedia
             }
         }
 
-        // Fallback to SVG logo
-        return asset('images/logo.svg');
+        // Fallback placeholder to avoid broken image if no local asset exists.
+        return 'https://via.placeholder.com/200x60?text=School+Logo';
     }
 }

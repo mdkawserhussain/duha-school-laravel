@@ -32,6 +32,11 @@ class HomePageSectionForm
                                 'values' => 'Our Values',
                                 'advisors' => 'Advisors Section',
                                 'board_management' => 'Board of Management',
+                                'achievements' => 'Achievements Section',
+                                'stats_main' => 'Stats Section',
+                                'parallax_experience' => 'Parallax Experience Section',
+                                'competitions' => 'Competitions Section',
+                                'academic_programs' => 'Academic Programs Section',
                             ])
                             ->helperText('Unique identifier for this section')
                             ->live()
@@ -51,6 +56,11 @@ class HomePageSectionForm
                                     'values' => 'list',
                                     'advisors' => 'advisors',
                                     'board_management' => 'board',
+                                    'achievements' => 'achievements',
+                                    'stats_main' => 'stats',
+                                    'parallax_experience' => 'parallax',
+                                    'competitions' => 'competitions',
+                                    'academic_programs' => 'programs',
                                 ];
                                 $set('section_type', $typeMap[$state] ?? 'content');
                             }),
@@ -67,6 +77,11 @@ class HomePageSectionForm
                                 'list' => 'List Section (Values)',
                                 'advisors' => 'Advisors Section',
                                 'board' => 'Board of Management',
+                                'achievements' => 'Achievements Section',
+                                'stats' => 'Stats Section',
+                                'parallax' => 'Parallax Section',
+                                'competitions' => 'Competitions Section',
+                                'programs' => 'Programs Section',
                             ])
                             ->helperText('Type of section')
                             ->disabled()

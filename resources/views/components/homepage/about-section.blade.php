@@ -23,7 +23,7 @@
                         <span class="text-blue-600">Enriching Hearts</span>
                     </h2>
                     <p class="text-lg text-gray-600 leading-relaxed">
-                        Al-Maghrib International School stands as a beacon of educational excellence, 
+                        {{ $siteName ?? \App\Helpers\SiteHelper::getSiteName() }} stands as a beacon of educational excellence, 
                         seamlessly blending modern academic rigor with timeless Islamic values to 
                         nurture well-rounded individuals prepared for global leadership.
                     </p>

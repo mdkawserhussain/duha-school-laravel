@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <title>Al-Maghrib International School - Events</title>
-    <subtitle>Upcoming events and activities at Al-Maghrib International School</subtitle>
+    @php
+        $siteName = \App\Helpers\SiteHelper::getSiteName();
+    @endphp
+    <title>{{ $siteName }} - Events</title>
+    <subtitle>Upcoming events and activities at {{ $siteName }}</subtitle>
     <link href="{{ route('events.feed') }}" rel="self"/>
     <link href="{{ route('events.index') }}"/>
     <id>{{ route('events.feed') }}</id>
@@ -30,7 +33,7 @@
             ]]>
         </content>
         <author>
-            <name>Al-Maghrib International School</name>
+            <name>{{ $siteName }}</name>
             <email>{{ config('contact.email.info') }}</email>
         </author>
     </entry>

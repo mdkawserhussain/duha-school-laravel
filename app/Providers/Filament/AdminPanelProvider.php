@@ -64,7 +64,7 @@ class AdminPanelProvider extends PanelProvider
             ], isPersistent: true)
             ->authGuard('web')
             ->authPasswordBroker('users')
-            ->brandName('Al-Maghrib International School')
+            ->brandName(\App\Helpers\SiteHelper::getSiteName())
             ->favicon(asset('favicon.ico'))
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->navigationGroups([

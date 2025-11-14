@@ -30,7 +30,7 @@ class AdmissionApplicationReceived extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Admission Application Received - AlMaghrib International School',
+            subject: 'Admission Application Received - ' . \App\Helpers\SiteHelper::getSiteName(),
         );
     }
 

@@ -12,14 +12,19 @@
             <div class="lg:col-span-2 space-y-6">
                 <!-- Logo/Name -->
                 <div>
-                    <h3 class="text-2xl font-bold mb-3 text-white">Al-Maghrib International School</h3>
+                    @php
+                        $siteName = \App\Helpers\SiteHelper::getSiteName();
+                        $siteDescription = \App\Helpers\SiteHelper::getSiteDescription();
+                    @endphp
+                    <h3 class="text-2xl font-bold mb-3 text-white">{{ $siteName }}</h3>
                     <p class="text-white/80 text-lg leading-relaxed max-w-md">
-                        Excellence in Islamic Education - Nurturing minds and hearts for a better tomorrow through Cambridge and Islamic integrated curriculum.
+                        {{ $siteDescription }}
                     </p>
                 </div>
                 
                 <!-- Contact Info -->
                 <div class="space-y-4">
+                    @if($settings?->address)
                     <div class="flex items-start space-x-3">
                         <div class="w-6 h-6 bg-aisd-gold/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-1 border border-aisd-gold/30">
                             <svg class="w-4 h-4 text-aisd-gold" fill="currentColor" viewBox="0 0 20 20">
@@ -28,10 +33,12 @@
                         </div>
                         <div>
                             <div class="font-semibold text-white">Address</div>
-                            <div class="text-white/70">Chattogram, Bangladesh</div>
+                            <div class="text-white/70">{{ $settings->address }}</div>
                         </div>
                     </div>
+                    @endif
                     
+                    @if($settings?->contact_phone)
                     <div class="flex items-start space-x-3">
                         <div class="w-6 h-6 bg-aisd-gold/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-1 border border-aisd-gold/30">
                             <svg class="w-4 h-4 text-aisd-gold" fill="currentColor" viewBox="0 0 20 20">
@@ -40,10 +47,12 @@
                         </div>
                         <div>
                             <div class="font-semibold text-white">Phone</div>
-                            <div class="text-white/70">+880 1XXX-XXXXXX</div>
+                            <div class="text-white/70">{{ $settings->contact_phone }}</div>
                         </div>
                     </div>
+                    @endif
                     
+                    @if($settings?->contact_email)
                     <div class="flex items-start space-x-3">
                         <div class="w-6 h-6 bg-aisd-gold/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-1 border border-aisd-gold/30">
                             <svg class="w-4 h-4 text-aisd-gold" fill="currentColor" viewBox="0 0 20 20">
@@ -53,9 +62,10 @@
                         </div>
                         <div>
                             <div class="font-semibold text-white">Email</div>
-                            <div class="text-white/70">info@almaghrib.edu.bd</div>
+                            <div class="text-white/70">{{ $settings->contact_email }}</div>
                         </div>
                     </div>
+                    @endif
                 </div>
                 
                 <!-- Social Links -->
@@ -148,7 +158,10 @@
         <div class="container mx-auto px-6 lg:px-12 py-6 relative z-10">
             <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
                 <div class="text-white/60 text-sm">
-                    © {{ date('Y') }} Al-Maghrib International School. All rights reserved.
+                    @php
+                        $siteName = \App\Helpers\SiteHelper::getSiteName();
+                    @endphp
+                    © {{ date('Y') }} {{ $siteName }}. All rights reserved.
                 </div>
                 <div class="flex items-center space-x-6 text-sm">
                     <a href="#" class="text-white/60 hover:text-aisd-gold transition-colors">Privacy Policy</a>

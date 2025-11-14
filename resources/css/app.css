@@ -501,6 +501,31 @@
         margin-bottom: 0 !important;
     }
 
+    /* Hero video full coverage */
+    #hero-bg-video {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        min-width: 100%;
+        min-height: 100%;
+    }
+
+    /* Responsive hero content padding - accounts for fixed navbar */
+    @media (max-width: 640px) {
+        .hero-section .container {
+            padding-top: 5rem !important; /* Navbar height + spacing */
+        }
+    }
+
+    @media (min-width: 641px) {
+        .hero-section .container {
+            padding-top: 6rem !important; /* Navbar height + spacing */
+        }
+    }
+
     /* Remove any default spacing from body/container */
     body > div > main:has(.hero-section) {
         margin-top: 0 !important;

@@ -17,7 +17,7 @@ class StaffSeeder extends Seeder
                 'name' => 'Dr. Muhammad Abdullah',
                 'position' => 'Principal',
                 'bio' => 'Dr. Muhammad Abdullah brings over 20 years of experience in Islamic education and international curriculum management. He holds a Ph.D. in Islamic Education and has served in various leadership roles in educational institutions across the region. His vision focuses on integrating Islamic values with modern educational practices.',
-                'email' => 'principal@almaghribschool.com',
+                'email' => 'principal@duhaschool.com',
                 'phone' => '+880-31-1234567',
                 'is_active' => true,
                 'sort_order' => 1,
@@ -25,7 +25,7 @@ class StaffSeeder extends Seeder
             [
                 'name' => 'Mrs. Fatima Rahman',
                 'position' => 'Vice Principal',
-                'bio' => 'Mrs. Fatima Rahman has been with Al-Maghrib International School since its inception. She holds a Master\'s degree in Education and specializes in curriculum development. She is passionate about student welfare and academic excellence.',
+                'bio' => 'Mrs. Fatima Rahman has been with Duha International School since its inception. She holds a Master\'s degree in Education and specializes in curriculum development. She is passionate about student welfare and academic excellence.',
                 'email' => 'viceprincipal@almaghribschool.com',
                 'phone' => '+880-31-1234568',
                 'is_active' => true,

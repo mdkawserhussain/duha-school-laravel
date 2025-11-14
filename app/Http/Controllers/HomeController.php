@@ -70,7 +70,7 @@ class HomeController extends Controller
 
         return [
             'badge' => $badge,
-            'heading' => $headline ?: 'Welcome to Al-Maghrib International School',
+            'heading' => $headline ?: 'Welcome to ' . \App\Helpers\SiteHelper::getSiteName(),
             'description' => $description,
             'primaryAction' => [
                 'label' => optional($primary)->button_text ?: 'Apply Now',

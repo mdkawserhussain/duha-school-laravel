@@ -38,6 +38,7 @@ class HomePageSection extends Model implements HasMedia
     {
         $this->addMediaCollection('images');
         $this->addMediaCollection('videos');
+        $this->addMediaCollection('video_poster')->singleFile();
     }
 
     public function registerMediaConversions(Media $media = null): void
@@ -81,7 +82,7 @@ class HomePageSection extends Model implements HasMedia
 
     /**
      * Get media URL with proper path handling and conversion support.
-     * Returns relative paths that work with any domain/port.
+     * Uses Spatie's built-in method to return full URLs.
      *
      * @param string $collectionName
      * @param string|null $conversionName
@@ -89,30 +90,15 @@ class HomePageSection extends Model implements HasMedia
      */
     public function getMediaUrl(string $collectionName = 'images', ?string $conversionName = null): ?string
     {
-        $media = $this->getFirstMedia($collectionName);
-        
-        if (!$media) {
+        if (!$this->hasMedia($collectionName)) {
             return null;
         }
 
-        // Use asset() for proper URL generation with cache busting
-        // This ensures URLs work regardless of APP_URL or domain/port
-        $basePath = 'storage/' . $media->id;
-        
-        if ($conversionName) {
-            // Check if conversion exists on disk
-            $conversionPath = $media->getPath($conversionName);
-            if ($conversionPath && file_exists($conversionPath)) {
-                // Get the actual conversion file name
-                $conversionFileName = basename($conversionPath);
-                // Return path for asset() helper
-                return $basePath . '/conversions/' . $conversionFileName;
-            }
-            // Fallback to original if conversion doesn't exist
-            return $basePath . '/' . $media->file_name;
-        }
-
-        return $basePath . '/' . $media->file_name;
+        // Use Spatie's built-in method which returns proper full URLs
+        // This handles conversions, path generation, and URL formatting correctly
+        // Empty string means no conversion, null is converted to empty string
+        $conversion = $conversionName ?? '';
+        return $this->getFirstMediaUrl($collectionName, $conversion);
     }
 
     /**
