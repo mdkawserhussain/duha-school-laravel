@@ -6,7 +6,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>@yield('title', config('app.name', 'Al-Maghrib International School'))</title>
-
+        
         @hasSection('meta-description')
             <meta name="description" content="@yield('meta-description')">
         @else
@@ -74,10 +74,15 @@
         @endif
 
         <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @vite([
+            'resources/css/app.css',
+            'resources/js/app.js'
+        ])
 
-        @stack('styles')
-        @stack('scripts')
+        <noscript>
+            @vite('resources/css/fallback.css')
+        </noscript>
+        
     </head>
     <body class="font-sans antialiased">
         @if(config('services.google_tag_manager.id'))
@@ -87,15 +92,118 @@
         <!-- End Google Tag Manager (noscript) -->
         @endif
 
-        <div class="min-h-screen bg-gray-100" style="margin: 0; padding: 0;">
-            <x-navbar :transparent="request()->routeIs('home')" />
+        <div class="min-h-screen bg-gray-100">
+            <x-header />
 
             <!-- Page Content -->
-            <main class="{{ request()->routeIs('home') ? '' : 'pt-20 lg:pt-24' }}" style="{{ request()->routeIs('home') ? 'margin-top: 0 !important; padding-top: 0 !important;' : '' }}">
+            <main id="main-content">
                 @yield('content')
             </main>
 
             <x-footer />
         </div>
+        
+        <!-- Simple Vanilla JS Lightbox -->
+        <div id="lightbox-overlay" class="lightbox-overlay" style="display: none;">
+            <div class="lightbox-container">
+                <img id="lightbox-image" src="" alt="" />
+                <button id="lightbox-close" class="lightbox-close">&times;</button>
+                <div id="lightbox-counter" class="lightbox-counter"></div>
+            </div>
+        </div>
+        
+        <script>
+            // Simple Vanilla JS Lightbox Implementation
+            document.addEventListener('DOMContentLoaded', function() {
+                const overlay = document.getElementById('lightbox-overlay');
+                const image = document.getElementById('lightbox-image');
+                const closeBtn = document.getElementById('lightbox-close');
+                const counter = document.getElementById('lightbox-counter');
+                
+                let currentImages = [];
+                let currentIndex = 0;
+                
+                // Find all lightbox links
+                const lightboxLinks = document.querySelectorAll('a[data-lightbox]');
+                
+                lightboxLinks.forEach((link, index) => {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        
+                        // Get all images in the same gallery
+                        const gallery = this.getAttribute('data-lightbox');
+                        currentImages = Array.from(document.querySelectorAll(`a[data-lightbox="${gallery}"]`));
+                        currentIndex = currentImages.indexOf(this);
+                        
+                        showLightbox(this.href, this.getAttribute('data-title') || '');
+                    });
+                });
+                
+                function showLightbox(src, title) {
+                    image.src = src;
+                    image.alt = title;
+                    updateCounter();
+                    overlay.style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
+                }
+                
+                function hideLightbox() {
+                    overlay.style.display = 'none';
+                    document.body.style.overflow = '';
+                }
+                
+                function updateCounter() {
+                    if (currentImages.length > 1) {
+                        counter.textContent = `${currentIndex + 1} of ${currentImages.length}`;
+                        counter.style.display = 'block';
+                    } else {
+                        counter.style.display = 'none';
+                    }
+                }
+                
+                function showNext() {
+                    if (currentIndex < currentImages.length - 1) {
+                        currentIndex++;
+                        const nextLink = currentImages[currentIndex];
+                        showLightbox(nextLink.href, nextLink.getAttribute('data-title') || '');
+                    }
+                }
+                
+                function showPrev() {
+                    if (currentIndex > 0) {
+                        currentIndex--;
+                        const prevLink = currentImages[currentIndex];
+                        showLightbox(prevLink.href, prevLink.getAttribute('data-title') || '');
+                    }
+                }
+                
+                // Event listeners
+                closeBtn.addEventListener('click', hideLightbox);
+                overlay.addEventListener('click', function(e) {
+                    if (e.target === overlay) {
+                        hideLightbox();
+                    }
+                });
+                
+                // Keyboard navigation
+                document.addEventListener('keydown', function(e) {
+                    if (overlay.style.display === 'flex') {
+                        switch(e.key) {
+                            case 'Escape':
+                                hideLightbox();
+                                break;
+                            case 'ArrowLeft':
+                                showPrev();
+                                break;
+                            case 'ArrowRight':
+                                showNext();
+                                break;
+                        }
+                    }
+                });
+            });
+        </script>
+        
+        @stack('scripts')
     </body>
 </html>

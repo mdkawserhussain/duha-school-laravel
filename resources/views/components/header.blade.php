@@ -253,21 +253,33 @@ document.addEventListener('keydown', function(event) {
 function openSearchModal() {
     const modal = document.getElementById('search-modal');
     if (modal) {
+        modal.classList.add('open');
         modal.classList.remove('hidden');
-        document.getElementById('search-input').focus();
+        const input = document.getElementById('search-input');
+        if (input) input.focus();
     }
 }
 
 function closeSearchModal() {
     const modal = document.getElementById('search-modal');
     if (modal) {
+        modal.classList.remove('open');
         modal.classList.add('hidden');
     }
 }
 
-// Close modal on Escape key
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeSearchModal();
+    }
+});
+
+document.addEventListener('click', function(event) {
+    const modal = document.getElementById('search-modal');
+    if (!modal) return;
+    if (!modal.classList.contains('open')) return;
+    const content = modal.querySelector('.search-modal-content');
+    if (content && !content.contains(event.target)) {
         closeSearchModal();
     }
 });

@@ -17,6 +17,10 @@
 
         @filamentStyles
         @vite('resources/css/app.css')
+
+        <noscript>
+            @vite('resources/css/fallback.css')
+        </noscript>
     </head>
 
     <body class="antialiased">

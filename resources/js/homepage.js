@@ -103,12 +103,8 @@
 
             if (currentScroll > 100) {
                 header.classList.add('scrolled');
-                header.style.background = 'rgba(30, 58, 138, 0.95)';
-                header.style.backdropFilter = 'blur(10px)';
             } else {
                 header.classList.remove('scrolled');
-                header.style.background = '';
-                header.style.backdropFilter = '';
             }
 
             lastScroll = currentScroll;

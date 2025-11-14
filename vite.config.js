@@ -1,18 +1,21 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
-import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
     plugins: [
         laravel({
             input: [
-                'resources/css/app.css', 
+                'resources/css/app.css',
+                'resources/css/fallback.css',
                 'resources/js/app.js',
-                'resources/js/homepage.js',
-                'resources/css/filament/admin/theme.css'
+                'resources/js/homepage.js'
             ],
             refresh: true,
         }),
-        tailwindcss(),
     ],
+    server: {
+        hmr: {
+            overlay: false
+        }
+    }
 });

@@ -468,6 +468,11 @@
         -webkit-backdrop-filter: blur(12px);
     }
 
+    header.scrolled {
+        background: rgba(30, 58, 138, 0.95);
+        backdrop-filter: blur(10px);
+    }
+
     /* Account for navbar height */
     /* Navbar height: h-16 (4rem) mobile, h-20 (5rem) desktop */
     
