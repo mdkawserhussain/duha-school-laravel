@@ -525,3 +525,25 @@ app/Filament/
 **Analyzed By**: AI Assistant
 **Application**: Al-Maghrib School Laravel Admin Panel
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

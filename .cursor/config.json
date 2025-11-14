@@ -1,0 +1,20 @@
+{
+  "terminal": {
+    "profiles": [
+      {
+        "name": "Laragon (Laravel)",
+        "match": {
+          "paths": [
+            "**/artisan",
+            "composer.json"
+          ]
+        },
+        "command": "\"C:\\laragon\\bin\\cmder\\Cmder.exe\" /START \"%PROJECT_ROOT%\"",
+        "env": {
+          "PATH": "C:\\laragon\\bin\\php\\php-8.3.26-Win32-vs16-x64;%PATH%"
+        }
+      }
+    ]
+  }
+}
+
