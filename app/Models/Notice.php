@@ -12,10 +12,13 @@ class Notice extends Model
 
     protected $fillable = [
         'title',
+        'slug',
         'excerpt',
         'content',
         'category',
+        'is_featured',
         'is_important',
+        'status',
         'is_published',
         'published_at',
     ];

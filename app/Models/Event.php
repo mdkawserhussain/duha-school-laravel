@@ -15,12 +15,17 @@ class Event extends Model implements HasMedia
 
     protected $fillable = [
         'title',
+        'slug',
         'excerpt',
         'description',
+        'content',
         'event_date',
+        'start_at',
+        'end_at',
         'location',
         'category',
         'is_featured',
+        'status',
         'is_published',
         'published_at',
     ];
