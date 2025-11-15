@@ -88,12 +88,21 @@ class SiteSettingsHelper
 
     /**
      * Get logo URL.
+     * Returns the uploaded logo URL or falls back to placeholder.
+     * Uses relative paths with asset() for better compatibility.
      */
     public static function logoUrl(): ?string
     {
         try {
             $settings = static::all();
-            return $settings->logo_url ?? SiteSettings::getLogoUrl();
+            
+            // Use the logo_url accessor which now uses relative paths with asset()
+            if ($settings && $settings->logo_url) {
+                return $settings->logo_url;
+            }
+            
+            // Fallback to static method which also uses relative paths
+            return SiteSettings::getLogoUrl();
         } catch (\Exception $e) {
             Log::error('Error getting logo URL: ' . $e->getMessage());
             return SiteSettings::getLogoUrl();

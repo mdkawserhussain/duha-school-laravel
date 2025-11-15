@@ -176,32 +176,70 @@ class SiteSettings extends Model implements HasMedia
 
     /**
      * Get the logo URL with fallback.
+     * Uses relative paths with asset() for better compatibility.
      */
     public static function getLogoUrl(?string $conversion = null): string
     {
         $settings = static::getSettings();
 
         if ($settings && $settings->hasMedia('logo')) {
-            $url = $settings->getFirstMediaUrl('logo', $conversion ?? '');
-            if ($url) {
-                return $url;
+            $media = $settings->getFirstMedia('logo');
+            if ($media) {
+                // Use relative path with asset() instead of getFirstMediaUrl()
+                $mediaPath = $media->getPath();
+                
+                // Extract relative path from storage/app/public
+                if ($mediaPath && str_contains($mediaPath, 'storage/app/public/')) {
+                    $relativePath = 'storage/' . substr($mediaPath, strpos($mediaPath, 'storage/app/public/') + strlen('storage/app/public/'));
+                    return asset($relativePath);
+                } else {
+                    // Fallback: construct from media attributes
+                    $fileName = $media->file_name ?? '';
+                    if ($fileName) {
+                        $relativePath = 'storage/' . $media->id . '/' . $fileName;
+                        return asset($relativePath);
+                    }
+                }
             }
         }
 
-        return 'https://via.placeholder.com/200x60?text=School+Logo';
+        return asset('images/logo.svg');
     }
 
     /**
      * Accessor: Get logo URL.
+     * Uses relative paths with asset() for better compatibility.
      */
     public function getLogoUrlAttribute(): ?string
     {
         if ($this->hasMedia('logo')) {
-            return $this->getFirstMediaUrl('logo');
+            $media = $this->getFirstMedia('logo');
+            if ($media) {
+                // Use relative path with asset() instead of getFirstMediaUrl()
+                $mediaPath = $media->getPath();
+                
+                // Extract relative path from storage/app/public
+                if ($mediaPath && str_contains($mediaPath, 'storage/app/public/')) {
+                    $relativePath = 'storage/' . substr($mediaPath, strpos($mediaPath, 'storage/app/public/') + strlen('storage/app/public/'));
+                    return asset($relativePath);
+                } else {
+                    // Fallback: construct from media attributes
+                    $fileName = $media->file_name ?? '';
+                    if ($fileName) {
+                        $relativePath = 'storage/' . $media->id . '/' . $fileName;
+                        return asset($relativePath);
+                    }
+                }
+            }
         }
         
         if ($this->logo_path && Storage::disk('public')->exists($this->logo_path)) {
-            return Storage::disk('public')->url($this->logo_path);
+            // Use asset() for relative paths
+            if (str_starts_with($this->logo_path, 'storage/') || str_starts_with($this->logo_path, '/storage/')) {
+                return asset($this->logo_path);
+            } else {
+                return asset('storage/' . ltrim($this->logo_path, '/'));
+            }
         }
         
         return null;
@@ -209,15 +247,33 @@ class SiteSettings extends Model implements HasMedia
 
     /**
      * Accessor: Get favicon URL.
+     * Uses relative paths with asset() for better compatibility.
      */
     public function getFaviconUrlAttribute(): ?string
     {
         if ($this->hasMedia('favicon')) {
-            return $this->getFirstMediaUrl('favicon');
+            $media = $this->getFirstMedia('favicon');
+            if ($media) {
+                $mediaPath = $media->getPath();
+                if ($mediaPath && str_contains($mediaPath, 'storage/app/public/')) {
+                    $relativePath = 'storage/' . substr($mediaPath, strpos($mediaPath, 'storage/app/public/') + strlen('storage/app/public/'));
+                    return asset($relativePath);
+                } else {
+                    $fileName = $media->file_name ?? '';
+                    if ($fileName) {
+                        $relativePath = 'storage/' . $media->id . '/' . $fileName;
+                        return asset($relativePath);
+                    }
+                }
+            }
         }
         
         if ($this->favicon_path && Storage::disk('public')->exists($this->favicon_path)) {
-            return Storage::disk('public')->url($this->favicon_path);
+            if (str_starts_with($this->favicon_path, 'storage/') || str_starts_with($this->favicon_path, '/storage/')) {
+                return asset($this->favicon_path);
+            } else {
+                return asset('storage/' . ltrim($this->favicon_path, '/'));
+            }
         }
         
         return null;
@@ -225,15 +281,33 @@ class SiteSettings extends Model implements HasMedia
 
     /**
      * Accessor: Get OG image URL.
+     * Uses relative paths with asset() for better compatibility.
      */
     public function getOgImageUrlAttribute(): ?string
     {
         if ($this->hasMedia('og_image')) {
-            return $this->getFirstMediaUrl('og_image');
+            $media = $this->getFirstMedia('og_image');
+            if ($media) {
+                $mediaPath = $media->getPath();
+                if ($mediaPath && str_contains($mediaPath, 'storage/app/public/')) {
+                    $relativePath = 'storage/' . substr($mediaPath, strpos($mediaPath, 'storage/app/public/') + strlen('storage/app/public/'));
+                    return asset($relativePath);
+                } else {
+                    $fileName = $media->file_name ?? '';
+                    if ($fileName) {
+                        $relativePath = 'storage/' . $media->id . '/' . $fileName;
+                        return asset($relativePath);
+                    }
+                }
+            }
         }
         
         if ($this->og_image && Storage::disk('public')->exists($this->og_image)) {
-            return Storage::disk('public')->url($this->og_image);
+            if (str_starts_with($this->og_image, 'storage/') || str_starts_with($this->og_image, '/storage/')) {
+                return asset($this->og_image);
+            } else {
+                return asset('storage/' . ltrim($this->og_image, '/'));
+            }
         }
         
         return null;

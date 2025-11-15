@@ -30,6 +30,14 @@ class EditSiteSettings extends EditRecord
         $this->faviconPath = $data['favicon'] ?? null;
         $this->ogImagePath = $data['og_image'] ?? null;
         
+        \Log::info('EditSiteSettings::mutateFormDataBeforeSave: Captured file paths', [
+            'logoPath' => $this->logoPath,
+            'faviconPath' => $this->faviconPath,
+            'ogImagePath' => $this->ogImagePath,
+            'logoPathType' => gettype($this->logoPath),
+            'logoPathIsArray' => is_array($this->logoPath),
+        ]);
+        
         // Remove files from data since we'll handle them manually
         unset($data['logo'], $data['favicon'], $data['og_image']);
         
@@ -47,31 +55,82 @@ class EditSiteSettings extends EditRecord
         // Get file paths from form raw state if not already stored
         $formState = $this->form->getRawState();
         
+        \Log::info('EditSiteSettings::afterSave: Starting media upload processing', [
+            'logoPath' => $this->logoPath ?? 'not set',
+            'formStateLogo' => $formState['logo'] ?? 'not set',
+            'faviconPath' => $this->faviconPath ?? 'not set',
+            'ogImagePath' => $this->ogImagePath ?? 'not set',
+        ]);
+        
         // Handle logo upload
-        $this->handleMediaUpload($settings, $this->logoPath ?? $formState['logo'] ?? null, 'logo');
+        $logoPath = $this->logoPath ?? $formState['logo'] ?? null;
+        if ($logoPath) {
+            \Log::info('EditSiteSettings::afterSave: Processing logo upload', [
+                'logoPath' => $logoPath,
+                'isArray' => is_array($logoPath),
+            ]);
+        }
+        $this->handleMediaUpload($settings, $logoPath, 'logo');
         
         // Handle favicon upload
-        $this->handleMediaUpload($settings, $this->faviconPath ?? $formState['favicon'] ?? null, 'favicon');
+        $faviconPath = $this->faviconPath ?? $formState['favicon'] ?? null;
+        if ($faviconPath) {
+            \Log::info('EditSiteSettings::afterSave: Processing favicon upload', [
+                'faviconPath' => $faviconPath,
+            ]);
+        }
+        $this->handleMediaUpload($settings, $faviconPath, 'favicon');
         
         // Handle OG image upload
-        $this->handleMediaUpload($settings, $this->ogImagePath ?? $formState['og_image'] ?? null, 'og_image');
+        $ogImagePath = $this->ogImagePath ?? $formState['og_image'] ?? null;
+        if ($ogImagePath) {
+            \Log::info('EditSiteSettings::afterSave: Processing OG image upload', [
+                'ogImagePath' => $ogImagePath,
+            ]);
+        }
+        $this->handleMediaUpload($settings, $ogImagePath, 'og_image');
         
         // Handle advisors profile images
         $this->handleAdvisorsMedia($settings, $formState['advisors'] ?? null);
         
-        // Clear cache after saving
+        // Refresh the model to load new media relationships
+        $settings->refresh();
+        $settings->load('media');
+        
+        // Verify media was added
+        $hasLogo = $settings->hasMedia('logo');
+        $hasFavicon = $settings->hasMedia('favicon');
+        $hasOgImage = $settings->hasMedia('og_image');
+        
+        \Log::info('EditSiteSettings::afterSave: Media verification after upload', [
+            'hasLogo' => $hasLogo,
+            'hasFavicon' => $hasFavicon,
+            'hasOgImage' => $hasOgImage,
+            'mediaCount' => $settings->media->count(),
+        ]);
+        
+        // Clear all relevant caches after saving
         SiteSettings::clearCache();
+        \Illuminate\Support\Facades\Cache::forget('site_settings');
+        \Illuminate\Support\Facades\Artisan::call('view:clear');
+        \Illuminate\Support\Facades\Artisan::call('config:clear');
+
+        $message = 'Site settings have been updated and all caches have been cleared.';
+        if ($logoPath && !$hasLogo) {
+            $message .= ' Warning: Logo upload may have failed. Check logs for details.';
+        }
 
         Notification::make()
             ->title('Settings saved successfully')
             ->success()
-            ->body('Site settings have been updated and cache has been cleared.')
+            ->body($message)
             ->send();
     }
 
     protected function handleMediaUpload($settings, $filePath, string $collection): void
     {
         if (!$filePath) {
+            \Log::info("handleMediaUpload: No file path provided for collection: {$collection}");
             return;
         }
         
@@ -81,33 +140,85 @@ class EditSiteSettings extends EditRecord
         }
         
         if (!$filePath || !is_string($filePath)) {
+            \Log::warning("handleMediaUpload: Invalid file path format for collection: {$collection}", [
+                'filePath' => $filePath,
+                'type' => gettype($filePath),
+            ]);
             return;
         }
         
-        // Skip if it's a URL (already uploaded)
+        \Log::info("handleMediaUpload: Processing file for collection: {$collection}", [
+            'filePath' => $filePath,
+            'isUrl' => filter_var($filePath, FILTER_VALIDATE_URL),
+        ]);
+        
+        // Skip if it's a URL (already uploaded and in media collection)
         if (filter_var($filePath, FILTER_VALIDATE_URL)) {
+            \Log::info("handleMediaUpload: File path is a URL, skipping: {$filePath}");
             return;
         }
         
         // Clear existing media in collection
         $settings->clearMediaCollection($collection);
+        \Log::info("handleMediaUpload: Cleared existing media in collection: {$collection}");
         
         $added = false;
+        $lastError = null;
         
-        // Handle Livewire temporary files
-        if (str_starts_with($filePath, 'livewire-tmp/')) {
-            if (Storage::disk('public')->exists($filePath)) {
+        // First, try using Storage disk (most reliable for Filament uploads)
+        // Filament stores files relative to the public disk root
+        if (Storage::disk('public')->exists($filePath)) {
+            try {
+                \Log::info("handleMediaUpload: Attempting addMediaFromDisk with path: {$filePath}");
+                $settings->addMediaFromDisk($filePath, 'public')
+                    ->toMediaCollection($collection);
+                $added = true;
+                \Log::info("handleMediaUpload: Successfully added media from disk: {$filePath}");
+            } catch (\Exception $e) {
+                $lastError = $e->getMessage();
+                \Log::error("handleMediaUpload: Failed to add media from disk", [
+                    'filePath' => $filePath,
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString(),
+                ]);
+            }
+        }
+        
+        // Handle Livewire temporary files (if not already added)
+        if (!$added && str_starts_with($filePath, 'livewire-tmp/')) {
+            $fullPath = storage_path('app/public/' . $filePath);
+            if (file_exists($fullPath) && is_file($fullPath)) {
                 try {
+                    \Log::info("handleMediaUpload: Attempting addMedia from livewire-tmp: {$fullPath}");
+                    $settings->addMedia($fullPath)
+                        ->toMediaCollection($collection);
+                    $added = true;
+                    \Log::info("handleMediaUpload: Successfully added media from livewire-tmp");
+                } catch (\Exception $e) {
+                    $lastError = $e->getMessage();
+                    \Log::error("handleMediaUpload: Failed to add media from livewire-tmp", [
+                        'fullPath' => $fullPath,
+                        'error' => $e->getMessage(),
+                    ]);
+                }
+            } elseif (Storage::disk('public')->exists($filePath)) {
+                try {
+                    \Log::info("handleMediaUpload: Attempting addMediaFromDisk for livewire-tmp: {$filePath}");
                     $settings->addMediaFromDisk($filePath, 'public')
                         ->toMediaCollection($collection);
                     $added = true;
+                    \Log::info("handleMediaUpload: Successfully added media from livewire-tmp disk");
                 } catch (\Exception $e) {
-                    // Try alternative method
+                    $lastError = $e->getMessage();
+                    \Log::error("handleMediaUpload: Failed to add media from livewire-tmp disk", [
+                        'filePath' => $filePath,
+                        'error' => $e->getMessage(),
+                    ]);
                 }
             }
         }
         
-        // If not added yet, try different path formats
+        // If not added yet, try different absolute path formats
         if (!$added) {
             $paths = [
                 storage_path('app/public/' . $filePath),
@@ -119,26 +230,47 @@ class EditSiteSettings extends EditRecord
             foreach ($paths as $path) {
                 if (file_exists($path) && is_file($path)) {
                     try {
+                        \Log::info("handleMediaUpload: Attempting addMedia with absolute path: {$path}");
                         $settings->addMedia($path)
                             ->toMediaCollection($collection);
                         $added = true;
+                        \Log::info("handleMediaUpload: Successfully added media from absolute path");
                         break;
                     } catch (\Exception $e) {
+                        $lastError = $e->getMessage();
+                        \Log::warning("handleMediaUpload: Failed to add media from absolute path", [
+                            'path' => $path,
+                            'error' => $e->getMessage(),
+                        ]);
                         continue;
                     }
                 }
             }
         }
         
-        // If file exists in storage disk
-        if (!$added && Storage::disk('public')->exists($filePath)) {
-            try {
-                $settings->addMediaFromDisk($filePath, 'public')
-                    ->toMediaCollection($collection);
-                $added = true;
-            } catch (\Exception $e) {
-                // Log error but don't fail
+        // Final verification
+        if ($added) {
+            $settings->refresh();
+            $hasMedia = $settings->hasMedia($collection);
+            \Log::info("handleMediaUpload: Media addition verification", [
+                'collection' => $collection,
+                'hasMedia' => $hasMedia,
+            ]);
+            
+            if (!$hasMedia) {
+                \Log::error("handleMediaUpload: Media was added but verification failed!", [
+                    'collection' => $collection,
+                    'filePath' => $filePath,
+                ]);
+                $added = false;
             }
+        } else {
+            \Log::error("handleMediaUpload: Failed to add media to collection", [
+                'collection' => $collection,
+                'filePath' => $filePath,
+                'lastError' => $lastError,
+                'storageExists' => Storage::disk('public')->exists($filePath),
+            ]);
         }
     }
 

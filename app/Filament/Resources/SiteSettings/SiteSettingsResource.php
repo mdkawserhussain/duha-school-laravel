@@ -393,7 +393,7 @@ class SiteSettingsResource extends Resource
                                         FormComponents\Repeater::make('advisors')
                                             ->label('Advisors & Board Members')
                                             ->schema([
-                                                FormComponents\Grid::make()
+                                                Components\Grid::make()
                                                     ->schema([
                                                         FormComponents\Toggle::make('is_active')
                                                             ->label('Active')
