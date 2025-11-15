@@ -39,6 +39,7 @@ class HomePageSection extends Model implements HasMedia
         $this->addMediaCollection('images');
         $this->addMediaCollection('videos');
         $this->addMediaCollection('video_poster')->singleFile();
+        $this->addMediaCollection('background_image')->singleFile();
     }
 
     public function registerMediaConversions(Media $media = null): void

@@ -1,27 +1,101 @@
 <!-- Parallax Impact Strip - AISD Style -->
-<section class="relative bg-fixed bg-center bg-cover min-h-[600px] flex items-center" style="background-image:url('{{ asset('images/parallax-students.svg') }}');">
+@php
+    // Get the section data
+    $section = $homePageSections['parallax_experience'] ?? null;
+    $sectionData = $section && $section->is_active ? $section->data : [];
+    
+    // Get background image from CMS or use default
+    $backgroundImage = null;
+    $useDefaultImage = $sectionData['use_default_image'] ?? false;
+    
+    // Priority: 1. Media collection 'background_image', 2. Data array, 3. Default
+    if (!$useDefaultImage && $section) {
+        // Ensure media relationship is loaded
+        if (!$section->relationLoaded('media')) {
+            $section->load('media');
+        }
+        
+        // Try to get from dedicated background_image media collection (preferred)
+        try {
+            if ($section->hasMedia('background_image')) {
+                $media = $section->getFirstMedia('background_image');
+                if ($media) {
+                    $backgroundImage = $media->getUrl();
+                    // Ensure absolute URL
+                    if ($backgroundImage && !filter_var($backgroundImage, FILTER_VALIDATE_URL)) {
+                        $backgroundImage = url($backgroundImage);
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            \Log::debug('Parallax section: Failed to get background_image media', [
+                'section_id' => $section->id,
+                'error' => $e->getMessage()
+            ]);
+        }
+        
+        // If still no image, try data array
+        if (!$backgroundImage && isset($sectionData['background_image'])) {
+            $bgData = $sectionData['background_image'];
+            if (filter_var($bgData, FILTER_VALIDATE_URL)) {
+                $backgroundImage = $bgData;
+            } elseif (is_string($bgData) && !empty($bgData)) {
+                if (str_starts_with($bgData, 'storage/') || str_starts_with($bgData, '/storage/')) {
+                    $backgroundImage = asset($bgData);
+                } else {
+                    $backgroundImage = asset('storage/' . ltrim($bgData, '/'));
+                }
+            }
+        }
+        
+        // Fallback to images collection
+        if (!$backgroundImage && $section->hasMedia('images')) {
+            try {
+                $media = $section->getFirstMedia('images');
+                if ($media) {
+                    $backgroundImage = $media->getUrl();
+                }
+            } catch (\Exception $e) {
+                // Continue to default
+            }
+        }
+    }
+    
+    // Use default image if no custom image is set
+    if (!$backgroundImage || $useDefaultImage) {
+        $backgroundImage = asset('images/parallax-students.svg');
+    }
+    
+    // Ensure we have a valid absolute URL
+    if ($backgroundImage && !filter_var($backgroundImage, FILTER_VALIDATE_URL)) {
+        $backgroundImage = url($backgroundImage);
+    }
+    
+    // Extract content data
+    $badge = $sectionData['badge'] ?? 'Experience';
+    $title = $sectionData['title'] ?? 'Where tradition meets innovation every school day.';
+    $description = $sectionData['description'] ?? 'Borrowing Duha\'s parallax rhythm, this slice of campus life highlights collaborative learning pods, Arabic storytelling corners, and maker labs.';
+    $featurePills = $sectionData['feature_pills'] ?? [
+        ['text' => 'Dedicated Musalla & Hifz Pods'],
+        ['text' => 'Robotics & Design Thinking Lab'],
+        ['text' => 'Outdoor Play Courts'],
+    ];
+    $cta = $sectionData['cta'] ?? ['text' => 'Explore Our Campus', 'link' => '#campus'];
+@endphp
+
+<section 
+    class="parallax-section relative min-h-[600px] flex items-center justify-center overflow-hidden"
+    style="background-image: url('{{ e($backgroundImage) }}');"
+>
     <!-- Gradient Overlay -->
-    <div class="absolute inset-0 bg-gradient-to-r from-aisd-midnight/90 via-aisd-cobalt/80 to-aisd-midnight/90"></div>
+    <div class="absolute inset-0 bg-gradient-to-r from-aisd-midnight/70 via-aisd-cobalt/60 to-aisd-midnight/70 z-10"></div>
 
     <!-- Decorative Pattern Overlay -->
-    <div class="absolute inset-0 opacity-20" style="background-image:url('data:image/svg+xml,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;120&quot; height=&quot;120&quot; viewBox=&quot;0 0 120 120&quot;><g fill=&quot;none&quot; fill-rule=&quot;evenodd&quot; opacity=&quot;.25&quot;><path d=&quot;M60 0l60 60-60 60L0 60z&quot; stroke=&quot;%23F4C430&quot; stroke-width=&quot;0.5&quot; opacity=&quot;.3&quot;/></g></svg>');"></div>
+    <div class="absolute inset-0 opacity-20 z-20" style="background-image:url('data:image/svg+xml,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;120&quot; height=&quot;120&quot; viewBox=&quot;0 0 120 120&quot;><g fill=&quot;none&quot; fill-rule=&quot;evenodd&quot; opacity=&quot;.25&quot;><path d=&quot;M60 0l60 60-60 60L0 60z&quot; stroke=&quot;%23F4C430&quot; stroke-width=&quot;0.5&quot; opacity=&quot;.3&quot;/></g></svg>');"></div>
 
-    <div class="container relative z-10 mx-auto px-6 py-32 text-white lg:px-12">
-        @php
-            $section = $homePageSections['parallax_experience'] ?? null;
-            $sectionData = $section && $section->is_active ? $section->data : [];
-            $badge = $sectionData['badge'] ?? 'Experience';
-            $title = $sectionData['title'] ?? 'Where tradition meets innovation every school day.';
-            $description = $sectionData['description'] ?? 'Borrowing Duha\'s parallax rhythm, this slice of campus life highlights collaborative learning pods, Arabic storytelling corners, and maker labs.';
-            $featurePills = $sectionData['feature_pills'] ?? [
-                ['text' => 'Dedicated Musalla & Hifz Pods'],
-                ['text' => 'Robotics & Design Thinking Lab'],
-                ['text' => 'Outdoor Play Courts'],
-            ];
-            $cta = $sectionData['cta'] ?? ['text' => 'Explore Our Campus', 'link' => '#campus'];
-        @endphp
-
-        @if($section && $section->is_active)
+    <!-- Content -->
+    @if($section && $section->is_active)
+    <div class="container relative z-30 mx-auto px-6 py-32 text-white lg:px-12">
         <div class="max-w-3xl space-y-6">
             <!-- Section Badge -->
             <p class="text-xs uppercase tracking-[0.5em] text-white/70">{{ $badge }}</p>
@@ -59,6 +133,6 @@
             </div>
             @endif
         </div>
-        @endif
     </div>
+    @endif
 </section>

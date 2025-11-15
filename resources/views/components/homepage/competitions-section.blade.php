@@ -49,12 +49,12 @@
             @foreach ($competitions as $index => $competition)
                 <article class="group rounded-2xl border transition-all overflow-hidden" style="border-color: #e5e7eb; background-color: #ffffff; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);" onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'">
                     <!-- Colored Top Bar -->
-                    <div class="h-2" style="background: {{ $competition['gradient'] }};"></div>
+                    <div class="h-2" style="<?php echo 'background: ' . $competition['gradient'] . ';'; ?>"></div>
                     
                     <!-- Card Content -->
                     <div class="p-6">
                         <!-- Icon -->
-                        <div class="inline-flex items-center justify-center rounded-xl p-3 mb-4" style="background-color: {{ $competition['iconBg'] }};">
+                        <div class="inline-flex items-center justify-center rounded-xl p-3 mb-4" style="<?php echo 'background-color: ' . $competition['iconBg'] . ';'; ?>">
                             <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="24" height="24" style="color: #ffffff;">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $competition['icon'] }}" />
                             </svg>
@@ -73,14 +73,6 @@
                         
                         <!-- Description -->
                         <p class="text-sm leading-relaxed mb-6" style="color: #4a5568;">{{ $competition['copy'] }}</p>
-                        
-                        <!-- View Button -->
-                        <button class="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all" style="background-color: #F4C430; color: #0C1B3D;" onmouseover="this.style.backgroundColor='#ffdc5c'; this.style.transform='scale(1.05)'" onmouseout="this.style.backgroundColor='#F4C430'; this.style.transform='scale(1)'">
-                            View Details
-                            <svg class="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                            </svg>
-                        </button>
                     </div>
                 </article>
             @endforeach

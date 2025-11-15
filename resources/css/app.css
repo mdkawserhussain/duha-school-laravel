@@ -416,6 +416,30 @@
         }
     }
 
+    /* Parallax Section Background - Clean Implementation */
+    .parallax-section {
+        background-attachment: fixed;
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        position: relative;
+        min-height: 600px;
+    }
+
+    /* Mobile fallback - background-attachment: fixed doesn't work well on mobile */
+    @media (max-width: 768px) {
+        .parallax-section {
+            background-attachment: scroll;
+        }
+    }
+
+    /* iOS Safari fix for background-attachment: fixed */
+    @supports (-webkit-touch-callout: none) {
+        .parallax-section {
+            background-attachment: scroll;
+        }
+    }
+
     /* Pulse Animation */
     .animate-pulse-on-hover:hover {
         animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;

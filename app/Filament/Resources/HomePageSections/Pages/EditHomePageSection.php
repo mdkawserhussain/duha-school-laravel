@@ -17,6 +17,11 @@ class EditHomePageSection extends EditRecord
     {
         // Convert data array to JSON string for textarea display
         if (isset($data['data']) && is_array($data['data'])) {
+            // For parallax section, extract background_image and use_default_image to top level
+            if (isset($data['section_key']) && $data['section_key'] === 'parallax_experience') {
+                // These fields are now handled by the form directly
+            }
+            
             $data['data'] = json_encode($data['data'], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         }
         
@@ -32,6 +37,25 @@ class EditHomePageSection extends EditRecord
         if (isset($data['data']) && is_string($data['data'])) {
             $decoded = json_decode($data['data'], true);
             $data['data'] = $decoded !== null ? $decoded : [];
+        }
+        
+        // Handle parallax section specific fields
+        if (isset($data['section_key']) && $data['section_key'] === 'parallax_experience') {
+            // Ensure data is an array
+            if (!isset($data['data']) || !is_array($data['data'])) {
+                $data['data'] = [];
+            }
+            
+            // Move parallax fields to data array
+            if (isset($data['parallax_background_image'])) {
+                $data['data']['background_image'] = $data['parallax_background_image'];
+                unset($data['parallax_background_image']);
+            }
+            
+            if (isset($data['parallax_use_default_image'])) {
+                $data['data']['use_default_image'] = $data['parallax_use_default_image'];
+                unset($data['parallax_use_default_image']);
+            }
         }
         
         // Remove images from data as we'll handle it manually

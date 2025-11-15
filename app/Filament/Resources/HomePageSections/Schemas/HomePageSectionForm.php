@@ -177,7 +177,68 @@ class HomePageSectionForm
                                 }
                                 return is_array($state) ? $state : [];
                             })
-                            ->visible(fn ($get) => $get('section_key') !== 'achievements'),
+                            ->visible(fn ($get) => $get('section_key') !== 'achievements' && $get('section_key') !== 'parallax_experience'),
+
+                        // Parallax Background Image Section
+                        Components\Section::make('Parallax Background Image (for parallax section)')
+                            ->schema([
+                                FormComponents\FileUpload::make('parallax_background_image')
+                                    ->label('Background Image')
+                                    ->image()
+                                    ->directory('homepage-sections/parallax')
+                                    ->visibility('public')
+                                    ->disk('public')
+                                    ->imageEditor()
+                                    ->imageEditorAspectRatios([
+                                        null,
+                                        '16:9',
+                                        '4:3',
+                                        '3:2',
+                                    ])
+                                    ->helperText('Upload a background image for the parallax section. Recommended size: 1920x1080 pixels or larger.')
+                                    ->columnSpanFull()
+                                    ->saveUploadedFileUsing(function ($state, $set, callable $get) {
+                                        // When a file is uploaded, update the data array
+                                        $data = $get('data') ?? [];
+                                        if (!is_array($data)) {
+                                            $data = [];
+                                        }
+                                        $data['background_image'] = $state;
+                                        $set('data', $data);
+                                    })
+                                    ->loadStateFrom(function (callable $get) {
+                                        // Load the background image from the data array
+                                        $data = $get('data');
+                                        if (is_array($data) && isset($data['background_image'])) {
+                                            return $data['background_image'];
+                                        }
+                                        return null;
+                                    }),
+                                
+                                FormComponents\Toggle::make('parallax_use_default_image')
+                                    ->label('Use Default Image')
+                                    ->helperText('Toggle to use the default parallax image instead of uploaded image.')
+                                    ->default(false)
+                                    ->afterStateUpdated(function ($state, $set, callable $get) {
+                                        // When the toggle changes, update the data array
+                                        $data = $get('data') ?? [];
+                                        if (!is_array($data)) {
+                                            $data = [];
+                                        }
+                                        $data['use_default_image'] = $state;
+                                        $set('data', $data);
+                                    })
+                                    ->loadStateFrom(function (callable $get) {
+                                        // Load the use_default_image from the data array
+                                        $data = $get('data');
+                                        if (is_array($data) && isset($data['use_default_image'])) {
+                                            return $data['use_default_image'];
+                                        }
+                                        return false;
+                                    }),
+                            ])
+                            ->columns(1)
+                            ->visible(fn ($get) => $get('section_key') === 'parallax_experience'),
 
                         FormComponents\TextInput::make('sort_order')
                             ->label('Sort Order')

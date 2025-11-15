@@ -350,6 +350,7 @@ class HomePageSectionSeeder extends Seeder
                         'text' => 'Explore Our Campus',
                         'link' => '/campus'
                     ],
+                    'use_default_image' => true,
                 ],
                 'sort_order' => 8,
                 'is_active' => true,
@@ -495,7 +496,7 @@ class HomePageSectionSeeder extends Seeder
         ];
 
         foreach ($sections as $section) {
-            HomePageSection::firstOrCreate(
+            HomePageSection::updateOrCreate(
                 ['section_key' => $section['section_key']],
                 $section
             );

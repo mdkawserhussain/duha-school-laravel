@@ -30,7 +30,11 @@ class HomeController extends Controller
         $cacheTime = 3600; // 1 hour
 
         $data = cache()->remember($cacheKey, $cacheTime, function () {
-            $sections = HomePageSection::active()->ordered()->get();
+            // Eager load media relationships to ensure images are available
+            $sections = HomePageSection::active()
+                ->ordered()
+                ->with('media')
+                ->get();
             $sectionsByKey = $sections->keyBy('section_key');
             $heroSlides = $sections->where('section_type', 'hero')->values();
 

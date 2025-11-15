@@ -76,10 +76,10 @@ $locales = [
 
     {{-- Main Navbar --}}
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16 lg:h-20 transition-all duration-300">
+        <div class="flex items-center h-16 lg:h-20 transition-all duration-300 relative">
 
             {{-- Logo --}}
-            <div class="flex-shrink-0">
+            <div class="flex-shrink-0 absolute left-4 sm:left-6 lg:left-8">
                 <a
                     href="{{ route('home') }}"
                     class="navbar-logo navbar-focus focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 rounded-lg p-1"
@@ -98,8 +98,8 @@ $locales = [
                 </a>
             </div>
 
-            {{-- Desktop Navigation --}}
-            <div class="hidden lg:flex items-center space-x-1 flex-1 justify-center">
+            {{-- Desktop Navigation - Centered --}}
+            <div class="hidden lg:flex items-center space-x-1 flex-1 justify-center mx-auto">
                 {{-- Home --}}
                 <a
                     href="{{ route('home') }}"
@@ -320,7 +320,7 @@ $locales = [
             </div>
 
             {{-- Right Side --}}
-            <div class="hidden lg:flex items-center space-x-3">
+            <div class="hidden lg:flex items-center space-x-3 absolute right-4 sm:right-6 lg:right-8">
                 {{-- Search --}}
                 <div class="relative" x-data="searchComponent()">
                     <button
