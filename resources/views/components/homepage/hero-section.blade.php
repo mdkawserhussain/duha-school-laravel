@@ -62,9 +62,9 @@
 @endphp
 
 @if($heroSlide && $heroSlide->is_active)
-<section class="relative min-h-screen flex items-center overflow-hidden bg-aisd-midnight hero-section" style="margin-top: 0 !important; padding-top: 0 !important;">
+<section class="relative w-full h-screen flex items-center overflow-hidden bg-aisd-midnight hero-section" style="margin-top: 0 !important; padding-top: 0 !important; height: 100vh; min-height: 100vh;">
     <!-- Background Video Container - Handle both direct video URLs and YouTube URLs -->
-    <div class="absolute inset-0 w-full h-full overflow-hidden" style="top: 0; left: 0; right: 0; bottom: 0;">
+    <div class="absolute inset-0 w-full h-full overflow-hidden" style="top: 0; left: 0; right: 0; bottom: 0; width: 100vw; height: 100vh;">
         @php
             // Check if it's a YouTube URL
             $isYouTube = preg_match('/^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/', $videoUrl, $matches);
@@ -75,23 +75,25 @@
             <!-- YouTube Video Embed -->
             <iframe 
                 id="hero-bg-video"
-                class="absolute w-full h-full"
-                style="object-fit: cover; width: 100%; height: 100%; position: absolute; top: 0; left: 0; min-width: 100%; min-height: 100%; border: none;"
-                src="https://www.youtube.com/embed/{{ $youtubeId }}?autoplay=1&mute=1&loop=1&playlist={{ $youtubeId }}&controls=0&showinfo=0&rel=0&modestbranding=1"
-                allow="autoplay; encrypted-media"
+                class="absolute inset-0 w-full h-full object-cover"
+                style="position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; object-fit: cover; border: none;"
+                src="https://www.youtube.com/embed/{{ $youtubeId }}?autoplay=1&mute=1&loop=1&playlist={{ $youtubeId }}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1"
+                allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
                 allowfullscreen
-                frameborder="0">
+                frameborder="0"
+                loading="lazy">
             </iframe>
         @else
             <!-- Direct Video File -->
             <video 
                 id="hero-bg-video"
-                class="absolute w-full h-full"
-                style="object-fit: cover; width: 100%; height: 100%; position: absolute; top: 0; left: 0; min-width: 100%; min-height: 100%;"
+                class="absolute inset-0 w-full h-full object-cover"
+                style="position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; object-fit: cover;"
                 autoplay 
                 muted 
                 loop 
                 playsinline
+                preload="auto"
                 poster="{{ $videoPoster }}">
                 @if($videoUrl)
                 <source src="{{ $videoUrl }}" type="video/mp4">

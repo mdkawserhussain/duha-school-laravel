@@ -6,7 +6,7 @@
             <div>
                 <p class="text-xs font-semibold uppercase tracking-[0.5em]" style="color: #173B7A;">Calendar</p>
                 <h2 class="mt-3 text-3xl font-bold md:text-4xl lg:text-5xl" style="color: #0C1B3D;">Upcoming Events & Key Dates</h2>
-                <p class="mt-3 max-w-2xl leading-relaxed" style="color: #4a5568;">Stay aligned with admission briefings, community gatherings, and student showcases inspired by AISD's rhythm.</p>
+                <p class="mt-3 max-w-2xl leading-relaxed" style="color: #4a5568;">Stay aligned with admission briefings, community gatherings, and student showcases inspired by Duha's rhythm.</p>
             </div>
             <a href="#calendar" class="inline-flex items-center rounded-full border px-6 py-3 text-sm font-semibold tracking-wide backdrop-blur-sm transition-all" style="border-color: #173B7A; background-color: #ffffff; color: #173B7A; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);" onmouseover="this.style.backgroundColor='#173B7A'; this.style.color='#ffffff'" onmouseout="this.style.backgroundColor='#ffffff'; this.style.color='#173B7A'">
                 Download Academic Calendar
@@ -58,22 +58,22 @@
                         <div class="flex-shrink-0 rounded-2xl border px-5 py-4 text-center" style="background: linear-gradient(135deg, #173B7A, #0F224C); border-color: #173B7A; box-shadow: 0 4px 6px rgba(23, 59, 122, 0.2);">
                             <span class="text-2xl font-bold block" style="color: #ffffff;">{{ $event['date'] }}</span>
                         </div>
-                        
+
                         <!-- Event Details -->
                         <div class="flex-1">
                             <!-- Category Chip -->
                             <span class="inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-wide" style="background-color: {{ $event['tagColor'] }}; color: {{ $event['tagTextColor'] }}; border-color: {{ $event['tagBorderColor'] }};">
                                 {{ $event['tag'] }}
                             </span>
-                            
+
                             <!-- Title -->
                             <h3 class="mt-3 text-2xl font-semibold" style="color: #0C1B3D;">{{ $event['title'] }}</h3>
-                            
+
                             <!-- Description -->
                             <p class="mt-2 leading-relaxed" style="color: #4a5568;">{{ $event['copy'] }}</p>
                         </div>
                     </div>
-                    
+
                     <!-- Right: Arrow Button -->
                     <button class="group/btn inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-all sm:flex-shrink-0" style="background-color: #F4C430; color: #0C1B3D; box-shadow: 0 4px 6px rgba(244, 196, 48, 0.2);" onmouseover="this.style.backgroundColor='#ffdc5c'; this.style.boxShadow='0 10px 15px -3px rgba(244, 196, 48, 0.5)'; this.style.transform='scale(1.05)'" onmouseout="this.style.backgroundColor='#F4C430'; this.style.boxShadow='0 4px 6px rgba(244, 196, 48, 0.2)'; this.style.transform='scale(1)'">
                         Details

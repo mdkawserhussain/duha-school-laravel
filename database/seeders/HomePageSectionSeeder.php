@@ -192,9 +192,9 @@ class HomePageSectionSeeder extends Seeder
                             'linkedin' => '#'
                         ],
                         [
-                            'name' => 'Md. Kawser Hussain',
+                            'name' => 'Md.Hussain',
                             'role' => 'Founder & Advisor',
-                            'bio' => 'Visionary behind AISD-inspired transformation.',
+                            'bio' => 'Visionary behind Duha-inspired transformation.',
                             'image' => 'images/advisors/kawser.svg',
                             'linkedin' => '#'
                         ],
@@ -340,7 +340,7 @@ class HomePageSectionSeeder extends Seeder
                 'data' => [
                     'badge' => 'Experience',
                     'title' => 'Where tradition meets innovation every school day.',
-                    'description' => 'Borrowing AISD\'s parallax rhythm, this slice of campus life highlights collaborative learning pods, Arabic storytelling corners, and maker labs.',
+                    'description' => 'Borrowing Duha\'s parallax rhythm, this slice of campus life highlights collaborative learning pods, Arabic storytelling corners, and maker labs.',
                     'feature_pills' => [
                         ['text' => 'Dedicated Musalla & Hifz Pods'],
                         ['text' => 'Robotics & Design Thinking Lab'],

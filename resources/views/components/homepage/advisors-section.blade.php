@@ -27,7 +27,7 @@
                 [
                     'name' => 'Md. Kawser Hussain',
                     'role' => 'Founder & Advisor',
-                    'bio' => 'Visionary behind AISD-inspired transformation.',
+                    'bio' => 'Visionary behind Duha-inspired transformation.',
                     'image' => 'images/advisors/kawser.svg',
                     'linkedin' => '#'
                 ],
@@ -47,30 +47,30 @@
                 <div class="group rounded-3xl bg-white/5 border border-white/10 p-6 text-center shadow-card backdrop-blur-xl transition-all hover:bg-white/10 hover:shadow-soft hover:-translate-y-1">
                     <!-- Circular Portrait Frame -->
                     <div class="mx-auto h-32 w-32 overflow-hidden rounded-full border-4 border-white/30 shadow-lg relative">
-                        <img 
-                            src="{{ asset($member['image']) }}" 
-                            alt="{{ $member['name'] }}" 
-                            class="h-full w-full object-cover transition-transform group-hover:scale-110" 
+                        <img
+                            src="{{ asset($member['image']) }}"
+                            alt="{{ $member['name'] }}"
+                            class="h-full w-full object-cover transition-transform group-hover:scale-110"
                             loading="lazy"
                             onerror="this.src='{{ asset('images/placeholder.svg') }}'"
                         >
                         <!-- Decorative ring -->
                         <div class="absolute inset-0 rounded-full border-2 border-aisd-gold/30 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     </div>
-                    
+
                     <!-- Name -->
                     <h3 class="mt-6 text-xl font-semibold text-white">{{ $member['name'] }}</h3>
-                    
+
                     <!-- Role Badge -->
                     <p class="mt-2 text-sm uppercase tracking-[0.3em] text-aisd-gold font-semibold">{{ $member['role'] }}</p>
-                    
+
                     <!-- Bio -->
                     <p class="mt-4 text-sm text-white/70 leading-relaxed">{{ $member['bio'] }}</p>
-                    
+
                     <!-- Social Links -->
                     <div class="mt-6 flex items-center justify-center gap-3">
-                        <a 
-                            href="{{ $member['linkedin'] }}" 
+                        <a
+                            href="{{ $member['linkedin'] }}"
                             class="rounded-full bg-white/10 border border-white/20 p-2.5 hover:bg-white/20 hover:border-aisd-gold/50 transition-all group/link"
                             aria-label="LinkedIn profile for {{ $member['name'] }}"
                         >
@@ -78,8 +78,8 @@
                                 <path d="M22.23 0H1.77C.792 0 0 .775 0 1.732v20.535C0 23.225.792 24 1.77 24h20.46c.978 0 1.77-.775 1.77-1.733V1.732C24 .775 23.208 0 22.23 0zM7.06 20.452H3.56V9h3.5v11.452zM5.31 7.433a2.03 2.03 0 112.03-2.03 2.03 2.03 0 01-2.03 2.03zM20.452 20.452h-3.5v-5.569c0-1.33-.026-3.043-1.855-3.043-1.855 0-2.14 1.453-2.14 2.954v5.658h-3.5V9h3.36v1.561h.047c.468-.888 1.61-1.825 3.314-1.825 3.543 0 4.198 2.333 4.198 5.366v6.35z"/>
                             </svg>
                         </a>
-                        <a 
-                            href="mailto:{{ strtolower(str_replace(' ', '.', $member['name'])) }}@almaghrib.edu.bd" 
+                        <a
+                            href="mailto:{{ strtolower(str_replace(' ', '.', $member['name'])) }}@almaghrib.edu.bd"
                             class="rounded-full bg-white/10 border border-white/20 p-2.5 hover:bg-white/20 hover:border-aisd-gold/50 transition-all group/link"
                             aria-label="Email {{ $member['name'] }}"
                         >

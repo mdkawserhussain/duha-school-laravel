@@ -122,6 +122,43 @@ class HomePageSectionForm
                             ->url()
                             ->helperText('URL for call-to-action button (if applicable)'),
 
+                        Components\Section::make('Achievements Data (for achievements section)')
+                            ->schema([
+                                FormComponents\Repeater::make('data.achievements')
+                                    ->label('Achievements')
+                                    ->schema([
+                                        FormComponents\TextInput::make('title')
+                                            ->label('Title')
+                                            ->required()
+                                            ->maxLength(255),
+                                        FormComponents\Textarea::make('copy')
+                                            ->label('Description')
+                                            ->required()
+                                            ->maxLength(500)
+                                            ->rows(3),
+                                        FormComponents\TextInput::make('badge')
+                                            ->label('Badge')
+                                            ->required()
+                                            ->maxLength(50),
+                                        FormComponents\TextInput::make('icon')
+                                            ->label('Icon Path')
+                                            ->required()
+                                            ->maxLength(255)
+                                            ->helperText('SVG path data for the icon'),
+                                        FormComponents\TextInput::make('link')
+                                            ->label('Learn More Link')
+                                            ->url()
+                                            ->maxLength(255)
+                                            ->helperText('URL for the Learn More link (optional)'),
+                                    ])
+                                    ->collapsible()
+                                    ->collapsed()
+                                    ->itemLabel(fn (array $state): string => $state['title'] ?? 'New Achievement')
+                                    ->defaultItems(4)
+                                    ->columnSpanFull(),
+                            ])
+                            ->columns(1),
+
                         FormComponents\Textarea::make('data')
                             ->label('Additional Data (JSON)')
                             ->helperText('JSON data for structured content. Examples: For values: {"values": ["Value 1", "Value 2"]}. For advisors: {"advisors": [{"name": "Name", "title": "Title"}]}. For videos: {"video_url": "https://...", "youtube_url": "https://..."}. For board: {"members": [{"name": "Name", "title": "Title"}]}. For images: {"image_url": "https://..."}')
@@ -139,7 +176,8 @@ class HomePageSectionForm
                                     return $decoded !== null ? $decoded : [];
                                 }
                                 return is_array($state) ? $state : [];
-                            }),
+                            })
+                            ->visible(fn ($get) => $get('section_key') !== 'achievements'),
 
                         FormComponents\TextInput::make('sort_order')
                             ->label('Sort Order')

@@ -1452,3 +1452,34 @@ body:has(.hero-section) main {
     margin: 0 !important;
     padding: 0 !important;
 }
+
+/* NEW: Ensure hero video background covers full viewport */
+.hero-section .absolute.inset-0.w-full.h-full.overflow-hidden {
+    width: 100vw !important;
+    height: 100vh !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    overflow: hidden !important;
+}
+
+/* NEW: Ensure hero video/iframe covers full viewport */
+#hero-bg-video {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    object-fit: cover !important;
+    z-index: 0 !important;
+}
+
+/* NEW: Ensure hero section itself covers full viewport */
+.hero-section {
+    width: 100vw !important;
+    height: 100vh !important;
+    min-height: 100vh !important;
+    position: relative !important;
+    overflow: hidden !important;
+}

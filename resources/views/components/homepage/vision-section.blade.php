@@ -2,7 +2,7 @@
 <section id="vision" class="relative py-24 overflow-hidden" style="background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 50%, #f8f9fa 100%);">
     <!-- Decorative star pattern background -->
     <div class="absolute inset-0 opacity-5" style="background-image:url('data:image/svg+xml,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;200&quot; height=&quot;200&quot; viewBox=&quot;0 0 200 200&quot;><g fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;><path d=&quot;M100 0l20 60-60 20 60 20-20 60-20-60-60-20 60-20z&quot; stroke=&quot;%23F4C430&quot; stroke-width=&quot;1&quot; opacity=&quot;.4&quot;/></g></svg>');">></div>
-    
+
     <div class="container relative z-10 mx-auto px-6 lg:px-12">
         <div class="grid items-center gap-12 lg:grid-cols-2">
             <!-- Left Content -->
@@ -12,16 +12,16 @@
                     <span class="h-2 w-2 rounded-full" style="background-color: #F4C430;"></span>
                     Our Charter
                 </div>
-                
+
                 <!-- Main Heading -->
                 <h2 class="text-3xl font-bold md:text-4xl lg:text-5xl leading-tight" style="color: #0C1B3D;">
                     Empowering Minds,<br>
                     <span style="color: #173B7A;">Enriching Hearts</span>
                 </h2>
-                
+
                 <!-- Description -->
                 <p class="text-lg leading-relaxed" style="color: #4a5568;">
-                    We follow the footsteps of AISD with a distinctly Islamic ethos—uniting rigorous academics and tarbiyah to nurture resilient, compassionate leaders.
+                    We follow the footsteps of Duha with a distinctly Islamic ethos—uniting rigorous academics and tarbiyah to nurture resilient, compassionate leaders.
                 </p>
 
                 <!-- Vision & Mission Cards -->
@@ -36,7 +36,7 @@
                         </div>
                         <p class="leading-relaxed" style="color: #0C1B3D;">To cultivate God-conscious learners who lead with integrity and scholarship across the globe.</p>
                     </div>
-                    
+
                     <!-- Mission Card -->
                     <div class="rounded-2xl border p-6 transition-all" style="border-color: #d1d5db; background-color: #ffffff; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'">
                         <div class="flex items-center gap-3 mb-4" style="color: #F4C430;">
@@ -72,7 +72,7 @@
                 <div class="aspect-[4/5] rounded-[32px] p-6 overflow-hidden" style="background-color: #0C1B3D; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);">
                     <div class="h-full w-full rounded-[24px] bg-cover bg-center relative" style="background-image:url('{{ asset('images/vision-campus.svg') }}');">
                         <div class="absolute inset-0 rounded-[24px]" style="background: linear-gradient(180deg, transparent 0%, rgba(12, 27, 61, 0.6) 60%, rgba(12, 27, 61, 0.9) 100%);"></div>
-                        
+
                         <!-- Overlay Content -->
                         <div class="absolute bottom-0 left-0 right-0 p-8">
                             <h3 class="text-2xl font-bold mb-2" style="color: #ffffff;">Our Campus</h3>
@@ -80,7 +80,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Floating Core Values Card -->
                 <div class="absolute -bottom-6 -right-6 rounded-2xl p-5" style="background-color: #ffffff; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.1);">
                     <p class="text-xs uppercase tracking-[0.4em] mb-3" style="color: #173B7A;">Core Values</p>
@@ -99,7 +99,7 @@
                         </li>
                     </ul>
                 </div>
-                
+
                 <!-- Decorative Star Element -->
                 <div class="absolute -top-6 -left-6 w-24 h-24 opacity-20">
                     <svg class="w-full h-full text-aisd-gold" fill="currentColor" viewBox="0 0 24 24">

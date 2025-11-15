@@ -67,7 +67,7 @@ class ParallaxSection extends Page implements HasForms
                             ->maxLength(500)
                             ->rows(3)
                             ->columnSpanFull()
-                            ->placeholder('Borrowing AISD\'s parallax rhythm, this slice of campus life...'),
+                            ->placeholder('Borrowing Duha\'s parallax rhythm, this slice of campus life...'),
 
                         FormComponents\Repeater::make('feature_pills')
                             ->label('Feature Pills')
