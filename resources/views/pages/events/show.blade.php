@@ -178,8 +178,8 @@
             // Basic calendar integration - can be enhanced with proper ICS generation
             const eventTitle = "{{ addslashes($event->title) }}";
             const eventDetails = "{{ addslashes(strip_tags($event->excerpt ?? '')) }}";
-            const startDate = "{{ $event->start_at->format('Ymd\\THis') }}";
-            const endDate = "{{ $event->end_at ? $event->end_at->format('Ymd\\THis') : $event->start_at->addHours(2)->format('Ymd\\THis') }}";
+            const startDate = "{{ $event->start_at ? $event->start_at->format('Ymd\\THis') : '' }}";
+            const endDate = "{{ $event->end_at ? $event->end_at->format('Ymd\\THis') : ($event->start_at ? $event->start_at->addHours(2)->format('Ymd\\THis') : '') }}";
 
             const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(eventTitle)}&details=${encodeURIComponent(eventDetails)}&dates=${startDate}/${endDate}`;
 

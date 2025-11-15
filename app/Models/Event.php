@@ -32,6 +32,8 @@ class Event extends Model implements HasMedia
 
     protected $casts = [
         'event_date' => 'datetime',
+        'start_at' => 'datetime',
+        'end_at' => 'datetime',
         'is_featured' => 'boolean',
         'is_published' => 'boolean',
         'published_at' => 'datetime',

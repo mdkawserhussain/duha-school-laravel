@@ -1,5 +1,32 @@
 <!-- Upcoming Events Section - AISD Style with Date Badges & Category Chips -->
 <section class="py-24" id="events" style="background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);">
+    <style>
+        .category-chip-academic {
+            background-color: rgba(72, 187, 120, 0.25) !important;
+            color: #2F855A !important;
+            border-color: rgba(72, 187, 120, 0.4) !important;
+        }
+        .category-chip-social {
+            background-color: rgba(66, 153, 225, 0.25) !important;
+            color: #2B6CB0 !important;
+            border-color: rgba(66, 153, 225, 0.4) !important;
+        }
+        .category-chip-islamic {
+            background-color: rgba(237, 137, 54, 0.25) !important;
+            color: #C05621 !important;
+            border-color: rgba(237, 137, 54, 0.4) !important;
+        }
+        .category-chip-sports {
+            background-color: rgba(229, 62, 62, 0.25) !important;
+            color: #C53030 !important;
+            border-color: rgba(229, 62, 62, 0.4) !important;
+        }
+        .category-chip-default {
+            background-color: rgba(203, 213, 224, 0.25) !important;
+            color: #4A5568 !important;
+            border-color: rgba(203, 213, 224, 0.4) !important;
+        }
+    </style>
     <div class="container mx-auto px-6 lg:px-12">
         <!-- Section Header -->
         <div class="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between mb-12">
@@ -17,72 +44,102 @@
         </div>
 
         @php
-            $events = [
-                [
-                    'date' => 'Dec 06',
-                    'title' => 'Winter Quran Summit',
-                    'copy' => 'Community-wide hifz recitation & nasheed evening.',
-                    'tag' => 'Community',
-                    'tagColor' => 'rgba(244, 196, 48, 0.25)',
-                    'tagTextColor' => '#F4C430',
-                    'tagBorderColor' => 'rgba(244, 196, 48, 0.4)'
+            // Use dynamic events from the controller if available, otherwise fetch upcoming events
+            $events = $upcomingEvents ?? \App\Models\Event::published()->upcoming()->orderBy('event_date', 'asc')->limit(3)->get();
+            
+            // Define category colors
+            $categoryColors = [
+                'Academic' => [
+                    'bg' => 'rgba(72, 187, 120, 0.25)',
+                    'text' => '#2F855A',
+                    'border' => 'rgba(72, 187, 120, 0.4)'
                 ],
-                [
-                    'date' => 'Jan 12',
-                    'title' => 'STEM Expo & Robotics',
-                    'copy' => 'Secondary students pitch prototypes to industry mentors.',
-                    'tag' => 'STEM',
-                    'tagColor' => 'rgba(110, 193, 245, 0.25)',
-                    'tagTextColor' => '#6EC1F5',
-                    'tagBorderColor' => 'rgba(110, 193, 245, 0.4)'
+                'Social' => [
+                    'bg' => 'rgba(66, 153, 225, 0.25)',
+                    'text' => '#2B6CB0',
+                    'border' => 'rgba(66, 153, 225, 0.4)'
                 ],
-                [
-                    'date' => 'Feb 05',
-                    'title' => 'Admissions Open House',
-                    'copy' => 'Campus tour plus parent Q&A with the Principal.',
-                    'tag' => 'Admissions',
-                    'tagColor' => 'rgba(255, 255, 255, 0.15)',
-                    'tagTextColor' => '#ffffff',
-                    'tagBorderColor' => 'rgba(255, 255, 255, 0.3)'
+                'Islamic' => [
+                    'bg' => 'rgba(237, 137, 54, 0.25)',
+                    'text' => '#C05621',
+                    'border' => 'rgba(237, 137, 54, 0.4)'
                 ],
+                'Sports' => [
+                    'bg' => 'rgba(229, 62, 62, 0.25)',
+                    'text' => '#C53030',
+                    'border' => 'rgba(229, 62, 62, 0.4)'
+                ],
+                'default' => [
+                    'bg' => 'rgba(203, 213, 224, 0.25)',
+                    'text' => '#4A5568',
+                    'border' => 'rgba(203, 213, 224, 0.4)'
+                ]
             ];
         @endphp
 
         <!-- Events Grid -->
         <div class="grid gap-6">
-            @foreach ($events as $event)
+            @forelse ($events as $event)
+                @php
+                    // Get category colors
+                    $categoryKey = $event->category ?? 'default';
+                    $categoryStyles = '';
+                    switch($categoryKey) {
+                        case 'Academic':
+                            $categoryStyles = 'background-color: rgba(72, 187, 120, 0.25); color: #2F855A; border-color: rgba(72, 187, 120, 0.4);';
+                            break;
+                        case 'Social':
+                            $categoryStyles = 'background-color: rgba(66, 153, 225, 0.25); color: #2B6CB0; border-color: rgba(66, 153, 225, 0.4);';
+                            break;
+                        case 'Islamic':
+                            $categoryStyles = 'background-color: rgba(237, 137, 54, 0.25); color: #C05621; border-color: rgba(237, 137, 54, 0.4);';
+                            break;
+                        case 'Sports':
+                            $categoryStyles = 'background-color: rgba(229, 62, 62, 0.25); color: #C53030; border-color: rgba(229, 62, 62, 0.4);';
+                            break;
+                        default:
+                            $categoryStyles = 'background-color: rgba(203, 213, 224, 0.25); color: #4A5568; border-color: rgba(203, 213, 224, 0.4);';
+                    }
+                    
+                    // Format date
+                    $formattedDate = $event->event_date->format('M d');
+                @endphp
                 <article class="group flex flex-col gap-6 rounded-3xl border p-6 transition-all hover:-translate-y-1 sm:flex-row sm:items-center sm:justify-between" style="border-color: #d1d5db; background-color: #ffffff; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);" onmouseover="this.style.boxShadow='0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'" onmouseout="this.style.boxShadow='0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'">
                     <!-- Left: Date Badge & Content -->
                     <div class="flex items-center gap-4 sm:gap-6">
                         <!-- Date Badge -->
                         <div class="flex-shrink-0 rounded-2xl border px-5 py-4 text-center" style="background: linear-gradient(135deg, #173B7A, #0F224C); border-color: #173B7A; box-shadow: 0 4px 6px rgba(23, 59, 122, 0.2);">
-                            <span class="text-2xl font-bold block" style="color: #ffffff;">{{ $event['date'] }}</span>
+                            <span class="text-2xl font-bold block" style="color: #ffffff;">{{ $formattedDate }}</span>
                         </div>
 
                         <!-- Event Details -->
                         <div class="flex-1">
                             <!-- Category Chip -->
-                            <span class="inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-wide" style="background-color: {{ $event['tagColor'] }}; color: {{ $event['tagTextColor'] }}; border-color: {{ $event['tagBorderColor'] }};">
-                                {{ $event['tag'] }}
+                            <span class="inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-wide category-chip-{{ \Illuminate\Support\Str::slug($categoryKey) }}">
+                                {{ $event->category ?? 'General' }}
                             </span>
 
                             <!-- Title -->
-                            <h3 class="mt-3 text-2xl font-semibold" style="color: #0C1B3D;">{{ $event['title'] }}</h3>
+                            <h3 class="mt-3 text-2xl font-semibold" style="color: #0C1B3D;">{{ $event->title }}</h3>
 
                             <!-- Description -->
-                            <p class="mt-2 leading-relaxed" style="color: #4a5568;">{{ $event['copy'] }}</p>
+                            <p class="mt-2 leading-relaxed" style="color: #4a5568;">{{ Str::limit(strip_tags($event->excerpt ?? $event->description), 100) }}</p>
                         </div>
                     </div>
 
                     <!-- Right: Arrow Button -->
-                    <button class="group/btn inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-all sm:flex-shrink-0" style="background-color: #F4C430; color: #0C1B3D; box-shadow: 0 4px 6px rgba(244, 196, 48, 0.2);" onmouseover="this.style.backgroundColor='#ffdc5c'; this.style.boxShadow='0 10px 15px -3px rgba(244, 196, 48, 0.5)'; this.style.transform='scale(1.05)'" onmouseout="this.style.backgroundColor='#F4C430'; this.style.boxShadow='0 4px 6px rgba(244, 196, 48, 0.2)'; this.style.transform='scale(1)'">
+                    <a href="{{ route('events.show', $event) }}" class="group/btn inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-all sm:flex-shrink-0" style="background-color: #F4C430; color: #0C1B3D; box-shadow: 0 4px 6px rgba(244, 196, 48, 0.2);" onmouseover="this.style.backgroundColor='#ffdc5c'; this.style.boxShadow='0 10px 15px -3px rgba(244, 196, 48, 0.5)'; this.style.transform='scale(1.05)'" onmouseout="this.style.backgroundColor='#F4C430'; this.style.boxShadow='0 4px 6px rgba(244, 196, 48, 0.2)'; this.style.transform='scale(1)'">
                         Details
                         <svg class="h-3.5 w-3.5 transition-transform group-hover/btn:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                         </svg>
-                    </button>
+                    </a>
                 </article>
-            @endforeach
+            @empty
+                <div class="text-center py-12">
+                    <p class="text-gray-500">No upcoming events at this time.</p>
+                </div>
+            @endforelse
         </div>
 
         <!-- View All Events CTA -->

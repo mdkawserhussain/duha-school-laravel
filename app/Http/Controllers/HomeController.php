@@ -41,7 +41,7 @@ class HomeController extends Controller
                 'featuredEvents' => $this->eventService->getFeaturedEvents(),
                 'recentNotices' => $this->noticeService->getRecentNotices(),
                 'featuredStaff' => $this->staffService->getFeaturedStaff(),
-                'upcomingEvents' => $this->eventService->getUpcomingEvents(5),
+                'upcomingEvents' => $this->eventService->getUpcomingEvents(3),
                 'visionPage' => \App\Models\Page::where('slug', 'vision')->published()->first(),
                 'homePageSections' => $sectionsByKey,
                 'heroSlides' => $heroSlides,
