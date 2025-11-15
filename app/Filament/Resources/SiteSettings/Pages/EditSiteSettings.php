@@ -68,13 +68,24 @@ class EditSiteSettings extends EditRecord
             \Log::info('EditSiteSettings::afterSave: Processing logo upload', [
                 'logoPath' => $logoPath,
                 'isArray' => is_array($logoPath),
+                'logoPathType' => gettype($logoPath),
             ]);
+            // Extract path from array if needed (Filament uses associative arrays with UUID keys)
+            if (is_array($logoPath)) {
+                $logoPath = !empty($logoPath[0]) ? $logoPath[0] : reset($logoPath);
+                \Log::info('EditSiteSettings::afterSave: Extracted logo path from array', [
+                    'extractedPath' => $logoPath,
+                ]);
+            }
         }
         $this->handleMediaUpload($settings, $logoPath, 'logo');
         
         // Handle favicon upload
         $faviconPath = $this->faviconPath ?? $formState['favicon'] ?? null;
         if ($faviconPath) {
+            if (is_array($faviconPath)) {
+                $faviconPath = !empty($faviconPath[0]) ? $faviconPath[0] : reset($faviconPath);
+            }
             \Log::info('EditSiteSettings::afterSave: Processing favicon upload', [
                 'faviconPath' => $faviconPath,
             ]);
@@ -84,6 +95,9 @@ class EditSiteSettings extends EditRecord
         // Handle OG image upload
         $ogImagePath = $this->ogImagePath ?? $formState['og_image'] ?? null;
         if ($ogImagePath) {
+            if (is_array($ogImagePath)) {
+                $ogImagePath = !empty($ogImagePath[0]) ? $ogImagePath[0] : reset($ogImagePath);
+            }
             \Log::info('EditSiteSettings::afterSave: Processing OG image upload', [
                 'ogImagePath' => $ogImagePath,
             ]);
@@ -134,15 +148,22 @@ class EditSiteSettings extends EditRecord
             return;
         }
         
-        // Handle array of file paths
+        // Handle array of file paths (Filament uses associative arrays with UUID keys)
         if (is_array($filePath)) {
-            $filePath = !empty($filePath[0]) ? $filePath[0] : null;
+            // Get the first value from the array (could be numeric or associative with UUID keys)
+            if (!empty($filePath[0])) {
+                $filePath = $filePath[0];
+            } else {
+                // Handle associative array (e.g., {"uuid": "path/to/file"})
+                $filePath = reset($filePath); // Get first value
+            }
         }
         
         if (!$filePath || !is_string($filePath)) {
             \Log::warning("handleMediaUpload: Invalid file path format for collection: {$collection}", [
                 'filePath' => $filePath,
                 'type' => gettype($filePath),
+                'originalFilePath' => is_array($filePath) ? json_encode($filePath) : $filePath,
             ]);
             return;
         }
