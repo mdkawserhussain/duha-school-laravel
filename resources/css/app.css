@@ -1,6 +1,13 @@
 @import "tailwindcss";
 
 @layer base {
+    :root {
+        --aisd-midnight: 15, 34, 76;      /* #0F224C - Deep blue */
+        --aisd-ocean: 12, 27, 61;         /* #0C1B3D - Darker blue */
+        --aisd-cobalt: 25, 45, 90;        /* #192D5A - Medium blue */
+        --aisd-gold: 252, 211, 77;        /* #FCD34D - Gold */
+    }
+    
     html {
         scroll-behavior: smooth;
     }
@@ -29,6 +36,31 @@
 }
 
 @layer components {
+    /* Custom AISD Color Classes */
+    .bg-aisd-midnight {
+        background-color: rgb(var(--aisd-midnight));
+    }
+    
+    .bg-aisd-ocean {
+        background-color: rgb(var(--aisd-ocean));
+    }
+    
+    .bg-aisd-cobalt {
+        background-color: rgb(var(--aisd-cobalt));
+    }
+    
+    .bg-aisd-gold {
+        background-color: rgb(var(--aisd-gold));
+    }
+    
+    .text-aisd-midnight {
+        color: rgb(var(--aisd-midnight));
+    }
+    
+    .text-aisd-gold {
+        color: rgb(var(--aisd-gold));
+    }
+    
     /* Modern Section Styles */
     .section-modern {
         @apply py-12 md:py-16 lg:py-20 xl:py-24 relative;
@@ -501,6 +533,38 @@
         margin-bottom: 0 !important;
     }
 
+    /* NEW: Ensure hero section starts at absolute top */
+    .hero-section {
+        position: relative !important;
+        top: 0 !important;
+    }
+
+    /* NEW: Fix navbar positioning to overlay hero correctly */
+    header {
+        position: sticky;
+        z-index: 50;
+    }
+
+    /* NEW: For pages with hero sections, make navbar sticky and overlay the content */
+    body:has(.hero-section) header {
+        position: sticky !important;
+        top: var(--announcement-height, 0) !important;
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 50 !important;
+    }
+    
+    /* When announcement bar is present, adjust top offset */
+    body:has(.announcement-bar) header {
+        top: var(--announcement-height, 2.5rem) !important;
+    }
+
+    /* NEW: Remove default margins that might affect hero positioning */
+    body:has(.hero-section) {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
     /* Hero video full coverage */
     #hero-bg-video {
         object-fit: cover;
@@ -513,18 +577,7 @@
         min-height: 100%;
     }
 
-    /* Responsive hero content padding - accounts for fixed navbar */
-    @media (max-width: 640px) {
-        .hero-section .container {
-            padding-top: 5rem !important; /* Navbar height + spacing */
-        }
-    }
-
-    @media (min-width: 641px) {
-        .hero-section .container {
-            padding-top: 6rem !important; /* Navbar height + spacing */
-        }
-    }
+    /* Hero section container padding handled inline in component */
 
     /* Remove any default spacing from body/container */
     body > div > main:has(.hero-section) {
@@ -567,6 +620,29 @@
     section[role="banner"] + section {
         margin-top: 0;
         padding-top: 0;
+    }
+
+    /* NEW: Ensure absolutely no gaps between announcement bar, navbar, and hero section */
+    .announcement-bar + header + main .hero-section,
+    header + main .hero-section,
+    .hero-section {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+        margin-bottom: 0 !important;
+    }
+
+    /* NEW: Ensure navbar directly follows announcement bar with no gap */
+    .announcement-bar + header {
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+    }
+
+    /* NEW: Ensure main content directly follows navbar with no gap */
+    .announcement-bar + header + main,
+    header + main {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+        margin-bottom: 0 !important;
     }
 
     .navbar-transparent {
@@ -1225,4 +1301,153 @@
         opacity: 1 !important;
         transform: none !important;
     }
+}
+
+/* Announcement Bar (Topbar) - Fixed at top, hides on scroll */
+.announcement-bar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 60 !important; /* Higher than navbar */
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1.5 !important;
+}
+
+/* Adjust header positioning when announcement bar is present */
+.announcement-bar + header,
+header.header-with-announcement {
+    top: var(--announcement-height, 2.5rem) !important;
+    position: sticky !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+/* When announcement bar is hidden (scrolled), header moves to top */
+.announcement-bar.hidden + header,
+body:has(.announcement-bar.hidden) header.header-with-announcement {
+    top: 0 !important;
+}
+
+/* Navbar transparent state (for homepage hero) */
+.navbar-transparent {
+    background: transparent !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.navbar-transparent * {
+    color: white !important;
+}
+
+.navbar-transparent a,
+.navbar-transparent button {
+    color: white !important;
+}
+
+.navbar-transparent .text-blue-900 {
+    color: white !important;
+}
+
+/* Navbar scrolled state (white background) */
+.navbar-scrolled {
+    background: white !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
+
+.navbar-scrolled * {
+    color: #1e293b !important;
+}
+
+.navbar-scrolled a,
+.navbar-scrolled button {
+    color: #1e293b !important;
+}
+
+/* Remove all gaps - header has no margins or padding */
+.announcement-bar + header,
+header {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+/* Remove all gaps - main content starts immediately after navbar */
+.announcement-bar + header + main,
+header + main,
+main {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+/* Hero section - no gaps, starts immediately after navbar */
+.announcement-bar + header + main .hero-section,
+header + main .hero-section,
+.hero-section {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+/* Ensure body has no top padding */
+body {
+    margin: 0 !important;
+    padding-top: 0 !important;
+}
+
+/* Mobile adjustments for header positioning */
+@media (max-width: 1023px) {
+    .announcement-bar + header {
+        top: var(--announcement-height, 2.5rem) !important;
+    }
+}
+
+/* Adjust scroll margin for sections when announcement bar is present */
+.announcement-bar + header + main section {
+    scroll-margin-top: calc(5rem + var(--announcement-height, 2.5rem)) !important;
+}
+
+/* When announcement bar is hidden, use standard scroll margin */
+body:has(.announcement-bar.hidden) main section {
+    scroll-margin-top: 5rem !important;
+}
+
+/* Ensure announcement bar is properly positioned */
+.announcement-bar.gradient-indigo-violet {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 60 !important;
+    margin: 0 !important;
+}
+
+/* Body - no padding needed */
+body:has(.announcement-bar) {
+    padding-top: 0;
+}
+
+/* NEW: Ensure absolutely no whitespace above hero section */
+body:has(.hero-section) {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* NEW: Remove any default browser spacing */
+body:has(.hero-section) > div {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* NEW: Ensure hero section container has no spacing */
+body:has(.hero-section) #main-content,
+body:has(.hero-section) main {
+    margin: 0 !important;
+    padding: 0 !important;
 }

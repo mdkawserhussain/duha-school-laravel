@@ -1,5 +1,18 @@
 <!-- Hero Section - AISD Style with Background Video -->
 @php
+    // Get announcements for dynamic padding calculation
+    $announcements = collect([]);
+    try {
+        if (!app()->bound('exception') && 
+            !str_contains(request()->path() ?? '', 'errors') &&
+            !str_contains(request()->path() ?? '', '_dusk') &&
+            !str_contains(request()->path() ?? '', 'telescope')) {
+            $announcements = \App\Helpers\AnnouncementHelper::getSafe();
+        }
+    } catch (\Throwable $e) {
+        $announcements = collect([]);
+    }
+    
     $heroSlide = $heroSlides->first();
     $heroData = $heroSlide && $heroSlide->is_active ? ($heroSlide->data ?? []) : [];
     $badge = $heroData['badge'] ?? 'Since 2010 • Chattogram';
@@ -49,7 +62,7 @@
 @endphp
 
 @if($heroSlide && $heroSlide->is_active)
-<section class="relative min-h-screen flex items-center overflow-hidden bg-aisd-midnight" style="margin-top: 0; padding-top: 0;">
+<section class="relative min-h-screen flex items-center overflow-hidden bg-aisd-midnight hero-section" style="margin-top: 0 !important; padding-top: 0 !important;">
     <!-- Background Video Container - Using HTML5 Video -->
     <div class="absolute inset-0 w-full h-full overflow-hidden" style="top: 0; left: 0; right: 0; bottom: 0;">
         <video 
@@ -74,7 +87,11 @@
     <!-- Decorative pattern overlay -->
     <div class="absolute inset-0 opacity-15" style="top: 0; left: 0; right: 0; bottom: 0; background-image:url('data:image/svg+xml,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;120&quot; height=&quot;120&quot; viewBox=&quot;0 0 120 120&quot;><g fill=&quot;none&quot; fill-rule=&quot;evenodd&quot; opacity=&quot;.25&quot;><path d=&quot;M60 0l60 60-60 60L0 60z&quot; stroke=&quot;%23F4C430&quot; stroke-width=&quot;0.5&quot; opacity=&quot;.3&quot;/></g></svg>');"></div>
 
-    <div class="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 md:pt-28 lg:pt-32 pb-12 sm:pb-16 md:pb-20 lg:pb-24">
+    <div class="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16 md:pb-20 lg:pb-24" 
+         x-data="{ scrolled: false, hasAnnouncement: {{ $announcements->isNotEmpty() ? 'true' : 'false' }} }"
+         x-init="window.addEventListener('scroll', () => { scrolled = window.pageYOffset > 50; })"
+         :style="hasAnnouncement && !scrolled ? 'padding-top: calc(5rem + var(--announcement-height, 2.5rem));' : 'padding-top: 5rem;'"
+         style="padding-top: calc(5rem + var(--announcement-height, 0)) !important;">
         <div class="grid lg:grid-cols-[1.1fr_0.9fr] gap-16 items-center">
             <!-- Text content - Left side -->
             <div class="text-white space-y-8">

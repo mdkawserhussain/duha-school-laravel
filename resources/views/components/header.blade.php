@@ -17,12 +17,21 @@
 @endphp
 
 @if($announcements->isNotEmpty())
-<div class="gradient-indigo-violet text-white py-2 text-sm overflow-hidden relative">
-    <div class="marquee-wrapper">
-        <div class="marquee-content">
+<div class="announcement-bar gradient-indigo-violet text-white text-sm overflow-hidden" 
+     id="announcement-bar" 
+     style="position: fixed; top: 0; left: 0; right: 0; z-index: 60; width: 100%; margin: 0; padding: 0.5rem 0; --announcement-height: 2.5rem;"
+     x-data="{ scrolled: false }"
+     x-init="window.addEventListener('scroll', () => { scrolled = window.pageYOffset > 50; })"
+     :class="{ 'hidden': scrolled }"
+     x-show="!scrolled"
+     x-transition:leave="transition ease-in duration-200"
+     x-transition:leave-start="opacity-100"
+     x-transition:leave-end="opacity-0">
+    <div class="marquee-wrapper" style="overflow: hidden; width: 100%; position: relative;">
+        <div class="marquee-content" style="display: inline-flex; white-space: nowrap; animation: marquee-scroll 20s linear infinite;">
             @foreach($announcements as $announcement)
                 @if($announcement && !empty($announcement->message))
-                <span>
+                <span style="padding-right: 3rem; display: inline-block;">
                     @if(!empty($announcement->link))
                         <a href="{{ e($announcement->link ?? '') }}" class="hover:underline" {{ empty($announcement->link_text) ? 'style="text-decoration: underline;"' : '' }}>
                             {{ e($announcement->message ?? '') }}
@@ -35,7 +44,7 @@
                     @endif
                 </span>
                 {{-- Repeat for seamless loop --}}
-                <span>
+                <span style="padding-right: 3rem; display: inline-block;">
                     @if(!empty($announcement->link))
                         <a href="{{ e($announcement->link ?? '') }}" class="hover:underline" {{ empty($announcement->link_text) ? 'style="text-decoration: underline;"' : '' }}>
                             {{ e($announcement->message ?? '') }}
@@ -55,23 +64,6 @@
 @endif
 
 <style>
-.marquee-wrapper {
-    overflow: hidden;
-    width: 100%;
-    position: relative;
-}
-
-.marquee-content {
-    display: inline-flex;
-    white-space: nowrap;
-    animation: marquee-scroll 20s linear infinite;
-}
-
-.marquee-content span {
-    padding-right: 3rem;
-    display: inline-block;
-}
-
 @keyframes marquee-scroll {
     0% {
         transform: translateX(100%);
@@ -82,81 +74,117 @@
 }
 </style>
 
-<header class="bg-white shadow-md sticky top-0 z-40 border-b border-indigo-100 transition-all duration-300" x-data="{ scrolled: false }" x-init="window.addEventListener('scroll', () => { scrolled = window.pageYOffset > 50; })" :class="{ 'shadow-xl': scrolled }">
-    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center h-20">
+<header class="sticky z-40 border-b transition-all duration-300 {{ request()->routeIs('home') ? 'navbar-transparent' : 'bg-white shadow-md' }} {{ $announcements->isNotEmpty() ? 'header-with-announcement' : 'top-0' }}" 
+        style="position: sticky; {{ $announcements->isNotEmpty() ? 'top: var(--announcement-height, 2.5rem);' : 'top: 0;' }} margin: 0 !important; padding: 0 !important;"
+        x-data="{ scrolled: false, hasAnnouncement: {{ $announcements->isNotEmpty() ? 'true' : 'false' }} }" 
+        x-init="
+            const updateScroll = () => { 
+                scrolled = window.pageYOffset > 50;
+                if (hasAnnouncement) {
+                    if (scrolled) {
+                        $el.style.top = '0';
+                    } else {
+                        $el.style.top = 'var(--announcement-height, 2.5rem)';
+                    }
+                }
+            };
+            window.addEventListener('scroll', updateScroll);
+            updateScroll();
+        " 
+        :class="{ 
+            'shadow-xl bg-white text-gray-900': scrolled, 
+            'navbar-transparent text-white': !scrolled && {{ request()->routeIs('home') ? 'true' : 'false' }},
+            'bg-white text-gray-900': !scrolled && !{{ request()->routeIs('home') ? 'true' : 'false' }}
+        }"
+        id="main-navbar">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style="margin: 0; padding-top: 0; padding-bottom: 0;">
+        <div class="flex items-center h-20" style="margin: 0; padding: 0;">
             <!-- Logo - Left -->
-            <div class="flex-shrink-0">
+            <div class="flex-shrink-0" style="margin: 0; padding: 0;">
                 <a href="{{ route('home') }}" class="flex items-center group transition-transform duration-200 hover:scale-105">
                     @php
                         $logoUrl = \App\Models\SiteSettings::getLogoUrl();
-                    @endphp
-                    @php
                         $siteName = \App\Helpers\SiteHelper::getSiteName();
                     @endphp
                     <img class="h-12 w-auto transition-transform duration-200 group-hover:rotate-3" src="{{ $logoUrl }}" alt="{{ $siteName }} Logo" onerror="this.onerror=null; this.src='{{ asset('images/logo.svg') }}'">
                 </a>
             </div>
-
+            
             <!-- Desktop Navigation - Center -->
-            <div class="hidden lg:flex flex-1 justify-center items-center">
-                <div class="flex items-center space-x-1">
-                    <a href="{{ route('home') }}" class="text-blue-900 hover:text-white hover:bg-blue-600 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 {{ request()->routeIs('home') ? 'bg-blue-600 text-white' : '' }}">Home</a>
-
+            <div class="hidden lg:flex flex-1 justify-center items-center" style="margin: 0; padding: 0;">
+                <div class="flex items-center space-x-1" style="margin: 0; padding: 0;">
+                    <a href="{{ route('home') }}" class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200" 
+                       :class="scrolled ? 'text-gray-900 hover:bg-gray-100' : ({{ request()->routeIs('home') ? 'true' : 'false' }} ? 'text-white hover:bg-white/20' : 'text-gray-900 hover:bg-gray-100')"
+                       :class="{{ request()->routeIs('home') ? '(scrolled ? \'bg-gray-100 text-gray-900\' : \'bg-white/20 text-white\')' : '' }}">Home</a>
+                    
                     <!-- About Dropdown -->
                     <div class="relative group">
-                        <button class="text-blue-900 hover:text-white hover:bg-blue-600 px-4 py-2 rounded-lg text-sm font-medium flex items-center transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" aria-haspopup="true" aria-expanded="false">
+                        <button class="px-4 py-2 rounded-lg text-sm font-medium flex items-center transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2" 
+                                :class="scrolled ? 'text-gray-900 hover:bg-gray-100 focus:ring-gray-500' : ({{ request()->routeIs('home') ? 'true' : 'false' }} ? 'text-white hover:bg-white/20 focus:ring-white/50' : 'text-gray-900 hover:bg-gray-100 focus:ring-gray-500')"
+                                aria-haspopup="true" aria-expanded="false">
                             About
                             <svg class="ml-2 h-4 w-4 transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </button>
-                        <div class="absolute left-0 mt-2 w-56 bg-white rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-blue-100">
-                            <a href="{{ route('about.show', 'principal') }}" class="block px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 rounded-t-xl transition-colors duration-200 first:rounded-t-xl">Principal's Message</a>
-                            <a href="{{ route('about.show', 'vision') }}" class="block px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 rounded-b-xl transition-colors duration-200 last:rounded-b-xl">Vision & Mission</a>
+                        <div class="absolute left-0 mt-2 w-56 bg-white rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-gray-100">
+                            <a href="{{ route('about.show', 'principal') }}" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 rounded-t-xl transition-colors duration-200 first:rounded-t-xl">Principal's Message</a>
+                            <a href="{{ route('about.show', 'vision') }}" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 rounded-b-xl transition-colors duration-200 last:rounded-b-xl">Vision & Mission</a>
                         </div>
                     </div>
-
+                    
                     <!-- Academics Dropdown -->
                     <div class="relative group">
-                        <button class="text-blue-900 hover:text-white hover:bg-blue-600 px-4 py-2 rounded-lg text-sm font-medium flex items-center transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" aria-haspopup="true" aria-expanded="false">
+                        <button class="px-4 py-2 rounded-lg text-sm font-medium flex items-center transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2" 
+                                :class="scrolled ? 'text-gray-900 hover:bg-gray-100 focus:ring-gray-500' : ({{ request()->routeIs('home') ? 'true' : 'false' }} ? 'text-white hover:bg-white/20 focus:ring-white/50' : 'text-gray-900 hover:bg-gray-100 focus:ring-gray-500')"
+                                aria-haspopup="true" aria-expanded="false">
                             Academics
                             <svg class="ml-2 h-4 w-4 transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </button>
-                        <div class="absolute left-0 mt-2 w-56 bg-white rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-blue-100">
-                            <a href="{{ route('academic.show', 'curriculum') }}" class="block px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 rounded-t-xl transition-colors duration-200 first:rounded-t-xl">Curriculum</a>
-                            <a href="{{ route('academic.show', 'policies') }}" class="block px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 rounded-b-xl transition-colors duration-200 last:rounded-b-xl">Policies</a>
+                        <div class="absolute left-0 mt-2 w-56 bg-white rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-gray-100">
+                            <a href="{{ route('academic.show', 'curriculum') }}" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 rounded-t-xl transition-colors duration-200 first:rounded-t-xl">Curriculum</a>
+                            <a href="{{ route('academic.show', 'policies') }}" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 rounded-b-xl transition-colors duration-200 last:rounded-b-xl">Policies</a>
                         </div>
                     </div>
-
-                    <a href="{{ route('admission.index') }}" class="text-blue-900 hover:text-white hover:bg-blue-600 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 {{ request()->routeIs('admission.*') ? 'bg-blue-600 text-white' : '' }}">Admission</a>
+                    
+                    <a href="{{ route('admission.index') }}" class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200" 
+                       :class="scrolled ? 'text-gray-900 hover:bg-gray-100' : ({{ request()->routeIs('home') ? 'true' : 'false' }} ? 'text-white hover:bg-white/20' : 'text-gray-900 hover:bg-gray-100')"
+                       :class="{{ request()->routeIs('admission.*') ? '(scrolled ? \'bg-gray-100 text-gray-900\' : \'bg-white/20 text-white\')' : '' }}">Admission</a>
                     
                     <!-- News & Media Dropdown -->
                     <div class="relative group">
-                        <button class="text-blue-900 hover:text-white hover:bg-blue-600 px-4 py-2 rounded-lg text-sm font-medium flex items-center transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" aria-haspopup="true" aria-expanded="false">
+                        <button class="px-4 py-2 rounded-lg text-sm font-medium flex items-center transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2" 
+                                :class="scrolled ? 'text-gray-900 hover:bg-gray-100 focus:ring-gray-500' : ({{ request()->routeIs('home') ? 'true' : 'false' }} ? 'text-white hover:bg-white/20 focus:ring-white/50' : 'text-gray-900 hover:bg-gray-100 focus:ring-gray-500')"
+                                aria-haspopup="true" aria-expanded="false">
                             News & Media
                             <svg class="ml-2 h-4 w-4 transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </button>
-                        <div class="absolute left-0 mt-2 w-56 bg-white rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-blue-100">
-                            <a href="{{ route('events.index') }}" class="block px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 rounded-t-xl transition-colors duration-200">Events</a>
-                            <a href="{{ route('notices.index') }}" class="block px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 rounded-b-xl transition-colors duration-200">Notices</a>
+                        <div class="absolute left-0 mt-2 w-56 bg-white rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-gray-100">
+                            <a href="{{ route('events.index') }}" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 rounded-t-xl transition-colors duration-200">Events</a>
+                            <a href="{{ route('notices.index') }}" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 rounded-b-xl transition-colors duration-200">Notices</a>
                         </div>
                     </div>
                     
-                    <a href="{{ route('careers.index') }}" class="text-blue-900 hover:text-white hover:bg-blue-600 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 {{ request()->routeIs('careers.*') ? 'bg-blue-600 text-white' : '' }}">Career</a>
-                    <a href="{{ route('contact.index') }}" class="text-blue-900 hover:text-white hover:bg-blue-600 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 {{ request()->routeIs('contact.*') ? 'bg-blue-600 text-white' : '' }}">Contact</a>
+                    <a href="{{ route('careers.index') }}" class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200" 
+                       :class="scrolled ? 'text-gray-900 hover:bg-gray-100' : ({{ request()->routeIs('home') ? 'true' : 'false' }} ? 'text-white hover:bg-white/20' : 'text-gray-900 hover:bg-gray-100')"
+                       :class="{{ request()->routeIs('careers.*') ? '(scrolled ? \'bg-gray-100 text-gray-900\' : \'bg-white/20 text-white\')' : '' }}">Career</a>
+                    <a href="{{ route('contact.index') }}" class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200" 
+                       :class="scrolled ? 'text-gray-900 hover:bg-gray-100' : ({{ request()->routeIs('home') ? 'true' : 'false' }} ? 'text-white hover:bg-white/20' : 'text-gray-900 hover:bg-gray-100')"
+                       :class="{{ request()->routeIs('contact.*') ? '(scrolled ? \'bg-gray-100 text-gray-900\' : \'bg-white/20 text-white\')' : '' }}">Contact</a>
                     
                 </div>
             </div>
-
+            
             <!-- Right Side - Search and Login -->
-            <div class="hidden lg:flex items-center space-x-2 ml-auto">
+            <div class="hidden lg:flex items-center space-x-2 ml-auto" style="margin: 0; padding: 0;">
                 <!-- Search Button -->
-                <button onclick="openSearchModal()" class="text-blue-900 hover:text-white hover:bg-blue-600 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200" aria-label="Search">
+                <button onclick="openSearchModal()" class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200" 
+                        :class="scrolled ? 'text-gray-900 hover:bg-gray-100' : ({{ request()->routeIs('home') ? 'true' : 'false' }} ? 'text-white hover:bg-white/20' : 'text-gray-900 hover:bg-gray-100')"
+                        aria-label="Search">
                     <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
@@ -166,21 +194,24 @@
                 <x-language-switcher />
                 
                 @auth
-                    <a href="{{ url('/admin') }}" class="text-blue-900 hover:text-white hover:bg-blue-600 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200">Admin</a>
+                    <a href="{{ url('/admin') }}" class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200" 
+                       :class="scrolled ? 'text-gray-900 hover:bg-gray-100' : ({{ request()->routeIs('home') ? 'true' : 'false' }} ? 'text-white hover:bg-white/20' : 'text-gray-900 hover:bg-gray-100')">Admin</a>
                     <form method="POST" action="{{ route('logout') }}" class="inline">
                         @csrf
-                        <button type="submit" class="text-blue-900 hover:text-white hover:bg-blue-600 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200">Logout</button>
+                        <button type="submit" class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200" 
+                                :class="scrolled ? 'text-gray-900 hover:bg-gray-100' : ({{ request()->routeIs('home') ? 'true' : 'false' }} ? 'text-white hover:bg-white/20' : 'text-gray-900 hover:bg-gray-100')">Logout</button>
                     </form>
                 @else
-                    <a href="{{ route('login') }}" class="text-blue-900 hover:text-white hover:bg-blue-600 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200">Login</a>
+                    <a href="{{ route('login') }}" class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200" 
+                       :class="scrolled ? 'text-gray-900 hover:bg-gray-100' : ({{ request()->routeIs('home') ? 'true' : 'false' }} ? 'text-white hover:bg-white/20' : 'text-gray-900 hover:bg-gray-100')">Login</a>
                     @if (Route::has('register'))
                         <a href="{{ route('register') }}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200">Register</a>
                     @endif
                 @endauth
             </div>
-
+            
             <!-- Mobile menu button -->
-            <div class="lg:hidden">
+            <div class="lg:hidden" style="margin: 0; padding: 0;">
                 <button type="button" id="mobile-menu-button" class="bg-blue-100 inline-flex items-center justify-center p-3 rounded-xl text-blue-600 hover:text-blue-700 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200" aria-controls="mobile-menu" aria-expanded="false" onclick="toggleMobileMenu()">
                     <span class="sr-only">Open main menu</span>
                     <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -190,26 +221,26 @@
             </div>
         </div>
     </nav>
-
+    
     <!-- Mobile menu -->
     <div class="lg:hidden hidden" id="mobile-menu">
         <div class="px-4 pt-4 pb-6 space-y-2 bg-gradient-to-b from-blue-50 to-white border-t border-blue-100 shadow-inner">
             <a href="{{ route('home') }}" class="text-blue-900 hover:text-white hover:bg-blue-600 block px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 {{ request()->routeIs('home') ? 'bg-blue-600 text-white' : '' }}">Home</a>
-
+            
             <!-- Mobile About Menu -->
             <div class="space-y-1">
                 <div class="px-4 py-2 text-sm font-semibold text-blue-700 uppercase tracking-wide">About</div>
                 <a href="{{ route('about.show', 'principal') }}" class="block px-6 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 rounded-lg transition-colors duration-200">Principal's Message</a>
                 <a href="{{ route('about.show', 'vision') }}" class="block px-6 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 rounded-lg transition-colors duration-200">Vision & Mission</a>
             </div>
-
+            
             <!-- Mobile Academics Menu -->
             <div class="space-y-1">
                 <div class="px-4 py-2 text-sm font-semibold text-blue-700 uppercase tracking-wide">Academics</div>
                 <a href="{{ route('academic.show', 'curriculum') }}" class="block px-6 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 rounded-lg transition-colors duration-200">Curriculum</a>
                 <a href="{{ route('academic.show', 'policies') }}" class="block px-6 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 rounded-lg transition-colors duration-200">Policies</a>
             </div>
-
+            
             <a href="{{ route('admission.index') }}" class="text-blue-900 hover:text-white hover:bg-blue-600 block px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 {{ request()->routeIs('admission.*') ? 'bg-blue-600 text-white' : '' }}">Admission</a>
             
             <!-- Mobile News & Media Menu -->

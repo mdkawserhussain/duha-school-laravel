@@ -96,11 +96,11 @@
         <!-- End Google Tag Manager (noscript) -->
         @endif
 
-        <div class="min-h-screen">
+        <div class="min-h-screen" style="margin: 0 !important; padding: 0 !important;">
             <x-header />
 
             <!-- Page Content -->
-            <main id="main-content">
+            <main id="main-content" style="margin: 0 !important; padding: 0 !important;">
                 @yield('content')
             </main>
 
