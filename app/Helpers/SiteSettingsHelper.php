@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Models\SiteSettings;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class SiteSettingsHelper
 {
@@ -358,6 +359,61 @@ class SiteSettingsHelper
     public static function customJs(): ?string
     {
         return static::get('custom_js');
+    }
+
+    /**
+     * Get active advisors sorted by sort_order.
+     * Retrieves advisors from HomePageSection (section_key='advisors')
+     */
+    public static function advisors(): array
+    {
+        try {
+            // Get advisors from HomePageSection instead of SiteSettings
+            $section = \App\Models\HomePageSection::where('section_key', 'advisors')
+                ->where('is_active', true)
+                ->first();
+            
+            if (!$section || empty($section->data['advisors'])) {
+                Log::info('No advisors found in HomePageSection');
+                return [];
+            }
+            
+            $advisors = $section->data['advisors'];
+            
+            // Process each advisor
+            foreach ($advisors as &$advisor) {
+                // Map 'photo_url' to 'profile_image_url' for consistency
+                if (isset($advisor['photo_url']) && !empty($advisor['photo_url'])) {
+                    $advisor['profile_image_url'] = $advisor['photo_url'];
+                } elseif (isset($advisor['profile_image'])) {
+                    // If it's already a full URL, use it as is
+                    if (filter_var($advisor['profile_image'], FILTER_VALIDATE_URL)) {
+                        $advisor['profile_image_url'] = $advisor['profile_image'];
+                    } else {
+                        // For local files, generate the URL directly
+                        $advisor['profile_image_url'] = url('storage/' . ltrim($advisor['profile_image'], '/'));
+                    }
+                } else {
+                    // Use placeholder if no image
+                    $advisor['profile_image_url'] = asset('images/placeholder.svg');
+                }
+                
+                // Ensure required fields have defaults
+                $advisor['name'] = $advisor['name'] ?? 'Unknown';
+                $advisor['title'] = $advisor['title'] ?? '';
+                $advisor['description'] = $advisor['description'] ?? '';
+                $advisor['linkedin_url'] = $advisor['linkedin_url'] ?? '';
+                $advisor['email'] = $advisor['email'] ?? '';
+                $advisor['accent_color'] = $advisor['accent_color'] ?? '#F4C430';
+            }
+            
+            Log::info('Advisors loaded successfully', ['count' => count($advisors)]);
+            return $advisors;
+            
+        } catch (\Exception $e) {
+            Log::error('Error loading advisors from HomePageSection: ' . $e->getMessage());
+            return [];
+        }
     }
 }
 

@@ -382,6 +382,89 @@ class SiteSettingsResource extends Resource
                                     ])
                                     ->columns(2),
                             ]),
+
+                        // Advisors Tab
+                        Components\Tabs\Tab::make('Advisors')
+                            ->icon('heroicon-o-user-group')
+                            ->schema([
+                                Components\Section::make('Advisors & Board Members')
+                                    ->description('Manage your advisors and board members. These will be displayed on the homepage.')
+                                    ->schema([
+                                        FormComponents\Repeater::make('advisors')
+                                            ->label('Advisors & Board Members')
+                                            ->schema([
+                                                FormComponents\Grid::make()
+                                                    ->schema([
+                                                        FormComponents\Toggle::make('is_active')
+                                                            ->label('Active')
+                                                            ->default(true)
+                                                            ->helperText('Inactive members will not be displayed on the website.')
+                                                            ->columnSpan(1),
+                                                        
+                                                        FormComponents\ColorPicker::make('accent_color')
+                                                            ->label('Accent Color')
+                                                            ->helperText('Optional accent color for this member card.')
+                                                            ->columnSpan(1),
+                                                    ])
+                                                    ->columns(2),
+                                                        
+                                                FormComponents\TextInput::make('name')
+                                                    ->label('Full Name')
+                                                    ->required()
+                                                    ->maxLength(255)
+                                                    ->columnSpanFull(),
+                                                    
+                                                FormComponents\TextInput::make('title')
+                                                    ->label('Title/Position')
+                                                    ->required()
+                                                    ->maxLength(255)
+                                                    ->columnSpanFull(),
+                                                    
+                                                FormComponents\Textarea::make('description')
+                                                    ->label('Description/Bio')
+                                                    ->rows(3)
+                                                    ->maxLength(500)
+                                                    ->helperText('A short biography or description of the member.')
+                                                    ->columnSpanFull(),
+                                                    
+                                                FormComponents\FileUpload::make('profile_image')
+                                                    ->label('Profile Image')
+                                                    ->image()
+                                                    ->directory('site-settings/advisors')
+                                                    ->visibility('public')
+                                                    ->acceptedFileTypes(['image/png', 'image/jpeg', 'image/jpg', 'image/webp'])
+                                                    ->maxSize(2048)
+                                                    ->helperText('Recommended size: 300x300px. Maximum file size: 2MB.')
+                                                    ->imageEditor()
+                                                    ->imageEditorAspectRatios([
+                                                        null,
+                                                        '1:1',
+                                                    ])
+                                                    ->disk('public')
+                                                    ->columnSpanFull(),
+                                                    
+                                                FormComponents\TextInput::make('linkedin_url')
+                                                    ->label('LinkedIn URL')
+                                                    ->url()
+                                                    ->maxLength(255)
+                                                    ->placeholder('https://linkedin.com/in/username')
+                                                    ->columnSpan(1),
+                                                    
+                                                FormComponents\TextInput::make('email')
+                                                    ->label('Email Address')
+                                                    ->email()
+                                                    ->maxLength(255)
+                                                    ->columnSpan(1),
+                                            ])
+                                            ->itemLabel(fn (array $state): string => $state['name'] ?? 'New Member')
+                                            ->collapsible()
+                                            ->collapsed()
+                                            ->orderColumn('sort_order')
+                                            ->defaultItems(0)
+                                            ->columnSpanFull(),
+                                    ])
+                                    ->columns(1),
+                            ]),
                     ])
                     ->columnSpanFull(),
             ]);

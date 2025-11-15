@@ -29,15 +29,9 @@
      style="position: fixed; top: 0; left: 0; right: 0; z-index: 60; width: 100%; margin: 0; padding: 0.5rem 0;"
      x-data="{ scrolled: false }"
      x-init="
-         console.log('[ANNOUNCEMENT BAR] Initialized');
          const announcementBar = $el;
-         console.log('[ANNOUNCEMENT BAR] Element:', announcementBar);
-         console.log('[ANNOUNCEMENT BAR] Computed styles:', window.getComputedStyle(announcementBar));
-         console.log('[ANNOUNCEMENT BAR] Height:', announcementBar.offsetHeight);
-         console.log('[ANNOUNCEMENT BAR] Top:', announcementBar.offsetTop);
          window.addEventListener('scroll', () => { 
              scrolled = window.pageYOffset > 50;
-             console.log('[ANNOUNCEMENT BAR] Scroll:', window.pageYOffset, 'Scrolled:', scrolled);
          });
      "
      :class="{ 'hidden': scrolled }"
@@ -96,8 +90,6 @@
         style="position: sticky; top: 0; margin: 0 !important; padding: 0 !important;"
         x-data="{ scrolled: false, hasAnnouncement: {{ $announcements->isNotEmpty() ? 'true' : 'false' }}, announcementHeight: 0 }" 
         x-init="
-            console.log('[HEADER] Initialized');
-            console.log('[HEADER] Has announcement:', hasAnnouncement);
             const header = $el;
             
             // Get actual announcement bar height dynamically
@@ -110,8 +102,6 @@
                     if (!scrolled) {
                         // Use setProperty with important flag to override CSS
                         header.style.setProperty('top', actualHeight + 'px', 'important');
-                        console.log('[HEADER] Set top to actual announcement height:', actualHeight + 'px');
-                        console.log('[HEADER] Computed top after setting:', window.getComputedStyle(header).top);
                     }
                 };
                 
@@ -123,7 +113,6 @@
                         const computedTop = window.getComputedStyle(header).top;
                         const expectedTop = announcementBar.offsetHeight + 'px';
                         if (computedTop !== expectedTop) {
-                            console.warn('[HEADER] Top mismatch! Expected:', expectedTop, 'Got:', computedTop);
                             updateHeight();
                         }
                     }, 50);
@@ -140,7 +129,6 @@
                     scrolled = window.pageYOffset > 50;
                     if (scrolled) {
                         header.style.setProperty('top', '0', 'important');
-                        console.log('[HEADER] Scrolled - top set to 0');
                     } else {
                         updateHeight();
                     }
@@ -152,8 +140,6 @@
                     scrolled = window.pageYOffset > 50;
                 });
             }
-            
-            console.log('[HEADER] Setup complete');
         " 
         :class="{ 
             'shadow-xl bg-white text-gray-900': scrolled, 
@@ -349,104 +335,9 @@
 </header>
 
 <script>
-// Debug layout on page load
+// Layout initialization
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('[LAYOUT DEBUG] DOM Content Loaded');
-    
-    const announcementBar = document.getElementById('announcement-bar');
-    const header = document.getElementById('main-navbar');
-    const heroSection = document.querySelector('.hero-section');
-    const main = document.querySelector('main');
-    
-    function debugLayout() {
-        console.log('=== LAYOUT DEBUG ===');
-        
-        if (announcementBar) {
-            const abRect = announcementBar.getBoundingClientRect();
-            console.log('[ANNOUNCEMENT BAR]');
-            console.log('  - Display:', window.getComputedStyle(announcementBar).display);
-            console.log('  - Position:', window.getComputedStyle(announcementBar).position);
-            console.log('  - Top:', abRect.top, 'px');
-            console.log('  - Height:', abRect.height, 'px');
-            console.log('  - Bottom:', abRect.bottom, 'px');
-            console.log('  - Margin:', window.getComputedStyle(announcementBar).margin);
-            console.log('  - Padding:', window.getComputedStyle(announcementBar).padding);
-        } else {
-            console.log('[ANNOUNCEMENT BAR] Not found');
-        }
-        
-        if (header) {
-            const hRect = header.getBoundingClientRect();
-            console.log('[HEADER]');
-            console.log('  - Position:', window.getComputedStyle(header).position);
-            console.log('  - Top:', hRect.top, 'px');
-            console.log('  - Height:', hRect.height, 'px');
-            console.log('  - Bottom:', hRect.bottom, 'px');
-            console.log('  - Margin:', window.getComputedStyle(header).margin);
-            console.log('  - Padding:', window.getComputedStyle(header).padding);
-            
-            if (announcementBar) {
-                const abRect = announcementBar.getBoundingClientRect();
-                const gap = hRect.top - abRect.bottom;
-                console.log('  - Gap from announcement bar:', gap, 'px');
-                if (gap > 0) {
-                    console.error('  - ⚠️ GAP DETECTED:', gap, 'px');
-                }
-            }
-        } else {
-            console.log('[HEADER] Not found');
-        }
-        
-        if (heroSection) {
-            const hsRect = heroSection.getBoundingClientRect();
-            console.log('[HERO SECTION]');
-            console.log('  - Top:', hsRect.top, 'px');
-            console.log('  - Height:', hsRect.height, 'px');
-            console.log('  - Margin:', window.getComputedStyle(heroSection).margin);
-            console.log('  - Padding:', window.getComputedStyle(heroSection).padding);
-            
-            if (header) {
-                const hRect = header.getBoundingClientRect();
-                const gap = hsRect.top - hRect.bottom;
-                console.log('  - Gap from header:', gap, 'px');
-                if (gap > 0) {
-                    console.error('  - ⚠️ GAP DETECTED:', gap, 'px');
-                }
-            }
-        } else {
-            console.log('[HERO SECTION] Not found');
-        }
-        
-        if (main) {
-            const mRect = main.getBoundingClientRect();
-            console.log('[MAIN]');
-            console.log('  - Top:', mRect.top, 'px');
-            console.log('  - Margin:', window.getComputedStyle(main).margin);
-            console.log('  - Padding:', window.getComputedStyle(main).padding);
-        }
-        
-        console.log('=== END LAYOUT DEBUG ===');
-    }
-    
-    // Debug immediately
-    debugLayout();
-    
-    // Debug after a short delay
-    setTimeout(debugLayout, 100);
-    setTimeout(debugLayout, 500);
-    setTimeout(debugLayout, 1000);
-    
-    // Debug on scroll
-    let scrollTimeout;
-    window.addEventListener('scroll', function() {
-        clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(debugLayout, 100);
-    });
-    
-    // Debug on resize
-    window.addEventListener('resize', function() {
-        setTimeout(debugLayout, 100);
-    });
+    // Layout initialization code can go here if needed in the future
 });
 
 function toggleMobileMenu() {

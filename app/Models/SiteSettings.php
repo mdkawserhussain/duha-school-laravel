@@ -70,12 +70,14 @@ class SiteSettings extends Model implements HasMedia
         'custom_css',
         'custom_js',
         'email_notification_preferences',
+        'advisors',
     ];
 
     protected $casts = [
         'social_media_links' => 'array',
         'supported_languages' => 'array',
         'email_notification_preferences' => 'array',
+        'advisors' => 'array',
         'maintenance_mode' => 'boolean',
         'maintenance_scheduled_at' => 'datetime',
         'maintenance_scheduled_until' => 'datetime',
@@ -141,6 +143,7 @@ class SiteSettings extends Model implements HasMedia
         $this->addMediaCollection('logo')->singleFile();
         $this->addMediaCollection('favicon')->singleFile();
         $this->addMediaCollection('og_image')->singleFile();
+        $this->addMediaCollection('advisors');
     }
 
     /**
@@ -156,6 +159,14 @@ class SiteSettings extends Model implements HasMedia
             ->quality(85);
 
         $this->addMediaConversion('medium')
+            ->width(300)
+            ->height(300)
+            ->sharpen(10)
+            ->format('webp')
+            ->quality(85);
+
+        // Advisor profile image conversion
+        $this->addMediaConversion('advisor')
             ->width(300)
             ->height(300)
             ->sharpen(10)

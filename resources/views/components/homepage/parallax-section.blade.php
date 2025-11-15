@@ -6,9 +6,16 @@
     
     // Get background image from CMS or use default
     $backgroundImage = null;
-    $useDefaultImage = $sectionData['use_default_image'] ?? false;
+    
+    // Handle use_default_image - can be boolean false, string 'false', or null
+    $useDefaultImageRaw = $sectionData['use_default_image'] ?? false;
+    $useDefaultImage = filter_var($useDefaultImageRaw, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+    if ($useDefaultImage === null) {
+        $useDefaultImage = false; // Default to false if not set
+    }
     
     // Priority: 1. Media collection 'background_image', 2. Data array, 3. Default
+    // Only skip if explicitly set to use default image
     if (!$useDefaultImage && $section) {
         // Ensure media relationship is loaded
         if (!$section->relationLoaded('media')) {
@@ -19,24 +26,48 @@
         try {
             if ($section->hasMedia('background_image')) {
                 $media = $section->getFirstMedia('background_image');
+                
                 if ($media) {
-                    $backgroundImage = $media->getUrl();
-                    // Ensure absolute URL
-                    if ($backgroundImage && !filter_var($backgroundImage, FILTER_VALIDATE_URL)) {
-                        $backgroundImage = url($backgroundImage);
+                    // Use relative path with asset() instead of getUrl() for better compatibility
+                    $mediaPath = $media->getPath();
+                    
+                    // Extract relative path from storage/app/public
+                    // Media path is like: /path/to/storage/app/public/7/filename.jpeg
+                    // We need: storage/7/filename.jpeg
+                    if ($mediaPath && str_contains($mediaPath, 'storage/app/public/')) {
+                        $relativePath = 'storage/' . substr($mediaPath, strpos($mediaPath, 'storage/app/public/') + strlen('storage/app/public/'));
+                        $backgroundImage = asset($relativePath);
+                    } else {
+                        // Fallback: try to construct from media attributes
+                        $fileName = $media->file_name ?? '';
+                        if ($fileName) {
+                            $relativePath = 'storage/' . $media->id . '/' . $fileName;
+                            $backgroundImage = asset($relativePath);
+                        } else {
+                            // Last resort: use getUrl() but convert to relative
+                            $fullUrl = $media->getUrl();
+                            // Extract path from URL
+                            if (preg_match('#/storage/(.+)$#', $fullUrl, $matches)) {
+                                $relativePath = 'storage/' . $matches[1];
+                                $backgroundImage = asset($relativePath);
+                            } else {
+                                $backgroundImage = $fullUrl;
+                            }
+                        }
                     }
                 }
             }
         } catch (\Exception $e) {
-            \Log::debug('Parallax section: Failed to get background_image media', [
-                'section_id' => $section->id,
-                'error' => $e->getMessage()
+            \Log::error('Parallax section: Failed to get background_image media', [
+                'section_id' => $section->id ?? null,
+                'error' => $e->getMessage(),
             ]);
         }
         
         // If still no image, try data array
         if (!$backgroundImage && isset($sectionData['background_image'])) {
             $bgData = $sectionData['background_image'];
+            
             if (filter_var($bgData, FILTER_VALIDATE_URL)) {
                 $backgroundImage = $bgData;
             } elseif (is_string($bgData) && !empty($bgData)) {
@@ -53,28 +84,47 @@
             try {
                 $media = $section->getFirstMedia('images');
                 if ($media) {
-                    $backgroundImage = $media->getUrl();
+                    $mediaPath = $media->getPath();
+                    if ($mediaPath && str_contains($mediaPath, 'storage/app/public/')) {
+                        $relativePath = 'storage/' . substr($mediaPath, strpos($mediaPath, 'storage/app/public/') + strlen('storage/app/public/'));
+                        $backgroundImage = asset($relativePath);
+                    } else {
+                        // Fallback to constructing from media attributes
+                        $fileName = $media->file_name ?? '';
+                        if ($fileName) {
+                            $relativePath = 'storage/' . $media->id . '/' . $fileName;
+                            $backgroundImage = asset($relativePath);
+                        } else {
+                            $backgroundImage = $media->getUrl();
+                        }
+                    }
                 }
             } catch (\Exception $e) {
-                // Continue to default
+                // Silently continue
             }
         }
     }
     
-    // Use default image if no custom image is set
+    // Use default image if no custom image is set OR if use_default_image is true
     if (!$backgroundImage || $useDefaultImage) {
         $backgroundImage = asset('images/parallax-students.svg');
     }
     
-    // Ensure we have a valid absolute URL
-    if ($backgroundImage && !filter_var($backgroundImage, FILTER_VALIDATE_URL)) {
-        $backgroundImage = url($backgroundImage);
+    // Ensure we have a valid URL (asset() already returns full URL, but check anyway)
+    if ($backgroundImage && !filter_var($backgroundImage, FILTER_VALIDATE_URL) && !str_starts_with($backgroundImage, '/')) {
+        // If it's a relative path without leading slash, add it
+        if (str_starts_with($backgroundImage, 'storage/')) {
+            $backgroundImage = asset($backgroundImage);
+        } else {
+            $backgroundImage = url($backgroundImage);
+        }
     }
     
     // Extract content data
+    // Note: title can be in either $section->title (column) or $sectionData['title'] (data array)
     $badge = $sectionData['badge'] ?? 'Experience';
-    $title = $sectionData['title'] ?? 'Where tradition meets innovation every school day.';
-    $description = $sectionData['description'] ?? 'Borrowing Duha\'s parallax rhythm, this slice of campus life highlights collaborative learning pods, Arabic storytelling corners, and maker labs.';
+    $title = $sectionData['title'] ?? $section->title ?? 'Where tradition meets innovation every school day.';
+    $description = $sectionData['description'] ?? $section->description ?? 'Borrowing Duha\'s parallax rhythm, this slice of campus life highlights collaborative learning pods, Arabic storytelling corners, and maker labs.';
     $featurePills = $sectionData['feature_pills'] ?? [
         ['text' => 'Dedicated Musalla & Hifz Pods'],
         ['text' => 'Robotics & Design Thinking Lab'],
@@ -85,28 +135,31 @@
 
 <section 
     class="parallax-section relative min-h-[600px] flex items-center justify-center overflow-hidden"
-    style="background-image: url('{{ e($backgroundImage) }}');"
+    style="background-image: url('{{ e($backgroundImage) }}'); background-color: #1e3a8a; background-size: cover; background-position: center center; background-repeat: no-repeat; background-attachment: fixed;"
 >
-    <!-- Gradient Overlay -->
-    <div class="absolute inset-0 bg-gradient-to-r from-aisd-midnight/70 via-aisd-cobalt/60 to-aisd-midnight/70 z-10"></div>
+    <!-- Dark Overlay - Ensures white text is always visible regardless of background image -->
+    <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/60 to-black/70 z-10"></div>
+    
+    <!-- Color Gradient Overlay - Adds brand colors while maintaining text visibility -->
+    <div class="absolute inset-0 bg-gradient-to-r from-aisd-midnight/40 via-aisd-cobalt/30 to-aisd-midnight/40" style="z-index: 11;"></div>
 
     <!-- Decorative Pattern Overlay -->
-    <div class="absolute inset-0 opacity-20 z-20" style="background-image:url('data:image/svg+xml,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;120&quot; height=&quot;120&quot; viewBox=&quot;0 0 120 120&quot;><g fill=&quot;none&quot; fill-rule=&quot;evenodd&quot; opacity=&quot;.25&quot;><path d=&quot;M60 0l60 60-60 60L0 60z&quot; stroke=&quot;%23F4C430&quot; stroke-width=&quot;0.5&quot; opacity=&quot;.3&quot;/></g></svg>');"></div>
+    <div class="absolute inset-0 opacity-15 z-20" style="background-image:url('data:image/svg+xml,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;120&quot; height=&quot;120&quot; viewBox=&quot;0 0 120 120&quot;><g fill=&quot;none&quot; fill-rule=&quot;evenodd&quot; opacity=&quot;.25&quot;><path d=&quot;M60 0l60 60-60 60L0 60z&quot; stroke=&quot;%23F4C430&quot; stroke-width=&quot;0.5&quot; opacity=&quot;.3&quot;/></g></svg>');"></div>
 
     <!-- Content -->
     @if($section && $section->is_active)
     <div class="container relative z-30 mx-auto px-6 py-32 text-white lg:px-12">
         <div class="max-w-3xl space-y-6">
             <!-- Section Badge -->
-            <p class="text-xs uppercase tracking-[0.5em] text-white/70">{{ $badge }}</p>
+            <p class="text-xs uppercase tracking-[0.5em] text-white font-semibold drop-shadow-lg">{{ $badge }}</p>
 
             <!-- Main Heading -->
-            <h2 class="text-4xl font-bold md:text-5xl lg:text-6xl leading-tight">
+            <h2 class="text-4xl font-bold md:text-5xl lg:text-6xl leading-tight text-white drop-shadow-lg">
                 {{ $title }}
             </h2>
 
             <!-- Description -->
-            <p class="text-lg text-white/90 leading-relaxed">
+            <p class="text-lg text-white leading-relaxed drop-shadow-md">
                 {{ $description }}
             </p>
 
@@ -114,7 +167,7 @@
             @if(count($featurePills) > 0)
             <div class="flex flex-wrap gap-4 text-sm">
                 @foreach($featurePills as $pill)
-                <span class="rounded-full bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 text-white">
+                <span class="rounded-full bg-white/20 backdrop-blur-sm border border-white/30 px-4 py-2 text-white font-medium drop-shadow-md">
                     {{ $pill['text'] ?? '' }}
                 </span>
                 @endforeach

@@ -3,7 +3,7 @@
     // Get announcements for dynamic padding calculation
     $announcements = collect([]);
     try {
-        if (!app()->bound('exception') && 
+        if (!app()->bound('exception') &&
             !str_contains(request()->path() ?? '', 'errors') &&
             !str_contains(request()->path() ?? '', '_dusk') &&
             !str_contains(request()->path() ?? '', 'telescope')) {
@@ -12,7 +12,7 @@
     } catch (\Throwable $e) {
         $announcements = collect([]);
     }
-    
+
     $heroSlide = $heroSlides->first();
     $heroData = $heroSlide && $heroSlide->is_active ? ($heroSlide->data ?? []) : [];
     $badge = $heroData['badge'] ?? 'Since 2010 • Chattogram';
@@ -25,8 +25,8 @@
     $secondaryButtonText = $heroData['secondary_button_text'] ?? 'Virtual Tour';
     $secondaryButtonLink = $heroData['secondary_button_link'] ?? '#virtual-tour';
     $videoUrl = $heroData['video_url'] ?? 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4';
-    $videoPoster = $heroSlide && $heroSlide->hasMedia('video_poster') 
-        ? $heroSlide->getMediaUrl('video_poster', 'large') 
+    $videoPoster = $heroSlide && $heroSlide->hasMedia('video_poster')
+        ? $heroSlide->getMediaUrl('video_poster', 'large')
         : asset('images/hero-poster.jpg');
     $features = $heroData['features'] ?? [
         [
@@ -70,10 +70,10 @@
             $isYouTube = preg_match('/^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/', $videoUrl, $matches);
             $youtubeId = $isYouTube && isset($matches[1]) ? $matches[1] : null;
         @endphp
-        
+
         @if($youtubeId)
             <!-- YouTube Video Embed -->
-            <iframe 
+            <iframe
                 id="hero-bg-video"
                 class="absolute inset-0 w-full h-full object-cover"
                 style="position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; object-fit: cover; border: none;"
@@ -85,13 +85,13 @@
             </iframe>
         @else
             <!-- Direct Video File -->
-            <video 
+            <video
                 id="hero-bg-video"
                 class="absolute inset-0 w-full h-full object-cover"
                 style="position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; object-fit: cover;"
-                autoplay 
-                muted 
-                loop 
+                autoplay
+                muted
+                loop
                 playsinline
                 preload="auto"
                 poster="{{ $videoPoster }}">
@@ -102,44 +102,40 @@
             </video>
         @endif
     </div>
-    
+
     <!-- Dark overlay for text readability -->
     <div class="absolute inset-0 bg-gradient-to-br from-aisd-midnight/85 via-aisd-ocean/80 to-aisd-cobalt/85" style="top: 0; left: 0; right: 0; bottom: 0;"></div>
-    
+
     <!-- Decorative pattern overlay -->
     <div class="absolute inset-0 opacity-15" style="top: 0; left: 0; right: 0; bottom: 0; background-image:url('data:image/svg+xml,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;120&quot; height=&quot;120&quot; viewBox=&quot;0 0 120 120&quot;><g fill=&quot;none&quot; fill-rule=&quot;evenodd&quot; opacity=&quot;.25&quot;><path d=&quot;M60 0l60 60-60 60L0 60z&quot; stroke=&quot;%23F4C430&quot; stroke-width=&quot;0.5&quot; opacity=&quot;.3&quot;/></g></svg>');"></div>
 
-    <div class="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16 md:pb-20 lg:pb-24" 
+    <div class="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16 md:pb-20 lg:pb-24"
          x-data="{ scrolled: false, hasAnnouncement: {{ $announcements->isNotEmpty() ? 'true' : 'false' }}, announcementHeight: 0 }"
          x-init="
-             console.log('[HERO CONTAINER] Initialized');
              const container = $el;
-             
+
              // Get actual announcement bar height
              const announcementBar = document.getElementById('announcement-bar');
              if (announcementBar && hasAnnouncement) {
                  const updateHeight = () => {
                      announcementHeight = announcementBar.offsetHeight;
-                     console.log('[HERO CONTAINER] Announcement height updated:', announcementHeight);
                  };
-                 
+
                  updateHeight();
-                 
+
                  const resizeObserver = new ResizeObserver(() => {
                      updateHeight();
                  });
                  resizeObserver.observe(announcementBar);
-                 
-                 window.addEventListener('scroll', () => { 
+
+                 window.addEventListener('scroll', () => {
                      scrolled = window.pageYOffset > 50;
                  });
              } else {
-                 window.addEventListener('scroll', () => { 
+                 window.addEventListener('scroll', () => {
                      scrolled = window.pageYOffset > 50;
                  });
              }
-             
-             console.log('[HERO CONTAINER] Setup complete');
          "
          :style="hasAnnouncement && !scrolled ? 'padding-top: calc(5rem + ' + (announcementHeight || 0) + 'px);' : 'padding-top: 5rem;'"
          style="padding-top: 5rem !important; margin-top: 0 !important;">
@@ -254,12 +250,11 @@
             // Check if it's an iframe (YouTube embed)
             if (video.tagName === 'IFRAME') {
                 // YouTube embeds handle autoplay automatically with the URL parameters
-                console.log('YouTube video embed detected');
             } else {
                 // HTML5 video element
                 video.muted = true;
                 video.play().catch(function(error) {
-                    console.log('Video autoplay prevented:', error);
+                    // Silently handle autoplay prevention
                 });
             }
         }

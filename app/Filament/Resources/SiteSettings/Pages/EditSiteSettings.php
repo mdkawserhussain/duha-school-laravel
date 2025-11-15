@@ -56,6 +56,9 @@ class EditSiteSettings extends EditRecord
         // Handle OG image upload
         $this->handleMediaUpload($settings, $this->ogImagePath ?? $formState['og_image'] ?? null, 'og_image');
         
+        // Handle advisors profile images
+        $this->handleAdvisorsMedia($settings, $formState['advisors'] ?? null);
+        
         // Clear cache after saving
         SiteSettings::clearCache();
 
@@ -135,6 +138,86 @@ class EditSiteSettings extends EditRecord
                 $added = true;
             } catch (\Exception $e) {
                 // Log error but don't fail
+            }
+        }
+    }
+
+    protected function handleAdvisorsMedia($settings, $advisorsData): void
+    {
+        if (!is_array($advisorsData)) {
+            return;
+        }
+
+        // Clear existing advisors media
+        $settings->clearMediaCollection('advisors');
+
+        // Process each advisor's profile image
+        foreach ($advisorsData as $advisor) {
+            if (isset($advisor['profile_image']) && $advisor['profile_image']) {
+                $filePath = $advisor['profile_image'];
+                
+                // Handle array of file paths
+                if (is_array($filePath)) {
+                    $filePath = !empty($filePath[0]) ? $filePath[0] : null;
+                }
+                
+                if (!$filePath || !is_string($filePath)) {
+                    continue;
+                }
+                
+                // Skip if it's a URL (already uploaded)
+                if (filter_var($filePath, FILTER_VALIDATE_URL)) {
+                    continue;
+                }
+                
+                $added = false;
+                
+                // Handle Livewire temporary files
+                if (str_starts_with($filePath, 'livewire-tmp/')) {
+                    if (Storage::disk('public')->exists($filePath)) {
+                        try {
+                            $settings->addMediaFromDisk($filePath, 'public')
+                                ->toMediaCollection('advisors');
+                            $added = true;
+                        } catch (\Exception $e) {
+                            // Try alternative method
+                        }
+                    }
+                }
+                
+                // If not added yet, try different path formats
+                if (!$added) {
+                    $paths = [
+                        storage_path('app/public/' . $filePath),
+                        storage_path('app/' . $filePath),
+                        public_path('storage/' . $filePath),
+                        $filePath,
+                    ];
+                    
+                    foreach ($paths as $path) {
+                        if (file_exists($path) && is_file($path)) {
+                            try {
+                                $settings->addMedia($path)
+                                    ->toMediaCollection('advisors');
+                                $added = true;
+                                break;
+                            } catch (\Exception $e) {
+                                continue;
+                            }
+                        }
+                    }
+                }
+                
+                // If file exists in storage disk
+                if (!$added && Storage::disk('public')->exists($filePath)) {
+                    try {
+                        $settings->addMediaFromDisk($filePath, 'public')
+                            ->toMediaCollection('advisors');
+                        $added = true;
+                    } catch (\Exception $e) {
+                        // Log error but don't fail
+                    }
+                }
             }
         }
     }
