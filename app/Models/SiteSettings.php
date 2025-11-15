@@ -8,10 +8,11 @@ use Illuminate\Support\Facades\Storage;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use App\Traits\HasWebPMedia;
 
 class SiteSettings extends Model implements HasMedia
 {
-    use InteractsWithMedia;
+    use InteractsWithMedia, HasWebPMedia;
 
     protected $fillable = [
         // Website Information
@@ -148,22 +149,34 @@ class SiteSettings extends Model implements HasMedia
 
     /**
      * Register media conversions.
+     * All images are automatically converted to WebP format.
      */
     public function registerMediaConversions(Media $media = null): void
     {
+        // Default WebP conversion - converts original file to WebP
+        // This is the main conversion that replaces the original file
+        $this->addMediaConversion('webp')
+            ->format('webp')
+            ->quality(90)
+            ->performOnCollections('logo', 'favicon', 'og_image', 'advisors')
+            ->nonQueued(); // Process immediately
+
+        // Responsive conversions
         $this->addMediaConversion('thumb')
             ->width(150)
             ->height(150)
             ->sharpen(10)
             ->format('webp')
-            ->quality(85);
+            ->quality(85)
+            ->performOnCollections('logo', 'favicon', 'og_image', 'advisors');
 
         $this->addMediaConversion('medium')
             ->width(300)
             ->height(300)
             ->sharpen(10)
             ->format('webp')
-            ->quality(85);
+            ->quality(85)
+            ->performOnCollections('logo', 'favicon', 'og_image', 'advisors');
 
         // Advisor profile image conversion
         $this->addMediaConversion('advisor')
@@ -171,12 +184,13 @@ class SiteSettings extends Model implements HasMedia
             ->height(300)
             ->sharpen(10)
             ->format('webp')
-            ->quality(85);
+            ->quality(85)
+            ->performOnCollections('advisors');
     }
 
     /**
      * Get the logo URL with fallback.
-     * Uses relative paths with asset() for better compatibility.
+     * Uses relative paths with asset() and serves WebP version.
      */
     public static function getLogoUrl(?string $conversion = null): string
     {
@@ -185,18 +199,34 @@ class SiteSettings extends Model implements HasMedia
         if ($settings && $settings->hasMedia('logo')) {
             $media = $settings->getFirstMedia('logo');
             if ($media) {
-                // Use relative path with asset() instead of getFirstMediaUrl()
-                $mediaPath = $media->getPath();
+                // Try to get WebP conversion first, fallback to original
+                $webpPath = null;
+                
+                // Check if WebP conversion exists
+                if ($media->hasGeneratedConversion('webp')) {
+                    $webpPath = $media->getPath('webp');
+                } elseif ($media->hasGeneratedConversion('thumb')) {
+                    // Fallback to thumb conversion if webp doesn't exist yet
+                    $webpPath = $media->getPath('thumb');
+                } else {
+                    // Use original path (will be WebP after conversion)
+                    $webpPath = $media->getPath();
+                }
                 
                 // Extract relative path from storage/app/public
-                if ($mediaPath && str_contains($mediaPath, 'storage/app/public/')) {
-                    $relativePath = 'storage/' . substr($mediaPath, strpos($mediaPath, 'storage/app/public/') + strlen('storage/app/public/'));
+                if ($webpPath && str_contains($webpPath, 'storage/app/public/')) {
+                    $relativePath = 'storage/' . substr($webpPath, strpos($webpPath, 'storage/app/public/') + strlen('storage/app/public/'));
                     return asset($relativePath);
                 } else {
                     // Fallback: construct from media attributes
                     $fileName = $media->file_name ?? '';
                     if ($fileName) {
-                        $relativePath = 'storage/' . $media->id . '/' . $fileName;
+                        // If WebP conversion exists, use it
+                        if ($media->hasGeneratedConversion('webp')) {
+                            $relativePath = 'storage/' . $media->id . '/conversions/' . pathinfo($fileName, PATHINFO_FILENAME) . '.webp';
+                        } else {
+                            $relativePath = 'storage/' . $media->id . '/' . $fileName;
+                        }
                         return asset($relativePath);
                     }
                 }
@@ -208,25 +238,38 @@ class SiteSettings extends Model implements HasMedia
 
     /**
      * Accessor: Get logo URL.
-     * Uses relative paths with asset() for better compatibility.
+     * Uses relative paths with asset() and serves WebP version.
      */
     public function getLogoUrlAttribute(): ?string
     {
         if ($this->hasMedia('logo')) {
             $media = $this->getFirstMedia('logo');
             if ($media) {
-                // Use relative path with asset() instead of getFirstMediaUrl()
-                $mediaPath = $media->getPath();
+                // Try to get WebP conversion first
+                $webpPath = null;
+                
+                // Check if WebP conversion exists
+                if ($media->hasGeneratedConversion('webp')) {
+                    $webpPath = $media->getPath('webp');
+                } else {
+                    // Use original path (will be WebP after conversion)
+                    $webpPath = $media->getPath();
+                }
                 
                 // Extract relative path from storage/app/public
-                if ($mediaPath && str_contains($mediaPath, 'storage/app/public/')) {
-                    $relativePath = 'storage/' . substr($mediaPath, strpos($mediaPath, 'storage/app/public/') + strlen('storage/app/public/'));
+                if ($webpPath && str_contains($webpPath, 'storage/app/public/')) {
+                    $relativePath = 'storage/' . substr($webpPath, strpos($webpPath, 'storage/app/public/') + strlen('storage/app/public/'));
                     return asset($relativePath);
                 } else {
                     // Fallback: construct from media attributes
                     $fileName = $media->file_name ?? '';
                     if ($fileName) {
-                        $relativePath = 'storage/' . $media->id . '/' . $fileName;
+                        // If WebP conversion exists, use it
+                        if ($media->hasGeneratedConversion('webp')) {
+                            $relativePath = 'storage/' . $media->id . '/conversions/' . pathinfo($fileName, PATHINFO_FILENAME) . '.webp';
+                        } else {
+                            $relativePath = 'storage/' . $media->id . '/' . $fileName;
+                        }
                         return asset($relativePath);
                     }
                 }
@@ -247,21 +290,32 @@ class SiteSettings extends Model implements HasMedia
 
     /**
      * Accessor: Get favicon URL.
-     * Uses relative paths with asset() for better compatibility.
+     * Uses relative paths with asset() and serves WebP version.
      */
     public function getFaviconUrlAttribute(): ?string
     {
         if ($this->hasMedia('favicon')) {
             $media = $this->getFirstMedia('favicon');
             if ($media) {
-                $mediaPath = $media->getPath();
-                if ($mediaPath && str_contains($mediaPath, 'storage/app/public/')) {
-                    $relativePath = 'storage/' . substr($mediaPath, strpos($mediaPath, 'storage/app/public/') + strlen('storage/app/public/'));
+                // Try to get WebP conversion first
+                $webpPath = null;
+                if ($media->hasGeneratedConversion('webp')) {
+                    $webpPath = $media->getPath('webp');
+                } else {
+                    $webpPath = $media->getPath();
+                }
+                
+                if ($webpPath && str_contains($webpPath, 'storage/app/public/')) {
+                    $relativePath = 'storage/' . substr($webpPath, strpos($webpPath, 'storage/app/public/') + strlen('storage/app/public/'));
                     return asset($relativePath);
                 } else {
                     $fileName = $media->file_name ?? '';
                     if ($fileName) {
-                        $relativePath = 'storage/' . $media->id . '/' . $fileName;
+                        if ($media->hasGeneratedConversion('webp')) {
+                            $relativePath = 'storage/' . $media->id . '/conversions/' . pathinfo($fileName, PATHINFO_FILENAME) . '.webp';
+                        } else {
+                            $relativePath = 'storage/' . $media->id . '/' . $fileName;
+                        }
                         return asset($relativePath);
                     }
                 }
@@ -281,21 +335,32 @@ class SiteSettings extends Model implements HasMedia
 
     /**
      * Accessor: Get OG image URL.
-     * Uses relative paths with asset() for better compatibility.
+     * Uses relative paths with asset() and serves WebP version.
      */
     public function getOgImageUrlAttribute(): ?string
     {
         if ($this->hasMedia('og_image')) {
             $media = $this->getFirstMedia('og_image');
             if ($media) {
-                $mediaPath = $media->getPath();
-                if ($mediaPath && str_contains($mediaPath, 'storage/app/public/')) {
-                    $relativePath = 'storage/' . substr($mediaPath, strpos($mediaPath, 'storage/app/public/') + strlen('storage/app/public/'));
+                // Try to get WebP conversion first
+                $webpPath = null;
+                if ($media->hasGeneratedConversion('webp')) {
+                    $webpPath = $media->getPath('webp');
+                } else {
+                    $webpPath = $media->getPath();
+                }
+                
+                if ($webpPath && str_contains($webpPath, 'storage/app/public/')) {
+                    $relativePath = 'storage/' . substr($webpPath, strpos($webpPath, 'storage/app/public/') + strlen('storage/app/public/'));
                     return asset($relativePath);
                 } else {
                     $fileName = $media->file_name ?? '';
                     if ($fileName) {
-                        $relativePath = 'storage/' . $media->id . '/' . $fileName;
+                        if ($media->hasGeneratedConversion('webp')) {
+                            $relativePath = 'storage/' . $media->id . '/conversions/' . pathinfo($fileName, PATHINFO_FILENAME) . '.webp';
+                        } else {
+                            $relativePath = 'storage/' . $media->id . '/' . $fileName;
+                        }
                         return asset($relativePath);
                     }
                 }

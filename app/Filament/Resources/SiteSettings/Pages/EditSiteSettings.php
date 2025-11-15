@@ -269,7 +269,7 @@ class EditSiteSettings extends EditRecord
             }
         }
         
-        // Final verification
+        // Final verification and trigger WebP conversion
         if ($added) {
             $settings->refresh();
             $hasMedia = $settings->hasMedia($collection);
@@ -278,7 +278,30 @@ class EditSiteSettings extends EditRecord
                 'hasMedia' => $hasMedia,
             ]);
             
-            if (!$hasMedia) {
+            if ($hasMedia) {
+                // Get the media and ensure WebP conversion is generated
+                $media = $settings->getFirstMedia($collection);
+                if ($media) {
+                    // Trigger WebP conversion generation
+                    try {
+                        if (!$media->hasGeneratedConversion('webp')) {
+                            \Log::info("handleMediaUpload: Triggering WebP conversion", [
+                                'media_id' => $media->id,
+                                'collection' => $collection,
+                            ]);
+                            // The conversion will be generated automatically
+                            // We can manually trigger it if needed
+                            $media->performConversions(['webp']);
+                        }
+                    } catch (\Exception $e) {
+                        \Log::warning("handleMediaUpload: Could not trigger WebP conversion immediately", [
+                            'media_id' => $media->id,
+                            'error' => $e->getMessage(),
+                        ]);
+                        // Conversion will happen asynchronously, which is fine
+                    }
+                }
+            } else {
                 \Log::error("handleMediaUpload: Media was added but verification failed!", [
                     'collection' => $collection,
                     'filePath' => $filePath,

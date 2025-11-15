@@ -8,10 +8,11 @@ use Illuminate\Support\Facades\Cache;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use App\Traits\HasWebPMedia;
 
 class HomePageSection extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia;
+    use HasFactory, InteractsWithMedia, HasWebPMedia;
 
     protected $table = 'home_page_sections';
 
@@ -44,25 +45,36 @@ class HomePageSection extends Model implements HasMedia
 
     public function registerMediaConversions(Media $media = null): void
     {
+        // Default WebP conversion - converts original file to WebP
+        $this->addMediaConversion('webp')
+            ->format('webp')
+            ->quality(90)
+            ->performOnCollections('images', 'background_image', 'video_poster')
+            ->nonQueued(); // Process immediately
+
+        // Responsive conversions
         $this->addMediaConversion('thumb')
             ->width(300)
             ->height(300)
             ->sharpen(10)
             ->format('webp')
-            ->quality(85);
+            ->quality(85)
+            ->performOnCollections('images', 'background_image', 'video_poster');
 
         $this->addMediaConversion('medium')
             ->width(600)
             ->height(400)
             ->sharpen(10)
             ->format('webp')
-            ->quality(85);
+            ->quality(85)
+            ->performOnCollections('images', 'background_image', 'video_poster');
 
         $this->addMediaConversion('large')
             ->width(1920)
             ->height(1080)
             ->format('webp')
             ->quality(90)
+            ->performOnCollections('images', 'background_image')
             ->nonQueued();
     }
 

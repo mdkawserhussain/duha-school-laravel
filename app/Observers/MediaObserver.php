@@ -11,6 +11,7 @@ class MediaObserver
     /**
      * Handle the Media "updated" event.
      * This fires after conversions are generated.
+     * Deletes original image files after WebP conversion is complete.
      */
     public function updated(Media $media): void
     {
@@ -26,12 +27,47 @@ class MediaObserver
             return;
         }
 
-        // Check if any WebP conversion exists by examining the model's conversion definitions
-        $hasWebPConversion = $this->hasWebPConversions($media, $generatedConversions->toArray());
+        // Check if WebP conversion exists and is generated
+        $hasWebPConversion = false;
+        $conversionArray = $generatedConversions->toArray();
+        
+        // Check if 'webp' conversion is generated
+        if (isset($conversionArray['webp']) && $conversionArray['webp']) {
+            $hasWebPConversion = true;
+        } else {
+            // Fallback: check if any conversion uses WebP format
+            $hasWebPConversion = $this->hasWebPConversions($media, $conversionArray);
+        }
 
-        // If WebP conversions exist and original is not WebP, delete original
+        // If WebP conversion exists and original is not WebP, delete original
         if ($hasWebPConversion && $this->shouldDeleteOriginal($media)) {
             $this->deleteOriginalFile($media);
+        }
+    }
+    
+    /**
+     * Handle the Media "created" event.
+     * Trigger WebP conversion immediately for new uploads.
+     */
+    public function created(Media $media): void
+    {
+        // Ensure WebP conversion is generated immediately
+        try {
+            $model = $media->model;
+            if ($model && method_exists($model, 'registerMediaConversions')) {
+                // The conversion will be generated automatically by Spatie
+                // We just need to ensure it's queued/non-queued properly
+                Log::info("Media created, WebP conversion will be generated", [
+                    'media_id' => $media->id,
+                    'file_name' => $media->file_name,
+                    'collection' => $media->collection_name,
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error("Error in MediaObserver::created", [
+                'media_id' => $media->id,
+                'error' => $e->getMessage(),
+            ]);
         }
     }
 

@@ -9,10 +9,11 @@ use Laravel\Scout\Searchable;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use App\Traits\HasWebPMedia;
 
 class Event extends Model implements HasMedia
 {
-    use HasFactory, Searchable, InteractsWithMedia;
+    use HasFactory, Searchable, InteractsWithMedia, HasWebPMedia;
 
     protected static function boot()
     {
@@ -80,6 +81,13 @@ class Event extends Model implements HasMedia
 
     public function registerMediaConversions(Media $media = null): void
     {
+        // Default WebP conversion - converts original file to WebP
+        $this->addMediaConversion('webp')
+            ->format('webp')
+            ->quality(90)
+            ->nonQueued(); // Process immediately
+
+        // Responsive conversions
         $this->addMediaConversion('thumb')
             ->width(300)
             ->height(300)
@@ -93,10 +101,6 @@ class Event extends Model implements HasMedia
             ->sharpen(10)
             ->format('webp')
             ->quality(85);
-
-        $this->addMediaConversion('webp')
-            ->format('webp')
-            ->quality(90);
     }
 
     public function toSearchableArray()

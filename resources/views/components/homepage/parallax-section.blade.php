@@ -23,39 +23,10 @@
         }
         
         // Try to get from dedicated background_image media collection (preferred)
+        // Use WebP conversion with fallback
         try {
             if ($section->hasMedia('background_image')) {
-                $media = $section->getFirstMedia('background_image');
-                
-                if ($media) {
-                    // Use relative path with asset() instead of getUrl() for better compatibility
-                    $mediaPath = $media->getPath();
-                    
-                    // Extract relative path from storage/app/public
-                    // Media path is like: /path/to/storage/app/public/7/filename.jpeg
-                    // We need: storage/7/filename.jpeg
-                    if ($mediaPath && str_contains($mediaPath, 'storage/app/public/')) {
-                        $relativePath = 'storage/' . substr($mediaPath, strpos($mediaPath, 'storage/app/public/') + strlen('storage/app/public/'));
-                        $backgroundImage = asset($relativePath);
-                    } else {
-                        // Fallback: try to construct from media attributes
-                        $fileName = $media->file_name ?? '';
-                        if ($fileName) {
-                            $relativePath = 'storage/' . $media->id . '/' . $fileName;
-                            $backgroundImage = asset($relativePath);
-                        } else {
-                            // Last resort: use getUrl() but convert to relative
-                            $fullUrl = $media->getUrl();
-                            // Extract path from URL
-                            if (preg_match('#/storage/(.+)$#', $fullUrl, $matches)) {
-                                $relativePath = 'storage/' . $matches[1];
-                                $backgroundImage = asset($relativePath);
-                            } else {
-                                $backgroundImage = $fullUrl;
-                            }
-                        }
-                    }
-                }
+                $backgroundImage = $section->getWebPMediaUrl('background_image', 'large');
             }
         } catch (\Exception $e) {
             \Log::error('Parallax section: Failed to get background_image media', [
@@ -82,23 +53,7 @@
         // Fallback to images collection
         if (!$backgroundImage && $section->hasMedia('images')) {
             try {
-                $media = $section->getFirstMedia('images');
-                if ($media) {
-                    $mediaPath = $media->getPath();
-                    if ($mediaPath && str_contains($mediaPath, 'storage/app/public/')) {
-                        $relativePath = 'storage/' . substr($mediaPath, strpos($mediaPath, 'storage/app/public/') + strlen('storage/app/public/'));
-                        $backgroundImage = asset($relativePath);
-                    } else {
-                        // Fallback to constructing from media attributes
-                        $fileName = $media->file_name ?? '';
-                        if ($fileName) {
-                            $relativePath = 'storage/' . $media->id . '/' . $fileName;
-                            $backgroundImage = asset($relativePath);
-                        } else {
-                            $backgroundImage = $media->getUrl();
-                        }
-                    }
-                }
+                $backgroundImage = $section->getWebPMediaUrl('images', 'large');
             } catch (\Exception $e) {
                 // Silently continue
             }
