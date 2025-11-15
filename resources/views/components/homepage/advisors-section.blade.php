@@ -4,7 +4,7 @@
         <!-- Section Header -->
         <div class="flex flex-col gap-6 text-center mb-14">
             <p class="text-xs font-semibold uppercase tracking-[0.5em] text-white/50">Leadership</p>
-            <h2 class="text-3xl font-bold md:text-4xl lg:text-5xl">Advisors & Board of Governors</h2>
+            <h2 class="text-3xl font-bold md:text-4xl lg:text-5xl text-white">Advisors & Board of Governors</h2>
             <p class="mx-auto max-w-3xl text-white/70 leading-relaxed">Distinguished scholars, Cambridge examiners, and community leaders steward our Islamic ethos and academic rigor.</p>
         </div>
 
@@ -73,15 +73,9 @@
                     <h3 class="mt-6 text-xl font-semibold text-white">{{ $member['name'] }}</h3>
 
                     <!-- Role Badge -->
-                    @if(!empty($member['accent_color']))
-                        <p class="mt-2 text-sm uppercase tracking-[0.3em] font-semibold advisor-title" style="color: {{ $member['accent_color'] }};">
-                            {{ $member['title'] }}
-                        </p>
-                    @else
-                        <p class="mt-2 text-sm uppercase tracking-[0.3em] text-aisd-gold font-semibold">
-                            {{ $member['title'] }}
-                        </p>
-                    @endif
+                    <p class="mt-2 text-sm uppercase tracking-[0.3em] text-aisd-gold font-semibold">
+                        {{ $member['title'] }}
+                    </p>
 
                     <!-- Bio -->
                     <p 
@@ -101,24 +95,13 @@
                     </p>
                     
                     @if(strlen($member['description']) > 100)
-                        @if(!empty($member['accent_color']))
-                            <button 
-                                @click="expanded = !expanded"
-                                class="mt-2 text-sm font-semibold advisor-read-more"
-                                style="color: {{ $member['accent_color'] }};"
-                            >
-                                <span x-show="!expanded">Read More</span>
-                                <span x-show="expanded">Show Less</span>
-                            </button>
-                        @else
-                            <button 
-                                @click="expanded = !expanded"
-                                class="mt-2 text-sm font-semibold text-aisd-gold"
-                            >
-                                <span x-show="!expanded">Read More</span>
-                                <span x-show="expanded">Show Less</span>
-                            </button>
-                        @endif
+                        <button 
+                            @click="expanded = !expanded"
+                            class="mt-2 text-sm font-semibold text-aisd-gold"
+                        >
+                            <span x-show="!expanded">Read More</span>
+                            <span x-show="expanded">Show Less</span>
+                        </button>
                     @endif
 
                     <!-- Social Links -->
@@ -153,11 +136,4 @@
             @endforeach
         </div>
     </div>
-    
-    <style>
-        .advisor-title,
-        .advisor-read-more {
-            color: inherit !important;
-        }
-    </style>
 </section>
