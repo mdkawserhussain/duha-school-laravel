@@ -167,10 +167,10 @@
             <div class="flex-shrink-0" style="margin: 0; padding: 0;">
                 <a href="{{ route('home') }}" class="flex items-center group transition-transform duration-200 hover:scale-105">
                     @php
-                        $logoUrl = \App\Models\SiteSettings::getLogoUrl();
-                        $siteName = \App\Helpers\SiteHelper::getSiteName();
+                        $logoUrl = \App\Helpers\SiteSettingsHelper::logoUrl();
+                        $siteName = \App\Helpers\SiteSettingsHelper::websiteName();
                     @endphp
-                    <img class="h-12 w-auto transition-transform duration-200 group-hover:rotate-3" src="{{ $logoUrl }}" alt="{{ $siteName }} Logo" onerror="this.onerror=null; this.src='{{ asset('images/logo.svg') }}'">
+                    <img class="h-12 w-auto transition-transform duration-200 group-hover:rotate-3" src="{{ $logoUrl ?? asset('images/logo.svg') }}" alt="{{ $siteName }} Logo" onerror="this.onerror=null; this.src='{{ asset('images/logo.svg') }}'">
                 </a>
             </div>
             

@@ -1,5 +1,5 @@
 @props([
-    'title' => 'Welcome to {{ $siteName ?? \App\Helpers\SiteHelper::getSiteName() }}',
+    'title' => 'Welcome to ' . \App\Helpers\SiteSettingsHelper::websiteName(),
     'description' => 'Providing quality Islamic and Cambridge curriculum education for students from Kindergarten to Grade 12',
     'primaryButton' => ['text' => 'Admission Going On', 'url' => null, 'route' => 'admission.index'],
     'secondaryButton' => ['text' => 'View Events', 'url' => null, 'route' => 'events.index'],
