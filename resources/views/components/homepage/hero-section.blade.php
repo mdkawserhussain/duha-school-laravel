@@ -63,22 +63,42 @@
 
 @if($heroSlide && $heroSlide->is_active)
 <section class="relative min-h-screen flex items-center overflow-hidden bg-aisd-midnight hero-section" style="margin-top: 0 !important; padding-top: 0 !important;">
-    <!-- Background Video Container - Using HTML5 Video -->
+    <!-- Background Video Container - Handle both direct video URLs and YouTube URLs -->
     <div class="absolute inset-0 w-full h-full overflow-hidden" style="top: 0; left: 0; right: 0; bottom: 0;">
-        <video 
-            id="hero-bg-video"
-            class="absolute w-full h-full"
-            style="object-fit: cover; width: 100%; height: 100%; position: absolute; top: 0; left: 0; min-width: 100%; min-height: 100%;"
-            autoplay 
-            muted 
-            loop 
-            playsinline
-            poster="{{ $videoPoster }}">
-            @if($videoUrl)
-            <source src="{{ $videoUrl }}" type="video/mp4">
-            @endif
-            Your browser does not support the video tag.
-        </video>
+        @php
+            // Check if it's a YouTube URL
+            $isYouTube = preg_match('/^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/', $videoUrl, $matches);
+            $youtubeId = $isYouTube && isset($matches[1]) ? $matches[1] : null;
+        @endphp
+        
+        @if($youtubeId)
+            <!-- YouTube Video Embed -->
+            <iframe 
+                id="hero-bg-video"
+                class="absolute w-full h-full"
+                style="object-fit: cover; width: 100%; height: 100%; position: absolute; top: 0; left: 0; min-width: 100%; min-height: 100%; border: none;"
+                src="https://www.youtube.com/embed/{{ $youtubeId }}?autoplay=1&mute=1&loop=1&playlist={{ $youtubeId }}&controls=0&showinfo=0&rel=0&modestbranding=1"
+                allow="autoplay; encrypted-media"
+                allowfullscreen
+                frameborder="0">
+            </iframe>
+        @else
+            <!-- Direct Video File -->
+            <video 
+                id="hero-bg-video"
+                class="absolute w-full h-full"
+                style="object-fit: cover; width: 100%; height: 100%; position: absolute; top: 0; left: 0; min-width: 100%; min-height: 100%;"
+                autoplay 
+                muted 
+                loop 
+                playsinline
+                poster="{{ $videoPoster }}">
+                @if($videoUrl)
+                <source src="{{ $videoUrl }}" type="video/mp4">
+                @endif
+                Your browser does not support the video tag.
+            </video>
+        @endif
     </div>
     
     <!-- Dark overlay for text readability -->
@@ -88,10 +108,39 @@
     <div class="absolute inset-0 opacity-15" style="top: 0; left: 0; right: 0; bottom: 0; background-image:url('data:image/svg+xml,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;120&quot; height=&quot;120&quot; viewBox=&quot;0 0 120 120&quot;><g fill=&quot;none&quot; fill-rule=&quot;evenodd&quot; opacity=&quot;.25&quot;><path d=&quot;M60 0l60 60-60 60L0 60z&quot; stroke=&quot;%23F4C430&quot; stroke-width=&quot;0.5&quot; opacity=&quot;.3&quot;/></g></svg>');"></div>
 
     <div class="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16 md:pb-20 lg:pb-24" 
-         x-data="{ scrolled: false, hasAnnouncement: {{ $announcements->isNotEmpty() ? 'true' : 'false' }} }"
-         x-init="window.addEventListener('scroll', () => { scrolled = window.pageYOffset > 50; })"
-         :style="hasAnnouncement && !scrolled ? 'padding-top: calc(5rem + var(--announcement-height, 2.5rem));' : 'padding-top: 5rem;'"
-         style="padding-top: calc(5rem + var(--announcement-height, 0)) !important;">
+         x-data="{ scrolled: false, hasAnnouncement: {{ $announcements->isNotEmpty() ? 'true' : 'false' }}, announcementHeight: 0 }"
+         x-init="
+             console.log('[HERO CONTAINER] Initialized');
+             const container = $el;
+             
+             // Get actual announcement bar height
+             const announcementBar = document.getElementById('announcement-bar');
+             if (announcementBar && hasAnnouncement) {
+                 const updateHeight = () => {
+                     announcementHeight = announcementBar.offsetHeight;
+                     console.log('[HERO CONTAINER] Announcement height updated:', announcementHeight);
+                 };
+                 
+                 updateHeight();
+                 
+                 const resizeObserver = new ResizeObserver(() => {
+                     updateHeight();
+                 });
+                 resizeObserver.observe(announcementBar);
+                 
+                 window.addEventListener('scroll', () => { 
+                     scrolled = window.pageYOffset > 50;
+                 });
+             } else {
+                 window.addEventListener('scroll', () => { 
+                     scrolled = window.pageYOffset > 50;
+                 });
+             }
+             
+             console.log('[HERO CONTAINER] Setup complete');
+         "
+         :style="hasAnnouncement && !scrolled ? 'padding-top: calc(5rem + ' + (announcementHeight || 0) + 'px);' : 'padding-top: 5rem;'"
+         style="padding-top: 5rem !important; margin-top: 0 !important;">
         <div class="grid lg:grid-cols-[1.1fr_0.9fr] gap-16 items-center">
             <!-- Text content - Left side -->
             <div class="text-white space-y-8">
@@ -200,10 +249,17 @@
     document.addEventListener('DOMContentLoaded', function() {
         var video = document.getElementById('hero-bg-video');
         if (video) {
-            video.muted = true;
-            video.play().catch(function(error) {
-                console.log('Video autoplay prevented:', error);
-            });
+            // Check if it's an iframe (YouTube embed)
+            if (video.tagName === 'IFRAME') {
+                // YouTube embeds handle autoplay automatically with the URL parameters
+                console.log('YouTube video embed detected');
+            } else {
+                // HTML5 video element
+                video.muted = true;
+                video.play().catch(function(error) {
+                    console.log('Video autoplay prevented:', error);
+                });
+            }
         }
     });
 </script>

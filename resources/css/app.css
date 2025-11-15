@@ -1317,20 +1317,21 @@
 }
 
 /* Adjust header positioning when announcement bar is present */
+/* NOTE: Top position is set dynamically via JavaScript - do not override with !important */
 .announcement-bar + header,
 header.header-with-announcement {
-    top: var(--announcement-height, 2.5rem) !important;
     position: sticky !important;
     margin-top: 0 !important;
     margin-bottom: 0 !important;
     padding-top: 0 !important;
     padding-bottom: 0 !important;
+    /* Top is set via inline style in JavaScript - don't override */
 }
 
 /* When announcement bar is hidden (scrolled), header moves to top */
 .announcement-bar.hidden + header,
 body:has(.announcement-bar.hidden) header.header-with-announcement {
-    top: 0 !important;
+    /* Top is set via inline style in JavaScript - don't override */
 }
 
 /* Navbar transparent state (for homepage hero) */
