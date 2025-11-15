@@ -1103,6 +1103,42 @@
         border-radius: 0.5rem;
     }
 
+    /* Navbar/Header Flex Layout Fixes */
+    .navbar .flex-1,
+    header .flex-1,
+    nav .flex-1 {
+        flex: 1 1 0%;
+        min-width: 0;
+    }
+
+    /* Ensure navigation items are properly centered */
+    .navbar .hidden.lg\:flex.flex-1,
+    header .hidden.lg\:flex.flex-1,
+    nav .hidden.lg\:flex.flex-1 {
+        display: flex !important;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Grid Layout for Header - Ensures proper three-column layout */
+    header nav .grid-cols-3 {
+        grid-template-columns: 1fr auto 1fr !important;
+    }
+
+    /* Ensure navigation is centered in grid */
+    header nav .grid-cols-3 > div:nth-child(2) {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Ensure right side aligns to end */
+    header nav .grid-cols-3 > div:nth-child(3) {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
     /* Responsive Design */
     @media (max-width: 1023px) {
         .navbar {

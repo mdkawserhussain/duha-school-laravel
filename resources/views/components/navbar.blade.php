@@ -2,13 +2,7 @@
 {{-- Enhanced Navbar Component with Alpine.js --}}
 @props(['transparent' => false])
 
-@php
-$currentLocale = app()->getLocale();
-$locales = [
-    'en' => ['name' => 'English', 'flag' => '🇬🇧'],
-    'bn' => ['name' => 'বাংলা', 'flag' => '🇧🇩'],
-];
-@endphp
+{{-- Locale variables removed as language switcher is no longer needed --}}
 
 <nav
     x-data="navbarComponent({{ $transparent ? 'true' : 'false' }})"
@@ -79,7 +73,7 @@ $locales = [
         <div class="flex items-center h-16 lg:h-20 transition-all duration-300 relative">
 
             {{-- Logo --}}
-            <div class="flex-shrink-0 absolute left-4 sm:left-6 lg:left-8">
+            <div class="flex-shrink-0 z-10">
                 <a
                     href="{{ route('home') }}"
                     class="navbar-logo navbar-focus focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 rounded-lg p-1"
@@ -99,7 +93,7 @@ $locales = [
             </div>
 
             {{-- Desktop Navigation - Centered --}}
-            <div class="hidden lg:flex items-center space-x-1 flex-1 justify-center mx-auto">
+            <div class="hidden lg:flex items-center space-x-1 flex-1 justify-center min-w-0 px-4">
                 {{-- Home --}}
                 <a
                     href="{{ route('home') }}"
@@ -320,7 +314,7 @@ $locales = [
             </div>
 
             {{-- Right Side --}}
-            <div class="hidden lg:flex items-center space-x-3 absolute right-4 sm:right-6 lg:right-8">
+            <div class="hidden lg:flex items-center space-x-3 flex-shrink-0 z-10">
                 {{-- Search --}}
                 <div class="relative" x-data="searchComponent()">
                     <button
@@ -436,88 +430,23 @@ $locales = [
                     </div>
                 </div>
 
-                {{-- Language Switcher --}}
-                <div class="relative" x-data="{ open: false }">
-                    <button
-                        @click="open = !open"
-                        @keydown.escape="open = false"
-                        class="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2"
-                        :class="transparent && !scrolled ? 'text-white/90 hover:text-white hover:bg-white/10 focus:ring-white/50' : 'text-gray-600 hover:text-indigo-600 hover:bg-indigo-50 focus:ring-indigo-500'"
-                        :aria-expanded="open"
-                        aria-label="Change language"
-                    >
-                        <span class="text-lg">{{ $locales[$currentLocale]['flag'] ?? '🌐' }}</span>
-                        <span class="hidden sm:inline">{{ $locales[$currentLocale]['name'] ?? strtoupper($currentLocale) }}</span>
-                        <svg class="h-4 w-4 transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                        </svg>
-                    </button>
-
-                    <div
-                        x-show="open"
-                        @click.away="open = false"
-                        class="language-dropdown"
-                        :class="{ 'open': open }"
-                        style="display: none;"
-                    >
-                        <div class="p-2">
-                            @foreach($locales as $code => $locale)
-                                <a
-                                    href="{{ route('language.switch', $code) }}"
-                                    class="language-option"
-                                    :class="{ 'active': '{{ $currentLocale }}' === '{{ $code }}' }"
-                                    @click="open = false"
-                                >
-                                    <span class="text-xl" x-text="'{{ $locale['flag'] }}'"></span>
-                                    <span x-text="'{{ $locale['name'] }}'"></span>
-                                    @if($currentLocale === $code)
-                                        <svg class="h-4 w-4 ml-auto text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                        </svg>
-                                    @endif
-                                </a>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Auth Links --}}
+                {{-- Logout Button (only for logged-in users) --}}
                 @auth
-                    <a
-                        href="{{ url('/admin') }}"
-                        class="px-4 py-2 rounded-xl text-sm font-medium text-gray-600 hover:text-indigo-600 hover:bg-indigo-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    >
-                        Admin
-                    </a>
                     <form method="POST" action="{{ route('logout') }}" class="inline">
                         @csrf
                         <button
                             type="submit"
-                            class="px-4 py-2 rounded-xl text-sm font-medium text-gray-600 hover:text-indigo-600 hover:bg-indigo-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                            class="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                            :class="transparent && !scrolled ? 'text-white/90 hover:text-white hover:bg-white/10' : 'text-gray-600 hover:text-indigo-600 hover:bg-indigo-50'"
                         >
                             Logout
                         </button>
                     </form>
-                @else
-                    <a
-                        href="{{ route('login') }}"
-                        class="px-4 py-2 rounded-xl text-sm font-medium text-gray-600 hover:text-indigo-600 hover:bg-indigo-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    >
-                        Login
-                    </a>
-                    @if (Route::has('register'))
-                        <a
-                            href="{{ route('register') }}"
-                            class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                        >
-                            Register
-                        </a>
-                    @endif
                 @endauth
             </div>
 
             {{-- Mobile Menu Button --}}
-            <div class="lg:hidden">
+            <div class="lg:hidden flex-shrink-0 ml-auto z-10">
                 <button
                     @click="mobileMenuOpen = !mobileMenuOpen"
                     class="inline-flex items-center justify-center p-2 rounded-xl text-gray-600 hover:text-indigo-600 hover:bg-indigo-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
@@ -713,44 +642,10 @@ $locales = [
                         Search
                     </button>
 
-                    {{-- Mobile Language Switcher --}}
-                    <div class="px-4 py-3 border-t border-gray-200 mt-4">
-                        <div class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Language</div>
-                        <div class="space-y-2">
-                            @foreach($locales as $code => $locale)
-                                <a
-                                    href="{{ route('language.switch', $code) }}"
-                                    @click="mobileMenuOpen = false"
-                                    class="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-xl transition-all duration-200"
-                                    :class="{ 'bg-indigo-100 text-indigo-700 font-semibold': '{{ $currentLocale }}' === '{{ $code }}' }"
-                                >
-                                    <span class="text-xl">{{ $locale['flag'] }}</span>
-                                    <span>{{ $locale['name'] }}</span>
-                                    @if($currentLocale === $code)
-                                        <svg class="h-4 w-4 ml-auto text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                                        </svg>
-                                    @endif
-                                </a>
-                            @endforeach
-                        </div>
-                    </div>
-
-                    {{-- Mobile Auth --}}
-                    <div class="px-4 py-3 border-t border-gray-200">
-                        @auth
-                            <a
-                                href="{{ url('/admin') }}"
-                                @click="mobileMenuOpen = false"
-                                class="flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-all duration-200"
-                            >
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                </svg>
-                                Admin
-                            </a>
-                            <form method="POST" action="{{ route('logout') }}" class="mt-2">
+                    {{-- Mobile Logout (only for logged-in users) --}}
+                    @auth
+                        <div class="px-4 py-3 border-t border-gray-200">
+                            <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <button
                                     type="submit"
@@ -762,31 +657,8 @@ $locales = [
                                     Logout
                                 </button>
                             </form>
-                        @else
-                            <a
-                                href="{{ route('login') }}"
-                                @click="mobileMenuOpen = false"
-                                class="flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-all duration-200"
-                            >
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-                                </svg>
-                                Login
-                            </a>
-                            @if (Route::has('register'))
-                                <a
-                                    href="{{ route('register') }}"
-                                    @click="mobileMenuOpen = false"
-                                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium bg-gradient-to-r from-indigo-600 to-purple-600 text-white transition-all duration-200 mt-2"
-                                >
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
-                                    </svg>
-                                    Register
-                                </a>
-                            @endif
-                        @endauth
-                    </div>
+                        </div>
+                    @endauth
                 </nav>
             </div>
         </div>
