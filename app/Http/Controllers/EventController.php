@@ -39,22 +39,18 @@ class EventController extends Controller
             ->header('Cache-Control', 'public, max-age=1800');
     }
 
-    public function show($id)
+    public function show(\App\Models\Event $event)
     {
-        $event = $this->eventService->findPublishedEvent($id);
-
-        if (!$event) {
+        if (!$event->is_published || $event->published_at > now()) {
             abort(404);
         }
 
         return view('pages.events.show', compact('event'));
     }
 
-    public function exportIcs($id)
+    public function exportIcs(\App\Models\Event $event)
     {
-        $event = $this->eventService->findPublishedEvent($id);
-
-        if (!$event) {
+        if (!$event->is_published || $event->published_at > now()) {
             abort(404);
         }
 

@@ -45,7 +45,7 @@
 
         @php
             // Use dynamic events from the controller if available, otherwise fetch upcoming events
-            $events = $upcomingEvents ?? \App\Models\Event::published()->upcoming()->orderBy('event_date', 'asc')->limit(3)->get();
+            $events = $upcomingEvents ?? \App\Models\Event::with('media')->published()->upcoming()->orderBy('event_date', 'asc')->limit(3)->get();
             
             // Define category colors
             $categoryColors = [

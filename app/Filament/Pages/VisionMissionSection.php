@@ -42,6 +42,185 @@ class VisionMissionSection extends Page implements HasForms
         return 'Vision & Mission Section';
     }
 
+    public function mount(): void
+    {
+        $section = \App\Models\HomePageSection::where('section_key', $this->getSectionKey())->first();
+
+        if ($section) {
+            // Merge section data with standard fields for statePath('data') forms
+            $this->data = array_merge([
+                'title' => $section->title,
+                'subtitle' => $section->subtitle,
+                'description' => $section->description,
+                'content' => $section->content,
+                'button_text' => $section->button_text,
+                'button_link' => $section->button_link,
+                'is_active' => $section->is_active,
+                'sort_order' => $section->sort_order,
+            ], $section->data ?? []);
+            
+            // Load existing campus image if available
+            if ($section->hasMedia('images')) {
+                $this->data['campus_image'] = $section->getFirstMediaUrl('images');
+            }
+        } else {
+            $this->data = [
+                'title' => null,
+                'subtitle' => null,
+                'description' => null,
+                'content' => null,
+                'button_text' => null,
+                'button_link' => null,
+                'is_active' => true,
+                'sort_order' => 0,
+            ];
+        }
+
+        $this->form->fill($this->data);
+    }
+
+    public function save(): void
+    {
+        $data = $this->form->getState();
+        $formState = $this->form->getRawState();
+
+        $sectionKey = $this->getSectionKey();
+        $sectionType = $this->getSectionType();
+        
+        $section = \App\Models\HomePageSection::where('section_key', $sectionKey)->first();
+
+        if (!$section) {
+            $section = new \App\Models\HomePageSection();
+            $section->section_key = $sectionKey;
+            $section->section_type = $sectionType;
+            $section->is_active = true;
+            $section->sort_order = 0;
+        }
+
+        // Extract standard fields
+        $section->title = $data['title'] ?? null;
+        $section->subtitle = $data['subtitle'] ?? null;
+        $section->description = $data['description'] ?? null;
+        $section->content = $data['content'] ?? null;
+        $section->button_text = $data['button_text'] ?? null;
+        $section->button_link = $data['button_link'] ?? null;
+        $section->is_active = $data['is_active'] ?? true;
+        $section->sort_order = $data['sort_order'] ?? 0;
+        
+        // Everything else goes into data
+        $sectionData = array_diff_key($data, [
+            'title' => true,
+            'subtitle' => true,
+            'description' => true,
+            'content' => true,
+            'button_text' => true,
+            'button_link' => true,
+            'is_active' => true,
+            'sort_order' => true,
+            'campus_image' => true, // Exclude campus_image from data JSON
+        ]);
+        
+        $section->data = $sectionData;
+        $section->section_key = $sectionKey;
+        $section->section_type = $sectionType;
+        
+        $section->save();
+
+        // Handle campus image upload specifically
+        $campusImageData = $formState['campus_image'] ?? null;
+        
+        if ($campusImageData) {
+            // Clear existing images when new ones are uploaded
+            $section->clearMediaCollection('images');
+            
+            // Handle array of images (if multiple uploads)
+            if (is_array($campusImageData)) {
+                foreach ($campusImageData as $imagePath) {
+                    if (!empty($imagePath)) {
+                        $this->processImageUpload($section, $imagePath);
+                    }
+                }
+            } 
+            // Handle single image string
+            elseif (is_string($campusImageData) && !empty($campusImageData)) {
+                $this->processImageUpload($section, $campusImageData);
+            }
+            
+            // Reload section to get fresh media relationship
+            $section->refresh();
+        }
+
+        // Clear cache
+        \Illuminate\Support\Facades\Cache::forget('homepage_v2_data');
+        \Illuminate\Support\Facades\Artisan::call('view:clear');
+
+        \Filament\Notifications\Notification::make()
+            ->title('Section saved successfully')
+            ->success()
+            ->send();
+    }
+
+    protected function processImageUpload(\App\Models\HomePageSection $section, string $imagePath): void
+    {
+        if (filter_var($imagePath, FILTER_VALIDATE_URL)) {
+            return;
+        }
+
+        $added = false;
+
+        // Handle Livewire temporary files
+        if (str_starts_with($imagePath, 'livewire-tmp/')) {
+            $fullPath = storage_path('app/public/' . $imagePath);
+            if (file_exists($fullPath) && is_file($fullPath)) {
+                try {
+                    $section->addMedia($fullPath)->toMediaCollection('images');
+                    $added = true;
+                } catch (\Exception $e) {
+                    \Log::error('Failed to add media from livewire-tmp: ' . $e->getMessage());
+                }
+            }
+            
+            if (!$added && \Illuminate\Support\Facades\Storage::disk('public')->exists($imagePath)) {
+                try {
+                    $section->addMediaFromDisk($imagePath, 'public')->toMediaCollection('images');
+                    $added = true;
+                } catch (\Exception $e) {
+                    \Log::error('Failed to add media from disk: ' . $e->getMessage());
+                }
+            }
+        } else {
+            // Handle files in vision-section directory or other paths
+            $possiblePaths = [
+                storage_path('app/public/' . $imagePath),
+                storage_path('app/public/vision-section/' . basename($imagePath)),
+                storage_path('app/' . $imagePath),
+                public_path('storage/' . $imagePath),
+                $imagePath,
+            ];
+            
+            foreach ($possiblePaths as $testPath) {
+                if (file_exists($testPath) && is_file($testPath)) {
+                    try {
+                        $section->addMedia($testPath)->toMediaCollection('images');
+                        $added = true;
+                        break;
+                    } catch (\Exception $e) {
+                        continue;
+                    }
+                }
+            }
+            
+            if (!$added && \Illuminate\Support\Facades\Storage::disk('public')->exists($imagePath)) {
+                try {
+                    $section->addMediaFromDisk($imagePath, 'public')->toMediaCollection('images');
+                    $added = true;
+                } catch (\Exception $e) {
+                    \Log::error('Failed to add media from storage disk: ' . $e->getMessage());
+                }
+            }
+        }
+    }
+
     public function form(Schema $schema): Schema
     {
         return $schema

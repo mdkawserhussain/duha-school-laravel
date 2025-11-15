@@ -142,7 +142,7 @@
                     <div class="bg-white border border-gray-200 rounded-lg p-6 mb-6">
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">Share This Event</h3>
                         <x-social-share 
-                            :url="route('events.show', $event->slug)"
+                            :url="route('events.show', $event)"
                             :title="$event->title"
                             :description="Str::limit(strip_tags($event->excerpt ?? ''), 160)"
                             :image="$event->getFirstMediaUrl('featured_image')"
