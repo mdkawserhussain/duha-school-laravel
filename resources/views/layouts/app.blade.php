@@ -6,30 +6,60 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         @php
-            $siteName = \App\Helpers\SiteHelper::getSiteName();
-            $siteDescription = \App\Helpers\SiteHelper::getSiteDescription();
+            $settings = \App\Helpers\SiteSettingsHelper::all();
+            $siteName = \App\Helpers\SiteSettingsHelper::websiteName();
+            $siteDescription = \App\Helpers\SiteSettingsHelper::websiteDescription();
+            $metaTitle = \App\Helpers\SiteSettingsHelper::metaTitle();
+            $metaDescription = \App\Helpers\SiteSettingsHelper::metaDescription();
+            $metaKeywords = \App\Helpers\SiteSettingsHelper::metaKeywords();
+            $ogTitle = \App\Helpers\SiteSettingsHelper::ogTitle();
+            $ogDescription = \App\Helpers\SiteSettingsHelper::ogDescription();
+            $ogImageUrl = \App\Helpers\SiteSettingsHelper::ogImageUrl();
+            $canonicalUrl = \App\Helpers\SiteSettingsHelper::canonicalUrl();
+            $faviconUrl = \App\Helpers\SiteSettingsHelper::faviconUrl();
+            $primaryColor = \App\Helpers\SiteSettingsHelper::primaryColor();
+            $secondaryColor = \App\Helpers\SiteSettingsHelper::secondaryColor();
+            $accentColor = \App\Helpers\SiteSettingsHelper::accentColor();
+            $customCss = \App\Helpers\SiteSettingsHelper::customCss();
+            $customJs = \App\Helpers\SiteSettingsHelper::customJs();
+            $googleAnalyticsId = \App\Helpers\SiteSettingsHelper::googleAnalyticsId();
         @endphp
-        <title>@yield('title', $siteName)</title>
+        <title>@yield('title', $metaTitle ?? $siteName)</title>
         
         @hasSection('meta-description')
             <meta name="description" content="@yield('meta-description')">
+        @elseif($metaDescription)
+            <meta name="description" content="{{ $metaDescription }}">
         @else
-            <meta name="description" content="{{ $siteName }} - {{ $siteDescription }}">
+            <meta name="description" content="{{ $siteName }} - {{ $siteDescription ?? 'Excellence in Islamic Education' }}">
         @endif
 
         @hasSection('meta-keywords')
             <meta name="keywords" content="@yield('meta-keywords')">
+        @elseif($metaKeywords)
+            <meta name="keywords" content="{{ $metaKeywords }}">
+        @endif
+
+        <!-- Favicon -->
+        @if($faviconUrl)
+            <link rel="icon" href="{{ $faviconUrl }}">
         @endif
 
         <!-- Open Graph / Facebook -->
         <meta property="og:type" content="website">
-        <meta property="og:url" content="{{ url()->current() }}">
-        <meta property="og:title" content="@yield('title', $siteName)">
+        <meta property="og:url" content="{{ $canonicalUrl ?? url()->current() }}">
+        <meta property="og:title" content="@yield('title', $ogTitle ?? $metaTitle ?? $siteName)">
         @hasSection('meta-description')
             <meta property="og:description" content="@yield('meta-description')">
+        @elseif($ogDescription)
+            <meta property="og:description" content="{{ $ogDescription }}">
+        @elseif($metaDescription)
+            <meta property="og:description" content="{{ $metaDescription }}">
         @endif
         @hasSection('og-image')
             <meta property="og:image" content="@yield('og-image')">
+        @elseif($ogImageUrl)
+            <meta property="og:image" content="{{ $ogImageUrl }}">
         @else
             <meta property="og:image" content="{{ asset('images/og-default.jpg') }}">
         @endif
@@ -37,17 +67,37 @@
 
         <!-- Twitter -->
         <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:url" content="{{ url()->current() }}">
-        <meta name="twitter:title" content="@yield('title', $siteName)">
+        <meta name="twitter:url" content="{{ $canonicalUrl ?? url()->current() }}">
+        <meta name="twitter:title" content="@yield('title', $ogTitle ?? $metaTitle ?? $siteName)">
         @hasSection('meta-description')
             <meta name="twitter:description" content="@yield('meta-description')">
+        @elseif($ogDescription)
+            <meta name="twitter:description" content="{{ $ogDescription }}">
+        @elseif($metaDescription)
+            <meta name="twitter:description" content="{{ $metaDescription }}">
         @endif
         @hasSection('og-image')
             <meta name="twitter:image" content="@yield('og-image')">
+        @elseif($ogImageUrl)
+            <meta name="twitter:image" content="{{ $ogImageUrl }}">
         @endif
 
         <!-- Canonical URL -->
-        <link rel="canonical" href="{{ url()->current() }}">
+        <link rel="canonical" href="{{ $canonicalUrl ?? url()->current() }}">
+
+        <!-- Theme Colors as CSS Variables -->
+        <style>
+            :root {
+                --color-primary: {{ $primaryColor }};
+                --color-secondary: {{ $secondaryColor }};
+                --color-accent: {{ $accentColor }};
+            }
+        </style>
+
+        <!-- Custom CSS -->
+        @if($customCss)
+            <style>{!! $customCss !!}</style>
+        @endif
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -55,7 +105,16 @@
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
         <!-- Google Analytics -->
-        @if(config('services.google_analytics.id'))
+        @if($googleAnalyticsId)
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ $googleAnalyticsId }}"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '{{ $googleAnalyticsId }}');
+        </script>
+        @elseif(config('services.google_analytics.id'))
         <!-- Google tag (gtag.js) -->
         <script async src="https://www.googletagmanager.com/gtag/js?id={{ config('services.google_analytics.id') }}"></script>
         <script>
@@ -209,5 +268,10 @@
         </script>
         
         @stack('scripts')
+        
+        <!-- Custom JavaScript -->
+        @if($customJs ?? null)
+            <script>{!! $customJs !!}</script>
+        @endif
     </body>
 </html>

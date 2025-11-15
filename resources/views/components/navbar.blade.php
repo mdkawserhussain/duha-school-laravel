@@ -86,14 +86,12 @@ $locales = [
                     aria-label="Go to homepage"
                 >
                     @php
-                        $logoUrl = \App\Models\SiteSettings::getLogoUrl();
+                        $logoUrl = \App\Helpers\SiteSettingsHelper::logoUrl();
+                        $siteName = \App\Helpers\SiteSettingsHelper::websiteName();
                     @endphp
                     <img
                         class="h-10 lg:h-12 w-auto"
-                        src="{{ $logoUrl }}"
-                        @php
-                            $siteName = \App\Helpers\SiteHelper::getSiteName();
-                        @endphp
+                        src="{{ $logoUrl ?? asset('images/logo.svg') }}"
                         alt="{{ $siteName }} Logo"
                         onerror="this.onerror=null; this.src='{{ asset('images/logo.svg') }}'"
                     >

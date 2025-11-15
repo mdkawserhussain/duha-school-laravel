@@ -16,6 +16,9 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
         $middleware->append(\App\Http\Middleware\SecurityHeaders::class);
         $middleware->append(\App\Http\Middleware\SetLocale::class);
+        $middleware->web(append: [
+            \App\Http\Middleware\CheckMaintenanceMode::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         // Log all exceptions with detailed context

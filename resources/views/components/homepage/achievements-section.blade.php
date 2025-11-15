@@ -65,10 +65,10 @@
                     <h3 class="mt-4 text-2xl font-semibold text-white">{{ $achievement['title'] }}</h3>
                     <p class="mt-3 text-white leading-relaxed opacity-90">{{ $achievement['copy'] }}</p>
                     
-                    <!-- Learn More Link -->
-                    @if(!empty($achievement['link']))
+                    <!-- Call-to-Action Button -->
+                    @if(!empty($achievement['link']) && !empty($achievement['button_text']))
                     <a href="{{ $achievement['link'] }}" class="mt-6 flex items-center text-sm font-semibold transition-colors" style="color: #6EC1F5;">
-                        Learn More
+                        {{ $achievement['button_text'] }}
                         <svg class="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                         </svg>

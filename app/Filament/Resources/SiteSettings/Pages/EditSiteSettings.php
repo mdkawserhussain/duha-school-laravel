@@ -20,122 +20,123 @@ class EditSiteSettings extends EditRecord
 
     public function getSubheading(): ?string
     {
-        return 'Manage your site configuration, logo, and contact information';
-    }
-
-    protected function mutateFormDataBeforeFill(array $data): array
-    {
-        $settings = SiteSettings::first();
-        if ($settings && $settings->hasMedia('logo')) {
-            // Return empty array so Filament doesn't try to load the media URL as a file path
-            $data['logo'] = null;
-        }
-        return $data;
+        return 'Manage your site configuration, branding, contact information, SEO, and more';
     }
 
     protected function mutateFormDataBeforeSave(array $data): array
     {
-        // Store logo path before removing it
+        // Store file paths before removing them
         $this->logoPath = $data['logo'] ?? null;
-        // Also check for stored filename
-        $this->logoFilename = $data['logo_filename'] ?? null;
-        // Remove logo from data since we'll handle it manually
-        unset($data['logo']);
-        unset($data['logo_filename']);
+        $this->faviconPath = $data['favicon'] ?? null;
+        $this->ogImagePath = $data['og_image'] ?? null;
+        
+        // Remove files from data since we'll handle them manually
+        unset($data['logo'], $data['favicon'], $data['og_image']);
+        
         return $data;
     }
 
     protected $logoPath = null;
-    protected $logoFilename = null;
+    protected $faviconPath = null;
+    protected $ogImagePath = null;
 
     protected function afterSave(): void
     {
         $settings = $this->record;
         
-        // Get logo from form raw state (FileUpload stores it here when dehydrated=false)
-        try {
-            $formState = $this->form->getRawState();
-            $logo = $formState['logo'] ?? null;
-            
-            // Also check stored filename
-            if (!$logo) {
-                $logo = $formState['logo_filename'] ?? null;
-            }
-            
-            // Handle logo upload
-            if ($logo) {
-                // Clear existing logo
-                $settings->clearMediaCollection('logo');
-                
-                // Handle array of file paths
-                if (is_array($logo)) {
-                    $logo = !empty($logo[0]) ? $logo[0] : null;
-                }
-                
-                if ($logo && is_string($logo) && !filter_var($logo, FILTER_VALIDATE_URL)) {
-                    $added = false;
-                    
-                    // Try different path formats
-                    $possiblePaths = [];
-                    
-                    // Livewire temporary files
-                    if (str_starts_with($logo, 'livewire-tmp/')) {
-                        $possiblePaths[] = storage_path('app/public/' . $logo);
-                        $possiblePaths[] = $logo;
-                    } 
-                    // Files in logos directory
-                    else {
-                        if (str_starts_with($logo, 'logos/')) {
-                            $possiblePaths[] = storage_path('app/public/' . $logo);
-                            $possiblePaths[] = $logo;
-                        } else {
-                            $possiblePaths[] = storage_path('app/public/logos/' . $logo);
-                            $possiblePaths[] = storage_path('app/public/' . $logo);
-                            $possiblePaths[] = 'logos/' . $logo;
-                            $possiblePaths[] = $logo;
-                        }
-                    }
-                    
-                    // Try each path
-                    foreach ($possiblePaths as $testPath) {
-                        // Try direct file path
-                        if (is_string($testPath) && file_exists($testPath) && is_file($testPath)) {
-                            try {
-                                $settings->addMedia($testPath)->toMediaCollection('logo');
-                                $added = true;
-                                \Log::info('Successfully added logo from: ' . $testPath);
-                                break;
-                            } catch (\Exception $e) {
-                                \Log::debug('Failed to add media from path: ' . $testPath . ' - ' . $e->getMessage());
-                            }
-                        }
-                        
-                        // Try Storage disk
-                        if (!$added && is_string($testPath) && Storage::disk('public')->exists($testPath)) {
-                            try {
-                                $settings->addMediaFromDisk($testPath, 'public')->toMediaCollection('logo');
-                                $added = true;
-                                \Log::info('Successfully added logo from disk: ' . $testPath);
-                                break;
-                            } catch (\Exception $e) {
-                                \Log::debug('Failed to add media from disk: ' . $testPath . ' - ' . $e->getMessage());
-                            }
-                        }
-                    }
-                    
-                    if (!$added) {
-                        \Log::warning('Logo file not found. Attempted paths: ' . implode(', ', $possiblePaths));
-                    }
-                }
-            }
-        } catch (\Exception $e) {
-            \Log::error('Error handling logo upload: ' . $e->getMessage());
-        }
+        // Get file paths from form raw state if not already stored
+        $formState = $this->form->getRawState();
+        
+        // Handle logo upload
+        $this->handleMediaUpload($settings, $this->logoPath ?? $formState['logo'] ?? null, 'logo');
+        
+        // Handle favicon upload
+        $this->handleMediaUpload($settings, $this->faviconPath ?? $formState['favicon'] ?? null, 'favicon');
+        
+        // Handle OG image upload
+        $this->handleMediaUpload($settings, $this->ogImagePath ?? $formState['og_image'] ?? null, 'og_image');
+        
+        // Clear cache after saving
+        SiteSettings::clearCache();
 
         Notification::make()
             ->title('Settings saved successfully')
             ->success()
+            ->body('Site settings have been updated and cache has been cleared.')
             ->send();
+    }
+
+    protected function handleMediaUpload($settings, $filePath, string $collection): void
+    {
+        if (!$filePath) {
+            return;
+        }
+        
+        // Handle array of file paths
+        if (is_array($filePath)) {
+            $filePath = !empty($filePath[0]) ? $filePath[0] : null;
+        }
+        
+        if (!$filePath || !is_string($filePath)) {
+            return;
+        }
+        
+        // Skip if it's a URL (already uploaded)
+        if (filter_var($filePath, FILTER_VALIDATE_URL)) {
+            return;
+        }
+        
+        // Clear existing media in collection
+        $settings->clearMediaCollection($collection);
+        
+        $added = false;
+        
+        // Handle Livewire temporary files
+        if (str_starts_with($filePath, 'livewire-tmp/')) {
+            if (Storage::disk('public')->exists($filePath)) {
+                try {
+                    $settings->addMediaFromDisk($filePath, 'public')
+                        ->toMediaCollection($collection);
+                    $added = true;
+                } catch (\Exception $e) {
+                    // Try alternative method
+                }
+            }
+        }
+        
+        // If not added yet, try different path formats
+        if (!$added) {
+            $paths = [
+                storage_path('app/public/' . $filePath),
+                storage_path('app/' . $filePath),
+                public_path('storage/' . $filePath),
+                $filePath,
+            ];
+            
+            foreach ($paths as $path) {
+                if (file_exists($path) && is_file($path)) {
+                    try {
+                        $settings->addMedia($path)
+                            ->toMediaCollection($collection);
+                        $added = true;
+                        break;
+                    } catch (\Exception $e) {
+                        continue;
+                    }
+                }
+            }
+        }
+        
+        // If file exists in storage disk
+        if (!$added && Storage::disk('public')->exists($filePath)) {
+            try {
+                $settings->addMediaFromDisk($filePath, 'public')
+                    ->toMediaCollection($collection);
+                $added = true;
+            } catch (\Exception $e) {
+                // Log error but don't fail
+            }
+        }
     }
 
     protected function getHeaderActions(): array

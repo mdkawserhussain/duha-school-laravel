@@ -96,6 +96,19 @@ class AchievementsSection extends Page implements HasForms
                                     ->rows(3)
                                     ->placeholder('M9 12l2 2 4-4M7.835 4.697a3.42...')
                                     ->helperText('SVG path data for the icon'),
+                                
+                                FormComponents\TextInput::make('button_text')
+                                    ->label('Button Text (Optional)')
+                                    ->maxLength(50)
+                                    ->placeholder('e.g., Learn More, View Details, Read More')
+                                    ->helperText('Leave empty to hide the call-to-action button'),
+                                
+                                FormComponents\TextInput::make('link')
+                                    ->label('Button Link (Optional)')
+                                    ->url()
+                                    ->maxLength(500)
+                                    ->placeholder('https://example.com/page or /about')
+                                    ->helperText('Internal link (e.g., /about) or external URL (e.g., https://example.com)'),
                             ])
                             ->defaultItems(4)
                             ->minItems(1)
