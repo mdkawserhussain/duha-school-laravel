@@ -24,9 +24,9 @@
 @endphp
 
 @if($announcements->isNotEmpty())
-<div class="announcement-bar text-white text-sm overflow-hidden" 
+<div class="announcement-bar text-white text-sm overflow-hidden backdrop-blur-md" 
      id="announcement-bar" 
-     style="position: fixed; top: 0; left: 0; right: 0; z-index: 60; width: 100%; margin: 0; padding: 0.5rem 0; background: {{ $primaryColor }} !important;"
+     style="position: fixed; top: 0; left: 0; right: 0; z-index: 60; width: 100%; margin: 0 !important; padding: 0.5rem 0 !important; background: rgba(0, 0, 0, 0.2) !important;"
      x-data="{ scrolled: false }"
      x-init="
          const announcementBar = $el;
@@ -64,11 +64,14 @@
 
 <!-- Main Navigation Bar -->
 <header 
-    class="sticky top-0 z-50 w-full transition-all duration-300"
+    class="fixed top-0 left-0 w-full z-50 transition-all duration-300"
+    :class="{
+        'backdrop-blur-md': !scrolled && {{ request()->routeIs('home') ? 'true' : 'false' }},
+        'backdrop-blur-sm': scrolled || !{{ request()->routeIs('home') ? 'true' : 'false' }}
+    }"
     :style="{
-        backgroundColor: (scrolled || !{{ request()->routeIs('home') ? 'true' : 'false' }}) ? '{{ $primaryColor }}' : 'transparent',
-        backdropFilter: (scrolled || !{{ request()->routeIs('home') ? 'true' : 'false' }}) ? 'blur(8px)' : 'none',
-        boxShadow: (scrolled || !{{ request()->routeIs('home') ? 'true' : 'false' }}) ? '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)' : 'none'
+        backgroundColor: (scrolled || !{{ request()->routeIs('home') ? 'true' : 'false' }}) ? '{{ $primaryColor }}' : 'rgba(0, 0, 0, 0.2)',
+        boxShadow: scrolled ? '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)' : 'none'
     }"
     x-data="{ 
         scrolled: false, 
@@ -116,6 +119,9 @@
                     scrolled = window.pageYOffset > 50;
                 });
             }
+            
+            // Initial scroll check
+            scrolled = window.pageYOffset > 50;
             
         // Close mobile menu on escape key
         document.addEventListener('keydown', (e) => {
@@ -352,7 +358,10 @@
         style="display: none;"
         @click.away="mobileMenuOpen = false">
         <div class="fixed inset-0 bg-black/50 backdrop-blur-sm" @click="mobileMenuOpen = false"></div>
-        <div class="fixed inset-y-0 right-0 w-full max-w-sm bg-white shadow-xl overflow-y-auto">
+        <div class="fixed inset-y-0 right-0 w-full max-w-sm bg-white/95 backdrop-blur-md shadow-xl overflow-y-auto"
+             :style="{
+                 backgroundColor: scrolled ? '{{ $primaryColor }}' : 'rgba(255, 255, 255, 0.95)'
+             }">
             <div class="flex flex-col h-full">
                 <!-- Mobile Menu Header -->
                 <div class="flex items-center justify-between p-6 border-b border-gray-200">

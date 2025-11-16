@@ -155,11 +155,11 @@
         <!-- End Google Tag Manager (noscript) -->
         @endif
 
-        <div class="min-h-screen" style="margin: 0 !important; padding: 0 !important;">
+        <div style="margin: 0 !important; padding: 0 !important; min-height: 0;">
             <x-header />
 
             <!-- Page Content -->
-            <main id="main-content" style="margin: 0 !important; padding: 0 !important;">
+            <main id="main-content" style="margin: 0 !important; padding: 0 !important; min-height: 0;">
                 @yield('content')
             </main>
 
