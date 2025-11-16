@@ -8,10 +8,11 @@ use Laravel\Scout\Searchable;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use App\Traits\HasWebPMedia;
 
 class Staff extends Model implements HasMedia
 {
-    use HasFactory, Searchable, InteractsWithMedia;
+    use HasFactory, Searchable, InteractsWithMedia, HasWebPMedia;
 
     protected $fillable = [
         'name',
@@ -62,6 +63,13 @@ class Staff extends Model implements HasMedia
 
     public function registerMediaConversions(Media $media = null): void
     {
+        // Default WebP conversion - converts original file to WebP
+        $this->addMediaConversion('webp')
+            ->format('webp')
+            ->quality(90)
+            ->nonQueued(); // Process immediately
+
+        // Responsive conversions
         $this->addMediaConversion('thumb')
             ->width(150)
             ->height(150)
@@ -75,10 +83,6 @@ class Staff extends Model implements HasMedia
             ->sharpen(10)
             ->format('webp')
             ->quality(85);
-
-        $this->addMediaConversion('webp')
-            ->format('webp')
-            ->quality(90);
     }
 
     public function toSearchableArray()

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admission Application Received - Al-Maghrib International School</title>
+    <title>Admission Application Received - {{ $siteName ?? \App\Helpers\SiteHelper::getSiteName() }}</title>
     <style>
         body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
         .container { max-width: 600px; margin: 0 auto; padding: 20px; }
@@ -18,13 +18,13 @@
     <div class="container">
         <div class="header">
             <h1>🎓 Admission Application Received</h1>
-            <p>Thank you for choosing Al-Maghrib International School</p>
+            <p>Thank you for choosing {{ $siteName ?? \App\Helpers\SiteHelper::getSiteName() }}</p>
         </div>
 
         <div class="content">
             <p>Dear {{ $application->parent_name }},</p>
 
-            <p>We have successfully received your admission application for <strong>{{ $application->child_name }}</strong> for Grade {{ $application->grade_applied }}. Thank you for your interest in Al-Maghrib International School.</p>
+            <p>We have successfully received your admission application for <strong>{{ $application->child_name }}</strong> for Grade {{ $application->grade_applied }}. Thank you for your interest in {{ $siteName ?? \App\Helpers\SiteHelper::getSiteName() }}.</p>
 
             <div class="info-box">
                 <h3>Application Details:</h3>
@@ -57,16 +57,16 @@
                 <a href="{{ route('home') }}" class="button">Visit Our Website</a>
             </div>
 
-            <p>We appreciate your interest in providing quality Islamic and Cambridge curriculum education to your child. Al-Maghrib International School is committed to nurturing young minds in a supportive and values-based environment.</p>
+            <p>We appreciate your interest in providing quality Islamic and Cambridge curriculum education to your child. {{ $siteName ?? \App\Helpers\SiteHelper::getSiteName() }} is committed to nurturing young minds in a supportive and values-based environment.</p>
 
             <p>Best regards,<br>
             <strong>Admissions Team</strong><br>
-            Al-Maghrib International School</p>
+            {{ $siteName ?? \App\Helpers\SiteHelper::getSiteName() }}</p>
         </div>
 
         <div class="footer">
             <p>This is an automated message. Please do not reply to this email.</p>
-            <p>© {{ date('Y') }} Al-Maghrib International School. All rights reserved.</p>
+            <p>© {{ date('Y') }} {{ $siteName ?? \App\Helpers\SiteHelper::getSiteName() }}. All rights reserved.</p>
         </div>
     </div>
 </body>

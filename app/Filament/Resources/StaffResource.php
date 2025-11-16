@@ -6,11 +6,13 @@ use App\Filament\Resources\StaffResource\Pages;
 use App\Models\Staff;
 use Filament\Actions;
 use Filament\Resources\Resource;
+use Filament\Forms\Components as FormComponents;
 use Filament\Schemas\Components;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use BackedEnum;
 use UnitEnum;
 
@@ -20,7 +22,7 @@ class StaffResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-users';
 
-    protected static string|UnitEnum|null $navigationGroup = 'Content';
+    protected static string|UnitEnum|null $navigationGroup = 'Staff';
 
     protected static ?int $navigationSort = 4;
 
@@ -30,21 +32,21 @@ class StaffResource extends Resource
             ->schema([
                 Components\Section::make('Staff Information')
                     ->schema([
-                        Components\TextInput::make('name')
+                        FormComponents\TextInput::make('name')
                             ->required()
                             ->maxLength(255),
 
-                        Components\TextInput::make('role_title')
+                        FormComponents\TextInput::make('role_title')
                             ->required()
                             ->maxLength(255)
                             ->label('Role/Title'),
 
-                        Components\Textarea::make('bio')
+                        FormComponents\Textarea::make('bio')
                             ->maxLength(1000)
                             ->rows(4)
                             ->columnSpanFull(),
 
-                        Components\FileUpload::make('photo')
+                        FormComponents\FileUpload::make('photo')
                             ->image()
                             ->directory('staff')
                             ->visibility('public')
@@ -59,17 +61,17 @@ class StaffResource extends Resource
 
                 Components\Section::make('Contact Information')
                     ->schema([
-                        Components\TextInput::make('email')
+                        FormComponents\TextInput::make('email')
                             ->email()
                             ->maxLength(255),
 
-                        Components\TextInput::make('phone')
+                        FormComponents\TextInput::make('phone')
                             ->tel()
                             ->maxLength(20),
 
-                        Components\Repeater::make('social_links')
+                        FormComponents\Repeater::make('social_links')
                             ->schema([
-                                Components\Select::make('platform')
+                                FormComponents\Select::make('platform')
                                     ->options([
                                         'facebook' => 'Facebook',
                                         'twitter' => 'Twitter',
@@ -77,7 +79,7 @@ class StaffResource extends Resource
                                         'instagram' => 'Instagram',
                                     ])
                                     ->required(),
-                                Components\TextInput::make('url')
+                                FormComponents\TextInput::make('url')
                                     ->url()
                                     ->required()
                                     ->label('Profile URL'),
@@ -91,12 +93,12 @@ class StaffResource extends Resource
 
                 Components\Section::make('Display Settings')
                     ->schema([
-                        Components\TextInput::make('order')
+                        FormComponents\TextInput::make('order')
                             ->numeric()
                             ->default(0)
                             ->helperText('Lower numbers appear first. Use this to control display order.'),
 
-                        Components\Toggle::make('is_active')
+                        FormComponents\Toggle::make('is_active')
                             ->label('Active')
                             ->default(true)
                             ->helperText('Inactive staff members won\'t appear on the public website'),
@@ -111,7 +113,7 @@ class StaffResource extends Resource
             ->columns([
                 Tables\Columns\ImageColumn::make('photo')
                     ->circular()
-                    ->defaultImageUrl('/images/placeholder.png')
+                    ->defaultImageUrl('/images/placeholder.svg')
                     ->size(40),
 
                 Tables\Columns\TextColumn::make('name')
@@ -187,23 +189,28 @@ class StaffResource extends Resource
         return parent::getEloquentQuery()->withoutGlobalScopes();
     }
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return true;
+    }
+
     public static function canViewAny(): bool
     {
-        return auth()->user()?->hasAnyRole(['admin', 'editor']) ?? false;
+        return Auth::user()?->hasAnyRole(['admin', 'editor']) ?? false;
     }
 
     public static function canCreate(): bool
     {
-        return auth()->user()?->hasAnyRole(['admin', 'editor']) ?? false;
+        return Auth::user()?->hasAnyRole(['admin', 'editor']) ?? false;
     }
 
     public static function canEdit($record): bool
     {
-        return auth()->user()?->hasAnyRole(['admin', 'editor']) ?? false;
+        return Auth::user()?->hasAnyRole(['admin', 'editor']) ?? false;
     }
 
     public static function canDelete($record): bool
     {
-        return auth()->user()?->hasRole('admin') ?? false;
+        return Auth::user()?->hasRole('admin') ?? false;
     }
 }

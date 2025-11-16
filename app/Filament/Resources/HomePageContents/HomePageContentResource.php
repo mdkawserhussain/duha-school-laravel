@@ -21,7 +21,7 @@ class HomePageContentResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Homepage Sections';
+    protected static string|UnitEnum|null $navigationGroup = 'Homepage Settings';
 
     protected static ?int $navigationSort = 1;
 
@@ -49,5 +49,10 @@ class HomePageContentResource extends Resource
             'create' => CreateHomePageContent::route('/create'),
             'edit' => EditHomePageContent::route('/{record}/edit'),
         ];
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
     }
 }

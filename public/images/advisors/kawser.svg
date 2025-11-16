@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bg-kawser" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F4C430;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#173B7A;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Circular background -->
+  <circle cx="200" cy="200" r="200" fill="url(#bg-kawser)"/>
+  
+  <!-- Profile silhouette -->
+  <g fill="#0C1B3D" opacity="0.9">
+    <!-- Head -->
+    <circle cx="200" cy="140" r="50"/>
+    <!-- Body/Shoulders -->
+    <ellipse cx="200" cy="290" rx="90" ry="110"/>
+  </g>
+  
+  <!-- Decorative element -->
+  <circle cx="200" cy="200" r="190" fill="none" stroke="#0C1B3D" stroke-width="2" opacity="0.3"/>
+  
+  <!-- Initials -->
+  <text x="200" y="215" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="#F8F5EB" text-anchor="middle" opacity="0.4">MK</text>
+</svg>

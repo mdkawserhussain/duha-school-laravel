@@ -5,7 +5,7 @@ set -e
 # Configuration
 BACKUP_DIR="${BACKUP_DIR:-./backups}"
 DATE=$(date +%Y%m%d_%H%M%S)
-DB_NAME="${DB_DATABASE:-almaghrib_school}"
+DB_NAME="${DB_DATABASE:-duha_school}"
 DB_USER="${DB_USERNAME:-root}"
 DB_PASS="${DB_PASSWORD:-root}"
 

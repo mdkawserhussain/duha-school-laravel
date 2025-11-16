@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'Search Results' . ($query ? ' - ' . $query : '') . ' - Al-Maghrib International School')
+@php
+    $siteName = \App\Helpers\SiteHelper::getSiteName();
+@endphp
+@section('title', 'Search Results' . ($query ? ' - ' . $query : '') . ' - ' . $siteName)
 @section('meta-description', 'Search results for: ' . $query)
 
 @section('content')

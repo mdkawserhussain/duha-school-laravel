@@ -30,6 +30,7 @@ class HeroSliderManager extends Page
     public $showForm = false;
     public $previewSlide = null;
     public $image = null;
+    public $videoPoster = null;
 
     public function mount(): void
     {
@@ -43,6 +44,7 @@ class HeroSliderManager extends Page
             ->ordered()
             ->get()
             ->map(function ($slide) {
+                $data = $slide->data ?? [];
                 return [
                     'id' => $slide->id,
                     'title' => $slide->title,
@@ -50,10 +52,17 @@ class HeroSliderManager extends Page
                     'description' => $slide->description,
                     'button_text' => $slide->button_text,
                     'button_link' => $slide->button_link,
-                    'badge' => data_get($slide->data, 'badge'),
+                    'badge' => data_get($data, 'badge'),
                     'is_active' => $slide->is_active,
                     'sort_order' => $slide->sort_order,
                     'image_url' => $slide->getMediaUrl('images', 'large') ?: $slide->getMediaUrl('images'),
+                    'video_url' => data_get($data, 'video_url'),
+                    'video_poster' => $slide->getMediaUrl('video_poster', 'large') ?: $slide->getMediaUrl('video_poster'),
+                    'secondary_button_text' => data_get($data, 'secondary_button_text'),
+                    'secondary_button_link' => data_get($data, 'secondary_button_link'),
+                    'features' => data_get($data, 'features', []),
+                    'stats_cards' => data_get($data, 'stats_cards', []),
+                    'stats_pills' => data_get($data, 'stats_pills', []),
                 ];
             })
             ->toArray();
@@ -61,15 +70,32 @@ class HeroSliderManager extends Page
 
     public function addNewSlide(): void
     {
-        $this->editingSlide = null;
+        $this->editingSlide = [
+            'title' => '',
+            'subtitle' => '',
+            'description' => '',
+            'button_text' => '',
+            'button_link' => '',
+            'badge' => '',
+            'is_active' => true,
+            'video_url' => '',
+            'secondary_button_text' => '',
+            'secondary_button_link' => '',
+            'features' => [],
+            'stats_cards' => [],
+            'stats_pills' => [],
+        ];
         $this->showForm = true;
-        $this->previewSlide = null;
+        $this->previewSlide = $this->editingSlide;
+        $this->image = null;
+        $this->videoPoster = null;
     }
 
     public function editSlide($slideId): void
     {
         $slide = HomePageSection::find($slideId);
         if ($slide) {
+            $data = $slide->data ?? [];
             $this->editingSlide = [
                 'id' => $slide->id,
                 'title' => $slide->title,
@@ -77,10 +103,17 @@ class HeroSliderManager extends Page
                 'description' => $slide->description,
                 'button_text' => $slide->button_text,
                 'button_link' => $slide->button_link,
-                'badge' => data_get($slide->data, 'badge'),
+                'badge' => data_get($data, 'badge'),
                 'is_active' => $slide->is_active,
                 'sort_order' => $slide->sort_order,
                 'image_url' => $slide->getMediaUrl('images', 'large') ?: $slide->getMediaUrl('images'),
+                'video_url' => data_get($data, 'video_url'),
+                'video_poster' => $slide->getMediaUrl('video_poster', 'large') ?: $slide->getMediaUrl('video_poster'),
+                'secondary_button_text' => data_get($data, 'secondary_button_text'),
+                'secondary_button_link' => data_get($data, 'secondary_button_link'),
+                'features' => data_get($data, 'features', []),
+                'stats_cards' => data_get($data, 'stats_cards', []),
+                'stats_pills' => data_get($data, 'stats_pills', []),
             ];
             $this->showForm = true;
             $this->previewSlide = $this->editingSlide;
@@ -133,14 +166,22 @@ class HeroSliderManager extends Page
     {
         $slide = HomePageSection::find($slideId);
         if ($slide) {
+            $data = $slide->data ?? [];
             $this->previewSlide = [
                 'title' => $slide->title,
                 'subtitle' => $slide->subtitle,
                 'description' => $slide->description,
                 'button_text' => $slide->button_text,
                 'button_link' => $slide->button_link,
-                'badge' => data_get($slide->data, 'badge'),
+                'badge' => data_get($data, 'badge'),
                 'image_url' => $slide->getMediaUrl('images', 'large') ?: $slide->getMediaUrl('images'),
+                'video_url' => data_get($data, 'video_url'),
+                'video_poster' => $slide->getMediaUrl('video_poster', 'large') ?: $slide->getMediaUrl('video_poster'),
+                'secondary_button_text' => data_get($data, 'secondary_button_text'),
+                'secondary_button_link' => data_get($data, 'secondary_button_link'),
+                'features' => data_get($data, 'features', []),
+                'stats_cards' => data_get($data, 'stats_cards', []),
+                'stats_pills' => data_get($data, 'stats_pills', []),
             ];
         }
     }
@@ -172,9 +213,28 @@ class HeroSliderManager extends Page
         $slide->button_link = $data['button_link'] ?? null;
         $slide->is_active = $data['is_active'] ?? true;
 
+        // Store all additional data in the data JSON field
         $slideData = $slide->data ?? [];
         if (isset($data['badge'])) {
             $slideData['badge'] = $data['badge'];
+        }
+        if (isset($data['video_url'])) {
+            $slideData['video_url'] = $data['video_url'];
+        }
+        if (isset($data['secondary_button_text'])) {
+            $slideData['secondary_button_text'] = $data['secondary_button_text'];
+        }
+        if (isset($data['secondary_button_link'])) {
+            $slideData['secondary_button_link'] = $data['secondary_button_link'];
+        }
+        if (isset($data['features'])) {
+            $slideData['features'] = $data['features'];
+        }
+        if (isset($data['stats_cards'])) {
+            $slideData['stats_cards'] = $data['stats_cards'];
+        }
+        if (isset($data['stats_pills'])) {
+            $slideData['stats_pills'] = $data['stats_pills'];
         }
         $slide->data = $slideData;
 
@@ -186,6 +246,14 @@ class HeroSliderManager extends Page
             $slide->addMedia($this->image)
                 ->toMediaCollection('images');
             $this->image = null;
+        }
+
+        // Handle video poster upload
+        if ($this->videoPoster) {
+            $slide->clearMediaCollection('video_poster');
+            $slide->addMedia($this->videoPoster)
+                ->toMediaCollection('video_poster');
+            $this->videoPoster = null;
         }
 
         $this->loadSlides();

@@ -6,6 +6,7 @@ use App\Filament\Resources\AdmissionApplicationResource\Pages;
 use App\Models\AdmissionApplication;
 use Filament\Actions;
 use Filament\Resources\Resource;
+use Filament\Forms\Components as FormComponents;
 use Filament\Schemas\Components;
 use Filament\Schemas\Schema;
 use Filament\Tables;
@@ -32,34 +33,34 @@ class AdmissionApplicationResource extends Resource
             ->schema([
                 Components\Section::make('Application Details')
                     ->schema([
-                        Components\TextInput::make('parent_name')
+                        FormComponents\TextInput::make('parent_name')
                             ->required()
                             ->maxLength(255),
 
-                        Components\TextInput::make('child_name')
+                        FormComponents\TextInput::make('child_name')
                             ->required()
                             ->maxLength(255),
 
-                        Components\DatePicker::make('child_dob')
+                        FormComponents\DatePicker::make('child_dob')
                             ->required()
                             ->maxDate(now()->subYears(3))
                             ->minDate(now()->subYears(18)),
 
-                        Components\TextInput::make('grade_applied')
+                        FormComponents\TextInput::make('grade_applied')
                             ->required()
                             ->maxLength(50),
 
-                        Components\TextInput::make('phone')
+                        FormComponents\TextInput::make('phone')
                             ->required()
                             ->tel()
                             ->maxLength(20),
 
-                        Components\TextInput::make('email')
+                        FormComponents\TextInput::make('email')
                             ->required()
                             ->email()
                             ->maxLength(255),
 
-                        Components\Textarea::make('message')
+                        FormComponents\Textarea::make('message')
                             ->maxLength(1000)
                             ->rows(4)
                             ->columnSpanFull(),
@@ -68,17 +69,17 @@ class AdmissionApplicationResource extends Resource
 
                 Components\Section::make('Supporting Documents')
                     ->schema([
-                        Components\Placeholder::make('documents_info')
+                        FormComponents\Placeholder::make('documents_info')
                             ->label('')
                             ->content('Documents uploaded by the applicant will appear here when available.'),
 
-                        Components\Repeater::make('documents')
+                        FormComponents\Repeater::make('documents')
                             ->schema([
-                                Components\TextInput::make('name')
+                                FormComponents\TextInput::make('name')
                                     ->required(),
-                                Components\TextInput::make('path')
+                                FormComponents\TextInput::make('path')
                                     ->required(),
-                                Components\TextInput::make('type')
+                                FormComponents\TextInput::make('type')
                                     ->required(),
                             ])
                             ->columns(3)
@@ -89,7 +90,7 @@ class AdmissionApplicationResource extends Resource
 
                 Components\Section::make('Application Status')
                     ->schema([
-                        Components\Select::make('status')
+                        FormComponents\Select::make('status')
                             ->options([
                                 'pending' => 'Pending Review',
                                 'reviewed' => 'Reviewed',
@@ -99,10 +100,10 @@ class AdmissionApplicationResource extends Resource
                             ->default('pending')
                             ->required(),
 
-                        Components\DateTimePicker::make('reviewed_at')
+                        FormComponents\DateTimePicker::make('reviewed_at')
                             ->label('Reviewed At'),
 
-                        Components\Textarea::make('review_notes')
+                        FormComponents\Textarea::make('review_notes')
                             ->label('Review Notes')
                             ->rows(3)
                             ->columnSpanFull(),
@@ -226,6 +227,11 @@ class AdmissionApplicationResource extends Resource
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::where('status', 'pending')->count();
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return true;
     }
 
     public static function canViewAny(): bool

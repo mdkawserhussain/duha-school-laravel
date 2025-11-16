@@ -19,12 +19,12 @@ class DatabaseSeeder extends Seeder
         $this->call([
             SiteSettingsSeeder::class,
             RoleSeeder::class,
+            AnnouncementSeeder::class,
             HomePageSectionSeeder::class,
             PageSeeder::class,
             EventSeeder::class,
             NoticeSeeder::class,
             StaffSeeder::class,
-            SubscriberSeeder::class,
         ]);
     }
 }

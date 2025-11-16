@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bg-students" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0C1B3D;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#173B7A;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0F224C;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#F4C430;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#6EC1F5;stop-opacity:0.1" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1920" height="1080" fill="url(#bg-students)"/>
+  
+  <!-- Decorative circles -->
+  <circle cx="960" cy="540" r="400" fill="url(#glow)" opacity="0.3"/>
+  
+  <!-- Student silhouettes (simplified) -->
+  <g opacity="0.6" fill="#6EC1F5">
+    <!-- Student 1 -->
+    <circle cx="600" cy="450" r="40"/>
+    <rect x="580" y="495" width="40" height="80" rx="20"/>
+    
+    <!-- Student 2 -->
+    <circle cx="960" cy="430" r="45"/>
+    <rect x="938" y="480" width="44" height="90" rx="22"/>
+    
+    <!-- Student 3 -->
+    <circle cx="1320" cy="460" r="38"/>
+    <rect x="1300" y="503" width="40" height="75" rx="20"/>
+  </g>
+  
+  <!-- Books/Learning elements -->
+  <g opacity="0.5" stroke="#F4C430" stroke-width="3" fill="none">
+    <rect x="500" y="650" width="80" height="100" rx="5"/>
+    <rect x="800" y="680" width="70" height="90" rx="5"/>
+    <rect x="1340" y="660" width="75" height="95" rx="5"/>
+  </g>
+  
+  <!-- Geometric pattern -->
+  <g opacity="0.2" stroke="#F4C430" stroke-width="2" fill="none">
+    <circle cx="300" cy="300" r="100"/>
+    <circle cx="1620" cy="250" r="80"/>
+    <circle cx="200" cy="800" r="60"/>
+    <circle cx="1700" cy="850" r="70"/>
+  </g>
+  
+  <!-- Text -->
+  <text x="960" y="950" font-family="Arial, sans-serif" font-size="36" fill="#F8F5EB" text-anchor="middle" opacity="0.9">
+    Student Image Coming Soon
+  </text>
+</svg>

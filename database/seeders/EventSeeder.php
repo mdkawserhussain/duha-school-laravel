@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Event;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 use Carbon\Carbon;
 
 class EventSeeder extends Seeder
@@ -16,6 +17,7 @@ class EventSeeder extends Seeder
         $events = [
             [
                 'title' => 'Annual Science Fair 2025',
+                'slug' => 'annual-science-fair-2025',
                 'excerpt' => 'Join us for our annual science fair showcasing innovative projects from students across all grade levels.',
                 'description' => '<p>Our Annual Science Fair is one of the most anticipated events of the year. Students from all grade levels will showcase their innovative science projects, experiments, and research findings. This event promotes scientific inquiry, critical thinking, and creativity among our students.</p>
                 
@@ -40,6 +42,7 @@ class EventSeeder extends Seeder
             ],
             [
                 'title' => 'Quran Memorization Competition',
+                'slug' => 'quran-memorization-competition',
                 'excerpt' => 'Annual Quran memorization competition for students to showcase their Hifz achievements.',
                 'description' => '<p>Our annual Quran Memorization Competition celebrates the achievements of our students in memorizing the Holy Quran. This event recognizes the dedication and effort of our Hifz students and encourages others to follow in their footsteps.</p>
                 
@@ -63,6 +66,7 @@ class EventSeeder extends Seeder
             ],
             [
                 'title' => 'Sports Day 2025',
+                'slug' => 'sports-day-2025',
                 'excerpt' => 'Annual sports day featuring various athletic competitions and team events.',
                 'description' => '<p>Join us for our annual Sports Day, a day filled with excitement, competition, and team spirit. Students will participate in various athletic events including track and field, team sports, and fun activities.</p>
                 
@@ -87,6 +91,7 @@ class EventSeeder extends Seeder
             ],
             [
                 'title' => 'Parent-Teacher Conference',
+                'slug' => 'parent-teacher-conference',
                 'excerpt' => 'Scheduled parent-teacher conferences to discuss student progress and academic performance.',
                 'description' => '<p>We invite all parents to attend our scheduled parent-teacher conferences. This is an opportunity to meet with your child\'s teachers, discuss academic progress, and address any concerns or questions.</p>
                 
@@ -112,6 +117,7 @@ class EventSeeder extends Seeder
             ],
             [
                 'title' => 'Islamic Art Exhibition',
+                'slug' => 'islamic-art-exhibition',
                 'excerpt' => 'Showcase of Islamic art and calligraphy created by our talented students.',
                 'description' => '<p>Our Islamic Art Exhibition celebrates the rich tradition of Islamic art and calligraphy. Students from all grade levels will display their artwork, including Arabic calligraphy, geometric patterns, and Islamic-inspired designs.</p>
                 
@@ -143,4 +149,3 @@ class EventSeeder extends Seeder
         }
     }
 }
-

@@ -6,6 +6,7 @@ use App\Filament\Resources\CareerApplicationResource\Pages;
 use App\Models\CareerApplication;
 use Filament\Actions;
 use Filament\Resources\Resource;
+use Filament\Forms\Components as FormComponents;
 use Filament\Schemas\Components;
 use Filament\Schemas\Schema;
 use Filament\Tables;
@@ -32,29 +33,29 @@ class CareerApplicationResource extends Resource
             ->schema([
                 Components\Section::make('Application Details')
                     ->schema([
-                        Components\TextInput::make('job_title')
+                        FormComponents\TextInput::make('job_title')
                             ->required()
                             ->maxLength(255),
 
-                        Components\TextInput::make('applicant_name')
+                        FormComponents\TextInput::make('applicant_name')
                             ->required()
                             ->maxLength(255),
 
-                        Components\TextInput::make('email')
+                        FormComponents\TextInput::make('email')
                             ->required()
                             ->email()
                             ->maxLength(255),
 
-                        Components\TextInput::make('phone')
+                        FormComponents\TextInput::make('phone')
                             ->tel()
                             ->maxLength(20),
 
-                        Components\Textarea::make('cover_letter')
+                        FormComponents\Textarea::make('cover_letter')
                             ->maxLength(2000)
                             ->rows(6)
                             ->columnSpanFull(),
 
-                        Components\FileUpload::make('resume_path')
+                        FormComponents\FileUpload::make('resume_path')
                             ->label('Resume/CV')
                             ->required()
                             ->acceptedFileTypes(['application/pdf'])
@@ -67,7 +68,7 @@ class CareerApplicationResource extends Resource
 
                 Components\Section::make('Application Status')
                     ->schema([
-                        Components\Select::make('status')
+                        FormComponents\Select::make('status')
                             ->options([
                                 'pending' => 'Pending Review',
                                 'reviewed' => 'Reviewed',
@@ -77,10 +78,10 @@ class CareerApplicationResource extends Resource
                             ->default('pending')
                             ->required(),
 
-                        Components\DateTimePicker::make('reviewed_at')
+                        FormComponents\DateTimePicker::make('reviewed_at')
                             ->label('Reviewed At'),
 
-                        Components\Textarea::make('review_notes')
+                        FormComponents\Textarea::make('review_notes')
                             ->label('Review Notes')
                             ->rows(3)
                             ->columnSpanFull(),
@@ -193,6 +194,11 @@ class CareerApplicationResource extends Resource
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::where('status', 'pending')->count();
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return true;
     }
 
     public static function canViewAny(): bool

@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('site_settings', function (Blueprint $table) {
             $table->id();
-            $table->string('site_name')->default('Al-Maghrib International School');
+            $table->string('site_name')->default('Duha International School');
             $table->text('site_description')->nullable();
             $table->string('contact_email')->nullable();
             $table->string('contact_phone')->nullable();
@@ -24,7 +24,7 @@ return new class extends Migration
 
         // Insert default settings
         DB::table('site_settings')->insert([
-            'site_name' => 'Al-Maghrib International School',
+            'site_name' => 'Duha International School',
             'created_at' => now(),
             'updated_at' => now(),
         ]);

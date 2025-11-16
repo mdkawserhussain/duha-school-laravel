@@ -1,7 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Events - Al-Maghrib International School')
-@section('meta-description', 'Stay updated with upcoming events and activities at Al-Maghrib International School')
+@php
+    $siteName = \App\Helpers\SiteHelper::getSiteName();
+@endphp
+@section('title', 'Events - ' . $siteName)
+@section('meta-description', 'Stay updated with upcoming events and activities at ' . $siteName)
 
 @section('content')
 
@@ -162,15 +165,5 @@
         </div>
     </section>
 
-    <!-- Newsletter CTA -->
-    <section class="py-16 bg-blue-600 text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-3xl font-bold mb-4">Never Miss an Event</h2>
-            <p class="text-xl mb-8">Subscribe to our newsletter to get notified about upcoming events and school activities</p>
-            <a href="#newsletter" class="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-3 px-8 rounded-lg transition duration-300">
-                Subscribe Now
-            </a>
-        </div>
-    </section>
 
 @endsection

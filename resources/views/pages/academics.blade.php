@@ -1,7 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Academics - Al-Maghrib International School')
-@section('meta-description', 'Discover our comprehensive Islamic and Cambridge curriculum program at Al-Maghrib International School, offering quality education from Kindergarten to Grade 12')
+@php
+    $siteName = \App\Helpers\SiteHelper::getSiteName();
+@endphp
+@section('title', 'Academics - ' . $siteName)
+@section('meta-description', 'Discover our comprehensive Islamic and Cambridge curriculum program at ' . $siteName . ', offering quality education from Kindergarten to Grade 12')
 
 @section('content')
 

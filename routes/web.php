@@ -7,11 +7,11 @@ use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\AdmissionController;
 use App\Http\Controllers\CareerController;
 use App\Http\Controllers\ContactController;
-use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\NewsletterController;
 
 // Public Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -25,8 +25,8 @@ Route::get('/api/search/autocomplete', [SearchController::class, 'autocomplete']
 
 // Events
 Route::get('/events', [EventController::class, 'index'])->name('events.index');
-Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
-Route::get('/events/{event}/ics', [EventController::class, 'exportIcs'])->name('events.ics');
+Route::get('/events/{event:slug}', [EventController::class, 'show'])->name('events.show');
+Route::get('/events/{event:slug}/ics', [EventController::class, 'exportIcs'])->name('events.ics');
 Route::get('/feed/events.atom', [EventController::class, 'feed'])->name('events.feed');
 
 // Notices
@@ -46,7 +46,10 @@ Route::get('/contact-us', [ContactController::class, 'index'])->name('contact.in
 Route::post('/contact-us', [ContactController::class, 'send'])->name('contact.send')->middleware('throttle:10,1');
 
 // Newsletter
-Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe')->middleware('throttle:3,1');
+Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])
+    ->name('newsletter.subscribe')
+    ->middleware('throttle:3,1');
+
 
 // Dynamic Pages
 Route::get('/about/{page}', [PageController::class, 'show'])->name('about.show');

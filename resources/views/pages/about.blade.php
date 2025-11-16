@@ -1,7 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'About Us - Al-Maghrib International School')
-@section('meta-description', 'Learn about Al-Maghrib International School\'s mission, vision, and commitment to Islamic and Cambridge curriculum education in Chattogram, Bangladesh')
+@php
+    $siteName = \App\Helpers\SiteHelper::getSiteName();
+@endphp
+@section('title', 'About Us - ' . $siteName)
+@section('meta-description', 'Learn about ' . $siteName . '\'s mission, vision, and commitment to Islamic and Cambridge curriculum education in Chattogram, Bangladesh')
 
 @section('content')
 
@@ -9,7 +12,7 @@
     <section class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
-                <h1 class="text-4xl md:text-6xl font-bold mb-6">About Al-Maghrib</h1>
+                <h1 class="text-4xl md:text-6xl font-bold mb-6">About {{ $siteName }}</h1>
                 <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
                     Nurturing young minds with Islamic values and Cambridge curriculum excellence
                 </p>
@@ -117,7 +120,7 @@
                     <h2 class="text-3xl font-bold text-gray-900 mb-6">Our Story</h2>
                     <div class="space-y-4 text-gray-700">
                         <p>
-                            Founded in 2025, Al-Maghrib International School emerged from a vision to create an educational
+                            Founded in 2025, {{ $siteName }} emerged from a vision to create an educational
                             institution that seamlessly integrates Islamic teachings with world-class academic standards.
                         </p>
                         <p>
@@ -137,7 +140,7 @@
                             <div class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3 flex-shrink-0">2025</div>
                             <div>
                                 <p class="font-medium text-gray-900">School Founded</p>
-                                <p class="text-sm text-gray-600">Al-Maghrib International School opens its doors</p>
+                                <p class="text-sm text-gray-600">{{ $siteName }} opens its doors</p>
                             </div>
                         </div>
                         <div class="flex items-start">

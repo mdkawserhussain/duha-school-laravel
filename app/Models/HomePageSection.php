@@ -8,10 +8,13 @@ use Illuminate\Support\Facades\Cache;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use App\Traits\HasWebPMedia;
 
 class HomePageSection extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia;
+    use HasFactory, InteractsWithMedia, HasWebPMedia;
+
+    protected $table = 'home_page_sections';
 
     protected $fillable = [
         'section_key',
@@ -36,29 +39,42 @@ class HomePageSection extends Model implements HasMedia
     {
         $this->addMediaCollection('images');
         $this->addMediaCollection('videos');
+        $this->addMediaCollection('video_poster')->singleFile();
+        $this->addMediaCollection('background_image')->singleFile();
     }
 
     public function registerMediaConversions(Media $media = null): void
     {
+        // Default WebP conversion - converts original file to WebP
+        $this->addMediaConversion('webp')
+            ->format('webp')
+            ->quality(90)
+            ->performOnCollections('images', 'background_image', 'video_poster')
+            ->nonQueued(); // Process immediately
+
+        // Responsive conversions
         $this->addMediaConversion('thumb')
             ->width(300)
             ->height(300)
             ->sharpen(10)
             ->format('webp')
-            ->quality(85);
+            ->quality(85)
+            ->performOnCollections('images', 'background_image', 'video_poster');
 
         $this->addMediaConversion('medium')
             ->width(600)
             ->height(400)
             ->sharpen(10)
             ->format('webp')
-            ->quality(85);
+            ->quality(85)
+            ->performOnCollections('images', 'background_image', 'video_poster');
 
         $this->addMediaConversion('large')
             ->width(1920)
             ->height(1080)
             ->format('webp')
             ->quality(90)
+            ->performOnCollections('images', 'background_image')
             ->nonQueued();
     }
 
@@ -79,7 +95,7 @@ class HomePageSection extends Model implements HasMedia
 
     /**
      * Get media URL with proper path handling and conversion support.
-     * Returns relative paths that work with any domain/port.
+     * Uses Spatie's built-in method to return full URLs.
      *
      * @param string $collectionName
      * @param string|null $conversionName
@@ -87,30 +103,15 @@ class HomePageSection extends Model implements HasMedia
      */
     public function getMediaUrl(string $collectionName = 'images', ?string $conversionName = null): ?string
     {
-        $media = $this->getFirstMedia($collectionName);
-        
-        if (!$media) {
+        if (!$this->hasMedia($collectionName)) {
             return null;
         }
 
-        // Use asset() for proper URL generation with cache busting
-        // This ensures URLs work regardless of APP_URL or domain/port
-        $basePath = 'storage/' . $media->id;
-        
-        if ($conversionName) {
-            // Check if conversion exists on disk
-            $conversionPath = $media->getPath($conversionName);
-            if ($conversionPath && file_exists($conversionPath)) {
-                // Get the actual conversion file name
-                $conversionFileName = basename($conversionPath);
-                // Return path for asset() helper
-                return $basePath . '/conversions/' . $conversionFileName;
-            }
-            // Fallback to original if conversion doesn't exist
-            return $basePath . '/' . $media->file_name;
-        }
-
-        return $basePath . '/' . $media->file_name;
+        // Use Spatie's built-in method which returns proper full URLs
+        // This handles conversions, path generation, and URL formatting correctly
+        // Empty string means no conversion, null is converted to empty string
+        $conversion = $conversionName ?? '';
+        return $this->getFirstMediaUrl($collectionName, $conversion);
     }
 
     /**

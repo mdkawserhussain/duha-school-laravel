@@ -19,7 +19,7 @@ class SiteSettingsForm
                             ->label('Site Name')
                             ->required()
                             ->maxLength(255)
-                            ->placeholder('Al-Maghrib International School')
+                            ->placeholder('Duha International School')
                             ->helperText('This name will be used throughout the website and in search results.')
                             ->columnSpanFull(),
                         Components\Textarea::make('site_description')
@@ -62,7 +62,7 @@ class SiteSettingsForm
                             ->label('Contact Email')
                             ->email()
                             ->maxLength(255)
-                            ->placeholder('info@almaghribinternationalschool.com')
+                            ->placeholder('info@duhainternationalschool.com')
                             ->helperText('This email will be displayed in the footer and contact sections.')
                             ->columnSpan(1),
                         Components\TextInput::make('contact_phone')

@@ -1,7 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Page Not Found - Al-Maghrib International School')
-@section('meta-description', 'The page you are looking for could not be found. Return to Al-Maghrib International School homepage')
+@php
+    $siteName = \App\Helpers\SiteHelper::getSiteName();
+@endphp
+@section('title', 'Page Not Found - ' . $siteName)
+@section('meta-description', 'The page you are looking for could not be found. Return to ' . $siteName . ' homepage')
 
 @section('content')
 
@@ -181,19 +184,6 @@
                     </div>
                 </a>
 
-                <a href="#newsletter" onclick="openNewsletterModal()" class="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 cursor-pointer">
-                    <div class="flex items-center">
-                        <div class="bg-pink-100 rounded-full p-3 mr-4">
-                            <svg class="h-6 w-6 text-pink-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <h3 class="font-semibold text-gray-900">Newsletter</h3>
-                            <p class="text-sm text-gray-600">Stay updated with school news</p>
-                        </div>
-                    </div>
-                </a>
             </div>
         </div>
     </section>

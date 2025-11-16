@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Event;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Event>
@@ -24,6 +25,7 @@ class EventFactory extends Factory
 
         return [
             'title' => fake()->sentence(4),
+            'slug' => fn (array $attributes) => Str::slug($attributes['title']) . '-' . fake()->randomNumber(3),
             'excerpt' => fake()->sentence(10),
             'description' => fake()->paragraphs(3, true),
             'event_date' => $eventDate,

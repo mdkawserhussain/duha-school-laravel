@@ -3,24 +3,30 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\NewsletterSubscribeRequest;
-use App\Services\NewsletterService;
+use App\Mail\NewsletterSubscriptionConfirmation;
+use App\Models\Subscriber;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Mail;
 
 class NewsletterController extends Controller
 {
-    protected NewsletterService $newsletterService;
-
-    public function __construct(NewsletterService $newsletterService)
+    public function subscribe(NewsletterSubscribeRequest $request): JsonResponse
     {
-        $this->newsletterService = $newsletterService;
-    }
+        $data = $request->validated();
 
-    public function subscribe(NewsletterSubscribeRequest $request)
-    {
-        $subscriber = $this->newsletterService->subscribe($request->email, $request->name);
+        $subscriber = Subscriber::updateOrCreate(
+            ['email' => $data['email']],
+            [
+                'name' => $data['name'] ?? null,
+                'is_active' => true,
+                'unsubscribed_at' => null,
+            ]
+        );
+
+        Mail::to($subscriber->email)->queue(new NewsletterSubscriptionConfirmation($subscriber));
 
         return response()->json([
-            'success' => true,
-            'message' => 'Successfully subscribed to our newsletter!'
+            'message' => 'Subscription successful.',
         ]);
     }
 }

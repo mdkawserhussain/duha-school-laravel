@@ -26,7 +26,7 @@ class UpcomingEvents extends BaseWidget
             ->columns([
                 Tables\Columns\ImageColumn::make('featured_image')
                     ->circular()
-                    ->defaultImageUrl('/images/placeholder.png')
+                    ->defaultImageUrl('/images/placeholder.svg')
                     ->size(40),
 
                 Tables\Columns\TextColumn::make('title')

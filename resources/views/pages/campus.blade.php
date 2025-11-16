@@ -1,7 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Campus - Al-Maghrib International School')
-@section('meta-description', 'Explore our modern campus facilities at Al-Maghrib International School in Chattogram, Bangladesh. State-of-the-art classrooms, labs, and recreational areas')
+@php
+    $siteName = \App\Helpers\SiteHelper::getSiteName();
+@endphp
+@section('title', 'Campus - ' . $siteName)
+@section('meta-description', 'Explore our modern campus facilities at ' . $siteName . ' in Chattogram, Bangladesh. State-of-the-art classrooms, labs, and recreational areas')
 
 @section('content')
 
@@ -221,7 +224,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                             </svg>
                             <div>
-                                <p class="font-medium text-gray-900">Al-Maghrib International School</p>
+                                <p class="font-medium text-gray-900">{{ $siteName }}</p>
                                 <p class="text-gray-600">Chattogram, Bangladesh</p>
                             </div>
                         </div>

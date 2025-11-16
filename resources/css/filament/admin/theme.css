@@ -3,1079 +3,729 @@
 @source '../../../../app/Filament/**/*';
 @source '../../../../resources/views/filament/**/*';
 
-/* Material UI Dark Theme */
+/* Balanced Professional Theme - Not Dark, Not Light */
 @theme {
-    /* Material UI Dark Color Palette */
-    --primary-50: #e3f2fd;
-    --primary-100: #bbdefb;
-    --primary-200: #90caf9;
-    --primary-300: #64b5f6;
-    --primary-400: #42a5f5;
-    --primary-500: #2196f3;
-    --primary-600: #1e88e5;
-    --primary-700: #1976d2;
-    --primary-800: #1565c0;
-    --primary-900: #0d47a1;
-    --primary-950: #0a3d91;
+    /* Primary Colors - Professional Indigo */
+    --primary-50: #eef2ff;
+    --primary-100: #e0e7ff;
+    --primary-200: #c7d2fe;
+    --primary-300: #a5b4fc;
+    --primary-400: #818cf8;
+    --primary-500: #6366f1;
+    --primary-600: #4f46e5;
+    --primary-700: #4338ca;
+    --primary-800: #3730a3;
+    --primary-900: #312e81;
+    --primary-950: #1e1b4b;
 
-    /* Material UI Dark Background & Surface */
-    --dark-bg: #121212;
-    --dark-surface: #1e1e1e;
-    --dark-surface-variant: #2d2d2d;
-    --dark-surface-hover: #2a2a2a;
+    /* Neutral Background Colors */
+    --background: #f8fafc;
+    --surface: #ffffff;
+    --surface-elevated: #ffffff;
+    --surface-hover: #f1f5f9;
+    --surface-active: #e2e8f0;
     
-    /* Material UI Text Colors */
-    --text-primary: rgba(255, 255, 255, 0.87);
-    --text-secondary: rgba(255, 255, 255, 0.6);
-    --text-disabled: rgba(255, 255, 255, 0.38);
-    --text-hint: rgba(255, 255, 255, 0.38);
+    /* Text Colors - High Contrast */
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-tertiary: #64748b;
+    --text-disabled: #94a3b8;
+    --text-inverse: #ffffff;
     
-    /* Material UI Divider */
-    --divider: rgba(255, 255, 255, 0.12);
+    /* Border Colors */
+    --border: #e2e8f0;
+    --border-strong: #cbd5e1;
+    --border-subtle: #f1f5f9;
     
-    /* Status Colors - Material UI */
-    --success: #4caf50;
-    --warning: #ff9800;
-    --danger: #f44336;
-    --info: #2196f3;
+    /* Status Colors */
+    --success: #10b981;
+    --success-light: #d1fae5;
+    --warning: #f59e0b;
+    --warning-light: #fef3c7;
+    --danger: #ef4444;
+    --danger-light: #fee2e2;
+    --info: #3b82f6;
+    --info-light: #dbeafe;
 }
 
-/* Global Dark Theme Styles */
+/* Global Styles - Balanced Theme */
 .fi-body {
-    background-color: #121212 !important;
-    color: rgba(255, 255, 255, 0.87) !important;
-    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background-color: #f8fafc !important;
+    color: #0f172a !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
     min-height: 100vh;
+    line-height: 1.6;
 }
 
-/* Material UI Sidebar - Dark Theme */
+/* Sidebar - Balanced Gray */
 .fi-sidebar {
-    background: #1e1e1e !important;
-    border-right: 1px solid rgba(255, 255, 255, 0.12) !important;
-    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3) !important;
+    background: #ffffff !important;
+    border-right: 1px solid #e2e8f0 !important;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1) !important;
 }
 
 .fi-sidebar-nav {
-    color: rgba(255, 255, 255, 0.87) !important;
+    color: #0f172a !important;
 }
 
 .fi-sidebar-nav-item {
-    color: rgba(255, 255, 255, 0.87) !important;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    border-radius: 4px !important;
-    margin: 4px 8px !important;
-    padding: 12px 16px !important;
+    color: #0f172a !important;
+    transition: all 0.2s ease !important;
+    border-radius: 8px !important;
+    margin: 2px 8px !important;
+    padding: 10px 16px !important;
+    font-weight: 500 !important;
 }
 
 .fi-sidebar-nav-item:hover {
-    background-color: rgba(255, 255, 255, 0.08) !important;
-    color: rgba(255, 255, 255, 1) !important;
+    background-color: #f1f5f9 !important;
+    color: #0f172a !important;
 }
 
-.fi-sidebar-nav-item.is-active {
-    background-color: rgba(33, 150, 243, 0.16) !important;
-    color: #90caf9 !important;
-    border-left: 4px solid #42a5f5 !important;
-    font-weight: 500 !important;
+.fi-sidebar-nav-item.active {
+    background-color: #6366f1 !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
 }
 
-/* Navigation Group Headers - Material UI */
-.fi-sidebar-nav-group-label {
-    color: rgba(255, 255, 255, 0.6) !important;
-    font-size: 0.75rem !important;
-    font-weight: 500 !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.08em !important;
-    padding: 16px 16px 8px 16px !important;
-    margin-top: 8px !important;
+.fi-sidebar-nav-item.active:hover {
+    background-color: #4f46e5 !important;
+    color: #ffffff !important;
 }
 
-/* Collapsible Navigation Groups */
-.fi-sidebar-nav-group {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+.fi-sidebar-nav-item-icon {
+    color: inherit !important;
+    opacity: 0.7 !important;
 }
 
-.fi-sidebar-nav-group-items {
-    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
-.fi-sidebar-nav-group[data-expanded="true"] .fi-sidebar-nav-group-items,
-.fi-sidebar-nav-group.is-expanded .fi-sidebar-nav-group-items {
-    max-height: 1000px !important;
+.fi-sidebar-nav-item.active .fi-sidebar-nav-item-icon {
     opacity: 1 !important;
+    color: #ffffff !important;
 }
 
-.fi-sidebar-nav-group[data-expanded="false"] .fi-sidebar-nav-group-items,
-.fi-sidebar-nav-group:not(.is-expanded):not([data-expanded="true"]) .fi-sidebar-nav-group-items {
-    max-height: 0 !important;
-    opacity: 0 !important;
-    overflow: hidden !important;
+/* Sidebar Navigation Groups */
+.fi-sidebar-nav-group {
+    margin: 8px 0 !important;
+}
+
+.fi-sidebar-nav-group-label {
+    color: #64748b !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    padding: 8px 16px !important;
+    margin-bottom: 4px !important;
 }
 
 .fi-sidebar-nav-group-button,
 .fi-sidebar-nav-group-toggle {
-    cursor: pointer !important;
-    user-select: none !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    padding: 12px 16px !important;
-    color: rgba(255, 255, 255, 0.87) !important;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    width: 100% !important;
-    background: transparent !important;
-    border: none !important;
-    text-align: left !important;
-    border-radius: 4px !important;
+    color: #0f172a !important;
+    padding: 10px 16px !important;
+    border-radius: 8px !important;
+    font-weight: 500 !important;
+    transition: all 0.2s ease !important;
 }
 
 .fi-sidebar-nav-group-button:hover,
 .fi-sidebar-nav-group-toggle:hover {
-    background-color: rgba(255, 255, 255, 0.08) !important;
-    color: rgba(255, 255, 255, 1) !important;
+    background-color: #f1f5f9 !important;
+    color: #0f172a !important;
 }
 
-.fi-sidebar-nav-group-button-icon,
-.fi-sidebar-nav-group-toggle-icon {
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    margin-left: auto !important;
-}
-
-.fi-sidebar-nav-group[data-expanded="true"] .fi-sidebar-nav-group-button-icon,
-.fi-sidebar-nav-group.is-expanded .fi-sidebar-nav-group-button-icon,
-.fi-sidebar-nav-group[data-expanded="true"] .fi-sidebar-nav-group-toggle-icon,
-.fi-sidebar-nav-group.is-expanded .fi-sidebar-nav-group-toggle-icon {
-    transform: rotate(90deg) !important;
-}
-
-/* Homepage Settings Group */
-.fi-sidebar-nav-group[data-group="Homepage Settings"] {
-    margin-top: 8px !important;
-}
-
-.fi-sidebar-nav-group[data-group="Homepage Settings"] .fi-sidebar-nav-group-button {
-    font-weight: 500 !important;
-    color: rgba(255, 255, 255, 0.87) !important;
-}
-
-.fi-sidebar-nav-group[data-group="Homepage Settings"] .fi-sidebar-nav-group-button:hover {
-    background-color: rgba(255, 255, 255, 0.08) !important;
-    color: rgba(255, 255, 255, 1) !important;
-}
-
-.fi-sidebar-nav-group[data-group="Homepage Settings"] .fi-sidebar-nav-group-items {
+.fi-sidebar-nav-group-items {
     padding-left: 8px !important;
-    border-left: 2px solid rgba(255, 255, 255, 0.12) !important;
-    margin-left: 8px !important;
 }
 
-/* Main Content Area - Material UI Dark */
+/* Main Content Area */
 .fi-main {
-    background: #121212 !important;
+    background: #f8fafc !important;
     min-height: 100vh !important;
-    color: rgba(255, 255, 255, 0.87) !important;
+    color: #0f172a !important;
 }
 
 .fi-main-content {
     padding: 24px !important;
-    background: #121212 !important;
+    background: #f8fafc !important;
 }
 
-/* Material UI Cards - Elevation System */
+/* Cards and Sections */
 .fi-section {
-    background: #1e1e1e !important;
-    border-radius: 4px !important;
-    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
-                0px 1px 1px 0px rgba(0, 0, 0, 0.14),
-                0px 1px 3px 0px rgba(0, 0, 0, 0.12) !important;
-    border: none !important;
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1) !important;
     padding: 24px !important;
     margin-bottom: 24px !important;
-    transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
-.fi-section:hover {
-    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
-                0px 2px 2px 0px rgba(0, 0, 0, 0.14),
-                0px 1px 5px 0px rgba(0, 0, 0, 0.12) !important;
-}
-
-.fi-card {
-    background: #1e1e1e !important;
-    border-radius: 4px !important;
-    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
-                0px 1px 1px 0px rgba(0, 0, 0, 0.14),
-                0px 1px 3px 0px rgba(0, 0, 0, 0.12) !important;
-    border: none !important;
-    padding: 24px !important;
-    transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    color: rgba(255, 255, 255, 0.87) !important;
-}
-
-.fi-card:hover {
-    box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2),
-                0px 8px 10px 1px rgba(0, 0, 0, 0.14),
-                0px 3px 14px 2px rgba(0, 0, 0, 0.12) !important;
 }
 
 .fi-section-header {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border-bottom: 1px solid #e2e8f0 !important;
     padding-bottom: 16px !important;
     margin-bottom: 24px !important;
 }
 
-/* Typography - Material UI */
-.fi-heading {
-    color: rgba(255, 255, 255, 0.87) !important;
-    font-weight: 500 !important;
+.fi-section-header-title {
+    color: #0f172a !important;
     font-size: 1.25rem !important;
-    line-height: 1.75rem !important;
-    letter-spacing: 0.00938em !important;
+    font-weight: 600 !important;
 }
 
-.fi-subheading {
-    color: rgba(255, 255, 255, 0.6) !important;
+.fi-section-header-description {
+    color: #64748b !important;
     font-size: 0.875rem !important;
-    margin-bottom: 16px !important;
-    line-height: 1.5 !important;
-    letter-spacing: 0.01071em !important;
+    margin-top: 4px !important;
 }
 
-/* Material UI Buttons */
-.fi-btn {
-    border-radius: 4px !important;
-    font-weight: 500 !important;
-    font-size: 0.875rem !important;
-    letter-spacing: 0.02857em !important;
-    text-transform: uppercase !important;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    padding: 10px 16px !important;
-    min-height: 36px !important;
-    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
-                0px 2px 2px 0px rgba(0, 0, 0, 0.14),
-                0px 1px 5px 0px rgba(0, 0, 0, 0.12) !important;
+/* Topbar */
+.fi-topbar-ctn {
+    background: #ffffff !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1) !important;
 }
 
-.fi-btn-primary {
-    background-color: #2196f3 !important;
-    color: rgba(255, 255, 255, 1) !important;
+.fi-topbar {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border-bottom: 1px solid #e2e8f0 !important;
 }
 
-.fi-btn-primary:hover {
-    background-color: #1976d2 !important;
-    box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2),
-                0px 4px 5px 0px rgba(0, 0, 0, 0.14),
-                0px 1px 10px 0px rgba(0, 0, 0, 0.12) !important;
+.fi-topbar-start,
+.fi-topbar-end {
+    color: #0f172a !important;
 }
 
-.fi-btn-secondary {
-    background-color: #7c3aed !important;
-    color: rgba(255, 255, 255, 1) !important;
+.fi-topbar-item {
+    color: #0f172a !important;
 }
 
-.fi-btn-secondary:hover {
-    background-color: #6d28d9 !important;
+.fi-topbar-item-btn {
+    color: #475569 !important;
+    background-color: transparent !important;
+    border-radius: 8px !important;
+    transition: all 0.2s ease !important;
+    padding: 8px 12px !important;
 }
 
-.fi-btn-success {
-    background-color: #4caf50 !important;
-    color: rgba(255, 255, 255, 1) !important;
+.fi-topbar-item-btn:hover {
+    background-color: #f1f5f9 !important;
+    color: #0f172a !important;
 }
 
-.fi-btn-success:hover {
-    background-color: #388e3c !important;
-}
-
-/* Material UI Inputs */
-.fi-input {
-    background-color: rgba(255, 255, 255, 0.05) !important;
-    border: 1px solid rgba(255, 255, 255, 0.23) !important;
-    border-radius: 4px !important;
-    padding: 14px 16px !important;
-    color: rgba(255, 255, 255, 0.87) !important;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    font-size: 1rem !important;
-    line-height: 1.5 !important;
-}
-
-.fi-input::placeholder {
-    color: rgba(255, 255, 255, 0.38) !important;
-}
-
-.fi-input:focus {
-    border-color: #42a5f5 !important;
-    background-color: rgba(255, 255, 255, 0.08) !important;
-    outline: none !important;
-    box-shadow: 0 0 0 2px rgba(66, 165, 245, 0.2) !important;
-}
-
-.fi-input:hover {
-    border-color: rgba(255, 255, 255, 0.5) !important;
-}
-
-.fi-label {
-    display: block !important;
-    font-size: 0.75rem !important;
-    font-weight: 400 !important;
-    color: rgba(255, 255, 255, 0.6) !important;
-    margin-bottom: 8px !important;
-    letter-spacing: 0.03333em !important;
-}
-
-/* Material UI Tables */
+/* Tables */
 .fi-ta-table {
-    background: #1e1e1e !important;
-    border-radius: 4px !important;
-    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
-                0px 1px 1px 0px rgba(0, 0, 0, 0.14),
-                0px 1px 3px 0px rgba(0, 0, 0, 0.12) !important;
-    border: none !important;
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 12px !important;
     overflow: hidden !important;
 }
 
-.fi-ta-table thead {
-    background-color: rgba(255, 255, 255, 0.05) !important;
+.fi-ta-header {
+    background: #f8fafc !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    color: #0f172a !important;
+    font-weight: 600 !important;
 }
 
-.fi-ta-table th {
-    color: rgba(255, 255, 255, 0.87) !important;
+.fi-ta-row {
+    border-bottom: 1px solid #f1f5f9 !important;
+    transition: background-color 0.2s ease !important;
+}
+
+.fi-ta-row:hover {
+    background-color: #f8fafc !important;
+}
+
+.fi-ta-cell {
+    color: #0f172a !important;
+    padding: 12px 16px !important;
+}
+
+/* Forms */
+.fi-input {
+    background: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 8px !important;
+    color: #0f172a !important;
+    padding: 10px 14px !important;
+    transition: all 0.2s ease !important;
+}
+
+.fi-input:focus {
+    border-color: #6366f1 !important;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1) !important;
+    outline: none !important;
+}
+
+.fi-input::placeholder {
+    color: #94a3b8 !important;
+}
+
+.fi-label {
+    color: #0f172a !important;
     font-weight: 500 !important;
-    font-size: 0.75rem !important;
-    padding: 16px !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.04em !important;
+    margin-bottom: 6px !important;
 }
 
-.fi-ta-table td {
-    padding: 16px !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
-    color: rgba(255, 255, 255, 0.87) !important;
+.fi-hint {
+    color: #64748b !important;
     font-size: 0.875rem !important;
+    margin-top: 4px !important;
 }
 
-.fi-ta-table tbody tr:hover {
-    background-color: rgba(255, 255, 255, 0.05) !important;
-}
-
-.fi-ta-table tbody tr:last-child td {
-    border-bottom: none !important;
-}
-
-/* Material UI Badges */
-.fi-badge {
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 4px !important;
-    padding: 4px 12px !important;
-    border-radius: 16px !important;
-    font-size: 0.75rem !important;
+/* Buttons */
+.fi-btn {
+    border-radius: 8px !important;
     font-weight: 500 !important;
-    letter-spacing: 0.02857em !important;
+    padding: 10px 20px !important;
+    transition: all 0.2s ease !important;
+}
+
+.fi-btn-primary {
+    background-color: #6366f1 !important;
+    color: #ffffff !important;
+    border: none !important;
+}
+
+.fi-btn-primary:hover {
+    background-color: #4f46e5 !important;
+    color: #ffffff !important;
+}
+
+.fi-btn-secondary {
+    background-color: #f1f5f9 !important;
+    color: #0f172a !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+.fi-btn-secondary:hover {
+    background-color: #e2e8f0 !important;
+    color: #0f172a !important;
+}
+
+.fi-btn-danger {
+    background-color: #ef4444 !important;
+    color: #ffffff !important;
+    border: none !important;
+}
+
+.fi-btn-danger:hover {
+    background-color: #dc2626 !important;
+    color: #ffffff !important;
+}
+
+/* Badges and Tags */
+.fi-badge {
+    border-radius: 6px !important;
+    font-weight: 500 !important;
+    padding: 4px 10px !important;
+    font-size: 0.75rem !important;
 }
 
 .fi-badge-success {
-    background-color: rgba(76, 175, 80, 0.2) !important;
-    color: #81c784 !important;
+    background-color: #d1fae5 !important;
+    color: #065f46 !important;
 }
 
 .fi-badge-warning {
-    background-color: rgba(255, 152, 0, 0.2) !important;
-    color: #ffb74d !important;
+    background-color: #fef3c7 !important;
+    color: #92400e !important;
 }
 
 .fi-badge-danger {
-    background-color: rgba(244, 67, 54, 0.2) !important;
-    color: #e57373 !important;
+    background-color: #fee2e2 !important;
+    color: #991b1b !important;
 }
 
 .fi-badge-info {
-    background-color: rgba(33, 150, 243, 0.2) !important;
-    color: #64b5f6 !important;
+    background-color: #dbeafe !important;
+    color: #1e40af !important;
 }
 
-/* Material UI Breadcrumbs */
-.fi-breadcrumbs {
-    display: flex !important;
-    align-items: center !important;
-    gap: 8px !important;
-    font-size: 0.875rem !important;
-    color: rgba(255, 255, 255, 0.6) !important;
-    margin-bottom: 16px !important;
+/* Modals and Overlays */
+.fi-modal {
+    background: #ffffff !important;
+    border-radius: 12px !important;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
 }
 
-.fi-breadcrumbs a {
-    color: #90caf9 !important;
-    text-decoration: none !important;
-    transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+.fi-modal-header {
+    border-bottom: 1px solid #e2e8f0 !important;
+    padding: 20px 24px !important;
 }
 
-.fi-breadcrumbs a:hover {
-    color: #64b5f6 !important;
-    text-decoration: underline !important;
+.fi-modal-title {
+    color: #0f172a !important;
+    font-size: 1.25rem !important;
+    font-weight: 600 !important;
 }
 
-.fi-breadcrumbs-current {
-    color: rgba(255, 255, 255, 0.87) !important;
-    font-weight: 400 !important;
-}
-
-/* Page Header - Material UI */
-.fi-header {
-    background: #1e1e1e !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+.fi-modal-body {
     padding: 24px !important;
-    margin-bottom: 24px !important;
-    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
-                0px 1px 1px 0px rgba(0, 0, 0, 0.14),
-                0px 1px 3px 0px rgba(0, 0, 0, 0.12) !important;
+    color: #0f172a !important;
 }
 
-.fi-header-heading {
-    color: rgba(255, 255, 255, 0.87) !important;
-    font-size: 1.5rem !important;
-    font-weight: 400 !important;
-    line-height: 1.334 !important;
-    letter-spacing: 0em !important;
+.fi-modal-footer {
+    border-top: 1px solid #e2e8f0 !important;
+    padding: 16px 24px !important;
+    background: #f8fafc !important;
 }
 
-.fi-header-subheading {
-    color: rgba(255, 255, 255, 0.6) !important;
-    font-size: 0.875rem !important;
-    margin-top: 4px !important;
-    letter-spacing: 0.01071em !important;
-}
-
-/* Action Buttons */
-.fi-header-actions {
-    display: flex !important;
-    align-items: center !important;
-    gap: 12px !important;
-}
-
-.fi-action-btn {
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 8px !important;
-    padding: 10px 16px !important;
-    border-radius: 4px !important;
-    font-size: 0.875rem !important;
-    font-weight: 500 !important;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    min-height: 36px !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.02857em !important;
-}
-
-/* Loading Skeletons - Material UI */
-.fi-skeleton {
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 75%) !important;
-    background-size: 200% 100% !important;
-    animation: skeleton-loading 1.5s ease-in-out infinite !important;
-    border-radius: 4px !important;
-}
-
-@keyframes skeleton-loading {
-    0% {
-        background-position: 200% 0;
-    }
-    100% {
-        background-position: -200% 0;
-    }
-}
-
-/* Material UI Animations */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(8px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.fi-fade-in {
-    animation: fadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
-/* Card Lift Effect - Material UI */
-.fi-card-lift {
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
-.fi-card-lift:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2),
-                0px 8px 10px 1px rgba(0, 0, 0, 0.14),
-                0px 3px 14px 2px rgba(0, 0, 0, 0.12) !important;
-}
-
-/* Drag and Drop - Material UI */
-.fi-draggable-item {
-    cursor: move !important;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    background: #1e1e1e !important;
-    border-radius: 4px !important;
-}
-
-.fi-draggable-item:hover {
-    background-color: rgba(255, 255, 255, 0.08) !important;
-    transform: translateX(4px) !important;
-}
-
-.fi-draggable-item.is-dragging {
-    opacity: 0.5 !important;
-    transform: scale(0.98) !important;
-}
-
-/* Floating Action Button - Material UI */
-.fi-fab {
-    position: fixed !important;
-    bottom: 24px !important;
-    right: 24px !important;
-    width: 56px !important;
-    height: 56px !important;
-    border-radius: 50% !important;
-    background-color: #2196f3 !important;
-    color: rgba(255, 255, 255, 1) !important;
-    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
-                0px 6px 10px 0px rgba(0, 0, 0, 0.14),
-                0px 1px 18px 0px rgba(0, 0, 0, 0.12) !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    cursor: pointer !important;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    z-index: 50 !important;
-    border: none !important;
-}
-
-.fi-fab:hover {
-    background-color: #1976d2 !important;
-    box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2),
-                0px 8px 10px 1px rgba(0, 0, 0, 0.14),
-                0px 3px 14px 2px rgba(0, 0, 0, 0.12) !important;
-}
-
-.fi-fab:active {
-    box-shadow: 0px 7px 8px -4px rgba(0, 0, 0, 0.2),
-                0px 12px 17px 2px rgba(0, 0, 0, 0.14),
-                0px 5px 22px 4px rgba(0, 0, 0, 0.12) !important;
-}
-
-/* Preview Panel - Material UI */
-.fi-preview-panel {
-    background: #1e1e1e !important;
-    border-radius: 4px !important;
-    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
-                0px 1px 1px 0px rgba(0, 0, 0, 0.14),
-                0px 1px 3px 0px rgba(0, 0, 0, 0.12) !important;
-    border: none !important;
-    padding: 24px !important;
-    position: sticky !important;
-    top: 24px !important;
-    max-height: calc(100vh - 48px) !important;
-    overflow-y: auto !important;
-}
-
-/* Toast Notifications - Material UI */
-.fi-toast {
-    background: #323232 !important;
-    border-radius: 4px !important;
-    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
-                0px 6px 10px 0px rgba(0, 0, 0, 0.14),
-                0px 1px 18px 0px rgba(0, 0, 0, 0.12) !important;
-    border: none !important;
-    padding: 14px 24px !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 12px !important;
-    animation: slideInRight 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    color: rgba(255, 255, 255, 0.87) !important;
-}
-
-@keyframes slideInRight {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
-/* Focus States - Material UI */
-.fi-focus-ring:focus-visible {
-    outline: none !important;
-    box-shadow: 0 0 0 2px rgba(66, 165, 245, 0.3) !important;
-    border-radius: 4px !important;
-}
-
-/* Select/Dropdown - Material UI */
-.fi-select,
+/* Dropdowns */
 .fi-dropdown {
-    background-color: rgba(255, 255, 255, 0.05) !important;
-    border: 1px solid rgba(255, 255, 255, 0.23) !important;
-    border-radius: 4px !important;
-    color: rgba(255, 255, 255, 0.87) !important;
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 8px !important;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1) !important;
 }
 
-.fi-select:focus,
-.fi-dropdown:focus {
-    border-color: #42a5f5 !important;
-    background-color: rgba(255, 255, 255, 0.08) !important;
-    box-shadow: 0 0 0 2px rgba(66, 165, 245, 0.2) !important;
+.fi-dropdown-item {
+    color: #0f172a !important;
+    padding: 10px 16px !important;
+    transition: background-color 0.2s ease !important;
 }
 
-/* Textarea - Material UI */
-.fi-textarea {
-    background-color: rgba(255, 255, 255, 0.05) !important;
-    border: 1px solid rgba(255, 255, 255, 0.23) !important;
-    border-radius: 4px !important;
-    padding: 14px 16px !important;
-    color: rgba(255, 255, 255, 0.87) !important;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    font-size: 1rem !important;
-    line-height: 1.5 !important;
-    resize: vertical !important;
+.fi-dropdown-item:hover {
+    background-color: #f1f5f9 !important;
+    color: #0f172a !important;
 }
 
-.fi-textarea:focus {
-    border-color: #42a5f5 !important;
-    background-color: rgba(255, 255, 255, 0.08) !important;
-    outline: none !important;
-    box-shadow: 0 0 0 2px rgba(66, 165, 245, 0.2) !important;
+/* Account Widget - Avatar and Dropdown */
+.fi-account-widget {
+    color: #0f172a !important;
 }
 
-/* Toggle/Switch - Material UI */
-.fi-toggle {
-    color: #42a5f5 !important;
+.fi-account-widget-trigger {
+    background: transparent !important;
+    border: none !important;
+    color: #0f172a !important;
+    padding: 4px !important;
+    border-radius: 8px !important;
+    transition: all 0.2s ease !important;
 }
 
-.fi-toggle input:checked + .fi-toggle-track {
-    background-color: #42a5f5 !important;
+.fi-account-widget-trigger:hover {
+    background-color: #f1f5f9 !important;
 }
 
-/* Checkbox/Radio - Material UI */
-.fi-checkbox input:checked,
-.fi-radio input:checked {
-    background-color: #42a5f5 !important;
-    border-color: #42a5f5 !important;
+.fi-account-widget-avatar {
+    border: 2px solid #e2e8f0 !important;
+    background: #6366f1 !important;
+    color: #ffffff !important;
 }
 
-/* Divider - Material UI */
-.fi-divider {
-    border-color: rgba(255, 255, 255, 0.12) !important;
-    margin: 16px 0 !important;
+/* Account Widget Dropdown Menu */
+.fi-account-widget-menu,
+.fi-account-menu,
+[class*="account-menu"],
+[class*="account-widget-menu"] {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1) !important;
+    padding: 8px !important;
+    min-width: 200px !important;
+    color: #0f172a !important;
 }
 
-/* Reduced Motion */
-@media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
-}
-
-/* Scrollbar - Material UI Dark */
-::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-
-::-webkit-scrollbar-track {
-    background: #121212;
-}
-
-::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.3);
-}
-
-/* Global Text Visibility - Ensure all text is visible */
-body,
-.fi-body,
-.fi-main,
-.fi-main-content,
-p,
-span,
-div,
-td,
-th,
-li,
-label,
-.fi-section,
-.fi-card {
-    color: rgba(255, 255, 255, 0.87) !important;
-}
-
-/* Headings - All levels */
-h1, h2, h3, h4, h5, h6,
-.fi-heading,
-.fi-title,
-.fi-subtitle,
-.fi-section-title,
-.fi-card-title {
-    color: rgba(255, 255, 255, 0.87) !important;
-}
-
-/* Secondary text elements */
-.fi-description,
-.fi-helper-text,
-.fi-hint,
-small,
-.fi-text-sm {
-    color: rgba(255, 255, 255, 0.6) !important;
-}
-
-/* Links */
-a,
-.fi-link,
-.fi-breadcrumbs-link {
-    color: #90caf9 !important;
+/* Account Widget Menu Items */
+.fi-account-widget-menu-item,
+.fi-account-menu-item,
+[class*="account-menu-item"] {
+    color: #0f172a !important;
+    padding: 10px 14px !important;
+    border-radius: 8px !important;
+    transition: all 0.2s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    font-weight: 500 !important;
     text-decoration: none !important;
 }
 
-a:hover,
-.fi-link:hover,
-.fi-breadcrumbs-link:hover {
-    color: #64b5f6 !important;
-    text-decoration: underline !important;
+.fi-account-widget-menu-item:hover,
+.fi-account-menu-item:hover,
+[class*="account-menu-item"]:hover {
+    background-color: #f1f5f9 !important;
+    color: #0f172a !important;
 }
 
-/* Icons - Ensure visibility */
-.fi-icon,
-svg,
-.fi-sidebar-nav-item-icon,
-.fi-btn-icon {
-    color: rgba(255, 255, 255, 0.87) !important;
-    fill: rgba(255, 255, 255, 0.87) !important;
+/* Account Widget Menu Header (User Info) */
+.fi-account-widget-menu-header,
+.fi-account-menu-header,
+[class*="account-menu-header"] {
+    padding: 12px 14px !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    margin-bottom: 4px !important;
 }
 
-.fi-sidebar-nav-item.is-active .fi-icon,
-.fi-sidebar-nav-item.is-active svg {
-    color: #90caf9 !important;
-    fill: #90caf9 !important;
+.fi-account-widget-menu-name,
+.fi-account-menu-name,
+[class*="account-menu-name"] {
+    color: #0f172a !important;
+    font-weight: 600 !important;
+    font-size: 0.875rem !important;
+    margin-bottom: 2px !important;
 }
 
-/* Form Elements - Enhanced Visibility */
-.fi-field-wrapper,
-.fi-field-label,
-.fi-field-hint,
-.fi-field-error {
-    color: rgba(255, 255, 255, 0.87) !important;
+.fi-account-widget-menu-email,
+.fi-account-menu-email,
+[class*="account-menu-email"] {
+    color: #64748b !important;
+    font-size: 0.75rem !important;
 }
 
-.fi-field-hint {
-    color: rgba(255, 255, 255, 0.6) !important;
+/* Account Widget Menu Divider */
+.fi-account-widget-menu-divider,
+.fi-account-menu-divider,
+[class*="account-menu-divider"] {
+    border-color: #e2e8f0 !important;
+    margin: 8px 0 !important;
 }
 
-.fi-field-error {
-    color: #e57373 !important;
+/* Account Widget Menu Actions */
+.fi-account-widget-menu-action,
+.fi-account-menu-action,
+[class*="account-menu-action"] {
+    color: #0f172a !important;
+    padding: 10px 14px !important;
+    border-radius: 8px !important;
+    transition: all 0.2s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    font-weight: 500 !important;
+    text-decoration: none !important;
+    width: 100% !important;
+    text-align: left !important;
 }
 
-/* Select Dropdown - Enhanced */
-select,
-.fi-select,
-.fi-select-input,
-.fi-select-option {
-    background-color: rgba(255, 255, 255, 0.05) !important;
-    border: 1px solid rgba(255, 255, 255, 0.23) !important;
-    color: rgba(255, 255, 255, 0.87) !important;
+.fi-account-widget-menu-action:hover,
+.fi-account-menu-action:hover,
+[class*="account-menu-action"]:hover {
+    background-color: #f1f5f9 !important;
+    color: #0f172a !important;
 }
 
-select:focus,
-.fi-select:focus,
-.fi-select-input:focus {
-    border-color: #42a5f5 !important;
-    background-color: rgba(255, 255, 255, 0.08) !important;
-    color: rgba(255, 255, 255, 0.87) !important;
+/* Account Widget Menu Icons */
+.fi-account-widget-menu-icon,
+.fi-account-menu-icon,
+[class*="account-menu-icon"] {
+    color: #64748b !important;
+    width: 18px !important;
+    height: 18px !important;
 }
 
-select option {
-    background-color: #1e1e1e !important;
-    color: rgba(255, 255, 255, 0.87) !important;
+.fi-account-widget-menu-action:hover .fi-account-widget-menu-icon,
+.fi-account-menu-action:hover .fi-account-menu-icon,
+[class*="account-menu-action"]:hover [class*="account-menu-icon"] {
+    color: #0f172a !important;
 }
 
-/* Checkbox and Radio - Enhanced */
-.fi-checkbox,
-.fi-radio {
-    color: rgba(255, 255, 255, 0.87) !important;
+/* Logout Button in Account Menu */
+.fi-account-widget-menu-logout,
+.fi-account-menu-logout,
+[class*="account-menu-logout"] {
+    color: #ef4444 !important;
+    padding: 10px 14px !important;
+    border-radius: 8px !important;
+    transition: all 0.2s ease !important;
 }
 
-.fi-checkbox input[type="checkbox"],
-.fi-radio input[type="radio"] {
-    accent-color: #42a5f5 !important;
+.fi-account-widget-menu-logout:hover,
+.fi-account-menu-logout:hover,
+[class*="account-menu-logout"]:hover {
+    background-color: #fee2e2 !important;
+    color: #dc2626 !important;
 }
 
-.fi-checkbox-label,
-.fi-radio-label {
-    color: rgba(255, 255, 255, 0.87) !important;
+/* Generic Filament Menu/Dropdown Overrides */
+.fi-menu,
+[class*="fi-menu"] {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 8px !important;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1) !important;
+    color: #0f172a !important;
 }
 
-/* Toggle Switch - Enhanced */
-.fi-toggle-label {
-    color: rgba(255, 255, 255, 0.87) !important;
+.fi-menu-item,
+[class*="fi-menu-item"] {
+    color: #0f172a !important;
+    padding: 10px 16px !important;
+    transition: background-color 0.2s ease !important;
 }
 
-.fi-toggle-track {
-    background-color: rgba(255, 255, 255, 0.3) !important;
+.fi-menu-item:hover,
+[class*="fi-menu-item"]:hover {
+    background-color: #f1f5f9 !important;
+    color: #0f172a !important;
 }
 
-.fi-toggle input:checked + .fi-toggle-track {
-    background-color: #42a5f5 !important;
+/* Additional Filament Account Widget Selectors */
+.fi-topbar-item[data-filament-dropdown-trigger],
+.fi-topbar-item button,
+.fi-topbar-item a {
+    color: #0f172a !important;
 }
 
-/* File Upload - Enhanced */
-.fi-file-upload,
-.fi-file-upload-area {
-    background-color: rgba(255, 255, 255, 0.05) !important;
-    border: 1px dashed rgba(255, 255, 255, 0.23) !important;
-    color: rgba(255, 255, 255, 0.87) !important;
+/* Filament Popover/Dropdown Container */
+[data-filament-dropdown-content],
+[role="menu"],
+[role="listbox"] {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1) !important;
+    color: #0f172a !important;
+    padding: 8px !important;
 }
 
-.fi-file-upload:hover {
-    border-color: rgba(255, 255, 255, 0.5) !important;
-    background-color: rgba(255, 255, 255, 0.08) !important;
+[data-filament-dropdown-content] > *,
+[role="menu"] > *,
+[role="listbox"] > * {
+    color: #0f172a !important;
 }
 
-/* Rich Text Editor - Enhanced */
-.fi-rich-editor,
-.fi-rich-editor-content,
-.fi-rich-editor-toolbar {
-    background-color: rgba(255, 255, 255, 0.05) !important;
-    border: 1px solid rgba(255, 255, 255, 0.23) !important;
-    color: rgba(255, 255, 255, 0.87) !important;
+[data-filament-dropdown-content] a,
+[data-filament-dropdown-content] button,
+[role="menu"] a,
+[role="menu"] button,
+[role="listbox"] a,
+[role="listbox"] button {
+    color: #0f172a !important;
+    padding: 10px 14px !important;
+    border-radius: 8px !important;
+    transition: all 0.2s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    width: 100% !important;
+    text-align: left !important;
+    text-decoration: none !important;
 }
 
-.fi-rich-editor:focus {
-    border-color: #42a5f5 !important;
-    background-color: rgba(255, 255, 255, 0.08) !important;
+[data-filament-dropdown-content] a:hover,
+[data-filament-dropdown-content] button:hover,
+[role="menu"] a:hover,
+[role="menu"] button:hover,
+[role="listbox"] a:hover,
+[role="listbox"] button:hover {
+    background-color: #f1f5f9 !important;
+    color: #0f172a !important;
 }
 
-.fi-rich-editor-toolbar button {
-    color: rgba(255, 255, 255, 0.87) !important;
+/* Ensure all dropdown text is readable */
+.fi-topbar [class*="dropdown"],
+.fi-topbar [class*="menu"],
+.fi-topbar [class*="popover"] {
+    background: #ffffff !important;
+    color: #0f172a !important;
 }
 
-.fi-rich-editor-toolbar button:hover {
-    background-color: rgba(255, 255, 255, 0.08) !important;
+.fi-topbar [class*="dropdown"] *,
+.fi-topbar [class*="menu"] *,
+.fi-topbar [class*="popover"] * {
+    color: #0f172a !important;
 }
 
-/* Modal/Dialog - Enhanced */
-.fi-modal,
-.fi-dialog,
-.fi-modal-content {
-    background: #1e1e1e !important;
-    color: rgba(255, 255, 255, 0.87) !important;
-    box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, 0.2),
-                0px 24px 38px 3px rgba(0, 0, 0, 0.14),
-                0px 9px 46px 8px rgba(0, 0, 0, 0.12) !important;
+/* Tabs */
+.fi-tabs {
+    border-bottom: 1px solid #e2e8f0 !important;
 }
 
-.fi-modal-header,
-.fi-dialog-header {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
-    color: rgba(255, 255, 255, 0.87) !important;
+.fi-tabs-item {
+    color: #64748b !important;
+    padding: 12px 16px !important;
+    font-weight: 500 !important;
+    transition: all 0.2s ease !important;
+    border-bottom: 2px solid transparent !important;
 }
 
-.fi-modal-title,
-.fi-dialog-title {
-    color: rgba(255, 255, 255, 0.87) !important;
+.fi-tabs-item:hover {
+    color: #0f172a !important;
 }
 
-/* Tooltip - Enhanced */
-.fi-tooltip {
-    background: #323232 !important;
-    color: rgba(255, 255, 255, 0.87) !important;
-    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
-                0px 6px 10px 0px rgba(0, 0, 0, 0.14),
-                0px 1px 18px 0px rgba(0, 0, 0, 0.12) !important;
+.fi-tabs-item.active {
+    color: #6366f1 !important;
+    border-bottom-color: #6366f1 !important;
 }
 
-/* Notification/Alert - Enhanced */
-.fi-notification,
-.fi-alert {
-    background: #1e1e1e !important;
-    color: rgba(255, 255, 255, 0.87) !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+/* Alerts and Notifications */
+.fi-notification {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1) !important;
+    color: #0f172a !important;
 }
 
 .fi-notification-success {
-    background: rgba(76, 175, 80, 0.1) !important;
-    border-color: rgba(76, 175, 80, 0.3) !important;
-    color: #81c784 !important;
+    border-left: 4px solid #10b981 !important;
+    background: #f0fdf4 !important;
 }
 
 .fi-notification-warning {
-    background: rgba(255, 152, 0, 0.1) !important;
-    border-color: rgba(255, 152, 0, 0.3) !important;
-    color: #ffb74d !important;
+    border-left: 4px solid #f59e0b !important;
+    background: #fffbeb !important;
 }
 
 .fi-notification-danger {
-    background: rgba(244, 67, 54, 0.1) !important;
-    border-color: rgba(244, 67, 54, 0.3) !important;
-    color: #e57373 !important;
+    border-left: 4px solid #ef4444 !important;
+    background: #fef2f2 !important;
 }
 
 .fi-notification-info {
-    background: rgba(33, 150, 243, 0.1) !important;
-    border-color: rgba(33, 150, 243, 0.3) !important;
-    color: #64b5f6 !important;
+    border-left: 4px solid #3b82f6 !important;
+    background: #eff6ff !important;
 }
 
-/* Pagination - Enhanced */
-.fi-pagination {
-    color: rgba(255, 255, 255, 0.87) !important;
-}
-
-.fi-pagination-link {
-    background-color: rgba(255, 255, 255, 0.05) !important;
-    color: rgba(255, 255, 255, 0.87) !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
-}
-
-.fi-pagination-link:hover {
-    background-color: rgba(255, 255, 255, 0.08) !important;
-    color: rgba(255, 255, 255, 1) !important;
-}
-
-.fi-pagination-link.active {
-    background-color: #2196f3 !important;
-    color: rgba(255, 255, 255, 1) !important;
-    border-color: #2196f3 !important;
-}
-
-/* Search/Filter - Enhanced */
-.fi-search,
-.fi-filter {
-    background-color: rgba(255, 255, 255, 0.05) !important;
-    border: 1px solid rgba(255, 255, 255, 0.23) !important;
-    color: rgba(255, 255, 255, 0.87) !important;
-}
-
-.fi-search:focus,
-.fi-filter:focus {
-    border-color: #42a5f5 !important;
-    background-color: rgba(255, 255, 255, 0.08) !important;
-}
-
-.fi-search::placeholder,
-.fi-filter::placeholder {
-    color: rgba(255, 255, 255, 0.38) !important;
-}
-
-/* Action Menu/Dropdown - Enhanced */
-.fi-action-menu,
-.fi-dropdown-menu {
-    background: #1e1e1e !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
-    box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2),
-                0px 8px 10px 1px rgba(0, 0, 0, 0.14),
-                0px 3px 14px 2px rgba(0, 0, 0, 0.12) !important;
-}
-
-.fi-action-menu-item,
-.fi-dropdown-menu-item {
-    color: rgba(255, 255, 255, 0.87) !important;
-}
-
-.fi-action-menu-item:hover,
-.fi-dropdown-menu-item:hover {
-    background-color: rgba(255, 255, 255, 0.08) !important;
-    color: rgba(255, 255, 255, 1) !important;
-}
-
-/* Tabs - Enhanced */
-.fi-tabs {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
-}
-
-.fi-tab {
-    color: rgba(255, 255, 255, 0.6) !important;
-}
-
-.fi-tab:hover {
-    color: rgba(255, 255, 255, 0.87) !important;
-    background-color: rgba(255, 255, 255, 0.05) !important;
-}
-
-.fi-tab.active {
-    color: #90caf9 !important;
-    border-bottom: 2px solid #42a5f5 !important;
-}
-
-/* Stats/Widgets - Enhanced */
-.fi-stats,
-.fi-widget {
-    background: #1e1e1e !important;
-    color: rgba(255, 255, 255, 0.87) !important;
-}
-
-.fi-stat-value,
-.fi-widget-value {
-    color: rgba(255, 255, 255, 0.87) !important;
-}
-
-.fi-stat-label,
-.fi-widget-label {
-    color: rgba(255, 255, 255, 0.6) !important;
-}
-
-/* Empty State - Enhanced */
-.fi-empty-state {
-    color: rgba(255, 255, 255, 0.6) !important;
-}
-
-.fi-empty-state-title {
-    color: rgba(255, 255, 255, 0.87) !important;
-}
-
-.fi-empty-state-description {
-    color: rgba(255, 255, 255, 0.6) !important;
-}
-
-/* Loading Spinner - Enhanced */
-.fi-spinner,
-.fi-loading {
-    border-color: rgba(255, 255, 255, 0.2) !important;
-    border-top-color: #42a5f5 !important;
-}
-
-/* Code/Pre blocks - Enhanced */
-code,
-pre,
-.fi-code {
-    background-color: rgba(255, 255, 255, 0.05) !important;
-    color: rgba(255, 255, 255, 0.87) !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
-}
-
-/* Progress Bar - Enhanced */
+/* Progress Bars */
 .fi-progress {
-    background-color: rgba(255, 255, 255, 0.1) !important;
+    background-color: #e2e8f0 !important;
+    border-radius: 9999px !important;
+    height: 8px !important;
 }
 
 .fi-progress-bar {
-    background-color: #42a5f5 !important;
+    background-color: #6366f1 !important;
+    border-radius: 9999px !important;
 }
 
-/* Override any light theme elements */
+/* Links */
+.fi-link {
+    color: #6366f1 !important;
+    text-decoration: none !important;
+    font-weight: 500 !important;
+    transition: color 0.2s ease !important;
+}
+
+.fi-link:hover {
+    color: #4f46e5 !important;
+    text-decoration: underline !important;
+}
+
+/* Dividers */
+.fi-divider {
+    border-color: #e2e8f0 !important;
+}
+
+/* Code Blocks */
+.fi-code {
+    background: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 6px !important;
+    color: #0f172a !important;
+    padding: 2px 6px !important;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace !important;
+}
+
+/* Ensure all text is readable */
 * {
-    color-scheme: dark !important;
+    color-scheme: light !important;
 }
 
-/* Ensure all text inherits dark theme */
+/* Force text visibility */
 .fi-body *,
 .fi-main *,
 .fi-section *,
@@ -1083,389 +733,148 @@ pre,
     color: inherit !important;
 }
 
-/* Force visibility for any remaining elements */
-[class*="fi-"] {
-    color: rgba(255, 255, 255, 0.87) !important;
-}
-
-/* Specific overrides for common Filament classes */
+/* Override any dark theme text colors */
 .fi-text-gray-500,
 .fi-text-gray-600,
 .fi-text-gray-700 {
-    color: rgba(255, 255, 255, 0.6) !important;
+    color: #64748b !important;
 }
 
 .fi-text-gray-900,
 .fi-text-gray-800 {
-    color: rgba(255, 255, 255, 0.87) !important;
+    color: #0f172a !important;
 }
 
 .fi-bg-white {
-    background-color: #1e1e1e !important;
+    background-color: #ffffff !important;
 }
 
 .fi-bg-gray-50,
 .fi-bg-gray-100 {
-    background-color: rgba(255, 255, 255, 0.05) !important;
+    background-color: #f8fafc !important;
 }
 
 .fi-border-gray-200,
 .fi-border-gray-300 {
-    border-color: rgba(255, 255, 255, 0.12) !important;
+    border-color: #e2e8f0 !important;
 }
 
-/* Topbar - Material UI Dark Theme */
-.fi-topbar-ctn {
-    background: #1e1e1e !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+/* Brand/Logo Area */
+.fi-brand {
+    color: #0f172a !important;
+    font-weight: 600 !important;
 }
 
-.fi-topbar {
-    background: #1e1e1e !important;
-    color: rgba(255, 255, 255, 0.87) !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
-    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
-                0px 1px 1px 0px rgba(0, 0, 0, 0.14),
-                0px 1px 3px 0px rgba(0, 0, 0, 0.12) !important;
+/* Search */
+.fi-search {
+    background: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 8px !important;
+    color: #0f172a !important;
 }
 
-.fi-topbar-start,
-.fi-topbar-end {
-    color: rgba(255, 255, 255, 0.87) !important;
+.fi-search:focus {
+    border-color: #6366f1 !important;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1) !important;
 }
 
-.fi-topbar-item {
-    color: rgba(255, 255, 255, 0.87) !important;
+/* Select Dropdowns */
+.fi-select {
+    background: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 8px !important;
+    color: #0f172a !important;
 }
 
-.fi-topbar-item-btn {
-    color: rgba(255, 255, 255, 0.87) !important;
-    background-color: transparent !important;
-    border-radius: 4px !important;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+.fi-select:focus {
+    border-color: #6366f1 !important;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1) !important;
 }
 
-.fi-topbar-item-btn:hover {
-    background-color: rgba(255, 255, 255, 0.08) !important;
-    color: rgba(255, 255, 255, 1) !important;
+/* Checkboxes and Radio Buttons */
+.fi-checkbox,
+.fi-radio {
+    accent-color: #6366f1 !important;
 }
 
-.fi-topbar-item.active .fi-topbar-item-btn {
-    background-color: rgba(33, 150, 243, 0.16) !important;
-    color: #90caf9 !important;
+/* Toggle Switches */
+.fi-toggle {
+    --toggle-bg: #cbd5e1 !important;
+    --toggle-active-bg: #6366f1 !important;
 }
 
-.fi-topbar-item-label {
-    color: rgba(255, 255, 255, 0.87) !important;
+/* Loading Spinners */
+.fi-spinner {
+    border-color: #e2e8f0 !important;
+    border-top-color: #6366f1 !important;
 }
 
-.fi-topbar-nav-groups {
-    color: rgba(255, 255, 255, 0.87) !important;
+/* Breadcrumbs */
+.fi-breadcrumbs {
+    color: #64748b !important;
 }
 
-.fi-topbar-open-sidebar-btn,
-.fi-topbar-close-sidebar-btn,
-.fi-topbar-open-collapse-sidebar-btn,
-.fi-topbar-close-collapse-sidebar-btn {
-    color: rgba(255, 255, 255, 0.87) !important;
-    background-color: transparent !important;
+.fi-breadcrumbs-item {
+    color: #64748b !important;
 }
 
-.fi-topbar-open-sidebar-btn:hover,
-.fi-topbar-close-sidebar-btn:hover,
-.fi-topbar-open-collapse-sidebar-btn:hover,
-.fi-topbar-close-collapse-sidebar-btn:hover {
-    background-color: rgba(255, 255, 255, 0.08) !important;
-    color: rgba(255, 255, 255, 1) !important;
+.fi-breadcrumbs-item.active {
+    color: #0f172a !important;
+    font-weight: 500 !important;
 }
 
-/* User Menu - Material UI Dark Theme */
-.fi-simple-user-menu-ctn {
-    background: transparent !important;
+.fi-breadcrumbs-separator {
+    color: #cbd5e1 !important;
 }
 
-.fi-user-menu-trigger {
-    background-color: transparent !important;
-    color: rgba(255, 255, 255, 0.87) !important;
-    border-radius: 4px !important;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+/* Pagination */
+.fi-pagination {
+    color: #0f172a !important;
 }
 
-.fi-user-menu-trigger:hover {
-    background-color: rgba(255, 255, 255, 0.08) !important;
-    color: rgba(255, 255, 255, 1) !important;
+.fi-pagination-item {
+    color: #475569 !important;
+    border: 1px solid #e2e8f0 !important;
+    background: #ffffff !important;
 }
 
-.fi-user-menu {
-    background: #1e1e1e !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
-    box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2),
-                0px 8px 10px 1px rgba(0, 0, 0, 0.14),
-                0px 3px 14px 2px rgba(0, 0, 0, 0.12) !important;
-    border-radius: 4px !important;
-    color: rgba(255, 255, 255, 0.87) !important;
+.fi-pagination-item:hover {
+    background: #f1f5f9 !important;
+    color: #0f172a !important;
 }
 
-.fi-user-menu-item {
-    color: rgba(255, 255, 255, 0.87) !important;
-    background-color: transparent !important;
-    border-radius: 4px !important;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+.fi-pagination-item.active {
+    background: #6366f1 !important;
+    color: #ffffff !important;
+    border-color: #6366f1 !important;
 }
 
-.fi-user-menu-item:hover {
-    background-color: rgba(255, 255, 255, 0.08) !important;
-    color: rgba(255, 255, 255, 1) !important;
+/* Tooltips */
+.fi-tooltip {
+    background: #0f172a !important;
+    color: #ffffff !important;
+    border-radius: 6px !important;
+    padding: 6px 12px !important;
+    font-size: 0.875rem !important;
 }
 
-.fi-user-menu-item-label {
-    color: rgba(255, 255, 255, 0.87) !important;
-}
-
-.fi-user-menu-item-icon {
-    color: rgba(255, 255, 255, 0.87) !important;
-}
-
-/* Avatar - Material UI Dark Theme */
-.fi-avatar {
-    background-color: rgba(255, 255, 255, 0.1) !important;
-    color: rgba(255, 255, 255, 0.87) !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
-}
-
-.fi-avatar-img {
-    border-radius: 50% !important;
-}
-
-/* Account Widget - Material UI Dark Theme */
-.fi-account-widget {
-    background: #1e1e1e !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
-    border-radius: 4px !important;
-    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
-                0px 1px 1px 0px rgba(0, 0, 0, 0.14),
-                0px 1px 3px 0px rgba(0, 0, 0, 0.12) !important;
-    color: rgba(255, 255, 255, 0.87) !important;
-}
-
-.fi-account-widget-main {
-    color: rgba(255, 255, 255, 0.87) !important;
-}
-
-.fi-account-widget-heading {
-    color: rgba(255, 255, 255, 0.87) !important;
-}
-
-.fi-account-widget-user-name {
-    color: rgba(255, 255, 255, 0.87) !important;
-}
-
-.fi-account-widget-logout-form {
-    border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
-}
-
-/* Widgets - Material UI Dark Theme (Recent Applications, etc.) */
-.fi-widget {
-    background: #1e1e1e !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
-    border-radius: 4px !important;
-    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
-                0px 1px 1px 0px rgba(0, 0, 0, 0.14),
-                0px 1px 3px 0px rgba(0, 0, 0, 0.12) !important;
-    color: rgba(255, 255, 255, 0.87) !important;
-}
-
-.fi-widget-header {
-    background: transparent !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
-    color: rgba(255, 255, 255, 0.87) !important;
-}
-
-.fi-widget-heading {
-    color: rgba(255, 255, 255, 0.87) !important;
-}
-
-.fi-widget-content {
-    background: transparent !important;
-    color: rgba(255, 255, 255, 0.87) !important;
-}
-
-.fi-widget-footer {
-    background: transparent !important;
-    border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
-    color: rgba(255, 255, 255, 0.6) !important;
-}
-
-/* Table Widget (Recent Applications) - Material UI Dark Theme */
-.fi-ta-widget {
-    background: #1e1e1e !important;
-    color: rgba(255, 255, 255, 0.87) !important;
-}
-
-.fi-ta-widget-header {
-    background: rgba(255, 255, 255, 0.05) !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
-    color: rgba(255, 255, 255, 0.87) !important;
-}
-
-.fi-ta-widget-table {
-    background: #1e1e1e !important;
-    color: rgba(255, 255, 255, 0.87) !important;
-}
-
-.fi-ta-widget-table thead {
-    background-color: rgba(255, 255, 255, 0.05) !important;
-}
-
-.fi-ta-widget-table th {
-    color: rgba(255, 255, 255, 0.87) !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
-}
-
-.fi-ta-widget-table td {
-    color: rgba(255, 255, 255, 0.87) !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
-}
-
-.fi-ta-widget-table tbody tr:hover {
-    background-color: rgba(255, 255, 255, 0.05) !important;
-}
-
-/* Footer - Material UI Dark Theme */
-.fi-footer {
-    background: #1e1e1e !important;
-    border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
-    color: rgba(255, 255, 255, 0.6) !important;
-    box-shadow: 0px -2px 1px -1px rgba(0, 0, 0, 0.2),
-                0px -1px 1px 0px rgba(0, 0, 0, 0.14),
-                0px -1px 3px 0px rgba(0, 0, 0, 0.12) !important;
-}
-
-.fi-footer-content {
-    color: rgba(255, 255, 255, 0.6) !important;
-}
-
-.fi-footer-link {
-    color: rgba(255, 255, 255, 0.6) !important;
-    text-decoration: none !important;
-    transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
-.fi-footer-link:hover {
-    color: #90caf9 !important;
-    text-decoration: underline !important;
-}
-
-/* Dropdown Menu (User Menu Dropdown) - Material UI Dark Theme */
+/* Ensure maximum readability */
+.fi-body,
+.fi-main,
+.fi-section,
+.fi-card,
+.fi-modal,
 .fi-dropdown {
-    background: #1e1e1e !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
-    box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2),
-                0px 8px 10px 1px rgba(0, 0, 0, 0.14),
-                0px 3px 14px 2px rgba(0, 0, 0, 0.12) !important;
-    border-radius: 4px !important;
+    color: #0f172a !important;
 }
 
-.fi-dropdown-list {
-    background: transparent !important;
+/* High contrast for important elements */
+.fi-heading {
+    color: #0f172a !important;
+    font-weight: 600 !important;
 }
 
-.fi-dropdown-list-item {
-    color: rgba(255, 255, 255, 0.87) !important;
-    background-color: transparent !important;
-    border-radius: 4px !important;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
-.fi-dropdown-list-item:hover {
-    background-color: rgba(255, 255, 255, 0.08) !important;
-    color: rgba(255, 255, 255, 1) !important;
-}
-
-.fi-dropdown-list-item-icon {
-    color: rgba(255, 255, 255, 0.87) !important;
-}
-
-.fi-dropdown-list-item-label {
-    color: rgba(255, 255, 255, 0.87) !important;
-}
-
-/* Icon Buttons in Topbar - Material UI Dark Theme */
-.fi-icon-btn {
-    color: rgba(255, 255, 255, 0.87) !important;
-    background-color: transparent !important;
-    border-radius: 4px !important;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
-.fi-icon-btn:hover {
-    background-color: rgba(255, 255, 255, 0.08) !important;
-    color: rgba(255, 255, 255, 1) !important;
-}
-
-.fi-icon-btn svg {
-    color: rgba(255, 255, 255, 0.87) !important;
-    fill: rgba(255, 255, 255, 0.87) !important;
-}
-
-/* Logo in Topbar - Material UI Dark Theme */
-.fi-logo {
-    color: rgba(255, 255, 255, 0.87) !important;
-}
-
-.fi-logo img {
-    filter: brightness(0) invert(1) !important;
-}
-
-/* Global Search in Topbar - Material UI Dark Theme */
-.fi-global-search {
-    background-color: rgba(255, 255, 255, 0.05) !important;
-    border: 1px solid rgba(255, 255, 255, 0.23) !important;
-    border-radius: 4px !important;
-    color: rgba(255, 255, 255, 0.87) !important;
-}
-
-.fi-global-search:focus {
-    border-color: #42a5f5 !important;
-    background-color: rgba(255, 255, 255, 0.08) !important;
-    box-shadow: 0 0 0 2px rgba(66, 165, 245, 0.2) !important;
-}
-
-.fi-global-search::placeholder {
-    color: rgba(255, 255, 255, 0.38) !important;
-}
-
-/* Database Notifications - Material UI Dark Theme */
-.fi-database-notifications {
-    background: transparent !important;
-    color: rgba(255, 255, 255, 0.87) !important;
-}
-
-.fi-database-notifications-trigger {
-    background-color: transparent !important;
-    color: rgba(255, 255, 255, 0.87) !important;
-    border-radius: 4px !important;
-}
-
-.fi-database-notifications-trigger:hover {
-    background-color: rgba(255, 255, 255, 0.08) !important;
-}
-
-.fi-database-notifications-menu {
-    background: #1e1e1e !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
-    box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2),
-                0px 8px 10px 1px rgba(0, 0, 0, 0.14),
-                0px 3px 14px 2px rgba(0, 0, 0, 0.12) !important;
-    color: rgba(255, 255, 255, 0.87) !important;
-}
-
-.fi-database-notification-item {
-    background: transparent !important;
-    color: rgba(255, 255, 255, 0.87) !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
-}
-
-.fi-database-notification-item:hover {
-    background-color: rgba(255, 255, 255, 0.08) !important;
+.fi-subheading {
+    color: #475569 !important;
+    font-weight: 500 !important;
 }
