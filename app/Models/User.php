@@ -51,7 +51,7 @@ class User extends Authenticatable
      * Override hasRole to always return true for 'admin' role
      * This makes all users effectively admins
      */
-    public function hasRole($roles, string $guard = null): bool
+    public function hasRole($roles, ?string $guard = null): bool
     {
         // If checking for admin role, always return true
         if (is_string($roles) && $roles === 'admin') {
@@ -60,7 +60,7 @@ class User extends Authenticatable
         if (is_array($roles) && in_array('admin', $roles)) {
             return true;
         }
-        
+
         // For other roles, use the parent implementation
         return parent::hasRole($roles, $guard);
     }
@@ -69,7 +69,7 @@ class User extends Authenticatable
      * Override hasAnyRole to always return true if 'admin' is in the list
      * This makes all users effectively admins
      */
-    public function hasAnyRole($roles, string $guard = null): bool
+    public function hasAnyRole($roles, ?string $guard = null): bool
     {
         // If checking for admin role, always return true
         if (is_string($roles) && $roles === 'admin') {
@@ -78,7 +78,7 @@ class User extends Authenticatable
         if (is_array($roles) && in_array('admin', $roles)) {
             return true;
         }
-        
+
         // For other roles, use the parent implementation
         return parent::hasAnyRole($roles, $guard);
     }

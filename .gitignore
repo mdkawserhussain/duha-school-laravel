@@ -14,7 +14,7 @@
 /storage/framework/sessions/*
 /storage/framework/views/*
 /storage/app/public/*
-database/database.sqlite
+# database/database.sqlite
 
 # IDE and OS specific ignores
 .DS_Store
