@@ -7,7 +7,7 @@
 
 @php
     $shareUrl = $url ?? url()->current();
-    $shareTitle = $title ?? config('app.name');
+    $shareTitle = $title ?? \App\Helpers\SiteSettingsHelper::websiteName();
     $shareDescription = $description ?? '';
     $shareImage = $image ?? asset('images/og-default.jpg');
     

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Message Received - Al-Maghrib International School</title>
+    <title>Contact Message Received - {{ $siteName ?? \App\Helpers\SiteHelper::getSiteName() }}</title>
     <style>
         body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
         .container { max-width: 600px; margin: 0 auto; padding: 20px; }
@@ -24,7 +24,7 @@
         <div class="content">
             <p>Dear {{ $data['name'] }},</p>
 
-            <p>Thank you for contacting Al-Maghrib International School. We have received your message and appreciate you taking the time to reach out to us.</p>
+            <p>Thank you for contacting {{ $siteName ?? \App\Helpers\SiteHelper::getSiteName() }}. We have received your message and appreciate you taking the time to reach out to us.</p>
 
             <div class="message-box">
                 <h3>Your Message Details:</h3>
@@ -58,23 +58,23 @@
                 <li><strong>Email:</strong> <a href="mailto:info@almaghribschool.com">info@almaghribschool.com</a></li>
                 <li><strong>Phone:</strong> {{ config('contact.phone_display') }}</li>
                 <li><strong>Office Hours:</strong> Sunday-Thursday, 9:00 AM - 3:00 PM</li>
-                <li><strong>Address:</strong> Al-Maghrib International School, Chattogram, Bangladesh</li>
+                <li><strong>Address:</strong> {{ $siteName ?? \App\Helpers\SiteHelper::getSiteName() }}, Chattogram, Bangladesh</li>
             </ul>
 
             <div style="text-align: center; margin: 30px 0;">
                 <a href="{{ route('home') }}" class="button">Visit Our Website</a>
             </div>
 
-            <p>Thank you for your interest in Al-Maghrib International School. We look forward to assisting you.</p>
+            <p>Thank you for your interest in {{ $siteName ?? \App\Helpers\SiteHelper::getSiteName() }}. We look forward to assisting you.</p>
 
             <p>Best regards,<br>
             <strong>Communications Team</strong><br>
-            Al-Maghrib International School</p>
+            {{ $siteName ?? \App\Helpers\SiteHelper::getSiteName() }}</p>
         </div>
 
         <div class="footer">
             <p>This is an automated confirmation. Please do not reply to this email.</p>
-            <p>© {{ date('Y') }} Al-Maghrib International School. All rights reserved.</p>
+            <p>© {{ date('Y') }} {{ $siteName ?? \App\Helpers\SiteHelper::getSiteName() }}. All rights reserved.</p>
         </div>
     </div>
 </body>

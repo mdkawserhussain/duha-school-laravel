@@ -26,7 +26,7 @@ class PageFactory extends Factory
             'title' => $title,
             'slug' => Str::slug($title),
             'content' => fake()->paragraphs(6, true),
-            'meta_title' => $title . ' - Al-Maghrib International School',
+            'meta_title' => $title . ' - Duha International School',
             'meta_description' => fake()->sentence(15),
             'seo_keywords' => fake()->words(5),
             'is_published' => true,

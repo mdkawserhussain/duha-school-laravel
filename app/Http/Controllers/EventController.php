@@ -39,22 +39,18 @@ class EventController extends Controller
             ->header('Cache-Control', 'public, max-age=1800');
     }
 
-    public function show($id)
+    public function show(\App\Models\Event $event)
     {
-        $event = $this->eventService->findPublishedEvent($id);
-
-        if (!$event) {
+        if (!$event->is_published || $event->published_at > now()) {
             abort(404);
         }
 
         return view('pages.events.show', compact('event'));
     }
 
-    public function exportIcs($id)
+    public function exportIcs(\App\Models\Event $event)
     {
-        $event = $this->eventService->findPublishedEvent($id);
-
-        if (!$event) {
+        if (!$event->is_published || $event->published_at > now()) {
             abort(404);
         }
 
@@ -78,7 +74,7 @@ class EventController extends Controller
 
         $ics = "BEGIN:VCALENDAR\r\n";
         $ics .= "VERSION:2.0\r\n";
-        $ics .= "PRODID:-//Al-Maghrib International School//Event Calendar//EN\r\n";
+        $ics .= "PRODID:-//" . \App\Helpers\SiteHelper::getSiteName() . "//Event Calendar//EN\r\n";
         $ics .= "CALSCALE:GREGORIAN\r\n";
         $ics .= "METHOD:PUBLISH\r\n";
         $ics .= "BEGIN:VEVENT\r\n";

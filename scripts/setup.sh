@@ -2,7 +2,7 @@
 
 set -e
 
-echo "🚀 Setting up Al-Maghrib International School Laravel Application..."
+echo "🚀 Setting up Duha International School Laravel Application..."
 
 # Check if .env exists
 if [ ! -f .env ]; then

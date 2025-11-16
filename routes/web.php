@@ -25,8 +25,8 @@ Route::get('/api/search/autocomplete', [SearchController::class, 'autocomplete']
 
 // Events
 Route::get('/events', [EventController::class, 'index'])->name('events.index');
-Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
-Route::get('/events/{event}/ics', [EventController::class, 'exportIcs'])->name('events.ics');
+Route::get('/events/{event:slug}', [EventController::class, 'show'])->name('events.show');
+Route::get('/events/{event:slug}/ics', [EventController::class, 'exportIcs'])->name('events.ics');
 Route::get('/feed/events.atom', [EventController::class, 'feed'])->name('events.feed');
 
 // Notices

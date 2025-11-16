@@ -64,31 +64,54 @@ class AdvisorsSection extends Page implements HasForms
                                 FormComponents\TextInput::make('name')
                                     ->label('Name')
                                     ->required()
-                                    ->maxLength(255),
+                                    ->maxLength(255)
+                                    ->columnSpan(1),
                                 
                                 FormComponents\TextInput::make('title')
                                     ->label('Title/Role')
                                     ->required()
                                     ->maxLength(255)
-                                    ->placeholder('e.g., CHIEF ADVISOR'),
+                                    ->placeholder('e.g., Chair, Board of Governors')
+                                    ->columnSpan(1),
                                 
                                 FormComponents\Textarea::make('description')
                                     ->label('Description')
+                                    ->required()
                                     ->maxLength(500)
                                     ->rows(3)
-                                    ->placeholder('e.g., Khateeb & Principal, Green Lane Masjid & Islamic Centre, London, UK'),
-                                
-                                FormComponents\TextInput::make('subtitle')
-                                    ->label('Subtitle/Additional Info')
-                                    ->maxLength(255)
-                                    ->placeholder('e.g., Former Professor, University of Chittagong, Bangladesh'),
+                                    ->placeholder('e.g., Former Cambridge examiner & Islamic pedagogy researcher.')
+                                    ->columnSpanFull(),
                                 
                                 FormComponents\TextInput::make('photo_url')
                                     ->label('Photo URL')
                                     ->url()
                                     ->maxLength(500)
-                                    ->placeholder('https://example.com/photo.jpg'),
+                                    ->placeholder('https://example.com/photo.jpg')
+                                    ->helperText('URL to the advisor\'s profile photo')
+                                    ->columnSpanFull(),
+                                
+                                FormComponents\TextInput::make('linkedin_url')
+                                    ->label('LinkedIn URL')
+                                    ->url()
+                                    ->maxLength(500)
+                                    ->placeholder('https://linkedin.com/in/username')
+                                    ->columnSpan(1),
+                                
+                                FormComponents\TextInput::make('email')
+                                    ->label('Email')
+                                    ->email()
+                                    ->maxLength(255)
+                                    ->placeholder('advisor@example.com')
+                                    ->columnSpan(1),
+                                
+                                FormComponents\TextInput::make('accent_color')
+                                    ->label('Accent Color')
+                                    ->maxLength(20)
+                                    ->placeholder('#F4C430')
+                                    ->helperText('Hex color code for the advisor\'s accent color (optional)')
+                                    ->columnSpan(1),
                             ])
+                            ->columns(2)
                             ->defaultItems(3)
                             ->minItems(1)
                             ->collapsible()

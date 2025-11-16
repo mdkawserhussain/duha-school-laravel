@@ -1,7 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Our Staff - Al-Maghrib International School')
-@section('meta-description', 'Meet our dedicated team of educators and administrators at Al-Maghrib International School')
+@php
+    $siteName = \App\Helpers\SiteHelper::getSiteName();
+@endphp
+@section('title', 'Our Staff - ' . $siteName)
+@section('meta-description', 'Meet our dedicated team of educators and administrators at ' . $siteName)
 
 @section('content')
     <!-- Page Header -->

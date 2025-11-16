@@ -75,7 +75,7 @@ class RoleSeeder extends Seeder
 
         // Create admin user
         $admin = User::firstOrCreate(
-            ['email' => 'admin@almaghribschool.com'],
+            ['email' => 'admin@duhaschool.com'],
             [
                 'name' => 'Administrator',
                 'password' => Hash::make('password'), // Change this in production!
@@ -85,7 +85,7 @@ class RoleSeeder extends Seeder
 
         // Create editor user
         $editor = User::firstOrCreate(
-            ['email' => 'editor@almaghribschool.com'],
+            ['email' => 'editor@duhaschool.com'],
             [
                 'name' => 'Content Editor',
                 'password' => Hash::make('password'), // Change this in production!
@@ -95,7 +95,7 @@ class RoleSeeder extends Seeder
 
         // Create admissions officer user
         $admissionsOfficer = User::firstOrCreate(
-            ['email' => 'admissions@almaghribschool.com'],
+            ['email' => 'admissions@duhaschool.com'],
             [
                 'name' => 'Admissions Officer',
                 'password' => Hash::make('password'), // Change this in production!

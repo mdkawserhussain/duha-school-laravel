@@ -17,26 +17,26 @@ class PageSeeder extends Seeder
                 'title' => 'Principal\'s Message',
                 'slug' => 'principal',
                 'content' => '<div class="prose max-w-none">
-                    <h2>Welcome to Al-Maghrib International School</h2>
-                    <p>As the Principal of Al-Maghrib International School, I am delighted to welcome you to our institution. Our school is dedicated to providing a comprehensive education that combines the best of Islamic values with the Cambridge International Curriculum.</p>
+                    <h2>Welcome to Duha International School</h2>
+                    <p>As the Principal of Duha International School, I am delighted to welcome you to our institution. Our school is dedicated to providing a comprehensive education that combines the best of Islamic values with the Cambridge International Curriculum.</p>
                     
                     <h3>Our Mission</h3>
-                    <p>At Al-Maghrib International School, we strive to nurture well-rounded individuals who are not only academically excellent but also morally upright and socially responsible. We believe in fostering a love for learning while instilling Islamic values that guide our students throughout their lives.</p>
+                    <p>At Duha International School, we strive to nurture well-rounded individuals who are not only academically excellent but also morally upright and socially responsible. We believe in fostering a love for learning while instilling Islamic values that guide our students throughout their lives.</p>
                     
                     <h3>Academic Excellence</h3>
                     <p>Our Cambridge curriculum ensures that our students receive a world-class education that is recognized globally. We prepare our students for international examinations while maintaining a strong foundation in Islamic studies and Arabic language.</p>
                     
                     <h3>Holistic Development</h3>
-                    <p>Education at Al-Maghrib goes beyond academics. We focus on character building, leadership skills, and community service. Our students are encouraged to participate in various extracurricular activities, sports, and community initiatives.</p>
+                    <p>Education at Duha goes beyond academics. We focus on character building, leadership skills, and community service. Our students are encouraged to participate in various extracurricular activities, sports, and community initiatives.</p>
                     
                     <h3>Our Commitment</h3>
                     <p>We are committed to providing a safe, nurturing, and inclusive environment where every student can thrive. Our dedicated faculty and staff work tirelessly to ensure that each child receives personalized attention and support.</p>
                     
-                    <p>I invite you to explore our website, visit our campus, and discover what makes Al-Maghrib International School a unique place for your child\'s educational journey.</p>
+                    <p>I invite you to explore our website, visit our campus, and discover what makes Duha International School a unique place for your child\'s educational journey.</p>
                     
                     <p><strong>May Allah guide us all in our pursuit of knowledge and excellence.</strong></p>
                 </div>',
-                'meta_title' => 'Principal\'s Message - Al-Maghrib International School',
+                'meta_title' => 'Principal\'s Message - Duha International School',
                 'meta_description' => 'Read the Principal\'s welcome message and learn about our mission, values, and commitment to providing quality Islamic and Cambridge curriculum education.',
                 'seo_keywords' => ['principal', 'message', 'welcome', 'mission', 'values'],
                 'is_published' => true,
@@ -50,7 +50,7 @@ class PageSeeder extends Seeder
                     <p>To be a leading international school that produces well-rounded, morally upright, and academically excellent individuals who contribute positively to society while maintaining strong Islamic values and identity.</p>
                     
                     <h2>Our Mission</h2>
-                    <p>Al-Maghrib International School is committed to providing a comprehensive education that:</p>
+                    <p>Duha International School is committed to providing a comprehensive education that:</p>
                     <ul>
                         <li>Integrates Islamic values with Cambridge International Curriculum</li>
                         <li>Fosters critical thinking, creativity, and problem-solving skills</li>
@@ -80,8 +80,8 @@ class PageSeeder extends Seeder
                         </div>
                     </div>
                 </div>',
-                'meta_title' => 'Vision & Mission - Al-Maghrib International School',
-                'meta_description' => 'Learn about our vision, mission, and core values that guide Al-Maghrib International School in providing quality education.',
+                'meta_title' => 'Vision & Mission - Duha International School',
+                'meta_description' => 'Learn about our vision, mission, and core values that guide Duha International School in providing quality education.',
                 'seo_keywords' => ['vision', 'mission', 'values', 'goals', 'objectives'],
                 'is_published' => true,
                 'published_at' => now(),
@@ -91,7 +91,7 @@ class PageSeeder extends Seeder
                 'slug' => 'curriculum',
                 'content' => '<div class="prose max-w-none">
                     <h2>Our Curriculum</h2>
-                    <p>Al-Maghrib International School offers a comprehensive curriculum that combines the Cambridge International Curriculum with Islamic Studies, ensuring our students receive a well-rounded education.</p>
+                    <p>Duha International School offers a comprehensive curriculum that combines the Cambridge International Curriculum with Islamic Studies, ensuring our students receive a well-rounded education.</p>
                     
                     <h3>Cambridge International Curriculum</h3>
                     <p>We follow the Cambridge International Curriculum, which is recognized worldwide for its academic rigor and international perspective. This curriculum prepares students for:</p>
@@ -151,7 +151,7 @@ class PageSeeder extends Seeder
                     <h3>Extracurricular Activities</h3>
                     <p>Beyond academics, we offer various extracurricular activities including sports, arts, debate, science clubs, and community service programs.</p>
                 </div>',
-                'meta_title' => 'Curriculum - Al-Maghrib International School',
+                'meta_title' => 'Curriculum - Duha International School',
                 'meta_description' => 'Explore our comprehensive curriculum combining Cambridge International Curriculum with Islamic Studies for grades 1-12.',
                 'seo_keywords' => ['curriculum', 'cambridge', 'igcse', 'islamic studies', 'education'],
                 'is_published' => true,
@@ -162,7 +162,7 @@ class PageSeeder extends Seeder
                 'slug' => 'policies',
                 'content' => '<div class="prose max-w-none">
                     <h2>School Policies</h2>
-                    <p>Al-Maghrib International School maintains comprehensive policies to ensure a safe, respectful, and productive learning environment for all students, staff, and parents.</p>
+                    <p>Duha International School maintains comprehensive policies to ensure a safe, respectful, and productive learning environment for all students, staff, and parents.</p>
                     
                     <h3>Admission Policy</h3>
                     <ul>
@@ -231,7 +231,7 @@ class PageSeeder extends Seeder
                     
                     <p><strong>Note:</strong> For detailed information on any policy, please contact the school administration or refer to the complete student handbook.</p>
                 </div>',
-                'meta_title' => 'School Policies - Al-Maghrib International School',
+                'meta_title' => 'School Policies - Duha International School',
                 'meta_description' => 'Review our comprehensive school policies including admission, attendance, dress code, behavior, and academic integrity policies.',
                 'seo_keywords' => ['policies', 'rules', 'guidelines', 'admission', 'attendance'],
                 'is_published' => true,
@@ -242,7 +242,7 @@ class PageSeeder extends Seeder
                 'slug' => 'campus',
                 'content' => '<div class="prose max-w-none">
                     <h2>Welcome to Our Campus</h2>
-                    <p>Al-Maghrib International School is located in the heart of Chittagong, providing a modern and conducive learning environment for our students.</p>
+                    <p>Duha International School is located in the heart of Chittagong, providing a modern and conducive learning environment for our students.</p>
                     
                     <h3>Campus Facilities</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
@@ -275,7 +275,7 @@ class PageSeeder extends Seeder
                     <h3>Location</h3>
                     <p><strong>Address:</strong> House-131/1, Road-01, South Khulshi, Chittagong, Bangladesh</p>
                     <p><strong>Phone:</strong> +880-1766-500001, +880-1835-318137</p>
-                    <p><strong>Email:</strong> info@almaghribinternationalschool.com</p>
+                    <p><strong>Email:</strong> info@duhainternationalschool.com</p>
                     
                     <h3>Office Hours</h3>
                     <ul>
@@ -286,7 +286,7 @@ class PageSeeder extends Seeder
                     <h3>Schedule a Visit</h3>
                     <p>We welcome prospective students and parents to visit our campus. Please contact our admissions office to schedule a tour. Our friendly staff will be happy to show you around and answer any questions you may have.</p>
                 </div>',
-                'meta_title' => 'Visit Our Campus - Al-Maghrib International School',
+                'meta_title' => 'Visit Our Campus - Duha International School',
                 'meta_description' => 'Explore our modern campus facilities including classrooms, laboratories, library, sports facilities, and more. Schedule a visit today.',
                 'seo_keywords' => ['campus', 'facilities', 'visit', 'tour', 'location'],
                 'is_published' => true,
@@ -299,7 +299,7 @@ class PageSeeder extends Seeder
                     <h2>Privacy Policy</h2>
                     <p><strong>Last Updated:</strong> ' . now()->format('F d, Y') . '</p>
                     
-                    <p>Al-Maghrib International School ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website.</p>
+                    <p>Duha International School ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website.</p>
                     
                     <h3>Information We Collect</h3>
                     <p>We may collect information that you provide directly to us, including:</p>
@@ -341,10 +341,10 @@ class PageSeeder extends Seeder
                     
                     <h3>Contact Us</h3>
                     <p>If you have questions about this Privacy Policy, please contact us at:</p>
-                    <p><strong>Email:</strong> info@almaghribinternationalschool.com<br>
+                    <p><strong>Email:</strong> info@duhainternationalschool.com<br>
                     <strong>Phone:</strong> +880-1766-500001</p>
                 </div>',
-                'meta_title' => 'Privacy Policy - Al-Maghrib International School',
+                'meta_title' => 'Privacy Policy - Duha International School',
                 'meta_description' => 'Read our privacy policy to understand how we collect, use, and protect your personal information.',
                 'seo_keywords' => ['privacy', 'policy', 'data protection', 'privacy rights'],
                 'is_published' => true,
@@ -357,7 +357,7 @@ class PageSeeder extends Seeder
                     <h2>Terms of Service</h2>
                     <p><strong>Last Updated:</strong> ' . now()->format('F d, Y') . '</p>
                     
-                    <p>Please read these Terms of Service ("Terms") carefully before using the Al-Maghrib International School website.</p>
+                    <p>Please read these Terms of Service ("Terms") carefully before using the Duha International School website.</p>
                     
                     <h3>Acceptance of Terms</h3>
                     <p>By accessing and using this website, you accept and agree to be bound by the terms and provision of this agreement.</p>
@@ -384,23 +384,23 @@ class PageSeeder extends Seeder
                     </ul>
                     
                     <h3>Intellectual Property</h3>
-                    <p>All content on this website, including text, graphics, logos, images, and software, is the property of Al-Maghrib International School and is protected by copyright and other intellectual property laws.</p>
+                    <p>All content on this website, including text, graphics, logos, images, and software, is the property of Duha International School and is protected by copyright and other intellectual property laws.</p>
                     
                     <h3>Disclaimer</h3>
                     <p>The materials on our website are provided on an "as is" basis. We make no warranties, expressed or implied, and hereby disclaim all other warranties including implied warranties of merchantability or fitness for a particular purpose.</p>
                     
                     <h3>Limitation of Liability</h3>
-                    <p>In no event shall Al-Maghrib International School or its suppliers be liable for any damages arising out of the use or inability to use the materials on our website.</p>
+                    <p>In no event shall Duha International School or its suppliers be liable for any damages arising out of the use or inability to use the materials on our website.</p>
                     
                     <h3>Revisions</h3>
                     <p>We may revise these terms of service at any time without notice. By using this website, you are agreeing to be bound by the then current version of these terms of service.</p>
                     
                     <h3>Contact Information</h3>
                     <p>If you have any questions about these Terms of Service, please contact us at:</p>
-                    <p><strong>Email:</strong> info@almaghribinternationalschool.com<br>
+                    <p><strong>Email:</strong> info@duhainternationalschool.com<br>
                     <strong>Phone:</strong> +880-1766-500001</p>
                 </div>',
-                'meta_title' => 'Terms of Service - Al-Maghrib International School',
+                'meta_title' => 'Terms of Service - Duha International School',
                 'meta_description' => 'Read our terms of service to understand the rules and regulations for using our website.',
                 'seo_keywords' => ['terms', 'service', 'agreement', 'legal', 'conditions'],
                 'is_published' => true,

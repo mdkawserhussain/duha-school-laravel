@@ -200,6 +200,18 @@ trait ManagesHomePageSection
             ]);
         }
         
+        // Check if data actually changed before saving
+        $originalData = $section->data ?? [];
+        $dataChanged = json_encode($originalData) !== json_encode($sectionData) ||
+                       $section->title !== ($data['title'] ?? $section->title) ||
+                       $section->subtitle !== ($data['subtitle'] ?? $section->subtitle) ||
+                       $section->description !== ($data['description'] ?? $section->description) ||
+                       $section->content !== ($data['content'] ?? $section->content) ||
+                       $section->button_text !== ($data['button_text'] ?? $section->button_text) ||
+                       $section->button_link !== ($data['button_link'] ?? $section->button_link) ||
+                       $section->is_active !== ($data['is_active'] ?? $section->is_active) ||
+                       $section->sort_order !== ($data['sort_order'] ?? $section->sort_order);
+        
         $section->data = $sectionData;
         
         // Always set required fields explicitly before saving
@@ -224,45 +236,64 @@ trait ManagesHomePageSection
             throw new \Exception('Invalid model instance. Expected HomePageSection, got: ' . get_class($section));
         }
         
-        // Save the section
-        try {
-            $section->save();
-        } catch (\Exception $e) {
-            \Log::error('Failed to save HomePageSection', [
-                'section_key' => $section->section_key,
-                'section_type' => $section->section_type,
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
-            throw $e;
-        }
-
-        // Handle image upload from form state
+        // Handle image upload from form state - only if file actually changed
         // Filament FileUpload stores files in the raw state
         $imageData = $formState['image'] ?? null;
+        $imageChanged = false;
         
         if ($imageData) {
-            // Clear existing images when new ones are uploaded
-            $section->clearMediaCollection('images');
-            
             // Handle array of images (if multiple uploads)
             if (is_array($imageData)) {
                 foreach ($imageData as $imagePath) {
-                    if (!empty($imagePath)) {
-                        $this->processImageUpload($section, $imagePath);
+                    if (!empty($imagePath) && is_string($imagePath) && !filter_var($imagePath, FILTER_VALIDATE_URL)) {
+                        // Check if this is a new file
+                        $existingMedia = $section->getFirstMedia('images');
+                        if (!$existingMedia || !str_contains($existingMedia->getPath(), $imagePath)) {
+                            if (!$imageChanged) {
+                                // Clear existing images when new ones are uploaded
+                                $section->clearMediaCollection('images');
+                                $imageChanged = true;
+                            }
+                            $this->processImageUpload($section, $imagePath);
+                        }
                     }
                 }
             } 
             // Handle single image string
-            elseif (is_string($imageData) && !empty($imageData)) {
-                $this->processImageUpload($section, $imageData);
+            elseif (is_string($imageData) && !empty($imageData) && !filter_var($imageData, FILTER_VALIDATE_URL)) {
+                // Check if this is a new file
+                $existingMedia = $section->getFirstMedia('images');
+                if (!$existingMedia || !str_contains($existingMedia->getPath(), $imageData)) {
+                    // Clear existing images when new ones are uploaded
+                    $section->clearMediaCollection('images');
+                    $this->processImageUpload($section, $imageData);
+                    $imageChanged = true;
+                }
             }
             
-            // Reload section to get fresh media relationship
-            $section->refresh();
+            // Reload section to get fresh media relationship only if image changed
+            if ($imageChanged) {
+                $section->refresh();
+            }
         }
-
-        $this->clearCache();
+        
+        // Only save if data actually changed
+        if ($dataChanged || $imageChanged) {
+            try {
+                $section->save();
+            } catch (\Exception $e) {
+                \Log::error('Failed to save HomePageSection', [
+                    'section_key' => $section->section_key,
+                    'section_type' => $section->section_type,
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+                throw $e;
+            }
+            
+            // Only clear cache if data actually changed
+            $this->clearCache();
+        }
 
         Notification::make()
             ->title('Section saved successfully')

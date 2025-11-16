@@ -4,14 +4,13 @@
     <div class="absolute inset-0 opacity-10" style="background-image:url('data:image/svg+xml,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;160&quot; height=&quot;160&quot; viewBox=&quot;0 0 160 160&quot;><g fill=&quot;none&quot; fill-rule=&quot;evenodd&quot; opacity=&quot;.16&quot;><path d=&quot;M0 0h160v160H0z&quot;/><path d=&quot;M80 40l40 80H40z&quot; stroke=&quot;%23F4C430&quot; stroke-width=&quot;0.6&quot; opacity=&quot;.3&quot;/></g></svg>');"></div>
     
     <div class="container relative z-10 mx-auto px-6 lg:px-12">
-        <div class="mb-14 text-center">
-            <p class="text-xs font-semibold uppercase tracking-[0.5em]" style="color: #7F8DB2;">Highlights</p>
-            <h2 class="mt-4 text-3xl font-bold text-white md:text-4xl">Recognising Our Learners</h2>
-            <p class="mt-3 text-white max-w-3xl mx-auto opacity-90">From Qur'an recitation championships to Cambridge distinctions, our students lead locally and globally.</p>
-        </div>
-
         @php
-            $achievements = [
+            $section = $homePageSections['achievements'] ?? null;
+            $sectionData = $section && $section->is_active ? $section->data : [];
+            $title = $section?->title ?? 'Recognising Our Learners';
+            $subtitle = $section?->data['subtitle'] ?? $section?->subtitle ?? 'Highlights';
+            $description = $section?->description ?? 'From Qur\'an recitation championships to Cambridge distinctions, our students lead locally and globally.';
+            $defaultAchievements = [
                 [
                     'title' => "Cambridge Top Achievers",
                     'copy' => 'Multiple "Top in Bangladesh" awards in Mathematics & English.',
@@ -37,7 +36,17 @@
                     'icon' => 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z'
                 ],
             ];
+            
+            // Use achievements from section data, or default if not available
+            $achievements = $sectionData['achievements'] ?? $defaultAchievements;
         @endphp
+
+        @if($section && $section->is_active && count($achievements) > 0)
+        <div class="mb-14 text-center">
+            <p class="text-xs font-semibold uppercase tracking-[0.5em]" style="color: #7F8DB2;">{{ $subtitle }}</p>
+            <h2 class="mt-4 text-3xl font-bold text-white md:text-4xl">{{ $title }}</h2>
+            <p class="mt-3 text-white max-w-3xl mx-auto opacity-90">{{ $description }}</p>
+        </div>
 
         <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             @foreach ($achievements as $achievement)
@@ -56,15 +65,18 @@
                     <h3 class="mt-4 text-2xl font-semibold text-white">{{ $achievement['title'] }}</h3>
                     <p class="mt-3 text-white leading-relaxed opacity-90">{{ $achievement['copy'] }}</p>
                     
-                    <!-- Learn More Link -->
-                    <div class="mt-6 flex items-center text-sm font-semibold transition-colors" style="color: #6EC1F5;">
-                        Learn More
+                    <!-- Call-to-Action Button -->
+                    @if(!empty($achievement['link']) && !empty($achievement['button_text']))
+                    <a href="{{ $achievement['link'] }}" class="mt-6 flex items-center text-sm font-semibold transition-colors" style="color: #6EC1F5;">
+                        {{ $achievement['button_text'] }}
                         <svg class="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                         </svg>
-                    </div>
+                    </a>
+                    @endif
                 </div>
             @endforeach
         </div>
+        @endif
     </div>
 </section>
