@@ -114,6 +114,10 @@
     <div class="absolute inset-0 opacity-15" 
          style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: 0; padding: 0; background-image:url('data:image/svg+xml,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;120&quot; height=&quot;120&quot; viewBox=&quot;0 0 120 120&quot;><g fill=&quot;none&quot; fill-rule=&quot;evenodd&quot; opacity=&quot;.25&quot;><path d=&quot;M60 0l60 60-60 60L0 60z&quot; stroke=&quot;%23F4C430&quot; stroke-width=&quot;0.5&quot; opacity=&quot;.3&quot;/></g></svg>');"></div>
 
+    <!-- 5% White overlay for entire hero section -->
+    <div class="absolute inset-0 bg-white/5 z-[5]" 
+         style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: 0; padding: 0; background-color: rgba(255, 255, 255, 0.05); z-index: 5;"></div>
+
     <!-- Content Container - Positioned to account for navbar overlay without creating gaps -->
     <div class="relative z-10 w-full mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16 md:pb-20 lg:pb-24"
          style="margin: 0; padding-top: 0 !important; padding-left: 1rem; padding-right: 1rem; padding-bottom: 3rem;">
@@ -122,7 +126,7 @@
             <div class="text-white space-y-8">
                 <!-- School crest badge -->
                 @if($badge)
-                <div class="inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/5 px-5 py-2 text-[0.65rem] uppercase tracking-[0.3em] backdrop-blur-sm text-white">
+                <div class="inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/5 px-5 py-2 text-[0.65rem] uppercase tracking-[0.3em] text-white" style="background-color: rgba(255, 255, 255, 0.05);">
                     <svg class="h-4 w-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
                     </svg>
@@ -143,7 +147,7 @@
                 <!-- Dual CTAs -->
                 <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6 sm:mt-8">
                     @if($primaryButtonText && $primaryButtonLink)
-                    <a href="{{ $primaryButtonLink }}" class="inline-flex items-center justify-center rounded-xl border-2 border-white/30 bg-white/10 px-6 py-3 sm:px-8 sm:py-4 text-sm sm:text-base font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/20 hover:border-white/50">
+                    <a href="{{ $primaryButtonLink }}" class="inline-flex items-center justify-center rounded-xl border-2 border-white/30 px-6 py-3 sm:px-8 sm:py-4 text-sm sm:text-base font-semibold text-white transition-all hover:border-white/50" style="background-color: rgba(255, 255, 255, 0.05);">
                         {{ $primaryButtonText }}
                         <svg class="ml-2 sm:ml-3 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -151,7 +155,7 @@
                     </a>
                     @endif
                     @if($secondaryButtonText && $secondaryButtonLink)
-                    <a href="{{ $secondaryButtonLink }}" class="inline-flex items-center justify-center rounded-xl border-2 border-white/30 bg-white/10 px-6 py-3 sm:px-8 sm:py-4 text-sm sm:text-base font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/20 hover:border-white/50">
+                    <a href="{{ $secondaryButtonLink }}" class="inline-flex items-center justify-center rounded-xl border-2 border-white/30 px-6 py-3 sm:px-8 sm:py-4 text-sm sm:text-base font-semibold text-white transition-all hover:border-white/50" style="background-color: rgba(255, 255, 255, 0.05);">
                         {{ $secondaryButtonText }}
                         <svg class="ml-2 sm:ml-3 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
@@ -165,7 +169,7 @@
                 <div class="grid gap-6 text-sm sm:grid-cols-2">
                     @foreach($features as $feature)
                     <div class="flex items-start gap-3">
-                        <div class="rounded-2xl bg-white/15 p-2 backdrop-blur-sm">
+                        <div class="rounded-2xl p-2" style="background-color: rgba(255, 255, 255, 0.05);">
                             <svg class="h-5 w-5 text-white sm:h-6 sm:w-6" fill="currentColor" viewBox="0 0 20 20" width="20" height="20">
                                 <path d="{{ $feature['icon'] ?? '' }}" />
                             </svg>
@@ -184,7 +188,7 @@
             <div class="grid gap-6">
                 @if(count($statsCards) > 0)
                     @foreach($statsCards as $card)
-                    <div class="rounded-3xl border border-white/30 p-6 backdrop-blur-xl shadow-2xl" style="background: linear-gradient(135deg, rgba(15, 34, 76, 0.85), rgba(12, 27, 61, 0.9)); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);">
+                    <div class="rounded-3xl border border-white/30 p-6 shadow-2xl" style="background-color: rgba(255, 255, 255, 0.05); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);">
                         <div class="flex items-center justify-between text-sm text-white">
                             <span>{{ $card['label1'] ?? '' }}</span>
                             <span>{{ $card['label2'] ?? '' }}</span>
@@ -198,7 +202,7 @@
                 <!-- Stats pills -->
                 <div class="grid grid-cols-3 gap-4 text-center text-white">
                     @foreach($statsPills as $pill)
-                    <div class="rounded-2xl p-4 backdrop-blur-sm border border-white/30" style="background: linear-gradient(135deg, rgba(15, 34, 76, 0.8), rgba(12, 27, 61, 0.85)); box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.3);">
+                    <div class="rounded-2xl p-4 border border-white/30" style="background-color: rgba(255, 255, 255, 0.05); box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.3);">
                         <div class="text-3xl font-bold text-white">{{ $pill['value'] ?? '' }}</div>
                         <div class="text-xs uppercase tracking-wide text-white mt-1">{{ $pill['label'] ?? '' }}</div>
                     </div>

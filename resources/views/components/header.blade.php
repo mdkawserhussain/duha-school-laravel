@@ -24,9 +24,9 @@
 @endphp
 
 @if($announcements->isNotEmpty())
-<div class="announcement-bar text-white text-sm overflow-hidden backdrop-blur-md" 
+<div class="announcement-bar text-white text-sm overflow-hidden" 
      id="announcement-bar" 
-     style="position: fixed; top: 0; left: 0; right: 0; z-index: 60; width: 100%; margin: 0 !important; padding: 0.5rem 0 !important; background: rgba(0, 0, 0, 0.2) !important;"
+     style="position: fixed; top: 0; left: 0; right: 0; z-index: 60; width: 100%; margin: 0 !important; padding: 0.5rem 0 !important; background: rgba(255, 255, 255, 0.05) !important;"
      x-data="{ scrolled: false }"
      x-init="
          const announcementBar = $el;
@@ -65,12 +65,8 @@
 <!-- Main Navigation Bar -->
 <header 
     class="fixed top-0 left-0 w-full z-50 transition-all duration-300"
-    :class="{
-        'backdrop-blur-md': !scrolled && {{ request()->routeIs('home') ? 'true' : 'false' }},
-        'backdrop-blur-sm': scrolled || !{{ request()->routeIs('home') ? 'true' : 'false' }}
-    }"
     :style="{
-        backgroundColor: (scrolled || !{{ request()->routeIs('home') ? 'true' : 'false' }}) ? '{{ $primaryColor }}' : 'rgba(0, 0, 0, 0.2)',
+        backgroundColor: (scrolled || !{{ request()->routeIs('home') ? 'true' : 'false' }}) ? '{{ $primaryColor }}' : 'rgba(255, 255, 255, 0.05)',
         boxShadow: scrolled ? '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)' : 'none'
     }"
     x-data="{ 
@@ -357,8 +353,8 @@
         x-transition:leave-end="opacity-0"
         style="display: none;"
         @click.away="mobileMenuOpen = false">
-        <div class="fixed inset-0 bg-black/50 backdrop-blur-sm" @click="mobileMenuOpen = false"></div>
-        <div class="fixed inset-y-0 right-0 w-full max-w-sm bg-white/95 backdrop-blur-md shadow-xl overflow-y-auto"
+                <div class="fixed inset-0 bg-black/50" @click="mobileMenuOpen = false"></div>
+                <div class="fixed inset-y-0 right-0 w-full max-w-sm bg-white/95 shadow-xl overflow-y-auto"
              :style="{
                  backgroundColor: scrolled ? '{{ $primaryColor }}' : 'rgba(255, 255, 255, 0.95)'
              }">

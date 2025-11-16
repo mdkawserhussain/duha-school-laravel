@@ -726,13 +726,11 @@
 
     /* Announcement Bar - Enhanced */
     .announcement-bar {
-        background: rgba(0, 0, 0, 0.2) !important;
+        background: rgba(255, 255, 255, 0.05) !important;
         color: white;
         padding: 0.5rem 0 !important;
         overflow: hidden;
         position: fixed !important;
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
         border-bottom: none !important;
         margin: 0 !important;
     }
