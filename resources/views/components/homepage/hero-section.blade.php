@@ -63,10 +63,10 @@
 
 @if($heroSlide && $heroSlide->is_active)
 <section class="hero-section relative w-full flex items-center overflow-hidden bg-aisd-midnight" 
-         style="position: relative; top: 0; left: 0; margin: 0 !important; padding: 0 !important; min-height: 100vh; height: 100vh; width: 100vw; max-width: 100vw; overflow-x: hidden;">
+         style="position: relative; top: 0; left: 0; margin: 0 !important; padding: 0 !important; min-height: 100vh; height: 100vh; width: 100vw; max-width: 100vw; overflow-x: hidden; pointer-events: none;">
     <!-- Background Video Container - Handle both direct video URLs and YouTube URLs -->
     <div class="absolute inset-0 w-full h-full overflow-hidden" 
-         style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; width: 100vw; height: 100vh; margin: 0; padding: 0;">
+         style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; width: 100vw; height: 100vh; margin: 0 !important; padding: 0 !important; min-width: 100vw;">
         @php
             // Check if it's a YouTube URL
             $isYouTube = preg_match('/^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/', $videoUrl, $matches);
@@ -78,7 +78,7 @@
             <iframe
                 id="hero-bg-video"
                 class="absolute inset-0 w-full h-full object-cover"
-                style="position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; object-fit: cover; border: none; margin: 0; padding: 0;"
+                style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; width: 100vw !important; min-width: 100vw !important; height: 100vh; object-fit: cover; object-position: center center; border: none; margin: 0 !important; padding: 0 !important;"
                 src="https://www.youtube.com/embed/{{ $youtubeId }}?autoplay=1&mute=1&loop=1&playlist={{ $youtubeId }}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1"
                 allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
                 allowfullscreen
@@ -90,7 +90,7 @@
             <video
                 id="hero-bg-video"
                 class="absolute inset-0 w-full h-full object-cover"
-                style="position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; object-fit: cover; margin: 0; padding: 0;"
+                style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; width: 100vw !important; min-width: 100vw !important; height: 100vh; object-fit: cover; object-position: center center; margin: 0 !important; padding: 0 !important;"
                 autoplay
                 muted
                 loop
@@ -108,19 +108,19 @@
 
     <!-- Dark overlay for text readability -->
     <div class="absolute inset-0 bg-gradient-to-br from-aisd-midnight/85 via-aisd-ocean/80 to-aisd-cobalt/85" 
-         style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: 0; padding: 0;"></div>
+         style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: 0; padding: 0; pointer-events: none;"></div>
 
     <!-- Decorative pattern overlay -->
     <div class="absolute inset-0 opacity-15" 
-         style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: 0; padding: 0; background-image:url('data:image/svg+xml,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;120&quot; height=&quot;120&quot; viewBox=&quot;0 0 120 120&quot;><g fill=&quot;none&quot; fill-rule=&quot;evenodd&quot; opacity=&quot;.25&quot;><path d=&quot;M60 0l60 60-60 60L0 60z&quot; stroke=&quot;%23F4C430&quot; stroke-width=&quot;0.5&quot; opacity=&quot;.3&quot;/></g></svg>');"></div>
+         style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: 0; padding: 0; background-image:url('data:image/svg+xml,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;120&quot; height=&quot;120&quot; viewBox=&quot;0 0 120 120&quot;><g fill=&quot;none&quot; fill-rule=&quot;evenodd&quot; opacity=&quot;.25&quot;><path d=&quot;M60 0l60 60-60 60L0 60z&quot; stroke=&quot;%23F4C430&quot; stroke-width=&quot;0.5&quot; opacity=&quot;.3&quot;/></g></svg>'); pointer-events: none;"></div>
 
     <!-- 5% White overlay for entire hero section -->
     <div class="absolute inset-0 bg-white/5 z-[5]" 
-         style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: 0; padding: 0; background-color: rgba(255, 255, 255, 0.05); z-index: 5;"></div>
+         style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: 0; padding: 0; background-color: rgba(255, 255, 255, 0.05); z-index: 5; pointer-events: none;"></div>
 
     <!-- Content Container - Positioned to account for navbar overlay without creating gaps -->
     <div class="relative z-10 w-full mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16 md:pb-20 lg:pb-24"
-         style="margin: 0; padding-top: 0 !important; padding-left: 1rem; padding-right: 1rem; padding-bottom: 3rem;">
+         style="margin: 0; padding-top: 0 !important; padding-left: 1rem; padding-right: 1rem; padding-bottom: 3rem; pointer-events: auto;">
         <div class="grid lg:grid-cols-[1.1fr_0.9fr] gap-16 items-center">
             <!-- Text content - Left side -->
             <div class="text-white space-y-8">

@@ -306,7 +306,7 @@
         </div>
         
         <!-- Mobile Navigation -->
-        <div class="lg:hidden flex items-center justify-between h-20">
+        <div class="lg:hidden flex items-center justify-between h-20 relative z-[60]">
             <!-- Logo -->
             <div class="flex-shrink-0">
                 <a href="{{ route('home') }}" class="flex items-center">
@@ -327,10 +327,11 @@
             <!-- Hamburger Menu Button -->
             <button 
                 type="button"
-                class="inline-flex items-center justify-center p-2 rounded-lg text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white/50 transition-colors duration-200"
+                class="inline-flex items-center justify-center p-2 rounded-lg text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white/50 transition-colors duration-200 relative z-[60]"
                 @click="mobileMenuOpen = !mobileMenuOpen"
                 :aria-expanded="mobileMenuOpen"
-                aria-label="Toggle menu">
+                aria-label="Toggle menu"
+                style="pointer-events: auto; z-index: 60;">
                 <svg class="h-6 w-6" :class="{ 'hidden': mobileMenuOpen, 'block': !mobileMenuOpen }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
@@ -343,7 +344,7 @@
     
     <!-- Mobile Menu Overlay -->
     <div 
-        class="fixed inset-0 z-50 lg:hidden"
+        class="fixed inset-0 z-[100] lg:hidden"
         x-show="mobileMenuOpen"
         x-transition:enter="transition ease-out duration-300"
         x-transition:enter-start="opacity-0"
@@ -351,7 +352,6 @@
         x-transition:leave="transition ease-in duration-200"
         x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0"
-        style="display: none;"
         @click.away="mobileMenuOpen = false">
                 <div class="fixed inset-0 bg-black/50" @click="mobileMenuOpen = false"></div>
                 <div class="fixed inset-y-0 right-0 w-full max-w-sm bg-white/95 shadow-xl overflow-y-auto"
