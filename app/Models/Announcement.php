@@ -72,28 +72,11 @@ class Announcement extends Model
     public function getMessageAttribute($value): ?string
     {
         try {
-            \Log::debug('Announcement::getMessageAttribute', [
-                'id' => $this->id ?? 'new',
-                'value_type' => gettype($value),
-                'value_length' => is_string($value) ? strlen($value) : null,
-                'value_hex' => is_string($value) ? bin2hex(substr($value, 0, 50)) : null,
-                'is_valid_utf8' => is_string($value) ? mb_check_encoding($value, 'UTF-8') : null,
-                'backtrace' => debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3),
-            ]);
-
             if (empty($value)) {
                 return $value;
             }
 
             $sanitized = static::sanitizeUtf8($value);
-            
-            \Log::debug('Announcement::getMessageAttribute sanitized', [
-                'id' => $this->id ?? 'new',
-                'original_length' => strlen($value),
-                'sanitized_length' => strlen($sanitized ?? ''),
-                'changed' => $value !== $sanitized,
-            ]);
-
             return $sanitized;
         } catch (\Throwable $e) {
             \Log::error('Announcement::getMessageAttribute ERROR', [
@@ -111,24 +94,11 @@ class Announcement extends Model
     public function getLinkTextAttribute($value): ?string
     {
         try {
-            \Log::debug('Announcement::getLinkTextAttribute', [
-                'id' => $this->id ?? 'new',
-                'value_type' => gettype($value),
-                'value_length' => is_string($value) ? strlen($value) : null,
-                'is_valid_utf8' => is_string($value) ? mb_check_encoding($value, 'UTF-8') : null,
-            ]);
-
             if (empty($value)) {
                 return $value;
             }
 
             $sanitized = static::sanitizeUtf8($value);
-            
-            \Log::debug('Announcement::getLinkTextAttribute sanitized', [
-                'id' => $this->id ?? 'new',
-                'changed' => $value !== $sanitized,
-            ]);
-
             return $sanitized;
         } catch (\Throwable $e) {
             \Log::error('Announcement::getLinkTextAttribute ERROR', [
@@ -298,72 +268,39 @@ class Announcement extends Model
         }
 
         try {
-            \Log::debug('Announcement::sanitizeUtf8 START', [
-                'input_type' => gettype($string),
-                'input_length' => strlen($string),
-                'input_hex' => bin2hex(substr($string, 0, 100)),
-                'is_valid_utf8_before' => mb_check_encoding($string, 'UTF-8'),
-            ]);
-
             // First, ensure it's a valid string
             if (!is_string($string)) {
                 $string = (string) $string;
-                \Log::debug('Announcement::sanitizeUtf8 converted to string');
             }
 
             // Remove null bytes and other control characters
             $string = str_replace(["\x00", "\r"], '', $string);
-            \Log::debug('Announcement::sanitizeUtf8 after null removal', [
-                'length' => strlen($string),
-            ]);
             
             // Convert to UTF-8, removing invalid sequences
             if (function_exists('mb_convert_encoding')) {
                 $string = mb_convert_encoding($string, 'UTF-8', 'UTF-8');
-                \Log::debug('Announcement::sanitizeUtf8 after mb_convert_encoding', [
-                    'length' => strlen($string),
-                    'is_valid_utf8' => mb_check_encoding($string, 'UTF-8'),
-                ]);
             }
             
             // Remove control characters except newlines and tabs
             $string = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/u', '', $string) ?? '';
-            \Log::debug('Announcement::sanitizeUtf8 after control char removal', [
-                'length' => strlen($string),
-            ]);
             
             // Validate and fix encoding
             if (function_exists('mb_check_encoding')) {
                 if (!mb_check_encoding($string, 'UTF-8')) {
-                    \Log::warning('Announcement::sanitizeUtf8 invalid UTF-8 detected, attempting fix');
                     if (function_exists('iconv')) {
                         $string = @iconv('UTF-8', 'UTF-8//IGNORE', $string);
                         if ($string === false) {
                             $string = '';
-                            \Log::warning('Announcement::sanitizeUtf8 iconv returned false');
-                        } else {
-                            \Log::debug('Announcement::sanitizeUtf8 after iconv', [
-                                'length' => strlen($string),
-                                'is_valid_utf8' => mb_check_encoding($string, 'UTF-8'),
-                            ]);
                         }
                     } else {
                         // Remove invalid UTF-8 bytes using regex
                         $string = preg_replace('/[\x80-\xFF](?![\x80-\xBF]{0,2})/u', '', $string) ?? '';
-                        \Log::debug('Announcement::sanitizeUtf8 after regex cleanup', [
-                            'length' => strlen($string),
-                        ]);
                     }
                 }
             }
             
             // Final check - ensure it can be JSON encoded
             if (!empty($string)) {
-                \Log::debug('Announcement::sanitizeUtf8 testing JSON encode', [
-                    'string_length' => strlen($string),
-                    'is_valid_utf8' => mb_check_encoding($string, 'UTF-8'),
-                ]);
-                
                 $test = json_encode($string, JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_IGNORE);
                 $jsonError = json_last_error();
                 
@@ -371,7 +308,6 @@ class Announcement extends Model
                     \Log::error('Announcement::sanitizeUtf8 JSON encode FAILED', [
                         'json_error' => $jsonError,
                         'json_error_msg' => json_last_error_msg(),
-                        'string_hex' => bin2hex(substr($string, 0, 100)),
                     ]);
                     
                     // If JSON encoding fails, use iconv to clean it
@@ -379,28 +315,14 @@ class Announcement extends Model
                         $string = @iconv('UTF-8', 'UTF-8//IGNORE', $string);
                         if ($string === false) {
                             $string = '';
-                            \Log::error('Announcement::sanitizeUtf8 iconv failed on retry');
-                        } else {
-                            \Log::debug('Announcement::sanitizeUtf8 retry after iconv', [
-                                'length' => strlen($string),
-                            ]);
                         }
                     } else {
                         $string = '';
-                        \Log::error('Announcement::sanitizeUtf8 no iconv available, returning empty');
                     }
-                } else {
-                    \Log::debug('Announcement::sanitizeUtf8 JSON encode SUCCESS');
                 }
             }
             
-            $result = $string ?: null;
-            \Log::debug('Announcement::sanitizeUtf8 COMPLETE', [
-                'result_length' => $result ? strlen($result) : 0,
-                'result_is_valid_utf8' => $result ? mb_check_encoding($result, 'UTF-8') : true,
-            ]);
-            
-            return $result;
+            return $string ?: null;
         } catch (\Throwable $e) {
             \Log::error('Announcement::sanitizeUtf8 EXCEPTION', [
                 'error' => $e->getMessage(),

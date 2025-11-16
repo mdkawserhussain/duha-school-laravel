@@ -10,6 +10,7 @@ use Filament\Schemas\Components;
 use Filament\Schemas\Schema;
 use Filament\Pages\Page;
 use UnitEnum;
+use Illuminate\Support\Facades\Storage;
 
 class ParallaxSection extends Page implements HasForms
 {
@@ -231,30 +232,70 @@ class ParallaxSection extends Page implements HasForms
             'sort_order' => true,
         ]);
         
-        $section->data = $sectionData;
-        $section->save();
-
-        // Handle background image upload
-        // Since we use statePath('data'), the background_image might be in formState['data']['background_image']
+        // Check if data actually changed before saving
+        $originalData = $section->data ?? [];
+        $dataChanged = json_encode($originalData) !== json_encode($sectionData) ||
+                       $section->title !== ($data['title'] ?? null) ||
+                       $section->is_active !== ($data['is_active'] ?? true) ||
+                       $section->sort_order !== ($data['sort_order'] ?? 0);
+        
+        // Handle background image upload - only if file path is provided and is not a URL
         $backgroundImagePath = $formState['data']['background_image'] ?? $formState['background_image'] ?? null;
+        $imageChanged = false;
         
-        // Handle array (if multiple files or nested structure)
-        if (is_array($backgroundImagePath)) {
-            $backgroundImagePath = !empty($backgroundImagePath[0]) ? $backgroundImagePath[0] : null;
+        if ($backgroundImagePath) {
+            // Handle array (if multiple files or nested structure)
+            if (is_array($backgroundImagePath)) {
+                $backgroundImagePath = !empty($backgroundImagePath[0]) ? $backgroundImagePath[0] : null;
+            }
+            
+            // Only process if it's a string and not a URL (already uploaded)
+            if ($backgroundImagePath && is_string($backgroundImagePath) && !filter_var($backgroundImagePath, FILTER_VALIDATE_URL)) {
+                // Check if this is a new file (different from existing)
+                $existingMedia = $section->getFirstMedia('background_image');
+                $isNewFile = true;
+                
+                // If there's existing media, check if the new file is different
+                if ($existingMedia) {
+                    $existingFileName = $existingMedia->file_name;
+                    $newFileName = basename($backgroundImagePath);
+                    // If filenames match and it's not a livewire-tmp path (new upload), skip processing
+                    if ($existingFileName === $newFileName && !str_contains($backgroundImagePath, 'livewire-tmp/')) {
+                        $isNewFile = false;
+                    }
+                }
+                
+                if ($isNewFile) {
+                    // Check if file actually exists before processing
+                    $fullPath = str_contains($backgroundImagePath, 'livewire-tmp/') 
+                        ? storage_path('app/public/' . $backgroundImagePath)
+                        : (Storage::disk('public')->exists($backgroundImagePath) 
+                            ? storage_path('app/public/' . $backgroundImagePath) 
+                            : $backgroundImagePath);
+                    
+                    if (file_exists($fullPath) || Storage::disk('public')->exists($backgroundImagePath)) {
+                        // Clear existing background image
+                        $section->clearMediaCollection('background_image');
+                        
+                        // Process the upload
+                        $this->processBackgroundImageUpload($section, $backgroundImagePath);
+                        $imageChanged = true;
+                        
+                        // Reload section to get fresh media relationship
+                        $section->refresh();
+                    }
+                }
+            }
         }
         
-        if ($backgroundImagePath && is_string($backgroundImagePath)) {
-            // Clear existing background image
-            $section->clearMediaCollection('background_image');
+        // Only save if data changed
+        if ($dataChanged || $imageChanged) {
+            $section->data = $sectionData;
+            $section->save();
             
-            // Process the upload
-            $this->processBackgroundImageUpload($section, $backgroundImagePath);
-            
-            // Reload section to get fresh media relationship
-            $section->refresh();
+            // Only clear cache if data actually changed
+            $this->clearCache();
         }
-
-        $this->clearCache();
 
         \Filament\Notifications\Notification::make()
             ->title('Parallax section saved successfully')
@@ -266,7 +307,10 @@ class ParallaxSection extends Page implements HasForms
     {
         // Ensure imagePath is a string
         if (is_array($imagePath)) {
-            $imagePath = !empty($imagePath[0]) ? $imagePath[0] : null;
+            if (empty($imagePath)) {
+                return;
+            }
+            $imagePath = !empty($imagePath[0]) ? $imagePath[0] : reset($imagePath);
         }
         
         if (!$imagePath || !is_string($imagePath)) {

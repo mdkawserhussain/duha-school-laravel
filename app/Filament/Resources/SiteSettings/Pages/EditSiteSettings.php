@@ -30,14 +30,6 @@ class EditSiteSettings extends EditRecord
         $this->faviconPath = $data['favicon'] ?? null;
         $this->ogImagePath = $data['og_image'] ?? null;
         
-        \Log::info('EditSiteSettings::mutateFormDataBeforeSave: Captured file paths', [
-            'logoPath' => $this->logoPath,
-            'faviconPath' => $this->faviconPath,
-            'ogImagePath' => $this->ogImagePath,
-            'logoPathType' => gettype($this->logoPath),
-            'logoPathIsArray' => is_array($this->logoPath),
-        ]);
-        
         // Remove files from data since we'll handle them manually
         unset($data['logo'], $data['favicon'], $data['og_image']);
         
@@ -47,6 +39,7 @@ class EditSiteSettings extends EditRecord
     protected $logoPath = null;
     protected $faviconPath = null;
     protected $ogImagePath = null;
+    protected $hasChanges = false;
 
     protected function afterSave(): void
     {
@@ -55,82 +48,75 @@ class EditSiteSettings extends EditRecord
         // Get file paths from form raw state if not already stored
         $formState = $this->form->getRawState();
         
-        \Log::info('EditSiteSettings::afterSave: Starting media upload processing', [
-            'logoPath' => $this->logoPath ?? 'not set',
-            'formStateLogo' => $formState['logo'] ?? 'not set',
-            'faviconPath' => $this->faviconPath ?? 'not set',
-            'ogImagePath' => $this->ogImagePath ?? 'not set',
-        ]);
+        // Track if any files were actually processed
+        $filesProcessed = false;
         
-        // Handle logo upload
+        // Handle logo upload - only if file path is provided and is not a URL (already uploaded)
         $logoPath = $this->logoPath ?? $formState['logo'] ?? null;
-        if ($logoPath) {
-            \Log::info('EditSiteSettings::afterSave: Processing logo upload', [
-                'logoPath' => $logoPath,
-                'isArray' => is_array($logoPath),
-                'logoPathType' => gettype($logoPath),
-            ]);
-            // Extract path from array if needed (Filament uses associative arrays with UUID keys)
+        if ($logoPath && (is_array($logoPath) || (is_string($logoPath) && !filter_var($logoPath, FILTER_VALIDATE_URL)))) {
             if (is_array($logoPath)) {
                 $logoPath = !empty($logoPath[0]) ? $logoPath[0] : reset($logoPath);
-                \Log::info('EditSiteSettings::afterSave: Extracted logo path from array', [
-                    'extractedPath' => $logoPath,
-                ]);
+            }
+            if ($logoPath && !filter_var($logoPath, FILTER_VALIDATE_URL)) {
+                $this->handleMediaUpload($settings, $logoPath, 'logo');
+                $filesProcessed = true;
             }
         }
-        $this->handleMediaUpload($settings, $logoPath, 'logo');
         
-        // Handle favicon upload
+        // Handle favicon upload - only if file path is provided and is not a URL
         $faviconPath = $this->faviconPath ?? $formState['favicon'] ?? null;
-        if ($faviconPath) {
+        if ($faviconPath && (is_array($faviconPath) || (is_string($faviconPath) && !filter_var($faviconPath, FILTER_VALIDATE_URL)))) {
             if (is_array($faviconPath)) {
                 $faviconPath = !empty($faviconPath[0]) ? $faviconPath[0] : reset($faviconPath);
             }
-            \Log::info('EditSiteSettings::afterSave: Processing favicon upload', [
-                'faviconPath' => $faviconPath,
-            ]);
+            if ($faviconPath && !filter_var($faviconPath, FILTER_VALIDATE_URL)) {
+                $this->handleMediaUpload($settings, $faviconPath, 'favicon');
+                $filesProcessed = true;
+            }
         }
-        $this->handleMediaUpload($settings, $faviconPath, 'favicon');
         
-        // Handle OG image upload
+        // Handle OG image upload - only if file path is provided and is not a URL
         $ogImagePath = $this->ogImagePath ?? $formState['og_image'] ?? null;
-        if ($ogImagePath) {
+        if ($ogImagePath && (is_array($ogImagePath) || (is_string($ogImagePath) && !filter_var($ogImagePath, FILTER_VALIDATE_URL)))) {
             if (is_array($ogImagePath)) {
                 $ogImagePath = !empty($ogImagePath[0]) ? $ogImagePath[0] : reset($ogImagePath);
             }
-            \Log::info('EditSiteSettings::afterSave: Processing OG image upload', [
-                'ogImagePath' => $ogImagePath,
-            ]);
+            if ($ogImagePath && !filter_var($ogImagePath, FILTER_VALIDATE_URL)) {
+                $this->handleMediaUpload($settings, $ogImagePath, 'og_image');
+                $filesProcessed = true;
+            }
         }
-        $this->handleMediaUpload($settings, $ogImagePath, 'og_image');
         
-        // Handle advisors profile images
-        $this->handleAdvisorsMedia($settings, $formState['advisors'] ?? null);
+        // Handle advisors profile images - only if data exists
+        $advisorsData = $formState['advisors'] ?? null;
+        if ($advisorsData && is_array($advisorsData)) {
+            $advisorsChanged = $this->handleAdvisorsMedia($settings, $advisorsData);
+            if ($advisorsChanged) {
+                $filesProcessed = true;
+            }
+        }
         
-        // Refresh the model to load new media relationships
-        $settings->refresh();
-        $settings->load('media');
+        // Only refresh if files were processed
+        if ($filesProcessed) {
+            $settings->refresh();
+            $settings->load('media');
+        }
         
-        // Verify media was added
+        // Verify media was added only if files were processed
         $hasLogo = $settings->hasMedia('logo');
         $hasFavicon = $settings->hasMedia('favicon');
         $hasOgImage = $settings->hasMedia('og_image');
         
-        \Log::info('EditSiteSettings::afterSave: Media verification after upload', [
-            'hasLogo' => $hasLogo,
-            'hasFavicon' => $hasFavicon,
-            'hasOgImage' => $hasOgImage,
-            'mediaCount' => $settings->media->count(),
-        ]);
-        
-        // Clear all relevant caches after saving
-        SiteSettings::clearCache();
-        \Illuminate\Support\Facades\Cache::forget('site_settings');
-        \Illuminate\Support\Facades\Artisan::call('view:clear');
-        \Illuminate\Support\Facades\Artisan::call('config:clear');
+        // Only clear caches if settings were actually changed (model was dirty before save)
+        if ($this->record->wasChanged() || $filesProcessed) {
+            SiteSettings::clearCache();
+            \Illuminate\Support\Facades\Cache::forget('site_settings');
+            \Illuminate\Support\Facades\Artisan::call('view:clear');
+            \Illuminate\Support\Facades\Artisan::call('config:clear');
+        }
 
-        $message = 'Site settings have been updated and all caches have been cleared.';
-        if ($logoPath && !$hasLogo) {
+        $message = 'Site settings have been updated' . ($filesProcessed || $this->record->wasChanged() ? ' and all caches have been cleared.' : '.');
+        if ($logoPath && !filter_var($logoPath, FILTER_VALIDATE_URL) && !$hasLogo) {
             $message .= ' Warning: Logo upload may have failed. Check logs for details.';
         }
 
@@ -144,12 +130,15 @@ class EditSiteSettings extends EditRecord
     protected function handleMediaUpload($settings, $filePath, string $collection): void
     {
         if (!$filePath) {
-            \Log::info("handleMediaUpload: No file path provided for collection: {$collection}");
             return;
         }
         
         // Handle array of file paths (Filament uses associative arrays with UUID keys)
         if (is_array($filePath)) {
+            // Check if array is empty
+            if (empty($filePath)) {
+                return;
+            }
             // Get the first value from the array (could be numeric or associative with UUID keys)
             if (!empty($filePath[0])) {
                 $filePath = $filePath[0];
@@ -161,27 +150,18 @@ class EditSiteSettings extends EditRecord
         
         if (!$filePath || !is_string($filePath)) {
             \Log::warning("handleMediaUpload: Invalid file path format for collection: {$collection}", [
-                'filePath' => $filePath,
                 'type' => gettype($filePath),
-                'originalFilePath' => is_array($filePath) ? json_encode($filePath) : $filePath,
             ]);
             return;
         }
         
-        \Log::info("handleMediaUpload: Processing file for collection: {$collection}", [
-            'filePath' => $filePath,
-            'isUrl' => filter_var($filePath, FILTER_VALIDATE_URL),
-        ]);
-        
         // Skip if it's a URL (already uploaded and in media collection)
         if (filter_var($filePath, FILTER_VALIDATE_URL)) {
-            \Log::info("handleMediaUpload: File path is a URL, skipping: {$filePath}");
             return;
         }
         
         // Clear existing media in collection
         $settings->clearMediaCollection($collection);
-        \Log::info("handleMediaUpload: Cleared existing media in collection: {$collection}");
         
         $added = false;
         $lastError = null;
@@ -190,17 +170,15 @@ class EditSiteSettings extends EditRecord
         // Filament stores files relative to the public disk root
         if (Storage::disk('public')->exists($filePath)) {
             try {
-                \Log::info("handleMediaUpload: Attempting addMediaFromDisk with path: {$filePath}");
                 $settings->addMediaFromDisk($filePath, 'public')
                     ->toMediaCollection($collection);
                 $added = true;
-                \Log::info("handleMediaUpload: Successfully added media from disk: {$filePath}");
             } catch (\Exception $e) {
                 $lastError = $e->getMessage();
                 \Log::error("handleMediaUpload: Failed to add media from disk", [
                     'filePath' => $filePath,
+                    'collection' => $collection,
                     'error' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString(),
                 ]);
             }
         }
@@ -210,29 +188,27 @@ class EditSiteSettings extends EditRecord
             $fullPath = storage_path('app/public/' . $filePath);
             if (file_exists($fullPath) && is_file($fullPath)) {
                 try {
-                    \Log::info("handleMediaUpload: Attempting addMedia from livewire-tmp: {$fullPath}");
                     $settings->addMedia($fullPath)
                         ->toMediaCollection($collection);
                     $added = true;
-                    \Log::info("handleMediaUpload: Successfully added media from livewire-tmp");
                 } catch (\Exception $e) {
                     $lastError = $e->getMessage();
                     \Log::error("handleMediaUpload: Failed to add media from livewire-tmp", [
                         'fullPath' => $fullPath,
+                        'collection' => $collection,
                         'error' => $e->getMessage(),
                     ]);
                 }
             } elseif (Storage::disk('public')->exists($filePath)) {
                 try {
-                    \Log::info("handleMediaUpload: Attempting addMediaFromDisk for livewire-tmp: {$filePath}");
                     $settings->addMediaFromDisk($filePath, 'public')
                         ->toMediaCollection($collection);
                     $added = true;
-                    \Log::info("handleMediaUpload: Successfully added media from livewire-tmp disk");
                 } catch (\Exception $e) {
                     $lastError = $e->getMessage();
                     \Log::error("handleMediaUpload: Failed to add media from livewire-tmp disk", [
                         'filePath' => $filePath,
+                        'collection' => $collection,
                         'error' => $e->getMessage(),
                     ]);
                 }
@@ -251,18 +227,12 @@ class EditSiteSettings extends EditRecord
             foreach ($paths as $path) {
                 if (file_exists($path) && is_file($path)) {
                     try {
-                        \Log::info("handleMediaUpload: Attempting addMedia with absolute path: {$path}");
                         $settings->addMedia($path)
                             ->toMediaCollection($collection);
                         $added = true;
-                        \Log::info("handleMediaUpload: Successfully added media from absolute path");
                         break;
                     } catch (\Exception $e) {
                         $lastError = $e->getMessage();
-                        \Log::warning("handleMediaUpload: Failed to add media from absolute path", [
-                            'path' => $path,
-                            'error' => $e->getMessage(),
-                        ]);
                         continue;
                     }
                 }
@@ -271,33 +241,15 @@ class EditSiteSettings extends EditRecord
         
         // Final verification and trigger WebP conversion
         if ($added) {
-            $settings->refresh();
             $hasMedia = $settings->hasMedia($collection);
-            \Log::info("handleMediaUpload: Media addition verification", [
-                'collection' => $collection,
-                'hasMedia' => $hasMedia,
-            ]);
             
             if ($hasMedia) {
                 // Get the media and ensure WebP conversion is generated
                 $media = $settings->getFirstMedia($collection);
-                if ($media) {
-                    // Trigger WebP conversion generation
+                if ($media && !$media->hasGeneratedConversion('webp')) {
                     try {
-                        if (!$media->hasGeneratedConversion('webp')) {
-                            \Log::info("handleMediaUpload: Triggering WebP conversion", [
-                                'media_id' => $media->id,
-                                'collection' => $collection,
-                            ]);
-                            // The conversion will be generated automatically
-                            // We can manually trigger it if needed
-                            $media->performConversions(['webp']);
-                        }
+                        $media->performConversions(['webp']);
                     } catch (\Exception $e) {
-                        \Log::warning("handleMediaUpload: Could not trigger WebP conversion immediately", [
-                            'media_id' => $media->id,
-                            'error' => $e->getMessage(),
-                        ]);
                         // Conversion will happen asynchronously, which is fine
                     }
                 }
@@ -306,26 +258,23 @@ class EditSiteSettings extends EditRecord
                     'collection' => $collection,
                     'filePath' => $filePath,
                 ]);
-                $added = false;
             }
-        } else {
+        } elseif ($lastError) {
             \Log::error("handleMediaUpload: Failed to add media to collection", [
                 'collection' => $collection,
                 'filePath' => $filePath,
-                'lastError' => $lastError,
-                'storageExists' => Storage::disk('public')->exists($filePath),
+                'error' => $lastError,
             ]);
         }
     }
 
-    protected function handleAdvisorsMedia($settings, $advisorsData): void
+    protected function handleAdvisorsMedia($settings, $advisorsData): bool
     {
-        if (!is_array($advisorsData)) {
-            return;
+        if (!is_array($advisorsData) || empty($advisorsData)) {
+            return false;
         }
 
-        // Clear existing advisors media
-        $settings->clearMediaCollection('advisors');
+        $hasNewImages = false;
 
         // Process each advisor's profile image
         foreach ($advisorsData as $advisor) {
@@ -334,7 +283,10 @@ class EditSiteSettings extends EditRecord
                 
                 // Handle array of file paths
                 if (is_array($filePath)) {
-                    $filePath = !empty($filePath[0]) ? $filePath[0] : null;
+                    if (empty($filePath)) {
+                        continue;
+                    }
+                    $filePath = !empty($filePath[0]) ? $filePath[0] : reset($filePath);
                 }
                 
                 if (!$filePath || !is_string($filePath)) {
@@ -355,8 +307,12 @@ class EditSiteSettings extends EditRecord
                             $settings->addMediaFromDisk($filePath, 'public')
                                 ->toMediaCollection('advisors');
                             $added = true;
+                            $hasNewImages = true;
                         } catch (\Exception $e) {
-                            // Try alternative method
+                            \Log::warning("handleAdvisorsMedia: Failed to add advisor image", [
+                                'filePath' => $filePath,
+                                'error' => $e->getMessage(),
+                            ]);
                         }
                     }
                 }
@@ -376,6 +332,7 @@ class EditSiteSettings extends EditRecord
                                 $settings->addMedia($path)
                                     ->toMediaCollection('advisors');
                                 $added = true;
+                                $hasNewImages = true;
                                 break;
                             } catch (\Exception $e) {
                                 continue;
@@ -390,12 +347,18 @@ class EditSiteSettings extends EditRecord
                         $settings->addMediaFromDisk($filePath, 'public')
                             ->toMediaCollection('advisors');
                         $added = true;
+                        $hasNewImages = true;
                     } catch (\Exception $e) {
-                        // Log error but don't fail
+                        \Log::warning("handleAdvisorsMedia: Failed to add advisor image from disk", [
+                            'filePath' => $filePath,
+                            'error' => $e->getMessage(),
+                        ]);
                     }
                 }
             }
         }
+        
+        return $hasNewImages;
     }
 
     protected function getHeaderActions(): array
