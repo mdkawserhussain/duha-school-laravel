@@ -28,12 +28,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->colors([
-                'primary' => Color::Indigo,
-                'secondary' => Color::Violet,
-                'success' => Color::Emerald,
-                'warning' => Color::Orange,
-                'danger' => Color::Red,
-                'gray' => Color::Slate,
+                'primary' => Color::Blue,
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
@@ -44,6 +39,7 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
+                \App\Filament\Widgets\ThemeToggleWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -69,14 +65,10 @@ class AdminPanelProvider extends PanelProvider
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->navigationGroups([
                 'Dashboard',
+                'Content',    // Pages, Events, Notices
                 'Site Settings',
-                'Homepage Settings',
-                'Pages',
-                'Events',
-                'Notices',
-                'Staff',
+                'People',      // Staff, Users
                 'Applications',
-                'Users',
             ])
             ->sidebarCollapsibleOnDesktop()
             ->spa()

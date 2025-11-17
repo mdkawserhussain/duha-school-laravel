@@ -9,7 +9,7 @@
         'description' => strip_tags($event->excerpt ?? $event->description),
         'startDate' => $event->event_date->toIso8601String(),
     ];
-    
+
     if ($event->location) {
         $eventData['location'] = [
             '@type' => 'Place',
@@ -21,13 +21,13 @@
             ],
         ];
     }
-    
+
     $eventData['organizer'] = [
         '@type' => 'EducationalOrganization',
         'name' => $organizationName,
         'url' => config('app.url'),
     ];
-    
+
     $eventData['url'] = route('events.show', $event);
 @endphp
 

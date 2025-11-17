@@ -20,7 +20,7 @@ class EventController extends Controller
         $upcoming = $request->get('upcoming', 'all'); // 'all', 'upcoming', 'past'
         $fromDate = $request->get('from_date');
         $toDate = $request->get('to_date');
-        
+
         $cacheKey = 'events_index_' . md5($category . $upcoming . $fromDate . $toDate . $request->get('page', 1));
         $cacheTime = 1800; // 30 minutes
 
@@ -102,7 +102,7 @@ class EventController extends Controller
     public function feed()
     {
         $events = $this->eventService->getPublishedEvents(null, 'upcoming', 20);
-        
+
         return response()
             ->view('feeds.events', ['events' => $events])
             ->header('Content-Type', 'application/atom+xml; charset=utf-8');

@@ -244,8 +244,8 @@ h4 { font-size: 1.25rem; }
 .hover\\:bg-indigo-100:hover { background-color: #e0e7ff; }
 .hover\\:bg-teal-100:hover { background-color: #ccfbf1; }
 .hover\\:bg-red-100:hover { background-color: #fee2e2; }
-.hover\\:shadow-md:hover { 
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); 
+.hover\\:shadow-md:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 /* Group hover effects */
@@ -341,7 +341,7 @@ a:hover {
 
 /* Focus utilities for accessibility */
 .focus-visible\\:outline-none:focus-visible { outline: none; }
-.focus-visible\\:ring-2:focus-visible { 
+.focus-visible\\:ring-2:focus-visible {
     box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
 }
 
@@ -396,7 +396,7 @@ a:hover {
     inset: 0;
     opacity: 0.4;
     mix-blend-mode: screen;
-    background: 
+    background:
         radial-gradient(circle at 20% 20%, rgba(255, 199, 120, 0.45), transparent 55%),
         radial-gradient(circle at 80% 30%, rgba(124, 197, 255, 0.35), transparent 60%),
         radial-gradient(circle at 50% 80%, rgba(255, 255, 255, 0.3), transparent 65%);
@@ -473,8 +473,8 @@ a:hover {
     .lg\\:pt-20 { padding-top: 5rem; }
     .lg\\:px-16 { padding-left: 4rem; padding-right: 4rem; }
     .lg\\:py-20 { padding-top: 5rem; padding-bottom: 5rem; }
-    .lg-grid-cols-hero { 
-        grid-template-columns: 1.1fr 0.9fr; 
+    .lg-grid-cols-hero {
+        grid-template-columns: 1.1fr 0.9fr;
     }
 }
 
@@ -609,7 +609,7 @@ a:hover {
         height: 35px;
         font-size: 20px;
     }
-    
+
     .lightbox-counter {
         bottom: 10px;
         font-size: 12px;

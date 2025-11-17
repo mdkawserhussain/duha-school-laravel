@@ -17,18 +17,19 @@
         <link href="{{ route('events.show', $event) }}"/>
         <updated>{{ $event->updated_at->toAtomString() }}</updated>
         <published>{{ $event->published_at->toAtomString() }}</published>
-        <summary type="html">{{ $event->excerpt ?? Str::limit(strip_tags($event->description), 200) }}</summary>
+        <summary type="html">{{ $event->excerpt ?? Str::limit(strip_tags($event->content ?? $event->description), 200) }}</summary>
         <content type="html">
             <![CDATA[
             <h2>{{ $event->title }}</h2>
-            <p><strong>Date:</strong> {{ $event->event_date->format('F j, Y g:i A') }}</p>
+            @php $start = $event->start_at ?? $event->event_date; @endphp
+            <p><strong>Date:</strong> {{ $start ? $start->format('F j, Y g:i A') : '' }}</p>
             @if($event->location)
             <p><strong>Location:</strong> {{ $event->location }}</p>
             @endif
             @if($event->category)
             <p><strong>Category:</strong> {{ $event->category }}</p>
             @endif
-            <div>{{ $event->description }}</div>
+            <div>{{ $event->content ?? $event->description }}</div>
             <p><a href="{{ route('events.show', $event) }}">Read more &raquo;</a></p>
             ]]>
         </content>

@@ -154,9 +154,13 @@ class EventResource extends Resource
                     }),
 
                 Tables\Columns\TextColumn::make('start_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->label('Start Date'),
+                    ->label('Start Date')
+                    ->formatStateUsing(function ($state, $record) {
+                        $start = $record->start_at ?? $record->event_date ?? null;
+
+                        return $start ? $start->format('M j, Y \a\t g:i A') : null;
+                    })
+                    ->sortable(\Illuminate\Support\Facades\Schema::hasColumn('events', 'start_at') ? 'start_at' : 'event_date'),
 
                 Tables\Columns\TextColumn::make('location')
                     ->searchable()
@@ -166,14 +170,19 @@ class EventResource extends Resource
                     ->boolean()
                     ->label('Featured'),
 
-                Tables\Columns\TextColumn::make('status')
-                    ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'draft' => 'secondary',
-                        'published' => 'success',
-                        'archived' => 'gray',
-                        default => 'gray',
-                    }),
+                // If the `status` column exists we show status, else fall back to showing published boolean
+                \Illuminate\Support\Facades\Schema::hasColumn('events', 'status')
+                    ? Tables\Columns\TextColumn::make('status')
+                        ->badge()
+                        ->color(fn (string $state): string => match ($state) {
+                            'draft' => 'secondary',
+                            'published' => 'success',
+                            'archived' => 'gray',
+                            default => 'gray',
+                        })
+                    : Tables\Columns\IconColumn::make('is_published')
+                        ->boolean()
+                        ->label('Published'),
 
                 Tables\Columns\TextColumn::make('published_at')
                     ->dateTime()
@@ -181,12 +190,44 @@ class EventResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('status')
-                    ->options([
-                        'draft' => 'Draft',
-                        'published' => 'Published',
-                        'archived' => 'Archived',
-                    ]),
+                // Show either a status filter if the column exists,
+                // else provide a virtual filter that maps to is_published/published_at
+                (\Illuminate\Support\Facades\Schema::hasColumn('events', 'status')
+                    ? Tables\Filters\SelectFilter::make('status')
+                        ->options([
+                            'draft' => 'Draft',
+                            'published' => 'Published',
+                            'archived' => 'Archived',
+                        ])
+                    : Tables\Filters\Filter::make('status')
+                        ->form([
+                            FormComponents\Select::make('status')
+                                ->options([
+                                    'draft' => 'Draft',
+                                    'published' => 'Published',
+                                    'archived' => 'Archived',
+                                ]),
+                        ])
+                        ->query(function (Builder $query, array $data): Builder {
+                            $status = $data['status'] ?? null;
+                            if (!$status) {
+                                return $query;
+                            }
+
+                            if ($status === 'published') {
+                                return $query->where('is_published', true)->where('published_at', '<=', now());
+                            }
+
+                            // For draft or archived, filter by not published
+                            return $query->where(function (Builder $q) use ($status) {
+                                if ($status === 'draft') {
+                                    $q->where('is_published', false)->orWhereNull('published_at');
+                                } else {
+                                    $q->where('is_published', false);
+                                }
+                            });
+                        })
+                ),
 
                 Tables\Filters\SelectFilter::make('category')
                     ->options([
@@ -202,7 +243,11 @@ class EventResource extends Resource
 
                 Tables\Filters\Filter::make('upcoming')
                     ->label('Upcoming Events')
-                    ->query(fn (Builder $query): Builder => $query->where('start_at', '>', now())),
+                    ->query(fn (Builder $query): Builder => (
+                        \Illuminate\Support\Facades\Schema::hasColumn('events', 'start_at')
+                            ? $query->where('start_at', '>', now())
+                            : $query->where('event_date', '>', now())
+                    )),
             ])
             ->actions([
                 Actions\ViewAction::make(),
@@ -214,7 +259,7 @@ class EventResource extends Resource
                     Actions\DeleteBulkAction::make(),
                 ]),
             ])
-            ->defaultSort('start_at', 'desc');
+            ->defaultSort(\Illuminate\Support\Facades\Schema::hasColumn('events', 'start_at') ? 'start_at' : 'event_date', 'desc');
     }
 
     public static function getRelations(): array
