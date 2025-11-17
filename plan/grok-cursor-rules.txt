@@ -1,0 +1,164 @@
+---
+description: "ULTIMATE FINAL KILLER Cursor AI Rules for Duha International School — 100% locked-in, zero deviation, enterprise-grade enforcement as of November 17, 2025"
+globs: ["**/*"]
+alwaysApply: true
+---
+
+Hello Kawser, I am now **permanently and irreversibly locked** into the **Duha International School** Laravel 12 project.
+I **NEVER** mention Al-Maghrib, AISD, or any legacy name.
+I **ONLY** switch projects when you write **[different project]** — otherwise I remain 100% focused here.
+
+**Error-Fixing Protocol (MANDATORY)**
+1. One surgical fix at a time
+2. Test → if it fails → immediate full undo
+3. Line-by-line re-analysis before next attempt
+
+---
+
+# DUHA INTERNATIONAL SCHOOL — FINAL KILLER CURSOR RULES (NOV 17, 2025)
+
+### 1. PROJECT IDENTITY & NAMING (LOCKED FOREVER)
+- School name is **Duha International School** — **NEVER** use any previous name in code, comments, seeds, READMEs, or responses
+- Greet user as **Kawser** at the start of **every** response
+- All assets, meta tags, emails, and content **MUST** use "Duha International School"
+
+### 2. TECH STACK & VERSIONS (EXACT — NON-NEGOTIABLE)
+
+| Layer               | Package / Tool                          | Exact Version (Nov 17, 2025)          | Enforcement Rule                              |
+|---------------------|-----------------------------------------|---------------------------------------|-----------------------------------------------|
+| Laravel             | laravel/framework                       | ^12.0                                 | MUST use Laravel 12 features only             |
+| PHP                 | —                                       | 8.3+                                  | MUST enforce PHP 8.3 in production            |
+| Admin Panel         | filament/filament                       | ^4.2                                  | MUST use Filament v4 patterns                 |
+| Roles/Permissions   | spatie/laravel-permission               | ^6.23                                 | MUST use Spatie Permission                   |
+| Media Library       | spatie/laravel-medialibrary             | ^11.17                                | MUST use for ALL file uploads                 |
+| Queue Dashboard     | laravel/horizon                         | ^5.39                                 | MUST monitor queues with Horizon              |
+| Tailwind            | tailwindcss                             | ^4.0                                  | MUST use Tailwind 4 only                      |
+| Alpine.js           | alpinejs                                | ^3.14+                                | ONLY Alpine.js — **NO** Vue/React/Livewire    |
+| Vite                | vite                                    | ^7.0                                  | MUST compile assets with Vite                 |
+| Search              | laravel/scout                           | ^10.21                                | Database driver + optional Meilisearch        |
+
+### 3. COLOR PALETTE (CSS VARIABLES — NEVER HARD CODE)
+
+```css
+--primary       : #6366f1;   /* Indigo-500 */
+--primary-dark  : #4f46e5;
+--accent        : #FCD34D;   /* Amber-300 */
+--accent-dark   : #F4C430;
+--ink           : #1E293B;   /* Slate-800 */
+--gray          : #475569;   /* Slate-600 */
+--light         : #f8f9fa;
+```
+
+**MUST** use these variables everywhere — **NEVER** raw hex codes.
+
+### 4. MEDIA & IMAGE PIPELINE (SACRED — ZERO TOLERANCE)
+
+- **MUST** convert **every** uploaded image to WebP
+- **MUST** delete original file after successful conversion (via `MediaObserver`)
+- **MUST** use `singleFile()` collections for: logo, favicon, hero images, staff photos
+- **MUST** generate conversions: thumb (300×300), medium (800×800), large (1600×1600), webp
+- **MUST** use `<picture><source srcset="...webp">` in **all** Blade templates
+- Logo background removal **MUST** be supported via queued job
+
+### 5. CACHING STRATEGY & KEYS (EXACT — NEVER CHANGE)
+
+| Key                          | Purpose                         | Cleared On                                 |
+|------------------------------|---------------------------------|--------------------------------------------|
+| `homepage_v2_data`           | Entire homepage data            | Any change to Page/Event/Notice/HeroSlide  |
+| `events_index_{hash}`        | Events listing                  | Event save/delete                          |
+| `notices_index_{hash}`       | Notices listing                 | Notice save/delete                         |
+| `site_settings`              | Global settings                 | Settings page save                         |
+
+**MUST** clear in observers → `Cache::forget()` + tags
+**MUST** use Redis in prod, database fallback in dev
+
+### 6. NAVBAR — GLASSY TRANSPARENT → SOLID (EXACT SPEC)
+
+- Transparent on hero (`bg-transparent backdrop-blur-md`)
+- Becomes solid white (`bg-white shadow-lg`) when scrolled > 50px
+- **MUST** use **only** Alpine.js: `x-data="navbarComponent()" @scroll.window="handleScroll()"`
+- Zero gap: announcement bar → navbar → hero
+- Fixed top, `z-50`
+- Mobile menu slides from right via Alpine
+
+### 7. HERO SECTION (ZERO GAP + OVERLAP — HOLY)
+
+- Starts at absolute top (`mt-0 pt-0`)
+- Overlaps navbar (hero content `z-10`, navbar `z-50`)
+- Supports image + video backgrounds with poster fallback
+- **MUST** be managed **exclusively** via **HeroSliderManager** Filament page
+- **MUST** clear `homepage_v2_data` on any change
+- CTA text: "Admission Going On 2025-26"
+
+### 8. FILAMENT ADMIN PANEL (STRICT ENFORCEMENT)
+
+- **NEVER** use `Grid::make()` — **ONLY** `Section::make()->schema([...])->columns(2)`
+- **MUST** use `SpatieMediaLibraryFileUpload` with proper collections
+- **MUST** clear relevant cache in `afterSave()` / `afterDelete()`
+- Collapsible sidebar in Homepage Settings & Hero Slider Manager
+- Roles: admin, editor, admissions_officer — enforced via Spatie
+- SEO fields **MUST** exist on Page, Event, Notice resources
+
+### 9. CODE ARCHITECTURE (MANDATORY — NO EXCEPTIONS)
+
+- **MUST** follow **Controller → Service → Repository** pattern
+- Controllers: HTTP only, thin
+- Services: All business logic, fat
+- Repositories: All database queries, caching, eager loading
+- **MUST** use FormRequest for ALL validation
+- **MUST** use dependency injection via constructor
+- **MUST** follow SOLID principles
+- Unit tests **MUST** cover services & repositories (80%+ coverage)
+
+### 10. FORBIDDEN PATTERNS (INSTANT REJECTION)
+
+- **NEVER** use `Grid::make()`
+- **NEVER** use Vue, React, Livewire, Inertia, Bootstrap
+- **NEVER** use raw SQL outside repositories
+- **NEVER** put business logic in controllers or models
+- **NEVER** hardcode school name, colors, URLs
+- **NEVER** leave original images after WebP conversion
+- **NEVER** forget cache clearing on content update
+- **NEVER** use inline styles or hardcoded values
+
+### 11. FRONTEND STANDARDS (ELITE)
+
+- Mobile-first (Tailwind breakpoints)
+- `<picture>` tag with WebP + fallback **everywhere**
+- Scroll-triggered fade-ins via Alpine + `x-intersect`
+- Semantic HTML5 only
+- **NO** inline styles — Tailwind classes only
+- **NO** external JS frameworks except Alpine.js
+
+### 12. AUTH, QUEUES & EMAILS
+
+- Laravel Breeze for auth
+- Spatie Permission for roles
+- All emails **MUST** implement `ShouldQueue`
+- Redis + Horizon for queues
+- All heavy tasks queued
+
+### 13. PERFORMANCE, SEO & SECURITY
+
+- Page load < 2s
+- Core Web Vitals monitored
+- Dynamic meta tags, JSON-LD (Organization + Event), sitemap.xml
+- HTTP caching headers
+- Lazy loading, WebP, CDN
+- CSRF/XSS/SQLi protection, rate limiting, validated uploads
+
+### 14. TESTING & DEPLOYMENT
+
+- 80%+ test coverage (Pest + GitHub Actions)
+- Zero-downtime deployment
+- Health checks, Sentry monitoring, centralized logs
+
+### 15. GLOSSARY (USE THESE TERMS)
+
+- **Glassy Navbar** → transparent → solid on scroll
+- **Hero Slider Manager** → Filament page for hero slides
+- **WebP Pipeline** → convert + delete original
+- **homepage_v2_data** → main homepage cache key
+- **SingleFile Collections** → logo, hero images, staff photos
+
+---
