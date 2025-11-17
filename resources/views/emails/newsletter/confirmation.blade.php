@@ -6,8 +6,8 @@
 </head>
 <body>
     <p>Assalamu Alaikum {{ $subscriber->name ?? 'there' }},</p>
-    <p>Thanks for subscribing to the Al-Maghrib International School newsletter. We will keep you updated with events, achievements, and important announcements.</p>
+    <p>Thanks for subscribing to the {{ $siteName ?? \App\Helpers\SiteHelper::getSiteName() }} newsletter. We will keep you updated with events, achievements, and important announcements.</p>
     <p>If you received this email in error, please ignore it.</p>
-    <p>JazakAllahu Khairan,<br>Al-Maghrib International School</p>
+    <p>JazakAllahu Khairan,<br>{{ $siteName ?? \App\Helpers\SiteHelper::getSiteName() }}</p>
 </body>
 </html>

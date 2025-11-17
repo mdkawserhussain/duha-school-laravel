@@ -1,7 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Contact Us - Al-Maghrib International School')
-@section('meta-description', 'Get in touch with Al-Maghrib International School. Find our contact information, office hours, and send us a message')
+@php
+    $siteName = \App\Helpers\SiteHelper::getSiteName();
+@endphp
+@section('title', 'Contact Us - ' . $siteName)
+@section('meta-description', 'Get in touch with ' . $siteName . '. Find our contact information, office hours, and send us a message')
 
 @section('content')
     <!-- Page Header -->
@@ -36,7 +39,7 @@
                             <div>
                                 <h3 class="text-lg font-semibold text-gray-900 mb-1">Address</h3>
                                 <p class="text-gray-600">
-                                    Al-Maghrib International School<br>
+                                    {{ $siteName ?? \App\Helpers\SiteHelper::getSiteName() }}<br>
                                     Chattogram, Bangladesh
                                 </p>
                             </div>
@@ -204,7 +207,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                     </svg>
                     <p class="text-gray-600">Interactive map will be embedded here</p>
-                    <p class="text-sm text-gray-500 mt-2">Al-Maghrib International School, Chattogram, Bangladesh</p>
+                    <p class="text-sm text-gray-500 mt-2">{{ $siteName ?? \App\Helpers\SiteHelper::getSiteName() }}, Chattogram, Bangladesh</p>
                 </div>
             </div>
         </div>

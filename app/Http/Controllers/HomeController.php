@@ -30,18 +30,22 @@ class HomeController extends Controller
         $cacheTime = 3600; // 1 hour
 
         $data = cache()->remember($cacheKey, $cacheTime, function () {
-            $sections = HomePageSection::active()->ordered()->get();
+            // Eager load media relationships to ensure images are available
+            $sections = HomePageSection::active()
+                ->ordered()
+                ->with('media')
+                ->get();
             $sectionsByKey = $sections->keyBy('section_key');
             $heroSlides = $sections->where('section_type', 'hero')->values();
 
             return [
                 'hero' => $this->mapHeroBlock($heroSlides, $sectionsByKey),
                 'featurePanels' => $this->mapFeaturePanels($sectionsByKey),
-                'statHighlights' => $this->mapStatHighlights(),
+                'statHighlights' => $this->mapStatHighlights($sectionsByKey),
                 'featuredEvents' => $this->eventService->getFeaturedEvents(),
                 'recentNotices' => $this->noticeService->getRecentNotices(),
                 'featuredStaff' => $this->staffService->getFeaturedStaff(),
-                'upcomingEvents' => $this->eventService->getUpcomingEvents(5),
+                'upcomingEvents' => $this->eventService->getUpcomingEvents(3),
                 'visionPage' => \App\Models\Page::where('slug', 'vision')->published()->first(),
                 'homePageSections' => $sectionsByKey,
                 'heroSlides' => $heroSlides,
@@ -70,7 +74,7 @@ class HomeController extends Controller
 
         return [
             'badge' => $badge,
-            'heading' => $headline ?: 'Welcome to Al-Maghrib International School',
+            'heading' => $headline ?: 'Welcome to ' . \App\Helpers\SiteHelper::getSiteName(),
             'description' => $description,
             'primaryAction' => [
                 'label' => optional($primary)->button_text ?: 'Apply Now',
@@ -130,15 +134,33 @@ class HomeController extends Controller
             ->all();
     }
 
-    protected function mapStatHighlights(): array
+    protected function mapStatHighlights(Collection $sections): array
     {
+        $section = $sections->get('stat_highlights');
+
+        if ($section && $section->is_active) {
+            $highlights = data_get($section, 'data.highlights', []);
+
+            if (is_array($highlights) && count($highlights)) {
+                return collect($highlights)
+                    ->map(fn ($highlight) => [
+                        'value' => Arr::get($highlight, 'value'),
+                        'label' => Arr::get($highlight, 'label'),
+                    ])
+                    ->filter(fn ($highlight) => filled($highlight['value']) && filled($highlight['label']))
+                    ->values()
+                    ->all();
+            }
+        }
+
+        // Fallback to default values if no section found
         return [
             [
                 'value' => 'Cambridge | Edexcel',
                 'label' => 'Dual International Curriculum Tracks',
             ],
             [
-                'value' => 'Hifzul Qur’an',
+                'value' => 'Hifzul Qur\'an',
                 'label' => 'Structured memorisation with daily coaching',
             ],
             [

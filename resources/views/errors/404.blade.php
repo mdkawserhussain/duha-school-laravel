@@ -1,7 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Page Not Found - Al-Maghrib International School')
-@section('meta-description', 'The page you are looking for could not be found. Return to Al-Maghrib International School homepage')
+@php
+    $siteName = \App\Helpers\SiteHelper::getSiteName();
+@endphp
+@section('title', 'Page Not Found - ' . $siteName)
+@section('meta-description', 'The page you are looking for could not be found. Return to ' . $siteName . ' homepage')
 
 @section('content')
 

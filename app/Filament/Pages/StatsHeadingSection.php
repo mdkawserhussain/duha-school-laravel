@@ -25,6 +25,11 @@ class StatsHeadingSection extends Page implements HasForms
 
     protected static ?int $navigationSort = 6;
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
+
     protected string $view = 'filament.pages.stats-heading-section';
 
     protected function getSectionKey(): string

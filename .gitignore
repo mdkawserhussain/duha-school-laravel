@@ -43,3 +43,6 @@ Homestead.yaml
 
 # Vite specific ignores
 .vite/
+
+# Admin credentials file
+ADMIN_CREDENTIALS.txt

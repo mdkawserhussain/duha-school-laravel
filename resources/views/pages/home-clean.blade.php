@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Welcome to Al-Maghrib International School')
+@section('title', 'Welcome to {{ $siteName ?? \App\Helpers\SiteHelper::getSiteName() }}')
 @section('meta-description', 'Islamic and Cambridge curriculum school providing quality education in Chattogram, Bangladesh')
 
 @push('scripts')
@@ -72,14 +72,14 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="lg:grid lg:grid-cols-2 lg:gap-12 lg:items-center">
             <div class="mb-12 lg:mb-0">
-                <img src="{{ asset('images/about-school.jpg') }}" alt="Al-Maghrib International School" class="rounded-2xl shadow-xl w-full h-96 object-cover">
+                <img src="{{ asset('images/about-school.jpg') }}" alt="{{ $siteName ?? \App\Helpers\SiteHelper::getSiteName() }}" class="rounded-2xl shadow-xl w-full h-96 object-cover">
             </div>
             <div>
                 <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
-                    About Al-Maghrib International School
+                    About {{ $siteName ?? \App\Helpers\SiteHelper::getSiteName() }}
                 </h2>
                 <p class="text-lg text-gray-600 mb-6">
-                    Al-Maghrib International School is committed to providing quality education that combines academic excellence with Islamic values. Our comprehensive curriculum prepares students for both worldly success and spiritual growth.
+                    {{ $siteName ?? \App\Helpers\SiteHelper::getSiteName() }} is committed to providing quality education that combines academic excellence with Islamic values. Our comprehensive curriculum prepares students for both worldly success and spiritual growth.
                 </p>
                 <div class="space-y-4">
                     <div class="flex items-start">

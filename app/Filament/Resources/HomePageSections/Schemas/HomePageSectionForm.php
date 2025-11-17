@@ -32,6 +32,11 @@ class HomePageSectionForm
                                 'values' => 'Our Values',
                                 'advisors' => 'Advisors Section',
                                 'board_management' => 'Board of Management',
+                                'achievements' => 'Achievements Section',
+                                'stats_main' => 'Stats Section',
+                                'parallax_experience' => 'Parallax Experience Section',
+                                'competitions' => 'Competitions Section',
+                                'academic_programs' => 'Academic Programs Section',
                             ])
                             ->helperText('Unique identifier for this section')
                             ->live()
@@ -51,6 +56,11 @@ class HomePageSectionForm
                                     'values' => 'list',
                                     'advisors' => 'advisors',
                                     'board_management' => 'board',
+                                    'achievements' => 'achievements',
+                                    'stats_main' => 'stats',
+                                    'parallax_experience' => 'parallax',
+                                    'competitions' => 'competitions',
+                                    'academic_programs' => 'programs',
                                 ];
                                 $set('section_type', $typeMap[$state] ?? 'content');
                             }),
@@ -67,6 +77,11 @@ class HomePageSectionForm
                                 'list' => 'List Section (Values)',
                                 'advisors' => 'Advisors Section',
                                 'board' => 'Board of Management',
+                                'achievements' => 'Achievements Section',
+                                'stats' => 'Stats Section',
+                                'parallax' => 'Parallax Section',
+                                'competitions' => 'Competitions Section',
+                                'programs' => 'Programs Section',
                             ])
                             ->helperText('Type of section')
                             ->disabled()
@@ -107,6 +122,43 @@ class HomePageSectionForm
                             ->url()
                             ->helperText('URL for call-to-action button (if applicable)'),
 
+                        Components\Section::make('Achievements Data (for achievements section)')
+                            ->schema([
+                                FormComponents\Repeater::make('data.achievements')
+                                    ->label('Achievements')
+                                    ->schema([
+                                        FormComponents\TextInput::make('title')
+                                            ->label('Title')
+                                            ->required()
+                                            ->maxLength(255),
+                                        FormComponents\Textarea::make('copy')
+                                            ->label('Description')
+                                            ->required()
+                                            ->maxLength(500)
+                                            ->rows(3),
+                                        FormComponents\TextInput::make('badge')
+                                            ->label('Badge')
+                                            ->required()
+                                            ->maxLength(50),
+                                        FormComponents\TextInput::make('icon')
+                                            ->label('Icon Path')
+                                            ->required()
+                                            ->maxLength(255)
+                                            ->helperText('SVG path data for the icon'),
+                                        FormComponents\TextInput::make('link')
+                                            ->label('Learn More Link')
+                                            ->url()
+                                            ->maxLength(255)
+                                            ->helperText('URL for the Learn More link (optional)'),
+                                    ])
+                                    ->collapsible()
+                                    ->collapsed()
+                                    ->itemLabel(fn (array $state): string => $state['title'] ?? 'New Achievement')
+                                    ->defaultItems(4)
+                                    ->columnSpanFull(),
+                            ])
+                            ->columns(1),
+
                         FormComponents\Textarea::make('data')
                             ->label('Additional Data (JSON)')
                             ->helperText('JSON data for structured content. Examples: For values: {"values": ["Value 1", "Value 2"]}. For advisors: {"advisors": [{"name": "Name", "title": "Title"}]}. For videos: {"video_url": "https://...", "youtube_url": "https://..."}. For board: {"members": [{"name": "Name", "title": "Title"}]}. For images: {"image_url": "https://..."}')
@@ -124,7 +176,69 @@ class HomePageSectionForm
                                     return $decoded !== null ? $decoded : [];
                                 }
                                 return is_array($state) ? $state : [];
-                            }),
+                            })
+                            ->visible(fn ($get) => $get('section_key') !== 'achievements' && $get('section_key') !== 'parallax_experience'),
+
+                        // Parallax Background Image Section
+                        Components\Section::make('Parallax Background Image (for parallax section)')
+                            ->schema([
+                                FormComponents\FileUpload::make('parallax_background_image')
+                                    ->label('Background Image')
+                                    ->image()
+                                    ->directory('homepage-sections/parallax')
+                                    ->visibility('public')
+                                    ->disk('public')
+                                    ->imageEditor()
+                                    ->imageEditorAspectRatios([
+                                        null,
+                                        '16:9',
+                                        '4:3',
+                                        '3:2',
+                                    ])
+                                    ->helperText('Upload a background image for the parallax section. Recommended size: 1920x1080 pixels or larger.')
+                                    ->columnSpanFull()
+                                    ->saveUploadedFileUsing(function ($state, $set, callable $get) {
+                                        // When a file is uploaded, update the data array
+                                        $data = $get('data') ?? [];
+                                        if (!is_array($data)) {
+                                            $data = [];
+                                        }
+                                        $data['background_image'] = $state;
+                                        $set('data', $data);
+                                    })
+                                    ->loadStateFrom(function (callable $get) {
+                                        // Load the background image from the data array
+                                        $data = $get('data');
+                                        if (is_array($data) && isset($data['background_image'])) {
+                                            return $data['background_image'];
+                                        }
+                                        return null;
+                                    }),
+                                
+                                FormComponents\Toggle::make('parallax_use_default_image')
+                                    ->label('Use Default Image')
+                                    ->helperText('Toggle to use the default parallax image instead of uploaded image.')
+                                    ->default(false)
+                                    ->afterStateUpdated(function ($state, $set, callable $get) {
+                                        // When the toggle changes, update the data array
+                                        $data = $get('data') ?? [];
+                                        if (!is_array($data)) {
+                                            $data = [];
+                                        }
+                                        $data['use_default_image'] = $state;
+                                        $set('data', $data);
+                                    })
+                                    ->loadStateFrom(function (callable $get) {
+                                        // Load the use_default_image from the data array
+                                        $data = $get('data');
+                                        if (is_array($data) && isset($data['use_default_image'])) {
+                                            return $data['use_default_image'];
+                                        }
+                                        return false;
+                                    }),
+                            ])
+                            ->columns(1)
+                            ->visible(fn ($get) => $get('section_key') === 'parallax_experience'),
 
                         FormComponents\TextInput::make('sort_order')
                             ->label('Sort Order')

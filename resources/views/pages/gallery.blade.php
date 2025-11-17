@@ -1,7 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Media Gallery - Al-Maghrib International School')
-@section('meta-description', 'Browse our media gallery showcasing school events, activities, and campus life at Al-Maghrib International School')
+@php
+    $siteName = \App\Helpers\SiteHelper::getSiteName();
+@endphp
+@section('title', 'Media Gallery - ' . $siteName)
+@section('meta-description', 'Browse our media gallery showcasing school events, activities, and campus life at ' . $siteName)
 
 @push('styles')
     <!-- Lightbox2 CSS -->

@@ -16,11 +16,13 @@ class UpcomingEvents extends BaseWidget
 
     public function table(Table $table): Table
     {
+        $orderClause = \Illuminate\Support\Facades\Schema::hasColumn('events', 'start_at') ? 'COALESCE(start_at, event_date)' : 'event_date';
+
         return $table
             ->query(
                 Event::published()
                     ->upcoming()
-                    ->orderBy('start_at')
+                    ->orderByRaw($orderClause . ' asc')
                     ->limit(5)
             )
             ->columns([
@@ -45,7 +47,15 @@ class UpcomingEvents extends BaseWidget
 
                 Tables\Columns\TextColumn::make('start_at')
                     ->label('Date & Time')
-                    ->dateTime('M j, Y \a\t g:i A'),
+                    ->formatStateUsing(function ($state, $record) {
+                        $start = $record->start_at ?? $record->event_date ?? null;
+
+                        if (!$start) {
+                            return null;
+                        }
+
+                        return $start->format('M j, Y \a\t g:i A');
+                    }),
 
                 Tables\Columns\TextColumn::make('location')
                     ->searchable()

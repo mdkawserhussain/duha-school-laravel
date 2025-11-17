@@ -1,7 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Admissions - Al-Maghrib International School')
-@section('meta-description', 'Apply for admission to Al-Maghrib International School. Join our Islamic and Cambridge curriculum program for grades K-12')
+@php
+    $siteName = \App\Helpers\SiteHelper::getSiteName();
+@endphp
+@section('title', 'Admissions - ' . $siteName)
+@section('meta-description', 'Apply for admission to ' . $siteName . '. Join our Islamic and Cambridge curriculum program for grades K-12')
 
 @section('content')
 
@@ -24,7 +27,7 @@
     <section class="py-16 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">Why Choose Al-Maghrib?</h2>
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Why Choose {{ $siteName }}?</h2>
                 <p class="text-lg text-gray-600">A comprehensive Islamic education with Cambridge curriculum excellence</p>
             </div>
 

@@ -142,7 +142,7 @@
                     <div class="bg-white border border-gray-200 rounded-lg p-6 mb-6">
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">Share This Event</h3>
                         <x-social-share 
-                            :url="route('events.show', $event->slug)"
+                            :url="route('events.show', $event)"
                             :title="$event->title"
                             :description="Str::limit(strip_tags($event->excerpt ?? ''), 160)"
                             :image="$event->getFirstMediaUrl('featured_image')"
@@ -178,10 +178,10 @@
             // Basic calendar integration - can be enhanced with proper ICS generation
             const eventTitle = "{{ addslashes($event->title) }}";
             const eventDetails = "{{ addslashes(strip_tags($event->excerpt ?? '')) }}";
-            const startDate = "{{ $event->start_at->format('Ymd\\THis') }}";
-            const endDate = "{{ $event->end_at ? $event->end_at->format('Ymd\\THis') : $event->start_at->addHours(2)->format('Ymd\\THis') }}";
+            const start = "{{ ($event->start_at ?? $event->event_date) ? ($event->start_at ?? $event->event_date)->format('Ymd\\THis') : '' }}";
+            const end = "{{ $event->end_at ? $event->end_at->format('Ymd\\THis') : (($event->start_at ?? $event->event_date) ? ($event->start_at ?? $event->event_date)->addHours(2)->format('Ymd\\THis') : '') }}";
 
-            const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(eventTitle)}&details=${encodeURIComponent(eventDetails)}&dates=${startDate}/${endDate}`;
+            const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(eventTitle)}&details=${encodeURIComponent(eventDetails)}&dates=${start}/${end}`;
 
             window.open(googleCalendarUrl, '_blank');
         }
