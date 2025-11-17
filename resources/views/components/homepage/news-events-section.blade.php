@@ -45,7 +45,8 @@
 
         @php
             // Use dynamic events from the controller if available, otherwise fetch upcoming events
-            $events = $upcomingEvents ?? \App\Models\Event::with('media')->published()->upcoming()->orderBy('event_date', 'asc')->limit(3)->get();
+            $orderClause = \Illuminate\Support\Facades\Schema::hasColumn('events', 'start_at') ? 'COALESCE(start_at, event_date)' : 'event_date';
+            $events = $upcomingEvents ?? \App\Models\Event::with('media')->published()->upcoming()->orderByRaw($orderClause . ' asc')->limit(3)->get();
             
             // Define category colors
             $categoryColors = [
@@ -102,13 +103,14 @@
                     }
                     
                     // Format date
-                    $formattedDate = $event->event_date->format('M d');
+                    $start = $event->start_at ?? $event->event_date;
+                    $formattedDate = $start ? $start->format('M d') : '';
                 @endphp
                 <article class="group flex flex-col gap-6 rounded-3xl border p-6 transition-all hover:-translate-y-1 sm:flex-row sm:items-center sm:justify-between" style="border-color: #d1d5db; background-color: #ffffff; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);" onmouseover="this.style.boxShadow='0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'" onmouseout="this.style.boxShadow='0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'">
                     <!-- Left: Date Badge & Content -->
                     <div class="flex items-center gap-4 sm:gap-6">
                         <!-- Date Badge -->
-                        <div class="flex-shrink-0 rounded-2xl border px-5 py-4 text-center" style="background: linear-gradient(135deg, #173B7A, #0F224C); border-color: #173B7A; box-shadow: 0 4px 6px rgba(23, 59, 122, 0.2);">
+                        <div class="shrink-0 rounded-2xl border px-5 py-4 text-center" style="background: linear-gradient(135deg, #173B7A, #0F224C); border-color: #173B7A; box-shadow: 0 4px 6px rgba(23, 59, 122, 0.2);">
                             <span class="text-2xl font-bold block" style="color: #ffffff;">{{ $formattedDate }}</span>
                         </div>
 
@@ -123,13 +125,13 @@
                             <h3 class="mt-3 text-2xl font-semibold" style="color: #0C1B3D;">{{ $event->title }}</h3>
 
                             <!-- Description -->
-                            <p class="mt-2 leading-relaxed" style="color: #4a5568;">{{ Str::limit(strip_tags($event->excerpt ?? $event->description), 100) }}</p>
+                            <p class="mt-2 leading-relaxed" style="color: #4a5568;">{{ Str::limit(strip_tags($event->excerpt ?? $event->content ?? $event->description), 100) }}</p>
                         </div>
                     </div>
 
                     <!-- Right: Arrow Button -->
-                    <a href="{{ route('events.show', $event) }}" class="group/btn inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-all sm:flex-shrink-0" style="background-color: #F4C430; color: #0C1B3D; box-shadow: 0 4px 6px rgba(244, 196, 48, 0.2);" onmouseover="this.style.backgroundColor='#ffdc5c'; this.style.boxShadow='0 10px 15px -3px rgba(244, 196, 48, 0.5)'; this.style.transform='scale(1.05)'" onmouseout="this.style.backgroundColor='#F4C430'; this.style.boxShadow='0 4px 6px rgba(244, 196, 48, 0.2)'; this.style.transform='scale(1)'">
-                        Details
+                    <a href="{{ route('events.show', $event) }}" class="group/btn inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-all sm:shrink-0" style="background-color: #F4C430; color: #0C1B3D; box-shadow: 0 4px 6px rgba(244, 196, 48, 0.2);" onmouseover="this.style.backgroundColor='#ffdc5c'; this.style.boxShadow='0 10px 15px -3px rgba(244, 196, 48, 0.5)'; this.style.transform='scale(1.05)'" onmouseout="this.style.backgroundColor='#F4C430'; this.style.boxShadow='0 4px 6px rgba(244, 196, 48, 0.2)'; this.style.transform='scale(1)'">
+                            Details
                         <svg class="h-3.5 w-3.5 transition-transform group-hover/btn:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                         </svg>

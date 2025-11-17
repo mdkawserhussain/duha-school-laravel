@@ -34,10 +34,13 @@ class EventSeeder extends Seeder
                 <strong>Time:</strong> 9:00 AM - 3:00 PM<br>
                 <strong>Location:</strong> School Auditorium and Science Labs</p>',
                 'event_date' => Carbon::now()->addMonths(2)->setTime(9, 0),
+                'content' => '<p>Our Annual Science Fair is one of the most anticipated events of the year. Students from all grade levels will showcase their innovative science projects, experiments, and research findings. This event promotes scientific inquiry, critical thinking, and creativity among our students.</p>',
+                'start_at' => Carbon::now()->addMonths(2)->setTime(9, 0),
                 'location' => 'School Auditorium',
                 'category' => 'Academic',
                 'is_featured' => true,
                 'is_published' => true,
+                'status' => 'published',
                 'published_at' => now(),
             ],
             [
@@ -58,10 +61,13 @@ class EventSeeder extends Seeder
                 <strong>Time:</strong> 10:00 AM - 2:00 PM<br>
                 <strong>Location:</strong> School Masjid</p>',
                 'event_date' => Carbon::now()->addMonths(3)->setTime(10, 0),
+                'content' => '<p>Our annual Quran Memorization Competition celebrates the achievements of our students in memorizing the Holy Quran. This event recognizes the dedication and effort of our Hifz students and encourages others to follow in their footsteps.</p>',
+                'start_at' => Carbon::now()->addMonths(3)->setTime(10, 0),
                 'location' => 'School Masjid',
                 'category' => 'Islamic',
                 'is_featured' => true,
                 'is_published' => true,
+                'status' => 'published',
                 'published_at' => now(),
             ],
             [
@@ -83,10 +89,13 @@ class EventSeeder extends Seeder
                 <strong>Time:</strong> 8:00 AM - 4:00 PM<br>
                 <strong>Location:</strong> School Sports Ground</p>',
                 'event_date' => Carbon::now()->addMonths(4)->setTime(8, 0),
+                'content' => '<p>Join us for our annual Sports Day, a day filled with excitement, competition, and team spirit. Students will participate in various athletic events including track and field, team sports, and fun activities.</p>',
+                'start_at' => Carbon::now()->addMonths(4)->setTime(8, 0),
                 'location' => 'School Sports Ground',
                 'category' => 'Sports',
                 'is_featured' => true,
                 'is_published' => true,
+                'status' => 'published',
                 'published_at' => now(),
             ],
             [
@@ -109,10 +118,13 @@ class EventSeeder extends Seeder
                 
                 <p><em>Please schedule your appointment in advance through the school office.</em></p>',
                 'event_date' => Carbon::now()->addMonths(1)->setTime(14, 0),
+                'content' => '<p>We invite all parents to attend our scheduled parent-teacher conferences. This is an opportunity to meet with your child\'s teachers, discuss academic progress, and address any concerns or questions.</p>',
+                'start_at' => Carbon::now()->addMonths(1)->setTime(14, 0),
                 'location' => 'School Classrooms',
                 'category' => 'Academic',
                 'is_featured' => false,
                 'is_published' => true,
+                'status' => 'published',
                 'published_at' => now(),
             ],
             [
@@ -133,10 +145,13 @@ class EventSeeder extends Seeder
                 <strong>Time:</strong> 10:00 AM - 4:00 PM<br>
                 <strong>Location:</strong> School Art Gallery</p>',
                 'event_date' => Carbon::now()->addMonths(5)->setTime(10, 0),
+                'content' => '<p>Our Islamic Art Exhibition celebrates the rich tradition of Islamic art and calligraphy. Students from all grade levels will display their artwork, including Arabic calligraphy, geometric patterns, and Islamic-inspired designs.</p>',
+                'start_at' => Carbon::now()->addMonths(5)->setTime(10, 0),
                 'location' => 'School Art Gallery',
                 'category' => 'Cultural',
                 'is_featured' => false,
                 'is_published' => true,
+                'status' => 'published',
                 'published_at' => now(),
             ],
         ];

@@ -61,7 +61,6 @@
 .fi-sidebar {
     background: #ffffff !important;
     border-right: 1px solid #e2e8f0 !important;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1) !important;
 }
 
 .fi-sidebar-nav {
@@ -154,7 +153,6 @@
     background: #ffffff !important;
     border: 1px solid #e2e8f0 !important;
     border-radius: 12px !important;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1) !important;
     padding: 24px !important;
     margin-bottom: 24px !important;
 }
@@ -181,7 +179,6 @@
 .fi-topbar-ctn {
     background: #ffffff !important;
     border-bottom: 1px solid #e2e8f0 !important;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1) !important;
 }
 
 .fi-topbar {
@@ -282,14 +279,25 @@
 }
 
 .fi-btn-primary {
-    background-color: #6366f1 !important;
-    color: #ffffff !important;
-    border: none !important;
+    background-color: #ffffff !important;
+    color: #4f46e5 !important; /* primary-600 */
+    border: 1px solid #4f46e5 !important;
 }
 
 .fi-btn-primary:hover {
     background-color: #4f46e5 !important;
     color: #ffffff !important;
+}
+
+/* Dark mode primary button: solid accent to sit better on dark panels */
+.dark .fi-btn-primary {
+    background-color: #4f46e5 !important;
+    color: #ffffff !important;
+    border-color: #4f46e5 !important;
+}
+
+.dark .fi-btn-primary:hover {
+    background-color: #4338ca !important; /* primary-700 */
 }
 
 .fi-btn-secondary {
@@ -301,6 +309,29 @@
 .fi-btn-secondary:hover {
     background-color: #e2e8f0 !important;
     color: #0f172a !important;
+}
+
+/* Filament action buttons (e.g. "New announcement") */
+.fi-ac-btn-action {
+    background-color: #ffffff !important;
+    color: #4f46e5 !important;
+    border: 1px solid #4f46e5 !important;
+    border-radius: 9999px !important;
+}
+
+.fi-ac-btn-action:hover {
+    background-color: #4f46e5 !important;
+    color: #ffffff !important;
+}
+
+.dark .fi-ac-btn-action {
+    background-color: #4f46e5 !important;
+    color: #ffffff !important;
+    border-color: #4f46e5 !important;
+}
+
+.dark .fi-ac-btn-action:hover {
+    background-color: #4338ca !important;
 }
 
 .fi-btn-danger {
@@ -346,7 +377,6 @@
 .fi-modal {
     background: #ffffff !important;
     border-radius: 12px !important;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
 }
 
 .fi-modal-header {
@@ -376,7 +406,6 @@
     background: #ffffff !important;
     border: 1px solid #e2e8f0 !important;
     border-radius: 8px !important;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1) !important;
 }
 
 .fi-dropdown-item {
@@ -656,7 +685,6 @@
     background: #ffffff !important;
     border: 1px solid #e2e8f0 !important;
     border-radius: 8px !important;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1) !important;
     color: #0f172a !important;
 }
 
@@ -720,9 +748,9 @@
     font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace !important;
 }
 
-/* Ensure all text is readable */
-* {
-    color-scheme: light !important;
+/* Ensure all text is readable while allowing both light and dark themes */
+:root {
+    color-scheme: light dark;
 }
 
 /* Force text visibility */
@@ -757,6 +785,19 @@
 .fi-border-gray-200,
 .fi-border-gray-300 {
     border-color: #e2e8f0 !important;
+}
+
+/* Generic Tailwind-style colors inside Filament */
+.dark .bg-white,
+.dark .bg-gray-50,
+.dark .bg-gray-100 {
+    background-color: #020617 !important; /* dark */
+}
+
+.dark .text-gray-900,
+.dark .text-gray-800,
+.dark .text-gray-700 {
+    color: #e5e7eb !important; /* light */
 }
 
 /* Brand/Logo Area */
@@ -877,4 +918,171 @@
 .fi-subheading {
     color: #475569 !important;
     font-weight: 500 !important;
+}
+
+/*
+ |--------------------------------------------------------------------------
+ | Dark theme overrides
+ |--------------------------------------------------------------------------
+ | When Filament is in dark mode it sets data-theme="dark" on the document.
+ | These rules counterbalance the light-mode !important overrides above to
+ | ensure a proper dark background + light text experience, while staying
+ | visually simple and minimal.
+ */
+/* Override core theme variables in dark mode so components using them
+   automatically get dark surfaces and light text. */
+.dark {
+    --background: #020617;          /* slate-950 */
+    --surface: #020617;
+    --surface-elevated: #020617;
+    --surface-hover: #111827;       /* gray-900 */
+    --surface-active: #1f2937;      /* gray-800 */
+
+    --text-primary: #e5e7eb;        /* gray-200 */
+    --text-secondary: #9ca3af;      /* gray-400 */
+    --text-tertiary: #6b7280;       /* gray-500 */
+    --text-disabled: #4b5563;       /* gray-600 */
+}
+
+.dark .fi-body {
+    background-color: #020617 !important; /* slate-950 */
+    color: #e5e7eb !important;             /* gray-200 */
+}
+
+.dark .fi-main {
+    background: #020617 !important;
+    color: #e5e7eb !important;
+}
+
+.dark .fi-main-content {
+    background: #020617 !important;
+}
+
+.dark .fi-sidebar {
+    background: #020617 !important;
+    border-right-color: #1f2937 !important; /* gray-800 */
+}
+
+.dark .fi-sidebar-nav,
+.dark .fi-sidebar-nav-item,
+.dark .fi-sidebar-nav-group-label {
+    color: #e5e7eb !important;
+}
+
+.dark .fi-sidebar-nav-item:hover {
+    background-color: #111827 !important; /* gray-900 */
+}
+
+.dark .fi-sidebar-nav-item.active {
+    background-color: #4f46e5 !important; /* primary-600 */
+    color: #f9fafb !important;
+}
+
+.dark .fi-topbar-ctn,
+.dark .fi-topbar {
+    background: #020617 !important;
+    border-bottom-color: #1f2937 !important;
+    color: #e5e7eb !important;
+}
+
+.dark .fi-section,
+.dark .fi-card,
+.dark .fi-modal,
+.dark .fi-dropdown,
+.dark .fi-notification,
+.dark .fi-ta-table {
+    background: #020617 !important;
+    border-color: #1f2937 !important;
+    color: #e5e7eb !important;
+}
+
+.dark .fi-section-header,
+.dark .fi-modal-header,
+.dark .fi-modal-footer,
+.dark .fi-ta-header {
+    border-color: #1f2937 !important;
+}
+
+/* Dark mode table header and cells */
+.dark .fi-ta-header {
+    background-color: #020617 !important;
+    color: #e5e7eb !important;
+}
+
+.dark .fi-ta-cell {
+    color: #e5e7eb !important;
+}
+
+/* Widget headers (e.g. "Recent Applications") */
+.dark .fi-section-header,
+.dark .fi-widget-header {
+    background-color: #020617 !important;
+}
+
+.dark .fi-section-header-title,
+.dark .fi-widget-header,
+.dark .fi-widget-header * {
+    color: #e5e7eb !important;
+}
+
+.dark .fi-main-content [class*='header'] {
+    background-color: #020617 !important;
+    color: #e5e7eb !important;
+}
+
+.dark .fi-ta-row:hover {
+    background-color: #0b1120 !important; /* slate-900 */
+}
+
+.dark .fi-input,
+.dark .fi-select,
+.dark .fi-search {
+    background: #020617 !important;
+    border-color: #1f2937 !important;
+    color: #e5e7eb !important;
+}
+
+.dark .fi-label,
+.dark .fi-hint,
+.dark .fi-text-gray-500,
+.dark .fi-text-gray-600,
+.dark .fi-text-gray-700,
+.dark .fi-text-gray-800,
+.dark .fi-text-gray-900 {
+    color: #e5e7eb !important;
+}
+
+.dark .fi-link {
+    color: #818cf8 !important; /* primary-400 */
+}
+
+.dark .fi-link:hover {
+    color: #a5b4fc !important; /* primary-300 */
+}
+
+.dark .fi-breadcrumbs,
+.dark .fi-breadcrumbs-item,
+.dark .fi-breadcrumbs-separator {
+    color: #9ca3af !important; /* gray-400 */
+}
+
+.dark .fi-pagination-item {
+    background: #020617 !important;
+    border-color: #1f2937 !important;
+    color: #d1d5db !important;
+}
+
+.dark .fi-pagination-item:hover {
+    background: #111827 !important;
+}
+
+.dark .fi-pagination-item.active {
+    background: #4f46e5 !important;
+    border-color: #4f46e5 !important;
+    color: #f9fafb !important;
+}
+
+.dark .fi-heading,
+.dark .fi-subheading {
+    color: #f9fafb !important;
 }
