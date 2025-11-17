@@ -2,18 +2,18 @@
 
 <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-300">
     @if($event->featured_image)
-        <img src="{{ $event->featured_image }}" alt="{{ $event->title }}" class="w-full h-48 object-cover">
+        <img src="{{ $event->featured_image }}" alt="{{ $event->title }}" class="w-full h-40 sm:h-48 object-cover">
     @else
-        <div class="w-full h-48 bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center">
+        <div class="w-full h-40 sm:h-48 bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center">
             <svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
             </svg>
         </div>
     @endif
 
-    <div class="p-6">
-        <div class="flex items-center justify-between mb-2">
-            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+    <div class="p-4 sm:p-6">
+        <div class="flex flex-wrap items-center gap-2 mb-2 sm:mb-3">
+            <span class="inline-flex items-center px-2 sm:px-2.5 py-0.5 rounded-full text-xs font-medium
                 @if($event->category === 'Academic') bg-green-100 text-green-800
                 @elseif($event->category === 'Social') bg-blue-100 text-blue-800
                 @elseif($event->category === 'Islamic') bg-yellow-100 text-yellow-800
@@ -33,8 +33,8 @@
             @endif
         </div>
 
-        <h3 class="text-xl font-bold text-gray-900 mb-2 line-clamp-2">
-            <a href="{{ route('events.show', $event) }}" class="hover:text-blue-600 transition duration-300">
+        <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3 line-clamp-2">
+            <a href="{{ route('events.show', $event) }}" class="hover:text-blue-600 transition duration-300 min-h-[44px] flex items-center">
                 {{ $event->title }}
             </a>
         </h3>
@@ -62,12 +62,12 @@
         @endif
 
         @if($event->excerpt)
-        <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+        <p class="text-gray-600 text-sm mb-3 sm:mb-4 line-clamp-3">
             {!! Str::limit(strip_tags($event->excerpt), 120) !!}
         </p>
         @endif
 
-        <a href="{{ route('events.show', $event) }}" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium transition duration-300">
+        <a href="{{ route('events.show', $event) }}" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium transition duration-300 min-h-[44px] py-2">
             Read More
             <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>

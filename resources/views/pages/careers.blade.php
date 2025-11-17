@@ -9,14 +9,14 @@
 @section('content')
 
     <!-- Page Header -->
-    <section class="bg-gradient-to-r from-green-600 to-green-800 text-white py-16">
+    <section class="bg-gradient-to-r from-green-600 to-green-800 text-white py-8 sm:py-12 md:py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
-                <h1 class="text-4xl md:text-6xl font-bold mb-6">Join Our Team</h1>
-                <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
+                <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-4 sm:mb-6">Join Our Team</h1>
+                <p class="text-base sm:text-lg md:text-xl lg:text-2xl mb-6 sm:mb-8 max-w-3xl mx-auto px-4">
                     Be part of our mission to provide quality Islamic and Cambridge curriculum education
                 </p>
-                <a href="#career-form" class="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-3 px-8 rounded-lg transition duration-300">
+                <a href="#career-form" class="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-3 px-6 sm:px-8 rounded-lg transition duration-300 min-h-[44px] inline-flex items-center justify-center">
                     Apply Now
                 </a>
             </div>
@@ -24,14 +24,14 @@
     </section>
 
     <!-- Why Work With Us -->
-    <section class="py-16 bg-white">
+    <section class="py-8 sm:py-12 md:py-16 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">Why Work at {{ $siteName }}?</h2>
-                <p class="text-lg text-gray-600">A rewarding career in Islamic education</p>
+            <div class="text-center mb-8 sm:mb-12">
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">Why Work at {{ $siteName }}?</h2>
+                <p class="text-base sm:text-lg text-gray-600 px-4">A rewarding career in Islamic education</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
                 <div class="text-center">
                     <div class="bg-green-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
                         <svg class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">

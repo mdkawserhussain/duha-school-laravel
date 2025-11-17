@@ -1001,7 +1001,15 @@
         transition: transform 0.3s ease;
     }
 
-    .mobile-menu.open {
+    @media (max-width: 767px) {
+        .mobile-menu {
+            max-width: 100%;
+            width: 100%;
+        }
+    }
+
+    .mobile-menu.open,
+    .mobile-menu.translate-x-0 {
         transform: translateX(0);
     }
 
@@ -1015,7 +1023,8 @@
         pointer-events: none;
     }
 
-    .mobile-menu.open + .mobile-menu-overlay {
+    .mobile-menu.open + .mobile-menu-overlay,
+    .mobile-menu-overlay.opacity-100 {
         opacity: 1;
         pointer-events: auto;
     }
@@ -1148,7 +1157,36 @@
         align-items: center;
     }
 
-    /* Responsive Design */
+    /* Mobile-First Responsive Design */
+    /* Base mobile styles (default) */
+    .btn-modern,
+    .btn-modern-primary,
+    .btn-modern-secondary {
+        min-height: 44px; /* WCAG touch target minimum */
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+    }
+
+    /* Tablet and up */
+    @media (min-width: 640px) {
+        .btn-modern,
+        .btn-modern-primary,
+        .btn-modern-secondary {
+            padding: 0.875rem 1.75rem;
+        }
+    }
+
+    /* Desktop */
+    @media (min-width: 1024px) {
+        .btn-modern,
+        .btn-modern-primary,
+        .btn-modern-secondary {
+            padding: 1rem 2rem;
+            font-size: 1.125rem;
+        }
+    }
+
+    /* Mobile-specific adjustments */
     @media (max-width: 1023px) {
         .navbar {
             padding-left: 1rem;
@@ -1161,6 +1199,15 @@
 
         .dropdown-menu {
             width: 16rem;
+        }
+
+        /* Ensure touch targets are adequate */
+        .nav-link,
+        .dropdown-item,
+        .mobile-menu-item {
+            min-height: 44px;
+            display: flex;
+            align-items: center;
         }
     }
 
@@ -1176,8 +1223,38 @@
             padding-right: 0.75rem;
         }
 
+        .search-modal-content {
+            max-width: calc(100vw - 1.5rem);
+            margin: 0 auto;
+        }
+
         .mobile-menu {
-            max-width: 20rem;
+            max-width: 100%;
+            width: 100%;
+        }
+
+        /* Mobile menu items full width */
+        .mobile-menu-item {
+            width: 100%;
+            padding: 1rem;
+            min-height: 48px;
+        }
+
+        /* Ensure buttons are full width on mobile when needed */
+        .btn-mobile-full {
+            width: 100%;
+        }
+    }
+
+    /* Extra small devices */
+    @media (max-width: 479px) {
+        .heading-modern {
+            font-size: 1.75rem;
+            line-height: 1.2;
+        }
+
+        .heading-modern-subtitle {
+            font-size: 1rem;
         }
     }
 

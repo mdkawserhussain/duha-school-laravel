@@ -4,13 +4,13 @@
     <div class="absolute top-0 left-0 w-64 h-64 bg-blue-100 rounded-full opacity-20 -translate-x-32 -translate-y-32"></div>
     <div class="absolute bottom-0 right-0 w-96 h-96 bg-yellow-100 rounded-full opacity-20 translate-x-48 translate-y-48"></div>
     
-    <div class="container mx-auto px-6 lg:px-12 relative z-10">
-        <div class="grid lg:grid-cols-2 gap-16 items-center">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
+        <div class="grid lg:grid-cols-2 gap-8 sm:gap-12 md:gap-16 items-center">
             <!-- Left Content -->
-            <div class="space-y-8">
+            <div class="space-y-6 sm:space-y-8 order-2 lg:order-1">
                 <!-- Section Badge -->
-                <div class="inline-flex items-center bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-semibold">
-                    <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <div class="inline-flex items-center bg-blue-100 text-blue-800 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold">
+                    <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
                     </svg>
                     About Our School
@@ -18,11 +18,11 @@
                 
                 <!-- Main Heading -->
                 <div>
-                    <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-6">
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-4 sm:mb-6">
                         Empowering Minds, <br>
                         <span class="text-blue-600">Enriching Hearts</span>
                     </h2>
-                    <p class="text-lg text-gray-600 leading-relaxed">
+                    <p class="text-base sm:text-lg text-gray-600 leading-relaxed">
                         @php
                             $siteName = \App\Helpers\SiteSettingsHelper::websiteName();
                         @endphp
@@ -33,16 +33,16 @@
                 </div>
                 
                 <!-- Features List -->
-                <div class="space-y-4">
-                    <div class="flex items-start space-x-4">
-                        <div class="flex-shrink-0 w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
-                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <div class="space-y-3 sm:space-y-4">
+                    <div class="flex items-start space-x-3 sm:space-x-4">
+                        <div class="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 bg-green-500 rounded-lg flex items-center justify-center">
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                             </svg>
                         </div>
                         <div>
-                            <h4 class="font-bold text-gray-900">Cambridge International Curriculum</h4>
-                            <p class="text-gray-600">World-class education standards recognized globally</p>
+                            <h4 class="text-sm sm:text-base font-bold text-gray-900">Cambridge International Curriculum</h4>
+                            <p class="text-xs sm:text-sm text-gray-600">World-class education standards recognized globally</p>
                         </div>
                     </div>
                     
@@ -84,10 +84,10 @@
                 </div>
                 
                 <!-- CTA Button -->
-                <div class="pt-6">
-                    <a href="#programs" class="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-lg transition-colors duration-300 shadow-lg hover:shadow-xl">
+                <div class="pt-4 sm:pt-6">
+                    <a href="#programs" class="inline-flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-lg transition-colors duration-300 shadow-lg hover:shadow-xl min-h-[44px] w-full sm:w-auto">
                         Explore Our Programs
-                        <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="ml-2 w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                         </svg>
                     </a>
@@ -95,9 +95,9 @@
             </div>
             
             <!-- Right Content - Image/Visual -->
-            <div class="relative">
+            <div class="relative order-1 lg:order-2">
                 <!-- Main Image Container -->
-                <div class="relative bg-white rounded-3xl p-8 shadow-2xl">
+                <div class="relative bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-2xl">
                     <div class="aspect-[4/3] bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl overflow-hidden">
                         <!-- Placeholder for school image -->
                         <div class="w-full h-full flex flex-col items-center justify-center text-blue-600">
@@ -110,30 +110,30 @@
                     </div>
                     
                     <!-- Floating Stats Cards -->
-                    <div class="absolute -top-6 -left-6 bg-white rounded-2xl shadow-xl p-4 border border-gray-100">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                                <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                    <div class="absolute -top-4 sm:-top-6 -left-4 sm:-left-6 bg-white rounded-xl sm:rounded-2xl shadow-xl p-3 sm:p-4 border border-gray-100">
+                        <div class="flex items-center space-x-2 sm:space-x-3">
+                            <div class="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                 </svg>
                             </div>
                             <div>
-                                <div class="text-xl font-bold text-gray-900">100%</div>
-                                <div class="text-xs text-gray-600">Pass Rate</div>
+                                <div class="text-lg sm:text-xl font-bold text-gray-900">100%</div>
+                                <div class="text-[10px] sm:text-xs text-gray-600">Pass Rate</div>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="absolute -bottom-6 -right-6 bg-yellow-400 rounded-2xl shadow-xl p-4">
-                        <div class="flex items-center space-x-3 text-blue-900">
-                            <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center">
-                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                    <div class="absolute -bottom-4 sm:-bottom-6 -right-4 sm:-right-6 bg-yellow-400 rounded-xl sm:rounded-2xl shadow-xl p-3 sm:p-4">
+                        <div class="flex items-center space-x-2 sm:space-x-3 text-blue-900">
+                            <div class="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-xl flex items-center justify-center">
+                                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
                                 </svg>
                             </div>
                             <div>
-                                <div class="text-xl font-bold">Excellence</div>
-                                <div class="text-xs">Since 2008</div>
+                                <div class="text-lg sm:text-xl font-bold">Excellence</div>
+                                <div class="text-[10px] sm:text-xs">Since 2008</div>
                             </div>
                         </div>
                     </div>

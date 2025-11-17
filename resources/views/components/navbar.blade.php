@@ -84,7 +84,7 @@
                         $siteName = \App\Helpers\SiteSettingsHelper::websiteName();
                     @endphp
                     <img
-                        class="h-10 lg:h-12 w-auto"
+                        class="h-8 sm:h-10 lg:h-12 w-auto"
                         src="{{ $logoUrl ?? asset('images/logo.svg') }}"
                         alt="{{ $siteName }} Logo"
                         onerror="this.onerror=null; this.src='{{ asset('images/logo.svg') }}'"
@@ -340,7 +340,7 @@
                         <div class="search-modal-content">
                             <button
                                 @click="closeSearch()"
-                                class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 rounded-lg p-1"
+                                class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 rounded-lg p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center"
                                 aria-label="Close search"
                             >
                                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -449,7 +449,7 @@
             <div class="lg:hidden flex-shrink-0 ml-auto z-10">
                 <button
                     @click="mobileMenuOpen = !mobileMenuOpen"
-                    class="inline-flex items-center justify-center p-2 rounded-xl text-gray-600 hover:text-indigo-600 hover:bg-indigo-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    class="inline-flex items-center justify-center p-2.5 rounded-xl text-gray-600 hover:text-indigo-600 hover:bg-indigo-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 min-w-[44px] min-h-[44px]"
                     :aria-expanded="mobileMenuOpen"
                     aria-controls="mobile-menu"
                     aria-label="Toggle mobile menu"
@@ -470,19 +470,28 @@
         x-show="mobileMenuOpen"
         @click.away="mobileMenuOpen = false"
         @keydown.escape="mobileMenuOpen = false"
-        class="mobile-menu"
-        :class="{ 'open': mobileMenuOpen }"
+        x-cloak
+        class="mobile-menu fixed inset-y-0 right-0 z-50 w-full max-w-sm bg-white shadow-xl transform transition-transform duration-300 ease-in-out"
+        :class="{ 'translate-x-0': mobileMenuOpen, 'translate-x-full': !mobileMenuOpen }"
         style="display: none;"
         id="mobile-menu"
     >
-        <div class="mobile-menu-overlay"></div>
+        {{-- Mobile Menu Overlay --}}
+        <div 
+            x-show="mobileMenuOpen"
+            @click="mobileMenuOpen = false"
+            class="fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300"
+            :class="{ 'opacity-100': mobileMenuOpen, 'opacity-0': !mobileMenuOpen }"
+            style="display: none;"
+        ></div>
+        
         <div class="flex flex-col h-full">
             {{-- Mobile Header --}}
-            <div class="flex items-center justify-between p-4 border-b border-gray-200">
+            <div class="flex items-center justify-between p-4 border-b border-gray-200 bg-white">
                 <span class="text-lg font-semibold text-gray-900">Menu</span>
                 <button
                     @click="mobileMenuOpen = false"
-                    class="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                    class="p-2.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
                     aria-label="Close mobile menu"
                 >
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -492,13 +501,13 @@
             </div>
 
             {{-- Mobile Menu Content --}}
-            <div class="flex-1 overflow-y-auto py-6 px-4">
-                <nav class="space-y-2">
+            <div class="flex-1 overflow-y-auto py-4 px-4">
+                <nav class="space-y-1">
                     {{-- Home --}}
                     <a
                         href="{{ route('home') }}"
                         @click="mobileMenuOpen = false"
-                        class="flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-all duration-200"
+                        class="flex items-center gap-3 px-4 py-3.5 rounded-xl text-base font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-all duration-200 min-h-[48px]"
                         :class="{ 'bg-indigo-100 text-indigo-700 font-semibold': isActive('home') }"
                     >
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -513,7 +522,7 @@
                         <a
                             href="{{ route('about.show', 'principal') }}"
                             @click="mobileMenuOpen = false"
-                            class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-xl transition-all duration-200"
+                            class="flex items-center gap-3 px-6 py-3.5 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-xl transition-all duration-200 min-h-[48px]"
                         >
                             <div class="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
                                 <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -525,7 +534,7 @@
                         <a
                             href="{{ route('about.show', 'vision') }}"
                             @click="mobileMenuOpen = false"
-                            class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-xl transition-all duration-200"
+                            class="flex items-center gap-3 px-6 py-3.5 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-xl transition-all duration-200 min-h-[48px]"
                         >
                             <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
                                 <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -542,7 +551,7 @@
                         <a
                             href="{{ route('academic.show', 'curriculum') }}"
                             @click="mobileMenuOpen = false"
-                            class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-xl transition-all duration-200"
+                            class="flex items-center gap-3 px-6 py-3.5 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-xl transition-all duration-200 min-h-[48px]"
                         >
                             <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
                                 <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -554,7 +563,7 @@
                         <a
                             href="{{ route('academic.show', 'policies') }}"
                             @click="mobileMenuOpen = false"
-                            class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-xl transition-all duration-200"
+                            class="flex items-center gap-3 px-6 py-3.5 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-xl transition-all duration-200 min-h-[48px]"
                         >
                             <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
                                 <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -569,7 +578,7 @@
                     <a
                         href="{{ route('admission.index') }}"
                         @click="mobileMenuOpen = false"
-                        class="flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-all duration-200"
+                        class="flex items-center gap-3 px-4 py-3.5 rounded-xl text-base font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-all duration-200 min-h-[48px]"
                         :class="{ 'bg-indigo-100 text-indigo-700 font-semibold': isActive('admission.*') }"
                     >
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -584,7 +593,7 @@
                         <a
                             href="{{ route('events.index') }}"
                             @click="mobileMenuOpen = false"
-                            class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-xl transition-all duration-200"
+                            class="flex items-center gap-3 px-6 py-3.5 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-xl transition-all duration-200 min-h-[48px]"
                         >
                             <div class="w-8 h-8 bg-pink-100 rounded-lg flex items-center justify-center">
                                 <svg class="w-4 h-4 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -596,7 +605,7 @@
                         <a
                             href="{{ route('notices.index') }}"
                             @click="mobileMenuOpen = false"
-                            class="flex items-center gap-3 px-6 py-3 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-xl transition-all duration-200"
+                            class="flex items-center gap-3 px-6 py-3.5 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-xl transition-all duration-200 min-h-[48px]"
                         >
                             <div class="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center">
                                 <svg class="w-4 h-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -610,7 +619,7 @@
                     <a
                         href="{{ route('careers.index') }}"
                         @click="mobileMenuOpen = false"
-                        class="flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-all duration-200"
+                        class="flex items-center gap-3 px-4 py-3.5 rounded-xl text-base font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-all duration-200 min-h-[48px]"
                         :class="{ 'bg-indigo-100 text-indigo-700 font-semibold': isActive('careers.*') }"
                     >
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -622,7 +631,7 @@
                     <a
                         href="{{ route('contact.index') }}"
                         @click="mobileMenuOpen = false"
-                        class="flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-all duration-200"
+                        class="flex items-center gap-3 px-4 py-3.5 rounded-xl text-base font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-all duration-200 min-h-[48px]"
                         :class="{ 'bg-indigo-100 text-indigo-700 font-semibold': isActive('contact.*') }"
                     >
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -634,7 +643,7 @@
                     {{-- Mobile Search --}}
                     <button
                         @click="mobileMenuOpen = false; $nextTick(() => { $dispatch('open-search') })"
-                        class="flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-all duration-200 w-full text-left"
+                        class="flex items-center gap-3 px-4 py-3.5 rounded-xl text-base font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-all duration-200 w-full text-left min-h-[48px]"
                     >
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
@@ -644,12 +653,12 @@
 
                     {{-- Mobile Logout (only for logged-in users) --}}
                     @auth
-                        <div class="px-4 py-3 border-t border-gray-200">
+                        <div class="px-4 py-3 border-t border-gray-200 mt-auto">
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <button
                                     type="submit"
-                                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-all duration-200 w-full text-left"
+                                    class="flex items-center gap-3 px-4 py-3.5 rounded-xl text-base font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-all duration-200 w-full text-left min-h-[48px]"
                                 >
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>

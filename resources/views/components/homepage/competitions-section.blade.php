@@ -33,46 +33,46 @@
 
         @if($section && $section->is_active && count($competitions) > 0)
         <!-- Section Header -->
-        <div class="flex flex-col gap-6 text-center mb-16">
-            <div class="inline-flex items-center justify-center gap-2 mx-auto rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.5em]" style="background-color: #FFF8E7; color: #173B7A; border: 1px solid #F4C430;">
-                <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20" style="color: #F4C430;">
+        <div class="flex flex-col gap-4 sm:gap-6 text-center mb-10 sm:mb-16 px-4">
+            <div class="inline-flex items-center justify-center gap-2 mx-auto rounded-full px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-semibold uppercase tracking-[0.5em]" style="background-color: #FFF8E7; color: #173B7A; border: 1px solid #F4C430;">
+                <svg class="h-3.5 w-3.5 sm:h-4 sm:w-4" fill="currentColor" viewBox="0 0 20 20" style="color: #F4C430;">
                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
                 Competitions
             </div>
-            <h2 class="text-3xl font-bold md:text-4xl lg:text-5xl" style="color: #0C1B3D;">{{ $title }}</h2>
-            <p class="mx-auto max-w-3xl leading-relaxed" style="color: #4a5568;">{{ $description }}</p>
+            <h2 class="text-2xl sm:text-3xl font-bold md:text-4xl lg:text-5xl" style="color: #0C1B3D;">{{ $title }}</h2>
+            <p class="mx-auto max-w-3xl text-sm sm:text-base leading-relaxed px-4" style="color: #4a5568;">{{ $description }}</p>
         </div>
 
         <!-- Competitions Grid with Skew -->
-        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div class="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
             @foreach ($competitions as $index => $competition)
                 <article class="group rounded-2xl border transition-all overflow-hidden" style="border-color: #e5e7eb; background-color: #ffffff; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);" onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'">
                     <!-- Colored Top Bar -->
                     <div class="h-2" style="<?php echo 'background: ' . $competition['gradient'] . ';'; ?>"></div>
                     
                     <!-- Card Content -->
-                    <div class="p-6">
+                    <div class="p-4 sm:p-6">
                         <!-- Icon -->
-                        <div class="inline-flex items-center justify-center rounded-xl p-3 mb-4" style="<?php echo 'background-color: ' . $competition['iconBg'] . ';'; ?>">
-                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="24" height="24" style="color: #ffffff;">
+                        <div class="inline-flex items-center justify-center rounded-xl p-2.5 sm:p-3 mb-3 sm:mb-4" style="<?php echo 'background-color: ' . $competition['iconBg'] . ';'; ?>">
+                            <svg class="h-5 w-5 sm:h-6 sm:w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="24" height="24" style="color: #ffffff;">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $competition['icon'] }}" />
                             </svg>
                         </div>
                         
                         <!-- Competition Number -->
-                        <div class="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wider mb-3" style="background-color: #FFF8E7; color: #173B7A; border: 1px solid #F4C430;">
-                            <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20" style="color: #F4C430;">
+                        <div class="inline-flex items-center gap-1.5 sm:gap-2 rounded-full px-2.5 sm:px-3 py-1 text-xs font-semibold uppercase tracking-wider mb-2 sm:mb-3" style="background-color: #FFF8E7; color: #173B7A; border: 1px solid #F4C430;">
+                            <svg class="h-2.5 w-2.5 sm:h-3 sm:w-3" fill="currentColor" viewBox="0 0 20 20" style="color: #F4C430;">
                                 <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                             </svg>
                             Achievement {{ $index + 1 }}
                         </div>
                         
                         <!-- Title -->
-                        <h3 class="text-xl font-bold mb-3" style="color: #0C1B3D;">{{ $competition['title'] }}</h3>
+                        <h3 class="text-lg sm:text-xl font-bold mb-2 sm:mb-3" style="color: #0C1B3D;">{{ $competition['title'] }}</h3>
                         
                         <!-- Description -->
-                        <p class="text-sm leading-relaxed mb-6" style="color: #4a5568;">{{ $competition['copy'] }}</p>
+                        <p class="text-xs sm:text-sm leading-relaxed mb-4 sm:mb-6" style="color: #4a5568;">{{ $competition['copy'] }}</p>
                     </div>
                 </article>
             @endforeach
