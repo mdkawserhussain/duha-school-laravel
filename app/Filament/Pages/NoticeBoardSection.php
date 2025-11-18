@@ -22,6 +22,11 @@ class NoticeBoardSection extends Page implements HasForms
 
     protected static ?int $navigationSort = 5;
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false; // Hidden - Not used in homepage template
+    }
+
     protected string $view = 'filament.pages.notice-board-section';
 
     protected function getSectionKey(): string

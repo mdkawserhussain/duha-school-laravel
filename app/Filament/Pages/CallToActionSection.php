@@ -22,6 +22,11 @@ class CallToActionSection extends Page implements HasForms
 
     protected static ?int $navigationSort = 12;
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false; // Hidden - Not used in homepage template
+    }
+
     protected string $view = 'filament.pages.call-to-action-section';
 
     protected function getSectionKey(): string

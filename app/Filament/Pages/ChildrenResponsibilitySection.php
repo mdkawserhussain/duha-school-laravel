@@ -22,6 +22,11 @@ class ChildrenResponsibilitySection extends Page implements HasForms
 
     protected static ?int $navigationSort = 8;
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false; // Hidden - Not used in homepage template
+    }
+
     protected string $view = 'filament.pages.children-responsibility-section';
 
     protected function getSectionKey(): string

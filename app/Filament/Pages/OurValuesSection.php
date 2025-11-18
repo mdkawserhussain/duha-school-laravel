@@ -25,6 +25,11 @@ class OurValuesSection extends Page implements HasForms
 
     protected static ?int $navigationSort = 9;
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false; // Hidden - Values are managed within Vision & Mission section
+    }
+
     protected string $view = 'filament.pages.our-values-section';
 
     protected function getSectionKey(): string

@@ -25,6 +25,11 @@ class BoardMembersSection extends Page implements HasForms
 
     protected static ?int $navigationSort = 11;
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false; // Hidden - Advisors section uses SiteSettingsHelper instead
+    }
+
     protected string $view = 'filament.pages.board-members-section';
 
     protected function getSectionKey(): string

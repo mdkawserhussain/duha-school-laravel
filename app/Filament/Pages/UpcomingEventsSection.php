@@ -22,6 +22,11 @@ class UpcomingEventsSection extends Page implements HasForms
 
     protected static ?int $navigationSort = 4;
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false; // Hidden - Events are fetched dynamically via EventService
+    }
+
     protected string $view = 'filament.pages.upcoming-events-section';
 
     protected function getSectionKey(): string
