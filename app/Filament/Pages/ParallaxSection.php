@@ -75,7 +75,7 @@ class ParallaxSection extends Page implements HasForms
 
         // Load existing background image URL if available
         if ($section && $section->hasMedia('background_image')) {
-            $this->data['background_image'] = $section->getFirstMediaUrl('background_image');
+            $this->data['background_image'] = $section->getMediaUrlRelative('background_image', 'large');
         }
 
         // Fill the form with data
@@ -388,6 +388,7 @@ class ParallaxSection extends Page implements HasForms
     {
         \Illuminate\Support\Facades\Cache::forget('homepage_v2_data');
         \Illuminate\Support\Facades\Artisan::call('view:clear');
+        \Illuminate\Support\Facades\Artisan::call('config:clear');
     }
 }
 

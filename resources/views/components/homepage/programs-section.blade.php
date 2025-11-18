@@ -29,10 +29,10 @@
         </div>
         
         @if(count($programs) > 0)
-        <!-- Programs Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 mb-12 sm:mb-16">
+        <!-- Programs Grid - Single row on desktop -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:flex lg:flex-row gap-4 sm:gap-6 md:gap-8 mb-12 sm:mb-16">
             @foreach($programs as $program)
-            <div class="group relative">
+            <div class="group relative lg:flex-1 lg:min-w-0">
                 <div class="rounded-2xl p-4 sm:p-6 md:p-8 h-full transition-all duration-500 border" style="background-color: #ffffff; border-color: #d1d5db; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);" onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)';">
                     <!-- Icon -->
                     <div class="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center mb-4 sm:mb-6 transition-transform duration-300" style="background-color: <?php echo $program['icon_bg_color'] ?? '#6EC1F5'; ?>;" onmouseover="this.style.transform='scale(1.1)';" onmouseout="this.style.transform='scale(1)';">

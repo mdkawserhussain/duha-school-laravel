@@ -58,6 +58,9 @@ Route::get('/campus', [PageController::class, 'show'])->name('campus.show');
 Route::get('/privacy-policy', [PageController::class, 'show'])->name('privacy.show');
 Route::get('/terms-of-service', [PageController::class, 'show'])->name('terms.show');
 
+// Generic page route for Filament preview (fallback)
+Route::get('/pages/{page:slug}', [PageController::class, 'show'])->name('pages.show');
+
 // Staff Directory
 Route::get('/staff', [StaffController::class, 'index'])->name('staff.index');
 Route::get('/staff/{id}', [StaffController::class, 'show'])->name('staff.show');

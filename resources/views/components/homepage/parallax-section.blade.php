@@ -90,7 +90,7 @@
 
 <section 
     class="parallax-section relative min-h-[400px] sm:min-h-[500px] md:min-h-[600px] flex items-center justify-center overflow-hidden"
-    style="background-image: url('{{ e($backgroundImage) }}'); background-color: #1e3a8a; background-size: cover; background-position: center center; background-repeat: no-repeat; background-attachment: scroll;"
+    style="background-image: url('{{ e($backgroundImage) }}'); background-color: #1e3a8a;"
 >
     <!-- Dark Overlay - Ensures white text is always visible regardless of background image -->
     <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/60 to-black/70 z-10"></div>
