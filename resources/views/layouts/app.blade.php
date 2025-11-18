@@ -87,6 +87,9 @@
 
         <!-- Theme Colors as CSS Variables -->
         <style>
+            [x-cloak] {
+                display: none !important;
+            }
             :root {
                 --color-primary: {{ $primaryColor }};
                 --color-secondary: {{ $secondaryColor }};

@@ -1,16 +1,16 @@
 You will create a comprehensive, production-ready Cursor AI rules file for the **Duha International School** project.
 
-There are already   cursor rule files at @./plan/rulesbygemini.txt   . take them as reference and generate an updated, enhanced and optimized cursor rules file according to the instructions below- 
+generate  updated, enhanced and optimized multiple cursor rules file (like core-rules.mdc self-improvements-rules.mdc etc) according to the instructions below- 
 
-Before writing the rules, thoroughly analyze **the entire project codebase, history, @plan folder, and current state** as of November 17, 2025. This includes:
+Before writing the rules, thoroughly analyze **the entire project codebase, history, @plan folder, and current state** as of November 18, 2025. This includes:
 
-- All past conversations and decisions from the "Al-Maghrib → Duha" rename until today
+- All past conversations and decisions  until today
 - Every fix, feature, and architectural decision (transparent glassy navbar, hero touching top, WebP + original-delete pipeline, background-removal logo, Hero Slider Manager page, collapsible Homepage Settings sidebar, cache keys, Filament Section + columns(), etc.)
 - The final visual design system (navbar layout, brand section with red line, hero overlapping navbar, scroll-triggered fade-ins, mobile behavior)
 - All technical constraints and non-negotiables (no Grid::make, singleFile() collections, cache clearing in afterSave/afterDelete, Alpine.js only, etc.)
 - The strict context-switching rule: only switch when user explicitly says **[different project]**
 
-Once analysis is complete, generate a **ready-to-paste Markdown rules file** (for Cursor → Settings → Rules for AI or .cursor/rules.md) that **permanently locks Cursor** into this exact project state.
+Once analysis is complete, generate multiple ** Markdown rules file** (inside .cursor/rules/ folder) that **permanently locks Cursor** into this exact project state.
 
 Write the rules in strict, absolute language using **MUST**, **NEVER**, **ALWAYS**, **ONLY**, and **MUST NOT** to eliminate any possibility of deviation.
 
@@ -362,6 +362,8 @@ Provide in-depth considerations and recommendations.
 
 ## **The following rules should be included in the beginning:**
 
+🚀 0. GLOBAL AI BEHAVIOR RULES
+
 - Top of rules. Important: call me (Kawser) at the start of every conversation.
 - Important: fix things at the cause, not the symptom.
 - Be very detailed with summarization and do not miss important things.
@@ -369,12 +371,38 @@ Provide in-depth considerations and recommendations.
 - Write better code.
 - Check the README and update it often.
 - When a fault, error, failure, or unexpected output is experienced:
-    - Attempt a maximum of one fix at a time
-    - Validate if that fix resolved the issue
-    - If the fix failed, undo it and reset the fix counter
-    - Reevaluate the issue using detailed line-by-line analysis
-    - Continue iterating until the issue is resolved
 
+  - Attempt a maximum of one fix at a time
+  - Validate if that fix resolved the issue
+  - If the fix failed, undo it and reset the fix counter
+  - Reevaluate the issue using detailed line-by-line analysis
+  - Continue iterating until the issue is resolved
+
+- Always follow spec-first development.
+
+- Always ask clarifying questions if any requirement is incomplete.
+
+- All responses must be accurate, deterministic, consistent, and production-ready.
+
+- Never hallucinate APIs, features, or libraries.
+
+- ALWAYS generate explanations first unless the user asks to otherwise.
+
+- Prefer clean, modular, maintainable, scalable code over shortcuts.
+
+- Use industry best practices for security, performance, maintainability, DX.
+
+- If code can be improved, automatically improve it unless asked not to.
+
+Follow specs precisely
+
+Maintain consistency
+
+Don't invent APIs
+
+Ask when unclear
+
+Produce professional, maintainable code
 ---
 
 ## description: How to add or edit Cursor rules in our project
@@ -520,7 +548,7 @@ alwaysApply: true
 - Maintain links between related rules
 - Document breaking changes
 
-Follow [cursor-rules.mdc](mdc:.cursor/rules/cursor-rules.mdc) for proper rule formatting and structure.
+
 
 ## **OUTPUT FORMAT**
 
@@ -549,15 +577,15 @@ I am attaching a plan below that you can use to generate the output
 
 Enhanced Cursor Rules Generation Plan
 Analysis Complete
-✅ Reviewed existing rules files (rulesbygemini.mdc, dis-international-school-rules.mdc)
+
 ✅ Analyzed codebase structure and key implementations
 ✅ Identified project-specific patterns (navbar, hero, WebP pipeline, cache keys)
 ✅ Documented forbidden patterns (Grid::make, external JS frameworks)
 ✅ Captured design system (colors, typography, spacing)
 ✅ Reviewed Filament resources structure and patterns
 Implementation Steps
-1. Create Enhanced Rules File Structure
-File: .cursor/rules/duha-school-rules.mdc
+1. Create Enhanced Rules Files Structure
+File: .cursor/rules/*.mdc
 
 Sections to Include (30 sections as specified):
 
@@ -634,11 +662,8 @@ MUST be mobile-first responsive
 MUST use Tailwind CSS 4.0 (no Bootstrap or other CSS frameworks)
 MUST implement scroll-triggered fade-in animations
 MUST use semantic HTML5 elements
-Color Palette
-Primary: Brand blues (#6366f1, #4f46e5, #4338ca)
-Accent: Gold (#FCD34D, #F4C430)
-Neutral: Ink grays (#1E293B, #475569)
-MUST use CSS variables for consistency
+# Color Palette
+- from existing homepage
 Forbidden Patterns
 MUST NOT use Grid::make() in Filament forms (use Section::make()->columns())
 MUST NOT introduce Vue, React, or other JS frameworks
@@ -696,7 +721,7 @@ Code blocks for examples
 Strict language (MUST, NEVER, ALWAYS, ONLY)
 Actionable and production-ready
 Deliverables
-Complete .cursor/rules/duha-international-school-rules.mdc file
+Complete .cursor/rules/*.mdc files
 All 30 required sections
 Project-specific patterns documented
 Forbidden patterns clearly stated

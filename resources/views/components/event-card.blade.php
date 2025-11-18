@@ -1,6 +1,6 @@
 @props(['event'])
 
-<div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-300">
+<div class="event-card bg-white rounded-2xl shadow-md overflow-hidden border border-slate-200/80 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
     @if($event->featured_image)
         <img src="{{ $event->featured_image }}" alt="{{ $event->title }}" class="w-full h-40 sm:h-48 object-cover">
     @else

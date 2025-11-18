@@ -1,6 +1,6 @@
 @props(['staff'])
 
-<div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-300">
+<div class="profile-card bg-white rounded-3xl shadow-md overflow-hidden border border-slate-200/80 hover:shadow-2xl hover:scale-105 transition-all duration-500">
     @if($staff->getFirstMediaUrl('photo'))
         <img src="{{ $staff->getFirstMediaUrl('photo', 'medium') }}" alt="{{ $staff->name }}" class="w-full h-40 sm:h-48 object-cover">
     @else
