@@ -29,11 +29,11 @@
 
 @section('content')
     <!-- Page Header -->
-    <section class="bg-gray-50 py-16">
+    <section class="bg-gray-50 py-8 sm:py-12 md:py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
-                <h1 class="text-4xl font-bold text-gray-900 mb-4">Media Gallery</h1>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">Media Gallery</h1>
+                <p class="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto px-4">
                     Explore our collection of photos and videos showcasing school events, student activities, and campus life
                 </p>
             </div>
@@ -41,36 +41,36 @@
     </section>
 
     <!-- Gallery Section -->
-    <section class="py-16 bg-white">
+    <section class="py-8 sm:py-12 md:py-16 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Gallery Categories -->
-            <div class="mb-8">
-                <div class="flex flex-wrap gap-2 justify-center">
+            <div class="mb-6 sm:mb-8">
+                <div class="flex flex-wrap gap-2 sm:gap-3 justify-center">
                     <a href="{{ route('media.gallery') }}"
-                       class="px-4 py-2 rounded-full text-sm font-medium bg-blue-600 text-white transition duration-300">
+                       class="px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium bg-blue-600 text-white transition duration-300 min-h-[44px] flex items-center justify-center">
                         All
                     </a>
                     <a href="{{ route('media.gallery', ['category' => 'events']) }}"
-                       class="px-4 py-2 rounded-full text-sm font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 transition duration-300">
+                       class="px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 transition duration-300 min-h-[44px] flex items-center justify-center">
                         Events
                     </a>
                     <a href="{{ route('media.gallery', ['category' => 'sports']) }}"
-                       class="px-4 py-2 rounded-full text-sm font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 transition duration-300">
+                       class="px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 transition duration-300 min-h-[44px] flex items-center justify-center">
                         Sports
                     </a>
                     <a href="{{ route('media.gallery', ['category' => 'academics']) }}"
-                       class="px-4 py-2 rounded-full text-sm font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 transition duration-300">
+                       class="px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 transition duration-300 min-h-[44px] flex items-center justify-center">
                         Academics
                     </a>
                     <a href="{{ route('media.gallery', ['category' => 'campus']) }}"
-                       class="px-4 py-2 rounded-full text-sm font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 transition duration-300">
+                       class="px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 transition duration-300 min-h-[44px] flex items-center justify-center">
                         Campus
                     </a>
                 </div>
             </div>
 
             <!-- Gallery Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12" id="gallery-grid">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12" id="gallery-grid">
                 <!-- Placeholder Gallery Items -->
                 @for($i = 1; $i <= 12; $i++)
                 <a href="{{ asset('images/gallery/placeholder-' . $i . '.jpg') }}" 
@@ -106,7 +106,7 @@
 
             <!-- Load More -->
             <div class="text-center">
-                <button class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-300">
+                <button class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-300 min-h-[44px] flex items-center justify-center mx-auto">
                     Load More Images
                 </button>
             </div>
@@ -114,25 +114,25 @@
     </section>
 
     <!-- Video Gallery Section -->
-    <section class="py-16 bg-gray-50">
+    <section class="py-8 sm:py-12 md:py-16 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">Video Gallery</h2>
-                <p class="text-lg text-gray-600">Watch our featured videos and school highlights</p>
+            <div class="text-center mb-8 sm:mb-12">
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">Video Gallery</h2>
+                <p class="text-base sm:text-lg text-gray-600 px-4">Watch our featured videos and school highlights</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
                 <!-- Video 1 -->
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">
                     <div class="aspect-w-16 aspect-h-9 bg-gray-200 flex items-center justify-center">
-                        <svg class="h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg class="h-12 w-12 sm:h-16 sm:w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1.586a1 1 0 01.707.293l.707.707A1 1 0 0012.414 11H15m-3 7.5A9.5 9.5 0 1121.5 12 9.5 9.5 0 0112 2.5z"></path>
                         </svg>
                     </div>
-                    <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-2">School Opening Ceremony 2024</h3>
-                        <p class="text-gray-600 mb-4">Highlights from our annual school opening ceremony and welcome event.</p>
-                        <button class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded transition duration-300">
+                    <div class="p-4 sm:p-6">
+                        <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-2">School Opening Ceremony 2024</h3>
+                        <p class="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">Highlights from our annual school opening ceremony and welcome event.</p>
+                        <button class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2.5 sm:py-2 px-4 sm:px-4 rounded transition duration-300 min-h-[44px] flex items-center justify-center w-full sm:w-auto">
                             ▶️ Watch Video
                         </button>
                     </div>
@@ -141,14 +141,14 @@
                 <!-- Video 2 -->
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">
                     <div class="aspect-w-16 aspect-h-9 bg-gray-200 flex items-center justify-center">
-                        <svg class="h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg class="h-12 w-12 sm:h-16 sm:w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1.586a1 1 0 01.707.293l.707.707A1 1 0 0012.414 11H15m-3 7.5A9.5 9.5 0 1121.5 12 9.5 9.5 0 0112 2.5z"></path>
                         </svg>
                     </div>
-                    <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Sports Day Highlights</h3>
-                        <p class="text-gray-600 mb-4">Exciting moments from our annual sports day celebrations.</p>
-                        <button class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded transition duration-300">
+                    <div class="p-4 sm:p-6">
+                        <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-2">Sports Day Highlights</h3>
+                        <p class="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">Exciting moments from our annual sports day celebrations.</p>
+                        <button class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2.5 sm:py-2 px-4 sm:px-4 rounded transition duration-300 min-h-[44px] flex items-center justify-center w-full sm:w-auto">
                             ▶️ Watch Video
                         </button>
                     </div>

@@ -9,11 +9,11 @@
 @section('content')
 
     <!-- Page Header -->
-    <section class="bg-gradient-to-r from-green-600 to-green-800 text-white py-16">
+    <section class="bg-gradient-to-r from-green-600 to-green-800 text-white py-8 sm:py-12 md:py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
-                <h1 class="text-4xl md:text-6xl font-bold mb-6">Academic Excellence</h1>
-                <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
+                <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-4 sm:mb-6">Academic Excellence</h1>
+                <p class="text-base sm:text-lg md:text-xl lg:text-2xl mb-6 sm:mb-8 max-w-3xl mx-auto px-4">
                     Comprehensive Islamic and Cambridge curriculum education for holistic development
                 </p>
             </div>
@@ -21,23 +21,23 @@
     </section>
 
     <!-- Curriculum Overview -->
-    <section class="py-16 bg-white">
+    <section class="py-8 sm:py-12 md:py-16 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">Our Curriculum</h2>
-                <p class="text-lg text-gray-600">A perfect blend of Islamic teachings and international academic standards</p>
+            <div class="text-center mb-8 sm:mb-12">
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">Our Curriculum</h2>
+                <p class="text-base sm:text-lg text-gray-600 px-4">A perfect blend of Islamic teachings and international academic standards</p>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 md:gap-12 items-center">
                 <!-- Islamic Studies -->
-                <div class="bg-green-50 p-8 rounded-lg">
-                    <div class="flex items-center mb-6">
-                        <div class="bg-green-100 rounded-full p-3 mr-4">
-                            <svg class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div class="bg-green-50 p-4 sm:p-6 md:p-8 rounded-lg">
+                    <div class="flex items-center mb-4 sm:mb-6">
+                        <div class="bg-green-100 rounded-full p-2.5 sm:p-3 mr-3 sm:mr-4">
+                            <svg class="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
                             </svg>
                         </div>
-                        <h3 class="text-2xl font-bold text-gray-900">Islamic Studies</h3>
+                        <h3 class="text-xl sm:text-2xl font-bold text-gray-900">Islamic Studies</h3>
                     </div>
                     <div class="space-y-4 text-gray-700">
                         <p>Our Islamic Studies program covers:</p>
@@ -53,14 +53,14 @@
                 </div>
 
                 <!-- Cambridge Curriculum -->
-                <div class="bg-blue-50 p-8 rounded-lg">
-                    <div class="flex items-center mb-6">
-                        <div class="bg-blue-100 rounded-full p-3 mr-4">
-                            <svg class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div class="bg-blue-50 p-4 sm:p-6 md:p-8 rounded-lg">
+                    <div class="flex items-center mb-4 sm:mb-6">
+                        <div class="bg-blue-100 rounded-full p-2.5 sm:p-3 mr-3 sm:mr-4">
+                            <svg class="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
                             </svg>
                         </div>
-                        <h3 class="text-2xl font-bold text-gray-900">Cambridge Curriculum</h3>
+                        <h3 class="text-xl sm:text-2xl font-bold text-gray-900">Cambridge Curriculum</h3>
                     </div>
                     <div class="space-y-4 text-gray-700">
                         <p>Internationally recognized academic program including:</p>
@@ -79,23 +79,23 @@
     </section>
 
     <!-- Grade Levels -->
-    <section class="py-16 bg-gray-50">
+    <section class="py-8 sm:py-12 md:py-16 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">Grade Levels</h2>
-                <p class="text-lg text-gray-600">Structured learning from Kindergarten to Grade 12</p>
+            <div class="text-center mb-8 sm:mb-12">
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">Grade Levels</h2>
+                <p class="text-base sm:text-lg text-gray-600 px-4">Structured learning from Kindergarten to Grade 12</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
                 <!-- Kindergarten -->
-                <div class="bg-white rounded-lg shadow-md p-6">
-                    <div class="text-center mb-4">
-                        <div class="bg-yellow-100 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-3">
-                            <span class="text-yellow-600 font-bold text-lg">K</span>
+                <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
+                    <div class="text-center mb-3 sm:mb-4">
+                        <div class="bg-yellow-100 rounded-full w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center mx-auto mb-2 sm:mb-3">
+                            <span class="text-yellow-600 font-bold text-base sm:text-lg">K</span>
                         </div>
-                        <h3 class="text-xl font-bold text-gray-900">Kindergarten</h3>
+                        <h3 class="text-lg sm:text-xl font-bold text-gray-900">Kindergarten</h3>
                     </div>
-                    <ul class="text-sm text-gray-600 space-y-2">
+                    <ul class="text-xs sm:text-sm text-gray-600 space-y-1.5 sm:space-y-2">
                         <li>• Play-based learning</li>
                         <li>• Basic Islamic concepts</li>
                         <li>• Social skills development</li>
@@ -159,22 +159,22 @@
     </section>
 
     <!-- Academic Features -->
-    <section class="py-16 bg-white">
+    <section class="py-8 sm:py-12 md:py-16 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">Academic Features</h2>
-                <p class="text-lg text-gray-600">What sets our academic program apart</p>
+            <div class="text-center mb-8 sm:mb-12">
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">Academic Features</h2>
+                <p class="text-base sm:text-lg text-gray-600 px-4">What sets our academic program apart</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                 <div class="text-center">
-                    <div class="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                        <svg class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div class="bg-blue-100 rounded-full w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                        <svg class="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Individual Attention</h3>
-                    <p class="text-gray-600">Small class sizes ensure personalized attention for every student</p>
+                    <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-2">Individual Attention</h3>
+                    <p class="text-sm sm:text-base text-gray-600">Small class sizes ensure personalized attention for every student</p>
                 </div>
 
                 <div class="text-center">
@@ -231,17 +231,17 @@
     </section>
 
     <!-- Subjects Offered -->
-    <section class="py-16 bg-gray-50">
+    <section class="py-8 sm:py-12 md:py-16 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">Subjects Offered</h2>
-                <p class="text-lg text-gray-600">Comprehensive curriculum covering all essential areas</p>
+            <div class="text-center mb-8 sm:mb-12">
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">Subjects Offered</h2>
+                <p class="text-base sm:text-lg text-gray-600 px-4">Comprehensive curriculum covering all essential areas</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="bg-white p-6 rounded-lg shadow-sm">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Core Subjects</h3>
-                    <ul class="space-y-2 text-gray-600">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                <div class="bg-white p-4 sm:p-6 rounded-lg shadow-sm">
+                    <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-3">Core Subjects</h3>
+                    <ul class="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-gray-600">
                         <li>• English Language & Literature</li>
                         <li>• Mathematics</li>
                         <li>• Islamic Studies</li>
@@ -309,15 +309,15 @@
     </section>
 
     <!-- Call to Action -->
-    <section class="py-16 bg-green-600 text-white">
+    <section class="py-8 sm:py-12 md:py-16 bg-green-600 text-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-3xl font-bold mb-4">Experience Academic Excellence</h2>
-            <p class="text-xl mb-8">Join our community of learners and discover the perfect balance of faith and knowledge</p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="{{ route('admission.index') }}" class="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-3 px-8 rounded-lg transition duration-300">
+            <h2 class="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Experience Academic Excellence</h2>
+            <p class="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 px-4">Join our community of learners and discover the perfect balance of faith and knowledge</p>
+            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+                <a href="{{ route('admission.index') }}" class="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-3 px-6 sm:px-8 rounded-lg transition duration-300 min-h-[44px] flex items-center justify-center">
                     Apply for Admission
                 </a>
-                <a href="{{ route('contact.index') }}" class="bg-white bg-opacity-20 hover:bg-opacity-30 border border-white text-white font-semibold py-3 px-8 rounded-lg transition duration-300">
+                <a href="{{ route('contact.index') }}" class="bg-white bg-opacity-20 hover:bg-opacity-30 border border-white text-white font-semibold py-3 px-6 sm:px-8 rounded-lg transition duration-300 min-h-[44px] flex items-center justify-center">
                     Learn More
                 </a>
             </div>

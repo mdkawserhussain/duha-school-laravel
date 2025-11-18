@@ -623,115 +623,167 @@ Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap')
 
 # Summery
 
-# Duha International School - Cursor AI Rules
+---
+description: "ULTIMATE FINAL KILLER Cursor AI Rules for Duha International School — 100% locked-in, zero deviation, enterprise-grade enforcement as of November 17, 2025"
+globs: ["**/*"]
+alwaysApply: true
+---
 
-## 1. PROJECT OVERVIEW
-Cursor AI MUST maintain the Duha International School Laravel 12 application as a production-ready, Filament-powered CMS with comprehensive public website functionality. The application MUST replicate and enhance https://almaghribschool.com/ with modern architecture, full testing coverage, and enterprise-grade features.
+Hello Kawser, I am now **permanently and irreversibly locked** into the **Duha International School** Laravel 12 project.
+I **NEVER** mention Al-Maghrib, AISD, or any legacy name.
+I **ONLY** switch projects when you write **[different project]** — otherwise I remain 100% focused here.
 
-## 2. TECH STACK REQUIREMENTS
-Cursor AI MUST enforce Laravel 12 with PHP 8.2+ as the core framework. Filament PHP 4.2 MUST be used for admin panels. Spatie packages (Permission, Media Library, Sitemap, Newsletter) MUST be utilized. Tailwind CSS 4.0 with Vite compilation MUST be the frontend stack. Redis MUST be preferred for queues and caching with database fallback.
+**Error-Fixing Protocol (MANDATORY)**
+1. One surgical fix at a time
+2. Test → if it fails → immediate full undo
+3. Line-by-line re-analysis before next attempt
 
-## 3. CODE ARCHITECTURE PATTERNS
-Cursor AI MUST implement Controller → Service → Repository pattern. Controllers MUST handle HTTP requests only. Services MUST contain business logic. Repositories MUST handle data access. Dependency injection MUST be used throughout. SOLID principles MUST be followed. Thin controllers and fat services MUST be maintained.
+---
 
-## 4. DATABASE DESIGN RULES
-Cursor AI MUST use MySQL 8.0+ or MariaDB 10.6+ with PostgreSQL support. All models MUST use Eloquent ORM. Indexes MUST be added to frequently queried columns. Foreign key constraints MUST be enforced. Soft deletes MUST be used for content models. Polymorphic relationships MUST be avoided unless absolutely necessary.
+# DUHA INTERNATIONAL SCHOOL — FINAL KILLER CURSOR RULES (NOV 17, 2025)
 
-## 5. CONTROLLER STANDARDS
-Controllers MUST extend base Controller class. Resource controllers MUST be used for CRUD operations. Form requests MUST validate all input. Services MUST be injected via constructor. Views MUST be returned with compact data. Redirects MUST use named routes. Flash messages MUST be used for user feedback.
+### 1. PROJECT IDENTITY & NAMING (LOCKED FOREVER)
+- School name is **Duha International School** — **NEVER** use any previous name in code, comments, seeds, READMEs, or responses
+- Greet user as **Kawser** at the start of **every** response
+- All assets, meta tags, emails, and content **MUST** use "Duha International School"
 
-## 6. SERVICE LAYER RULES
-Services MUST be injected via constructor. Business logic MUST reside in services. Services MUST call repositories for data access. Services MUST dispatch jobs for heavy operations. Services MUST return consistent response formats. Unit tests MUST cover service methods.
+### 2. TECH STACK & VERSIONS (EXACT — NON-NEGOTIABLE)
 
-## 7. REPOSITORY PATTERNS
-Repositories MUST implement interface contracts. Eager loading MUST be used to prevent N+1 queries. Query scopes MUST be used for reusable logic. Pagination MUST be applied to listing methods. Caching MUST be implemented at repository level. Repositories MUST handle database transactions.
+| Layer               | Package / Tool                          | Exact Version (Nov 17, 2025)          | Enforcement Rule                              |
+|---------------------|-----------------------------------------|---------------------------------------|-----------------------------------------------|
+| Laravel             | laravel/framework                       | ^12.0                                 | MUST use Laravel 12 features only             |
+| PHP                 | —                                       | 8.3+                                  | MUST enforce PHP 8.3 in production            |
+| Admin Panel         | filament/filament                       | ^4.2                                  | MUST use Filament v4 patterns                 |
+| Roles/Permissions   | spatie/laravel-permission               | ^6.23                                 | MUST use Spatie Permission                   |
+| Media Library       | spatie/laravel-medialibrary             | ^11.17                                | MUST use for ALL file uploads                 |
+| Queue Dashboard     | laravel/horizon                         | ^5.39                                 | MUST monitor queues with Horizon              |
+| Tailwind            | tailwindcss                             | ^4.0                                  | MUST use Tailwind 4 only                      |
+| Alpine.js           | alpinejs                                | ^3.14+                                | ONLY Alpine.js — **NO** Vue/React/Livewire    |
+| Vite                | vite                                    | ^7.0                                  | MUST compile assets with Vite                 |
+| Search              | laravel/scout                           | ^10.21                                | Database driver + optional Meilisearch        |
 
-## 8. FORM REQUEST VALIDATION
-All user input MUST be validated through Form Requests. Custom validation rules MUST be created for complex logic. Error messages MUST be user-friendly. Rate limiting MUST be applied to public forms. Honeypot protection MUST be used for spam prevention.
+### 3. COLOR PALETTE (CSS VARIABLES — NEVER HARD CODE)
 
-## 9. MODEL STANDARDS
-Models MUST use proper naming conventions. Relationships MUST be defined with correct methods. Accessors and mutators MUST be used for data transformation. Scopes MUST be used for query reusability. Events MUST be dispatched for important changes. Media library traits MUST be added where needed.
+```css
+--primary       : #6366f1;   /* Indigo-500 */
+--primary-dark  : #4f46e5;
+--accent        : #FCD34D;   /* Amber-300 */
+--accent-dark   : #F4C430;
+--ink           : #1E293B;   /* Slate-800 */
+--gray          : #475569;   /* Slate-600 */
+--light         : #f8f9fa;
+```
 
-## 10. MIGRATION GUIDELINES
-Migrations MUST be atomic and reversible. Foreign keys MUST be properly defined. Indexes MUST be added for performance. Data types MUST be appropriate. Migration files MUST be timestamped correctly. Rollback MUST be tested before deployment.
+**MUST** use these variables everywhere — **NEVER** raw hex codes.
 
-## 11. BLADE TEMPLATE RULES
-Templates MUST use consistent naming. Components MUST be created for reusable elements. Blade directives MUST be used appropriately. CSRF tokens MUST be included in forms. Alt attributes MUST be provided for images. Semantic HTML MUST be used throughout.
+### 4. MEDIA & IMAGE PIPELINE (SACRED — ZERO TOLERANCE)
 
-## 12. FRONTEND ASSET MANAGEMENT
-Vite MUST be used for asset compilation. Tailwind CSS MUST be the utility framework. JavaScript MUST be modular and ES6+. Asset optimization MUST be configured. Source maps MUST be generated for debugging. CDN integration MUST be supported.
+- **MUST** convert **every** uploaded image to WebP
+- **MUST** delete original file after successful conversion (via `MediaObserver`)
+- **MUST** use `singleFile()` collections for: logo, favicon, hero images, staff photos
+- **MUST** generate conversions: thumb (300×300), medium (800×800), large (1600×1600), webp
+- **MUST** use `<picture><source srcset="...webp">` in **all** Blade templates
+- Logo background removal **MUST** be supported via queued job
 
-## 13. FILAMENT ADMIN RULES
-Filament resources MUST follow CRUD conventions. Role-based access MUST be enforced. Custom pages MUST extend base classes. Widgets MUST be role-aware. Media uploads MUST use Spatie library. SEO fields MUST be included in content resources.
+### 5. CACHING STRATEGY & KEYS (EXACT — NEVER CHANGE)
 
-## 14. AUTHENTICATION & AUTHORIZATION
-Laravel Breeze MUST be used for authentication. Spatie Permission MUST handle roles. Default roles MUST be admin, editor, admissions_officer. Passwords MUST be hashed. Sessions MUST be secure. Two-factor authentication MUST be optional.
+| Key                          | Purpose                         | Cleared On                                 |
+|------------------------------|---------------------------------|--------------------------------------------|
+| `homepage_v2_data`           | Entire homepage data            | Any change to Page/Event/Notice/HeroSlide  |
+| `events_index_{hash}`        | Events listing                  | Event save/delete                          |
+| `notices_index_{hash}`       | Notices listing                 | Notice save/delete                         |
+| `site_settings`              | Global settings                 | Settings page save                         |
 
-## 15. EMAIL & NOTIFICATION RULES
-All emails MUST implement ShouldQueue. Mailables MUST use templates. SMTP MUST be configured for production. Rate limiting MUST prevent spam. Email verification MUST be implemented. Bounce handling MUST be configured.
+**MUST** clear in observers → `Cache::forget()` + tags
+**MUST** use Redis in prod, database fallback in dev
 
-## 16. QUEUE & JOB PROCESSING
-Redis MUST be preferred for queues. Horizon MUST be used for monitoring. Jobs MUST be retryable. Failed jobs MUST be logged. Queue priorities MUST be configured. Background processing MUST be used for heavy tasks.
+### 6. NAVBAR — GLASSY TRANSPARENT → SOLID (EXACT SPEC)
 
-## 17. CACHING STRATEGIES
-Redis MUST be used for caching. Model caching MUST be implemented. View caching MUST be used. HTTP caching headers MUST be set. Cache invalidation MUST be handled. Cache warming MUST be considered.
+- Transparent on hero (`bg-transparent backdrop-blur-md`)
+- Becomes solid white (`bg-white shadow-lg`) when scrolled > 50px
+- **MUST** use **only** Alpine.js: `x-data="navbarComponent()" @scroll.window="handleScroll()"`
+- Zero gap: announcement bar → navbar → hero
+- Fixed top, `z-50`
+- Mobile menu slides from right via Alpine
 
-## 18. ERROR HANDLING PROTOCOLS
-Custom exception classes MUST be created. Error pages MUST be user-friendly. Logging MUST capture all errors. Sentry MUST be integrated for production. Error responses MUST be consistent. Debug information MUST be hidden in production.
+### 7. HERO SECTION (ZERO GAP + OVERLAP — HOLY)
 
-## 19. CODE REVIEW GUIDELINES
-All code MUST pass Laravel Pint standards. Unit tests MUST exist for new features. Code coverage MUST be maintained above 80%. Security vulnerabilities MUST be checked. Performance implications MUST be reviewed. Documentation MUST be updated.
+- Starts at absolute top (`mt-0 pt-0`)
+- Overlaps navbar (hero content `z-10`, navbar `z-50`)
+- Supports image + video backgrounds with poster fallback
+- **MUST** be managed **exclusively** via **HeroSliderManager** Filament page
+- **MUST** clear `homepage_v2_data` on any change
+- CTA text: "Admission Going On 2025-26"
 
-## 20. FORBIDDEN PATTERNS
-Raw SQL queries MUST NOT be used in controllers. Business logic MUST NOT reside in models. Static methods MUST NOT be overused. Global variables MUST NOT be used. Inline styles MUST NOT be used. Hardcoded values MUST NOT be used.
+### 8. FILAMENT ADMIN PANEL (STRICT ENFORCEMENT)
 
-## 21. VERSION CONTROL STANDARDS
-Git MUST be used for version control. Feature branches MUST be used. Pull requests MUST be reviewed. Commit messages MUST be descriptive. Tags MUST be used for releases. Git hooks MUST enforce standards.
+- **NEVER** use `Grid::make()` — **ONLY** `Section::make()->schema([...])->columns(2)`
+- **MUST** use `SpatieMediaLibraryFileUpload` with proper collections
+- **MUST** clear relevant cache in `afterSave()` / `afterDelete()`
+- Collapsible sidebar in Homepage Settings & Hero Slider Manager
+- Roles: admin, editor, admissions_officer — enforced via Spatie
+- SEO fields **MUST** exist on Page, Event, Notice resources
 
-## 22. TESTING BENCHMARKS
-Unit tests MUST cover all services and repositories. Feature tests MUST cover critical user flows. Minimum 80% code coverage MUST be maintained. Tests MUST run in CI/CD pipeline. Database tests MUST use transactions. Mocking MUST be used appropriately.
+### 9. CODE ARCHITECTURE (MANDATORY — NO EXCEPTIONS)
 
-## 23. ACCESSIBILITY REQUIREMENTS
-WCAG 2.1 AA compliance MUST be maintained. Alt text MUST be provided for images. Keyboard navigation MUST work. Color contrast MUST meet standards. Screen reader compatibility MUST be tested. Focus indicators MUST be visible.
+- **MUST** follow **Controller → Service → Repository** pattern
+- Controllers: HTTP only, thin
+- Services: All business logic, fat
+- Repositories: All database queries, caching, eager loading
+- **MUST** use FormRequest for ALL validation
+- **MUST** use dependency injection via constructor
+- **MUST** follow SOLID principles
+- Unit tests **MUST** cover services & repositories (80%+ coverage)
 
-## 24. SEO & PERFORMANCE RULES
-Meta tags MUST be dynamic per page. Structured data MUST use JSON-LD. Sitemap MUST be auto-generated. Canonical URLs MUST be set. Page speed MUST be optimized. Core Web Vitals MUST be monitored.
+### 10. FORBIDDEN PATTERNS (INSTANT REJECTION)
 
-## 25. SECURITY PROTOCOLS
-CSRF protection MUST be enabled. XSS prevention MUST be implemented. SQL injection MUST be prevented. File uploads MUST be validated. Rate limiting MUST be enforced. Security headers MUST be configured. Regular security audits MUST be performed.
+- **NEVER** use `Grid::make()`
+- **NEVER** use Vue, React, Livewire, Inertia, Bootstrap
+- **NEVER** use raw SQL outside repositories
+- **NEVER** put business logic in controllers or models
+- **NEVER** hardcode school name, colors, URLs
+- **NEVER** leave original images after WebP conversion
+- **NEVER** forget cache clearing on content update
+- **NEVER** use inline styles or hardcoded values
 
-## 26. DEPLOYMENT STANDARDS
-Zero-downtime deployment MUST be supported. Environment variables MUST be used. Database migrations MUST be run. Asset compilation MUST be automated. Cache clearing MUST be performed. Health checks MUST be implemented.
+### 11. FRONTEND STANDARDS (ELITE)
 
-## 27. MONITORING & LOGGING
-Application logs MUST be centralized. Performance metrics MUST be tracked. Error alerting MUST be configured. Queue monitoring MUST be active. Database monitoring MUST be implemented. User analytics MUST be collected.
+- Mobile-first (Tailwind breakpoints)
+- `<picture>` tag with WebP + fallback **everywhere**
+- Scroll-triggered fade-ins via Alpine + `x-intersect`
+- Semantic HTML5 only
+- **NO** inline styles — Tailwind classes only
+- **NO** external JS frameworks except Alpine.js
 
-## 28. DOCUMENTATION REQUIREMENTS
-README MUST be comprehensive. API documentation MUST exist. Deployment guides MUST be current. Environment setup MUST be documented. Troubleshooting guides MUST be maintained. Code comments MUST be meaningful.
+### 12. AUTH, QUEUES & EMAILS
 
-## 29. CHANGE LOG
-**Version 1.0.0** - Initial production release
-- Complete Laravel 12 implementation
-- Filament admin panel with role-based access
-- Public website with responsive design
-- Comprehensive testing suite
-- Production deployment configuration
-- SEO optimization and performance tuning
+- Laravel Breeze for auth
+- Spatie Permission for roles
+- All emails **MUST** implement `ShouldQueue`
+- Redis + Horizon for queues
+- All heavy tasks queued
 
-## 30. GLOSSARY
-**Controller**: HTTP request handler that delegates to services
-**Service**: Business logic container that orchestrates operations
-**Repository**: Data access layer implementing database queries
-**Form Request**: Laravel validation class for user input
-**Migration**: Database schema change file
-**Seeder**: Database population script
-**Factory**: Model data generation class
-**Mailable**: Email template class
-**Job**: Queued background task
-**Middleware**: HTTP request/response filter
-**Blade**: Laravel templating engine
-**Eloquent**: Laravel ORM for database interaction
-**Filament**: Admin panel package for Laravel
-**Horizon**: Queue monitoring dashboard
-**Scout**: Search functionality package
-**Pint**: Laravel code style fixer
+### 13. PERFORMANCE, SEO & SECURITY
+
+- Page load < 2s
+- Core Web Vitals monitored
+- Dynamic meta tags, JSON-LD (Organization + Event), sitemap.xml
+- HTTP caching headers
+- Lazy loading, WebP, CDN
+- CSRF/XSS/SQLi protection, rate limiting, validated uploads
+
+### 14. TESTING & DEPLOYMENT
+
+- 80%+ test coverage (Pest + GitHub Actions)
+- Zero-downtime deployment
+- Health checks, Sentry monitoring, centralized logs
+
+### 15. GLOSSARY (USE THESE TERMS)
+
+- **Glassy Navbar** → transparent → solid on scroll
+- **Hero Slider Manager** → Filament page for hero slides
+- **WebP Pipeline** → convert + delete original
+- **homepage_v2_data** → main homepage cache key
+- **SingleFile Collections** → logo, hero images, staff photos
+
+---

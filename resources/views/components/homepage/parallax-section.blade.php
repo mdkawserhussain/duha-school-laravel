@@ -89,8 +89,8 @@
 @endphp
 
 <section 
-    class="parallax-section relative min-h-[600px] flex items-center justify-center overflow-hidden"
-    style="background-image: url('{{ e($backgroundImage) }}'); background-color: #1e3a8a; background-size: cover; background-position: center center; background-repeat: no-repeat; background-attachment: fixed;"
+    class="parallax-section relative min-h-[400px] sm:min-h-[500px] md:min-h-[600px] flex items-center justify-center overflow-hidden"
+    style="background-image: url('{{ e($backgroundImage) }}'); background-color: #1e3a8a; background-size: cover; background-position: center center; background-repeat: no-repeat; background-attachment: scroll;"
 >
     <!-- Dark Overlay - Ensures white text is always visible regardless of background image -->
     <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/60 to-black/70 z-10"></div>
@@ -103,26 +103,26 @@
 
     <!-- Content -->
     @if($section && $section->is_active)
-    <div class="container relative z-30 mx-auto px-6 py-32 text-white lg:px-12">
-        <div class="max-w-3xl space-y-6">
+    <div class="container relative z-30 mx-auto px-4 sm:px-6 py-16 sm:py-24 md:py-32 text-white lg:px-12">
+        <div class="max-w-3xl space-y-4 sm:space-y-6">
             <!-- Section Badge -->
             <p class="text-xs uppercase tracking-[0.5em] text-white font-semibold drop-shadow-lg">{{ $badge }}</p>
 
             <!-- Main Heading -->
-            <h2 class="text-4xl font-bold md:text-5xl lg:text-6xl leading-tight text-white drop-shadow-lg">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight text-white drop-shadow-lg">
                 {{ $title }}
             </h2>
 
             <!-- Description -->
-            <p class="text-lg text-white leading-relaxed drop-shadow-md">
+            <p class="text-base sm:text-lg text-white leading-relaxed drop-shadow-md">
                 {{ $description }}
             </p>
 
             <!-- Feature Pills -->
             @if(count($featurePills) > 0)
-            <div class="flex flex-wrap gap-4 text-sm">
+            <div class="flex flex-wrap gap-2 sm:gap-4 text-xs sm:text-sm">
                 @foreach($featurePills as $pill)
-                <span class="rounded-full bg-white/20 backdrop-blur-sm border border-white/30 px-4 py-2 text-white font-medium drop-shadow-md">
+                <span class="rounded-full bg-white/20 backdrop-blur-sm border border-white/30 px-3 sm:px-4 py-1.5 sm:py-2 text-white font-medium drop-shadow-md">
                     {{ $pill['text'] ?? '' }}
                 </span>
                 @endforeach
@@ -131,10 +131,10 @@
 
             <!-- CTA Button -->
             @if(isset($cta['text']) && isset($cta['link']))
-            <div class="pt-4">
-                <a href="{{ $cta['link'] }}" class="inline-flex items-center rounded-xl bg-aisd-gold px-8 py-4 text-base font-semibold text-aisd-midnight transition-all hover:bg-aisd-gold/90 hover:shadow-lg hover:shadow-aisd-gold/50">
+            <div class="pt-3 sm:pt-4">
+                <a href="{{ $cta['link'] }}" class="inline-flex items-center justify-center rounded-xl bg-aisd-gold px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base font-semibold text-aisd-midnight transition-all hover:bg-aisd-gold/90 hover:shadow-lg hover:shadow-aisd-gold/50 min-h-[44px] w-full sm:w-auto">
                     {{ $cta['text'] }}
-                    <svg class="ml-3 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
+                    <svg class="ml-2 sm:ml-3 h-3.5 w-3.5 sm:h-4 sm:w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                     </svg>
                 </a>

@@ -23,7 +23,7 @@
     }
 @endphp
 
-@if($announcements->isNotEmpty())
+@if($announcements->isNotEmpty() && request()->routeIs('home'))
 <div class="announcement-bar text-white text-sm overflow-hidden" 
      id="announcement-bar" 
      style="position: fixed; top: 0; left: 0; right: 0; z-index: 60; width: 100%; margin: 0 !important; padding: 0.5rem 0 !important; background: rgba(255, 255, 255, 0.05) !important;"
@@ -72,8 +72,9 @@
     x-data="{ 
         scrolled: false, 
         mobileMenuOpen: false,
-        hasAnnouncement: {{ $announcements->isNotEmpty() ? 'true' : 'false' }},
-        announcementHeight: 0
+        hasAnnouncement: {{ ($announcements->isNotEmpty() && request()->routeIs('home')) ? 'true' : 'false' }},
+        announcementHeight: 0,
+        justOpenedMenu: false
     }"
         x-init="
             const header = $el;
@@ -102,17 +103,31 @@
                 });
                 resizeObserver.observe(announcementBar);
                 window.addEventListener('scroll', () => {
-                    scrolled = window.pageYOffset > 50;
-                    if (scrolled) {
-                        header.style.setProperty('top', '0', 'important');
-                    } else {
-                        updateHeight();
-                    }
+                    // Skip scroll updates when menu is open to prevent interference
+                    if (mobileMenuOpen) return;
+                    
+                    requestAnimationFrame(() => {
+                        const wasScrolled = scrolled;
+                        scrolled = window.pageYOffset > 50;
+                        console.log('[DEBUG] Scroll event - pageYOffset:', window.pageYOffset, 'scrolled:', scrolled, 'wasScrolled:', wasScrolled, 'mobileMenuOpen:', mobileMenuOpen);
+                        if (scrolled) {
+                            header.style.setProperty('top', '0', 'important');
+                        } else {
+                            updateHeight();
+                        }
+                    });
                 });
             } else {
                 header.style.setProperty('top', '0', 'important');
                 window.addEventListener('scroll', () => {
-                    scrolled = window.pageYOffset > 50;
+                    // Skip scroll updates when menu is open to prevent interference
+                    if (mobileMenuOpen) return;
+                    
+                    requestAnimationFrame(() => {
+                        const wasScrolled = scrolled;
+                        scrolled = window.pageYOffset > 50;
+                        console.log('[DEBUG] Scroll event (no announcement) - pageYOffset:', window.pageYOffset, 'scrolled:', scrolled, 'wasScrolled:', wasScrolled, 'mobileMenuOpen:', mobileMenuOpen);
+                    });
                 });
             }
             
@@ -127,10 +142,55 @@
         });
         
         // Close mobile menu when clicking outside
+        // Use a closure to capture the Alpine component reference
+        const headerElement = $el;
+        const menuState = { justOpened: false };
+        
+        // Expose menuState to window for hamburger button access
+        headerElement._menuState = menuState;
+        
         document.addEventListener('click', (e) => {
-            if (mobileMenuOpen && !$el.contains(e.target)) {
-                mobileMenuOpen = false;
-            }
+            // Use setTimeout to ensure Alpine has processed any click handlers first
+            setTimeout(() => {
+                // Try multiple ways to access Alpine data
+                let alpineComponent = null;
+                if (headerElement.__x) {
+                    alpineComponent = headerElement.__x.$data;
+                } else if (typeof Alpine !== 'undefined' && Alpine.$data) {
+                    alpineComponent = Alpine.$data(headerElement);
+                }
+                
+                if (!alpineComponent) {
+                    console.log('[DEBUG] Document click - Alpine data not available');
+                    return;
+                }
+                
+                const currentMobileMenuOpen = alpineComponent.mobileMenuOpen;
+                const currentJustOpenedMenu = alpineComponent.justOpenedMenu || menuState.justOpened;
+                
+                console.log('[DEBUG] Document click - mobileMenuOpen:', currentMobileMenuOpen, 'contains target:', headerElement.contains(e.target), 'target:', e.target, 'justOpenedMenu:', currentJustOpenedMenu, 'menuState.justOpened:', menuState.justOpened);
+                
+                // Don't close if we just opened the menu (prevent immediate close)
+                if (currentJustOpenedMenu || menuState.justOpened) {
+                    console.log('[DEBUG] Ignoring click - menu just opened');
+                    if (alpineComponent) {
+                        alpineComponent.justOpenedMenu = false;
+                    }
+                    menuState.justOpened = false;
+                    return;
+                }
+                
+                // Don't close if clicking on hamburger button or its children - use class selector to avoid quote issues
+                const hamburgerButton = headerElement.querySelector('.mobile-menu-toggle');
+                const isClickOnHamburger = hamburgerButton && (hamburgerButton === e.target || hamburgerButton.contains(e.target));
+                
+                if (currentMobileMenuOpen && !headerElement.contains(e.target) && !isClickOnHamburger) {
+                    console.log('[DEBUG] Closing menu - clicked outside');
+                    if (alpineComponent) {
+                        alpineComponent.mobileMenuOpen = false;
+                    }
+                }
+            }, 0);
         });
     "
         id="main-navbar">
@@ -158,9 +218,7 @@
             <!-- Navigation Links - Right -->
             <div class="flex items-center space-x-6 md:space-x-8">
                 <a href="{{ route('home') }}" 
-                   class="relative text-sm font-medium transition-all duration-300 hover:text-white/90 group"
-                   :class="scrolled || !{{ request()->routeIs('home') ? 'true' : 'false' }} ? 'text-white' : 'text-white'"
-                   :class="{{ request()->routeIs('home') ? '(scrolled ? \'text-white\' : \'text-white\')' : '' }}">
+                   class="relative text-sm font-medium transition-all duration-300 hover:text-white/90 group text-white">
                     <span class="relative">
                         Home
                         <span class="absolute bottom-0 left-0 h-0.5 bg-white transition-all duration-300 {{ request()->routeIs('home') ? 'w-full' : 'w-0 group-hover:w-full' }}"></span>
@@ -230,8 +288,7 @@
                 </div>
                 
                 <a href="{{ route('admission.index') }}" 
-                   class="relative text-sm font-medium transition-all duration-300 hover:text-white/90 group text-white"
-                   :class="{{ request()->routeIs('admission.*') ? '\'text-white\' : \'text-white\'' : '' }}">
+                   class="relative text-sm font-medium transition-all duration-300 hover:text-white/90 group text-white">
                     <span class="relative">
                         Admission
                         <span class="absolute bottom-0 left-0 h-0.5 bg-white transition-all duration-300 {{ request()->routeIs('admission.*') ? 'w-full' : 'w-0 group-hover:w-full' }}"></span>
@@ -270,8 +327,7 @@
                 </div>
                 
                 <a href="{{ route('careers.index') }}" 
-                   class="relative text-sm font-medium transition-all duration-300 hover:text-white/90 group text-white"
-                   :class="{{ request()->routeIs('careers.*') ? '\'text-white\' : \'text-white\'' : '' }}">
+                   class="relative text-sm font-medium transition-all duration-300 hover:text-white/90 group text-white">
                     <span class="relative">
                         Career
                         <span class="absolute bottom-0 left-0 h-0.5 bg-white transition-all duration-300 {{ request()->routeIs('careers.*') ? 'w-full' : 'w-0 group-hover:w-full' }}"></span>
@@ -279,8 +335,7 @@
                 </a>
                 
                 <a href="{{ route('contact.index') }}" 
-                   class="relative text-sm font-medium transition-all duration-300 hover:text-white/90 group text-white"
-                   :class="{{ request()->routeIs('contact.*') ? '\'text-white\' : \'text-white\'' : '' }}">
+                   class="relative text-sm font-medium transition-all duration-300 hover:text-white/90 group text-white">
                     <span class="relative">
                         Contact
                         <span class="absolute bottom-0 left-0 h-0.5 bg-white transition-all duration-300 {{ request()->routeIs('contact.*') ? 'w-full' : 'w-0 group-hover:w-full' }}"></span>
@@ -293,8 +348,7 @@
                         @csrf
                         <button 
                             type="submit" 
-                            class="relative text-sm font-medium transition-all duration-300 hover:text-white/90 text-white"
-                            onclick="event.preventDefault(); this.closest('form').submit();">
+                            class="relative text-sm font-medium transition-all duration-300 hover:text-white/90 text-white">
                             <span class="relative">
                                 Logout
                                 <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-white transition-all duration-300 hover:w-full"></span>
@@ -327,8 +381,8 @@
             <!-- Hamburger Menu Button -->
             <button 
                 type="button"
-                class="inline-flex items-center justify-center p-2 rounded-lg text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white/50 transition-colors duration-200 relative z-[60]"
-                @click="mobileMenuOpen = !mobileMenuOpen"
+                class="mobile-menu-toggle inline-flex items-center justify-center p-2 rounded-lg text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white/50 transition-colors duration-200 relative z-[60]"
+                @click.stop="console.log('[DEBUG] Hamburger clicked - scrolled:', scrolled, 'mobileMenuOpen before:', mobileMenuOpen); mobileMenuOpen = !mobileMenuOpen; justOpenedMenu = mobileMenuOpen; const headerEl = document.getElementById('main-navbar'); if (headerEl && headerEl._menuState) { headerEl._menuState.justOpened = mobileMenuOpen; } console.log('[DEBUG] mobileMenuOpen after:', mobileMenuOpen, 'justOpenedMenu:', justOpenedMenu); setTimeout(() => { justOpenedMenu = false; if (headerEl && headerEl._menuState) { headerEl._menuState.justOpened = false; } }, 200);"
                 :aria-expanded="mobileMenuOpen"
                 aria-label="Toggle menu"
                 style="pointer-events: auto; z-index: 60;">
@@ -351,8 +405,7 @@
         x-transition:enter-end="opacity-100"
         x-transition:leave="transition ease-in duration-200"
         x-transition:leave-start="opacity-100"
-        x-transition:leave-end="opacity-0"
-        @click.away="mobileMenuOpen = false">
+        x-transition:leave-end="opacity-0">
                 <div class="fixed inset-0 bg-black/50" @click="mobileMenuOpen = false"></div>
                 <div class="fixed inset-y-0 right-0 w-full max-w-sm bg-white/95 shadow-xl overflow-y-auto"
              :style="{
@@ -471,8 +524,7 @@
                         @csrf
                             <button 
                                 type="submit" 
-                                class="w-full text-left text-base font-medium text-gray-900 hover:text-aisd-midnight transition-colors duration-200"
-                                onclick="event.preventDefault(); this.closest('form').submit();">
+                                class="w-full text-left text-base font-medium text-gray-900 hover:text-aisd-midnight transition-colors duration-200">
                                 Logout
                             </button>
                     </form>

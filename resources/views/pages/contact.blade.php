@@ -8,11 +8,11 @@
 
 @section('content')
     <!-- Page Header -->
-    <section class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+    <section class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-8 sm:py-12 md:py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
-                <h1 class="text-4xl md:text-6xl font-bold mb-6">Contact Us</h1>
-                <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
+                <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-4 sm:mb-6">Contact Us</h1>
+                <p class="text-base sm:text-lg md:text-xl lg:text-2xl mb-6 sm:mb-8 max-w-3xl mx-auto px-4">
                     We'd love to hear from you. Reach out with questions about admissions, academics, or anything else
                 </p>
             </div>
@@ -20,12 +20,12 @@
     </section>
 
     <!-- Contact Information -->
-    <section class="py-16 bg-white">
+    <section class="py-8 sm:py-12 md:py-16 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12">
                 <!-- Contact Details -->
-                <div>
-                    <h2 class="text-3xl font-bold text-gray-900 mb-8">Get In Touch</h2>
+                <div class="order-2 lg:order-1">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 sm:mb-8">Get In Touch</h2>
 
                     <div class="space-y-6">
                         <!-- Address -->
@@ -102,11 +102,11 @@
                     </div>
 
                     <!-- Social Media -->
-                    <div class="mt-8">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Follow Us</h3>
-                        <div class="flex space-x-4">
+                    <div class="mt-6 sm:mt-8">
+                        <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">Follow Us</h3>
+                        <div class="flex flex-wrap gap-3 sm:gap-4">
                             <a href="https://facebook.com/almaghribschool" target="_blank" rel="noopener noreferrer"
-                               class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full transition duration-300">
+                               class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full transition duration-300 min-w-[44px] min-h-[44px] flex items-center justify-center">
                                 <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                                 </svg>
@@ -116,18 +116,18 @@
                 </div>
 
                 <!-- Contact Form -->
-                <div>
-                    <div class="bg-gray-50 rounded-lg p-8">
-                        <h2 class="text-2xl font-bold text-gray-900 mb-6">Send Us a Message</h2>
+                <div class="order-1 lg:order-2">
+                    <div class="bg-gray-50 rounded-lg p-4 sm:p-6 md:p-8">
+                        <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Send Us a Message</h2>
 
-                        <form method="POST" action="{{ route('contact.send') }}" class="space-y-6">
+                        <form method="POST" action="{{ route('contact.send') }}" class="space-y-4 sm:space-y-6">
                             @csrf
 
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                                 <div>
                                     <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
                                     <input type="text" id="name" name="name" value="{{ old('name') }}"
-                                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 @error('name') border-red-500 @enderror" required>
+                                           class="w-full px-3 py-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-base @error('name') border-red-500 @enderror" required>
                                     @error('name')
                                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                     @enderror
@@ -135,18 +135,18 @@
                                 <div>
                                     <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address *</label>
                                     <input type="email" id="email" name="email" value="{{ old('email') }}"
-                                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 @error('email') border-red-500 @enderror" required>
+                                           class="w-full px-3 py-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-base @error('email') border-red-500 @enderror" required>
                                     @error('email')
                                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
                             </div>
 
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                                 <div>
                                     <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
                                     <input type="tel" id="phone" name="phone" value="{{ old('phone') }}"
-                                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 @error('phone') border-red-500 @enderror">
+                                           class="w-full px-3 py-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-base @error('phone') border-red-500 @enderror">
                                     @error('phone')
                                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                     @enderror
@@ -154,7 +154,7 @@
                                 <div>
                                     <label for="subject" class="block text-sm font-medium text-gray-700 mb-1">Subject *</label>
                                     <select id="subject" name="subject"
-                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 @error('subject') border-red-500 @enderror" required>
+                                            class="w-full px-3 py-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-base @error('subject') border-red-500 @enderror" required>
                                         <option value="">Select Subject</option>
                                         <option value="Admission Inquiry" {{ old('subject') == 'Admission Inquiry' ? 'selected' : '' }}>Admission Inquiry</option>
                                         <option value="Academic Information" {{ old('subject') == 'Academic Information' ? 'selected' : '' }}>Academic Information</option>
@@ -171,7 +171,7 @@
 
                             <div>
                                 <label for="message" class="block text-sm font-medium text-gray-700 mb-1">Message *</label>
-                                <textarea id="message" name="message" rows="6" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 @error('message') border-red-500 @enderror"
+                                <textarea id="message" name="message" rows="6" class="w-full px-3 py-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-base @error('message') border-red-500 @enderror"
                                           placeholder="Please enter your message here..." required>{{ old('message') }}</textarea>
                                 @error('message')
                                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -179,10 +179,10 @@
                             </div>
 
                             <div class="text-center">
-                                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 sm:px-8 rounded-lg transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px] w-full sm:w-auto">
                                     Send Message
                                 </button>
-                                <p class="text-sm text-gray-600 mt-2">We typically respond within 24 hours during business days.</p>
+                                <p class="text-xs sm:text-sm text-gray-600 mt-2 px-4">We typically respond within 24 hours during business days.</p>
                             </div>
                         </form>
                     </div>
@@ -192,15 +192,15 @@
     </section>
 
     <!-- Map Section -->
-    <section class="py-16 bg-gray-50">
+    <section class="py-8 sm:py-12 md:py-16 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-8">
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">Find Us</h2>
-                <p class="text-lg text-gray-600">Visit our campus in Chattogram, Bangladesh</p>
+            <div class="text-center mb-6 sm:mb-8">
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">Find Us</h2>
+                <p class="text-base sm:text-lg text-gray-600 px-4">Visit our campus in Chattogram, Bangladesh</p>
             </div>
 
             <!-- Placeholder for Google Maps -->
-            <div class="bg-gray-300 rounded-lg h-96 flex items-center justify-center">
+            <div class="bg-gray-300 rounded-lg h-64 sm:h-80 md:h-96 flex items-center justify-center">
                 <div class="text-center">
                     <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>

@@ -1,10 +1,10 @@
-# Al-Maghrib International School Website
+# Duha International School Website
 
-A modern, production-ready Laravel 12 website for Al-Maghrib International School. This application provides a comprehensive content management system for school administrators and a beautiful, responsive public-facing website.
+A modern, production-ready Laravel 12 website for Duha International School. This application provides a comprehensive content management system for school administrators and a beautiful, responsive public-facing website.
 
 ## 🎯 Project Overview
 
-This Laravel application replicates and enhances the functionality of the Al-Maghrib International School website (https://almaghribschool.com/). It provides:
+This Laravel application provides a comprehensive website solution for Duha International School. It provides:
 
 - **Public Website**: Fast, responsive, mobile-first design with SEO optimization
 - **Admin Panel**: Filament-based content management system for non-technical staff
@@ -69,7 +69,7 @@ This Laravel application replicates and enhances the functionality of the Al-Mag
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
-   cd almaghrib-school
+   cd duha-school
    ```
 
 2. **Install dependencies**
@@ -90,7 +90,7 @@ This Laravel application replicates and enhances the functionality of the Al-Mag
    DB_CONNECTION=mysql
    DB_HOST=127.0.0.1
    DB_PORT=3306
-   DB_DATABASE=almaghrib_school
+   DB_DATABASE=duha_school
    DB_USERNAME=root
    DB_PASSWORD=your_password
    ```
@@ -119,7 +119,7 @@ This Laravel application replicates and enhances the functionality of the Al-Mag
    - Public site: http://localhost:8000
    - Admin panel: http://localhost:8000/admin
    - Default admin credentials:
-     - Email: `admin@almaghribschool.com`
+     - Email: `admin@duhaschool.com`
      - Password: `password` (⚠️ Change in production!)
 
 ### Using Docker Compose
@@ -278,9 +278,9 @@ The application uses Laravel Breeze for authentication and Spatie Permission for
 
 After seeding, these users are created:
 
-- Admin: `admin@almaghribschool.com` / `password`
-- Editor: `editor@almaghribschool.com` / `password`
-- Admissions Officer: `admissions@almaghribschool.com` / `password`
+- Admin: `admin@duhaschool.com` / `password`
+- Editor: `editor@duhaschool.com` / `password`
+- Admissions Officer: `admissions@duhaschool.com` / `password`
 
 ⚠️ **Important**: Change these passwords in production!
 
@@ -295,8 +295,8 @@ MAIL_PORT=587
 MAIL_USERNAME=your_username
 MAIL_PASSWORD=your_password
 MAIL_ENCRYPTION=tls
-MAIL_FROM_ADDRESS=noreply@almaghribschool.com
-MAIL_FROM_NAME="Al-Maghrib International School"
+MAIL_FROM_ADDRESS=noreply@duhaschool.com
+MAIL_FROM_NAME="Duha International School"
 ```
 
 For local development, use Mailpit or log driver:
@@ -465,4 +465,4 @@ For issues and questions:
 
 ---
 
-**Built with ❤️ for Al-Maghrib International School**
+**Built with ❤️ for Duha International School**

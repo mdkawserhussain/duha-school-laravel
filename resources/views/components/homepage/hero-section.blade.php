@@ -121,9 +121,9 @@
     <!-- Content Container - Positioned to account for navbar overlay without creating gaps -->
     <div class="relative z-10 w-full mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16 md:pb-20 lg:pb-24"
          style="margin: 0; padding-top: 0 !important; padding-left: 1rem; padding-right: 1rem; padding-bottom: 3rem; pointer-events: auto;">
-        <div class="grid lg:grid-cols-[1.1fr_0.9fr] gap-16 items-center">
+        <div class="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-8 sm:gap-12 lg:gap-16 items-center">
             <!-- Text content - Left side -->
-            <div class="text-white space-y-8">
+            <div class="text-white space-y-6 sm:space-y-8">
                 <!-- School crest badge -->
                 @if($badge)
                 <div class="inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/5 px-5 py-2 text-[0.65rem] uppercase tracking-[0.3em] text-white" style="background-color: rgba(255, 255, 255, 0.05);">
@@ -135,19 +135,19 @@
                 @endif
 
                 <!-- Main headline -->
-                <h1 class="text-3xl sm:text-4xl md:text-5xl xl:text-6xl font-bold leading-tight tracking-tight text-white">
+                <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight tracking-tight text-white">
                     {{ $headline }}
                 </h1>
 
                 <!-- Subtext -->
-                <p class="text-base sm:text-lg text-white max-w-2xl leading-relaxed mt-4 sm:mt-6">
+                <p class="text-sm sm:text-base md:text-lg text-white max-w-2xl leading-relaxed mt-3 sm:mt-4 md:mt-6">
                     {{ $description }}
                 </p>
 
                 <!-- Dual CTAs -->
-                <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6 sm:mt-8">
+                <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-4 sm:mt-6 md:mt-8">
                     @if($primaryButtonText && $primaryButtonLink)
-                    <a href="{{ $primaryButtonLink }}" class="inline-flex items-center justify-center rounded-xl border-2 border-white/30 px-6 py-3 sm:px-8 sm:py-4 text-sm sm:text-base font-semibold text-white transition-all hover:border-white/50" style="background-color: rgba(255, 255, 255, 0.05);">
+                    <a href="{{ $primaryButtonLink }}" class="inline-flex items-center justify-center rounded-xl border-2 border-white/30 px-6 py-3 sm:px-8 sm:py-4 text-sm sm:text-base font-semibold text-white transition-all hover:border-white/50 min-h-[44px] w-full sm:w-auto" style="background-color: rgba(255, 255, 255, 0.05);">
                         {{ $primaryButtonText }}
                         <svg class="ml-2 sm:ml-3 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -155,7 +155,7 @@
                     </a>
                     @endif
                     @if($secondaryButtonText && $secondaryButtonLink)
-                    <a href="{{ $secondaryButtonLink }}" class="inline-flex items-center justify-center rounded-xl border-2 border-white/30 px-6 py-3 sm:px-8 sm:py-4 text-sm sm:text-base font-semibold text-white transition-all hover:border-white/50" style="background-color: rgba(255, 255, 255, 0.05);">
+                    <a href="{{ $secondaryButtonLink }}" class="inline-flex items-center justify-center rounded-xl border-2 border-white/30 px-6 py-3 sm:px-8 sm:py-4 text-sm sm:text-base font-semibold text-white transition-all hover:border-white/50 hover:bg-white/10 min-h-[44px] w-full sm:w-auto" style="background-color: transparent;">
                         {{ $secondaryButtonText }}
                         <svg class="ml-2 sm:ml-3 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
@@ -166,7 +166,7 @@
 
                 <!-- Feature highlights -->
                 @if(count($features) > 0)
-                <div class="grid gap-6 text-sm sm:grid-cols-2">
+                <div class="grid gap-4 sm:gap-6 text-sm grid-cols-1 sm:grid-cols-2">
                     @foreach($features as $feature)
                     <div class="flex items-start gap-3">
                         <div class="rounded-2xl p-2" style="background-color: rgba(255, 255, 255, 0.05);">
@@ -185,26 +185,26 @@
             </div>
 
             <!-- Highlight stats cards - Right side (desktop) -->
-            <div class="grid gap-6">
+            <div class="grid gap-4 sm:gap-6">
                 @if(count($statsCards) > 0)
                     @foreach($statsCards as $card)
-                    <div class="rounded-3xl border border-white/30 p-6 shadow-2xl" style="background-color: rgba(255, 255, 255, 0.05); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);">
-                        <div class="flex items-center justify-between text-sm text-white">
+                    <div class="rounded-3xl border border-white/30 p-4 sm:p-6 shadow-2xl" style="background-color: rgba(255, 255, 255, 0.05); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);">
+                        <div class="flex items-center justify-between text-xs sm:text-sm text-white">
                             <span>{{ $card['label1'] ?? '' }}</span>
                             <span>{{ $card['label2'] ?? '' }}</span>
                         </div>
-                        <h3 class="mt-4 text-3xl font-bold text-white">{{ $card['title'] ?? '' }}</h3>
-                        <p class="mt-3 text-white">{{ $card['description'] ?? '' }}</p>
+                        <h3 class="mt-3 sm:mt-4 text-xl sm:text-2xl md:text-3xl font-bold text-white">{{ $card['title'] ?? '' }}</h3>
+                        <p class="mt-2 sm:mt-3 text-sm sm:text-base text-white">{{ $card['description'] ?? '' }}</p>
                     </div>
                     @endforeach
                 @endif
                 @if(count($statsPills) > 0)
                 <!-- Stats pills -->
-                <div class="grid grid-cols-3 gap-4 text-center text-white">
+                <div class="grid grid-cols-3 gap-2 sm:gap-4 text-center text-white">
                     @foreach($statsPills as $pill)
-                    <div class="rounded-2xl p-4 border border-white/30" style="background-color: rgba(255, 255, 255, 0.05); box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.3);">
-                        <div class="text-3xl font-bold text-white">{{ $pill['value'] ?? '' }}</div>
-                        <div class="text-xs uppercase tracking-wide text-white mt-1">{{ $pill['label'] ?? '' }}</div>
+                    <div class="rounded-2xl p-3 sm:p-4 border border-white/30" style="background-color: rgba(255, 255, 255, 0.05); box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.3);">
+                        <div class="text-xl sm:text-2xl md:text-3xl font-bold text-white">{{ $pill['value'] ?? '' }}</div>
+                        <div class="text-[10px] sm:text-xs uppercase tracking-wide text-white mt-1">{{ $pill['label'] ?? '' }}</div>
                     </div>
                     @endforeach
                 </div>
@@ -214,7 +214,7 @@
     </div>
 
     <!-- Scroll cue -->
-    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 text-white z-10">
+    <div class="absolute bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 text-white z-10 hidden sm:flex">
         <div class="flex flex-col items-center gap-2 text-xs tracking-[0.4em] uppercase">
             <span class="opacity-70">Scroll</span>
             <div class="h-12 w-8 rounded-full border border-white/40 flex items-start justify-center p-1">
