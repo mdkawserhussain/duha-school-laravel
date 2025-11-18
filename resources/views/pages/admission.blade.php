@@ -9,14 +9,14 @@
 @section('content')
 
     <!-- Page Header -->
-    <section class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+    <section class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-8 sm:py-12 md:py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
-                <h1 class="text-4xl md:text-6xl font-bold mb-6">Admission Going On</h1>
-                <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
+                <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-4 sm:mb-6">Admission Going On</h1>
+                <p class="text-base sm:text-lg md:text-xl lg:text-2xl mb-6 sm:mb-8 max-w-3xl mx-auto px-4">
                     Join our community of learners in the Islamic and Cambridge curriculum program for the 2025-26 academic year
                 </p>
-                <a href="#admission-form" class="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-3 px-8 rounded-lg transition duration-300">
+                <a href="#admission-form" class="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-3 px-6 sm:px-8 rounded-lg transition duration-300 min-h-[44px] inline-flex items-center justify-center">
                     Apply Now
                 </a>
             </div>
@@ -24,14 +24,14 @@
     </section>
 
     <!-- Admission Information -->
-    <section class="py-16 bg-white">
+    <section class="py-8 sm:py-12 md:py-16 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">Why Choose {{ $siteName }}?</h2>
-                <p class="text-lg text-gray-600">A comprehensive Islamic education with Cambridge curriculum excellence</p>
+            <div class="text-center mb-8 sm:mb-12">
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">Why Choose {{ $siteName }}?</h2>
+                <p class="text-base sm:text-lg text-gray-600 px-4">A comprehensive Islamic education with Cambridge curriculum excellence</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16">
                 <div class="text-center">
                     <div class="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
                         <svg class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -64,9 +64,9 @@
             </div>
 
             <!-- Admission Requirements -->
-            <div class="bg-gray-50 rounded-lg p-8 mb-16">
-                <h3 class="text-2xl font-bold text-gray-900 mb-6">Admission Requirements</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-gray-50 rounded-lg p-4 sm:p-6 md:p-8 mb-12 sm:mb-16">
+                <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Admission Requirements</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
                     <div>
                         <h4 class="text-lg font-semibold text-gray-900 mb-3">Documents Required</h4>
                         <ul class="space-y-2 text-gray-600">
@@ -92,12 +92,12 @@
     </section>
 
     <!-- Admission Form -->
-    <section id="admission-form" class="py-16 bg-gray-50">
+    <section id="admission-form" class="py-8 sm:py-12 md:py-16 bg-gray-50">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-white rounded-lg shadow-lg p-8">
-                <div class="text-center mb-8">
-                    <h2 class="text-3xl font-bold text-gray-900 mb-4">Admission Application Form</h2>
-                    <p class="text-gray-600">Please fill out all required fields. We will contact you within 3-5 business days.</p>
+            <div class="bg-white rounded-lg shadow-lg p-4 sm:p-6 md:p-8">
+                <div class="text-center mb-6 sm:mb-8">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">Admission Application Form</h2>
+                    <p class="text-sm sm:text-base text-gray-600 px-4">Please fill out all required fields. We will contact you within 3-5 business days.</p>
                 </div>
 
                 <form method="POST" action="{{ route('admission.store') }}" enctype="multipart/form-data" class="space-y-6">

@@ -1,6 +1,6 @@
 <!-- Advisor & Board Section - AISD Style -->
 <section class="bg-[#0B1533] py-24 text-white" id="advisors">
-    <div class="container mx-auto px-6 lg:px-12">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-12">
         <!-- Section Header -->
         <div class="flex flex-col gap-6 text-center mb-14">
             <p class="text-xs font-semibold uppercase tracking-[0.5em] text-aisd-gold/70">Advisory Council</p>
@@ -51,14 +51,14 @@
         @endphp
 
         <!-- Advisors Grid -->
-        <div class="grid gap-8 md:grid-cols-2 xl:grid-cols-4">
+        <div class="grid gap-4 sm:gap-6 md:gap-8 md:grid-cols-2 xl:grid-cols-4">
             @foreach ($members as $member)
                 <div
                     class="group rounded-3xl bg-white/5 border border-white/10 p-6 text-center shadow-card backdrop-blur-xl transition-all hover:bg-white/10 hover:shadow-soft hover:-translate-y-1"
                     x-data="{ expanded: false }"
                 >
                     <!-- Circular Portrait Frame -->
-                    <div class="mx-auto h-32 w-32 overflow-hidden rounded-full border-4 border-white/30 shadow-lg relative">
+                    <div class="mx-auto h-24 w-24 sm:h-28 sm:w-28 md:h-32 md:w-32 overflow-hidden rounded-full border-3 sm:border-4 border-white/30 shadow-lg relative">
                         <img
                             src="{{ $member['profile_image_url'] }}"
                             alt="{{ $member['name'] }}"
@@ -70,10 +70,10 @@
                     </div>
 
                     <!-- Name -->
-                    <h3 class="mt-6 text-xl font-semibold text-white">{{ $member['name'] }}</h3>
+                    <h3 class="mt-4 sm:mt-6 text-lg sm:text-xl font-semibold text-white">{{ $member['name'] }}</h3>
 
                     <!-- Role Badge -->
-                    <p class="mt-2 text-sm uppercase tracking-[0.3em] text-aisd-gold font-semibold">
+                    <p class="mt-2 text-xs sm:text-sm uppercase tracking-[0.3em] text-aisd-gold font-semibold">
                         {{ $member['title'] }}
                     </p>
 
@@ -97,7 +97,7 @@
                     @if(strlen($member['description']) > 100)
                         <button
                             @click="expanded = !expanded"
-                            class="mt-2 text-sm font-semibold text-aisd-gold"
+                            class="mt-2 text-xs sm:text-sm font-semibold text-aisd-gold min-h-[44px]"
                         >
                             <span x-show="!expanded">Read More</span>
                             <span x-show="expanded">Show Less</span>
@@ -105,11 +105,11 @@
                     @endif
 
                     <!-- Social Links -->
-                    <div class="mt-6 flex items-center justify-center gap-3">
+                    <div class="mt-4 sm:mt-6 flex items-center justify-center gap-2 sm:gap-3">
                         @if(!empty($member['linkedin_url']))
                             <a
                                 href="{{ $member['linkedin_url'] }}"
-                                class="rounded-full bg-white/10 border border-white/20 p-2.5 hover:bg-white/20 hover:border-aisd-gold/50 transition-all group/link"
+                                class="rounded-full bg-white/10 border border-white/20 p-2.5 hover:bg-white/20 hover:border-aisd-gold/50 transition-all group/link min-w-[44px] min-h-[44px] flex items-center justify-center"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 aria-label="LinkedIn profile for {{ $member['name'] }}"
@@ -123,7 +123,7 @@
                         @if(!empty($member['email']))
                             <a
                                 href="mailto:{{ $member['email'] }}"
-                                class="rounded-full bg-white/10 border border-white/20 p-2.5 hover:bg-white/20 hover:border-aisd-gold/50 transition-all group/link"
+                                class="rounded-full bg-white/10 border border-white/20 p-2.5 hover:bg-white/20 hover:border-aisd-gold/50 transition-all group/link min-w-[44px] min-h-[44px] flex items-center justify-center"
                                 aria-label="Email {{ $member['name'] }}"
                             >
                                 <svg class="h-4 w-4 text-white group-hover/link:text-aisd-gold transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">

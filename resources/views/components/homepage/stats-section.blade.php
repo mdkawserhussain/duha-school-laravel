@@ -22,39 +22,39 @@
         @endphp
 
         @if($section && $section->is_active && count($stats) > 0)
-        <div class="mb-14 text-center">
-            <p class="text-sm font-semibold uppercase tracking-[0.4em]" style="color: #636c93;">{{ $subtitle }}</p>
-            <h2 class="mt-4 text-3xl font-bold md:text-4xl" style="color: #0C1B3D;">{{ $title }}</h2>
-            <p class="mt-4 text-lg max-w-2xl mx-auto" style="color: #343b57;">{{ $description }}</p>
+        <div class="mb-10 sm:mb-14 text-center px-4">
+            <p class="text-xs sm:text-sm font-semibold uppercase tracking-[0.4em]" style="color: #636c93;">{{ $subtitle }}</p>
+            <h2 class="mt-3 sm:mt-4 text-2xl sm:text-3xl font-bold md:text-4xl" style="color: #0C1B3D;">{{ $title }}</h2>
+            <p class="mt-3 sm:mt-4 text-base sm:text-lg max-w-2xl mx-auto px-4" style="color: #343b57;">{{ $description }}</p>
         </div>
 
-        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div class="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-4">
             @foreach ($stats as $stat)
-                <div class="group rounded-3xl border bg-white p-8 shadow-card transition hover:-translate-y-1" style="border-color: rgba(226, 232, 240, 0.8);">
-                    <div class="mb-6 inline-flex rounded-2xl p-3" style="background-color: rgba(12, 27, 61, 0.1); color: #0C1B3D;">
-                        <svg class="h-6 w-6 md:h-7 md:w-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="24" height="24">
+                <div class="group rounded-3xl border bg-white p-4 sm:p-6 md:p-8 shadow-card transition hover:-translate-y-1" style="border-color: rgba(226, 232, 240, 0.8);">
+                    <div class="mb-4 sm:mb-6 inline-flex rounded-2xl p-2.5 sm:p-3" style="background-color: rgba(12, 27, 61, 0.1); color: #0C1B3D;">
+                        <svg class="h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="24" height="24">
                             <path d="{{ $stat['icon'] }}" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </div>
-                    <div class="text-4xl font-bold" style="color: #0C1B3D;">{{ $stat['value'] }}</div>
-                    <div class="mt-2 text-sm font-semibold uppercase tracking-widest" style="color: #636c93;">{{ $stat['label'] }}</div>
-                    <p class="mt-4" style="color: #343b57;">{{ $stat['copy'] }}</p>
+                    <div class="text-2xl sm:text-3xl md:text-4xl font-bold" style="color: #0C1B3D;">{{ $stat['value'] }}</div>
+                    <div class="mt-2 text-xs sm:text-sm font-semibold uppercase tracking-widest" style="color: #636c93;">{{ $stat['label'] }}</div>
+                    <p class="mt-3 sm:mt-4 text-sm sm:text-base" style="color: #343b57;">{{ $stat['copy'] }}</p>
                 </div>
             @endforeach
         </div>
 
         @if(isset($cta['title']) && $cta['title'])
-        <div class="mt-16 grid gap-6 rounded-3xl p-10 text-white md:grid-cols-2" style="background-color: #0C1B3D;">
+        <div class="mt-10 sm:mt-16 grid gap-4 sm:gap-6 rounded-3xl p-6 sm:p-8 md:p-10 text-white md:grid-cols-2" style="background-color: #0C1B3D;">
             <div>
-                <p class="text-sm uppercase tracking-[0.4em]" style="color: rgba(255, 255, 255, 0.9);">Admissions</p>
-                <h3 class="mt-3 text-3xl font-bold text-white">{{ $cta['title'] }}</h3>
+                <p class="text-xs sm:text-sm uppercase tracking-[0.4em]" style="color: rgba(255, 255, 255, 0.9);">Admissions</p>
+                <h3 class="mt-2 sm:mt-3 text-xl sm:text-2xl md:text-3xl font-bold text-white">{{ $cta['title'] }}</h3>
             </div>
-            <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-end">
+            <div class="flex flex-col gap-3 sm:gap-4 md:flex-row md:items-center md:justify-end">
                 @if(isset($cta['button1']['text']) && isset($cta['button1']['link']))
-                <a href="{{ $cta['button1']['link'] }}" class="rounded-xl border px-6 py-3 text-center font-semibold text-white transition-all hover:bg-white/10" style="border-color: rgba(255, 255, 255, 0.3);">{{ $cta['button1']['text'] }}</a>
+                <a href="{{ $cta['button1']['link'] }}" class="rounded-xl border px-5 sm:px-6 py-3 text-center font-semibold text-white transition-all hover:bg-white/10 min-h-[44px] flex items-center justify-center" style="border-color: rgba(255, 255, 255, 0.3);">{{ $cta['button1']['text'] }}</a>
                 @endif
                 @if(isset($cta['button2']['text']) && isset($cta['button2']['link']))
-                <a href="{{ $cta['button2']['link'] }}" class="rounded-xl px-6 py-3 text-center font-semibold transition-all" style="background-color: #F4C430; color: #0C1B3D;" onmouseover="this.style.backgroundColor='#ffdc5c'" onmouseout="this.style.backgroundColor='#F4C430'">{{ $cta['button2']['text'] }}</a>
+                <a href="{{ $cta['button2']['link'] }}" class="rounded-xl px-5 sm:px-6 py-3 text-center font-semibold transition-all min-h-[44px] flex items-center justify-center" style="background-color: #F4C430; color: #0C1B3D;" onmouseover="this.style.backgroundColor='#ffdc5c'" onmouseout="this.style.backgroundColor='#F4C430'">{{ $cta['button2']['text'] }}</a>
                 @endif
             </div>
         </div>

@@ -7,12 +7,12 @@
         --aisd-cobalt: 25, 45, 90;        /* #192D5A - Medium blue */
         --aisd-gold: 252, 211, 77;        /* #FCD34D - Gold */
     }
-    
+
     /* Alpine.js cloak */
     [x-cloak] {
         display: none !important;
     }
-    
+
     /* Prevent body scroll when mobile menu is open */
     body.menu-open,
     html.menu-open {
@@ -21,7 +21,7 @@
         width: 100% !important;
         height: 100% !important;
     }
-    
+
     html {
         scroll-behavior: smooth;
         margin: 0 !important;
@@ -53,27 +53,27 @@
     .bg-aisd-midnight {
         background-color: rgb(var(--aisd-midnight));
     }
-    
+
     .bg-aisd-ocean {
         background-color: rgb(var(--aisd-ocean));
     }
-    
+
     .bg-aisd-cobalt {
         background-color: rgb(var(--aisd-cobalt));
     }
-    
+
     .bg-aisd-gold {
         background-color: rgb(var(--aisd-gold));
     }
-    
+
     .text-aisd-midnight {
         color: rgb(var(--aisd-midnight));
     }
-    
+
     .text-aisd-gold {
         color: rgb(var(--aisd-gold));
     }
-    
+
     /* Modern Section Styles */
     .section-modern {
         @apply py-12 md:py-16 lg:py-20 xl:py-24 relative;
@@ -544,7 +544,7 @@
 
     /* Account for navbar height */
     /* Navbar height: h-16 (4rem) mobile, h-20 (5rem) desktop */
-    
+
     /* Remove all spacing on homepage - hero starts at absolute top */
     body:has(.hero-section) main,
     main:has(.hero-section) {
@@ -575,7 +575,7 @@
         position: relative !important;
         top: 0 !important;
     }
-    
+
     /* When announcement bar is present, adjust top offset */
     /* Removed - header positioning is handled by JavaScript */
 
@@ -1002,6 +1002,61 @@
     .search-result-type-page { background-color: #3B82F6; }
     .search-result-type-staff { background-color: #10B981; }
 
+    /* Mobile Menu */
+    .mobile-menu {
+        position: fixed;
+        inset-y: 0;
+        right: 0;
+        z-index: 50;
+        width: 100%;
+        max-width: 24rem;
+        background: white;
+        box-shadow: -4px 0 6px -1px rgba(0, 0, 0, 0.1);
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+    }
+
+    .mobile-menu.open {
+        transform: translateX(0);
+    }
+
+    .mobile-menu-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 40;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+    }
+
+    .mobile-menu.open + .mobile-menu-overlay {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .mobile-menu-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        color: #374151;
+        text-decoration: none;
+        border-radius: 0.75rem;
+        transition: all 0.2s ease;
+    }
+
+    .mobile-menu-item:hover {
+        background-color: rgba(79, 70, 229, 0.1);
+        color: #4F46E5;
+    }
+
+    .mobile-menu-item.active {
+        background-color: rgba(79, 70, 229, 0.1);
+        color: #4F46E5;
+        font-weight: 600;
+    }
+
     /* Language Switcher */
     .language-dropdown {
         background: white;
@@ -1108,7 +1163,36 @@
         align-items: center;
     }
 
-    /* Responsive Design */
+    /* Mobile-First Responsive Design */
+    /* Base mobile styles (default) */
+    .btn-modern,
+    .btn-modern-primary,
+    .btn-modern-secondary {
+        min-height: 44px; /* WCAG touch target minimum */
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+    }
+
+    /* Tablet and up */
+    @media (min-width: 640px) {
+        .btn-modern,
+        .btn-modern-primary,
+        .btn-modern-secondary {
+            padding: 0.875rem 1.75rem;
+        }
+    }
+
+    /* Desktop */
+    @media (min-width: 1024px) {
+        .btn-modern,
+        .btn-modern-primary,
+        .btn-modern-secondary {
+            padding: 1rem 2rem;
+            font-size: 1.125rem;
+        }
+    }
+
+    /* Mobile-specific adjustments */
     @media (max-width: 1023px) {
         .navbar {
             padding-left: 1rem;
@@ -1121,6 +1205,15 @@
 
         .dropdown-menu {
             width: 16rem;
+        }
+
+        /* Ensure touch targets are adequate */
+        .nav-link,
+        .dropdown-item,
+        .mobile-menu-item {
+            min-height: 44px;
+            display: flex;
+            align-items: center;
         }
     }
 
@@ -1136,8 +1229,38 @@
             padding-right: 0.75rem;
         }
 
+        .search-modal-content {
+            max-width: calc(100vw - 1.5rem);
+            margin: 0 auto;
+        }
+
         .mobile-menu {
-            max-width: 20rem;
+            max-width: 100%;
+            width: 100%;
+        }
+
+        /* Mobile menu items full width */
+        .mobile-menu-item {
+            width: 100%;
+            padding: 1rem;
+            min-height: 48px;
+        }
+
+        /* Ensure buttons are full width on mobile when needed */
+        .btn-mobile-full {
+            width: 100%;
+        }
+    }
+
+    /* Extra small devices */
+    @media (max-width: 479px) {
+        .heading-modern {
+            font-size: 1.75rem;
+            line-height: 1.2;
+        }
+
+        .heading-modern-subtitle {
+            font-size: 1rem;
         }
     }
 

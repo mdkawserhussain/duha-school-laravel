@@ -8,11 +8,11 @@
 
 @section('content')
     <!-- Page Header -->
-    <section class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+    <section class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-8 sm:py-12 md:py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
-                <h1 class="text-4xl font-bold mb-4">Our Staff</h1>
-                <p class="text-xl max-w-3xl mx-auto">
+                <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Our Staff</h1>
+                <p class="text-base sm:text-lg md:text-xl max-w-3xl mx-auto px-4">
                     Meet our dedicated team of educators and administrators committed to providing quality education
                 </p>
             </div>
@@ -20,10 +20,10 @@
     </section>
 
     <!-- Staff Grid -->
-    <section class="py-16 bg-white">
+    <section class="py-8 sm:py-12 md:py-16 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             @if($staff->count() > 0)
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
                     @foreach($staff as $member)
                         <x-staff-card :staff="$member" />
                     @endforeach

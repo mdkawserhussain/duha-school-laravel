@@ -29,15 +29,15 @@
     </style>
     <div class="container mx-auto px-6 lg:px-12">
         <!-- Section Header -->
-        <div class="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between mb-12">
+        <div class="flex flex-col gap-4 sm:gap-6 lg:flex-row lg:items-center lg:justify-between mb-8 sm:mb-12 px-4">
             <div>
                 <p class="text-xs font-semibold uppercase tracking-[0.5em]" style="color: #173B7A;">Calendar</p>
-                <h2 class="mt-3 text-3xl font-bold md:text-4xl lg:text-5xl" style="color: #0C1B3D;">Upcoming Events & Key Dates</h2>
-                <p class="mt-3 max-w-2xl leading-relaxed" style="color: #4a5568;">Stay aligned with admission briefings, community gatherings, and student showcases inspired by Duha's rhythm.</p>
+                <h2 class="mt-2 sm:mt-3 text-2xl sm:text-3xl font-bold md:text-4xl lg:text-5xl" style="color: #0C1B3D;">Upcoming Events & Key Dates</h2>
+                <p class="mt-2 sm:mt-3 text-sm sm:text-base max-w-2xl leading-relaxed" style="color: #4a5568;">Stay aligned with admission briefings, community gatherings, and student showcases inspired by Duha's rhythm.</p>
             </div>
-            <a href="#calendar" class="inline-flex items-center rounded-full border px-6 py-3 text-sm font-semibold tracking-wide backdrop-blur-sm transition-all" style="border-color: #173B7A; background-color: #ffffff; color: #173B7A; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);" onmouseover="this.style.backgroundColor='#173B7A'; this.style.color='#ffffff'" onmouseout="this.style.backgroundColor='#ffffff'; this.style.color='#173B7A'">
+            <a href="#calendar" class="inline-flex items-center rounded-full border px-4 sm:px-6 py-3 text-xs sm:text-sm font-semibold tracking-wide backdrop-blur-sm transition-all min-h-[44px] justify-center" style="border-color: #173B7A; background-color: #ffffff; color: #173B7A; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);" onmouseover="this.style.backgroundColor='#173B7A'; this.style.color='#ffffff'" onmouseout="this.style.backgroundColor='#ffffff'; this.style.color='#173B7A'">
                 Download Academic Calendar
-                <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
+                <svg class="ml-2 h-3.5 w-3.5 sm:h-4 sm:w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
             </a>

@@ -9,11 +9,11 @@
 @section('content')
 
     <!-- Page Header -->
-    <section class="bg-gray-50 py-16">
+    <section class="bg-gray-50 py-8 sm:py-12 md:py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
-                <h1 class="text-4xl font-bold text-gray-900 mb-4">School Events</h1>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">School Events</h1>
+                <p class="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto px-4">
                     Stay connected with our school community through upcoming events, workshops, and celebrations
                 </p>
             </div>
@@ -21,33 +21,33 @@
     </section>
 
     <!-- Events Section -->
-    <section class="py-16 bg-white">
+    <section class="py-8 sm:py-12 md:py-16 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Filters -->
-            <div class="mb-8 bg-gray-50 rounded-lg p-6">
-                <div class="flex flex-col gap-6">
+            <div class="mb-6 sm:mb-8 bg-gray-50 rounded-lg p-4 sm:p-6">
+                <div class="flex flex-col gap-4 sm:gap-6">
                     <!-- Category Filters -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
                         <div class="flex flex-wrap gap-2">
                             <a href="{{ route('events.index', array_merge(request()->except(['category', 'from_date', 'to_date']), ['upcoming' => $upcoming ?? 'all'])) }}"
-                               class="px-4 py-2 rounded-full text-sm font-medium {{ !($category ?? null) ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }} transition duration-300">
+                               class="px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium min-h-[44px] flex items-center {{ !($category ?? null) ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }} transition duration-300">
                                 All Categories
                             </a>
                             <a href="{{ route('events.index', array_merge(request()->except(['category', 'from_date', 'to_date']), ['category' => 'Academic', 'upcoming' => $upcoming ?? 'all'])) }}"
-                               class="px-4 py-2 rounded-full text-sm font-medium {{ ($category ?? null) === 'Academic' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }} transition duration-300">
+                               class="px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium min-h-[44px] flex items-center {{ ($category ?? null) === 'Academic' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }} transition duration-300">
                                 Academic
                             </a>
                             <a href="{{ route('events.index', array_merge(request()->except(['category', 'from_date', 'to_date']), ['category' => 'Islamic', 'upcoming' => $upcoming ?? 'all'])) }}"
-                               class="px-4 py-2 rounded-full text-sm font-medium {{ ($category ?? null) === 'Islamic' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }} transition duration-300">
+                               class="px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium min-h-[44px] flex items-center {{ ($category ?? null) === 'Islamic' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }} transition duration-300">
                                 Islamic
                             </a>
                             <a href="{{ route('events.index', array_merge(request()->except(['category', 'from_date', 'to_date']), ['category' => 'Sports', 'upcoming' => $upcoming ?? 'all'])) }}"
-                               class="px-4 py-2 rounded-full text-sm font-medium {{ ($category ?? null) === 'Sports' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }} transition duration-300">
+                               class="px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium min-h-[44px] flex items-center {{ ($category ?? null) === 'Sports' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }} transition duration-300">
                                 Sports
                             </a>
                             <a href="{{ route('events.index', array_merge(request()->except(['category', 'from_date', 'to_date']), ['category' => 'Cultural', 'upcoming' => $upcoming ?? 'all'])) }}"
-                               class="px-4 py-2 rounded-full text-sm font-medium {{ ($category ?? null) === 'Cultural' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }} transition duration-300">
+                               class="px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium min-h-[44px] flex items-center {{ ($category ?? null) === 'Cultural' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }} transition duration-300">
                                 Cultural
                             </a>
                         </div>
@@ -86,17 +86,17 @@
                                 >
                             </div>
                             
-                            <div class="flex items-end gap-2">
+                            <div class="flex items-end gap-2 flex-col sm:flex-row">
                                 <button 
                                     type="submit" 
-                                    class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition duration-300 whitespace-nowrap"
+                                    class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-300 whitespace-nowrap w-full sm:w-auto min-h-[44px]"
                                 >
                                     Filter
                                 </button>
                                 @if($fromDate || $toDate)
                                 <a 
                                     href="{{ route('events.index', request()->except(['from_date', 'to_date'])) }}"
-                                    class="bg-gray-300 hover:bg-gray-400 text-gray-700 font-semibold py-2 px-4 rounded-lg transition duration-300 whitespace-nowrap"
+                                    class="bg-gray-300 hover:bg-gray-400 text-gray-700 font-semibold py-3 px-4 rounded-lg transition duration-300 whitespace-nowrap w-full sm:w-auto min-h-[44px] flex items-center justify-center"
                                 >
                                     Clear
                                 </a>
@@ -110,19 +110,19 @@
                         <label class="block text-sm font-medium text-gray-700 mb-2">Quick Filters</label>
                         <div class="flex flex-wrap gap-2">
                             <a href="{{ route('events.index', array_merge(request()->except(['upcoming', 'from_date', 'to_date']), ['upcoming' => 'all'])) }}"
-                               class="px-4 py-2 rounded-full text-sm font-medium {{ ($upcoming ?? 'all') === 'all' && !$fromDate && !$toDate ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }} transition duration-300">
+                               class="px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium min-h-[44px] flex items-center {{ ($upcoming ?? 'all') === 'all' && !$fromDate && !$toDate ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }} transition duration-300">
                                 All Events
                             </a>
                             <a href="{{ route('events.index', array_merge(request()->except(['upcoming', 'from_date', 'to_date']), ['upcoming' => 'upcoming'])) }}"
-                               class="px-4 py-2 rounded-full text-sm font-medium {{ ($upcoming ?? 'all') === 'upcoming' && !$fromDate && !$toDate ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }} transition duration-300">
+                               class="px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium min-h-[44px] flex items-center {{ ($upcoming ?? 'all') === 'upcoming' && !$fromDate && !$toDate ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }} transition duration-300">
                                 Upcoming
                             </a>
                             <a href="{{ route('events.index', array_merge(request()->except(['upcoming', 'from_date', 'to_date']), ['upcoming' => 'past'])) }}"
-                               class="px-4 py-2 rounded-full text-sm font-medium {{ ($upcoming ?? 'all') === 'past' && !$fromDate && !$toDate ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }} transition duration-300">
+                               class="px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium min-h-[44px] flex items-center {{ ($upcoming ?? 'all') === 'past' && !$fromDate && !$toDate ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }} transition duration-300">
                                 Past Events
                             </a>
                             <a href="{{ route('events.index', array_merge(request()->except(['upcoming', 'from_date', 'to_date']), ['from_date' => now()->format('Y-m-d'), 'to_date' => now()->addMonth()->format('Y-m-d')])) }}"
-                               class="px-4 py-2 rounded-full text-sm font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 transition duration-300">
+                               class="px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium min-h-[44px] flex items-center bg-gray-200 text-gray-700 hover:bg-gray-300 transition duration-300">
                                 Next Month
                             </a>
                         </div>
@@ -132,7 +132,7 @@
 
             <!-- Events Grid -->
             @if($events->count() > 0)
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-8 sm:mb-12">
                 @foreach($events as $event)
                 <x-event-card :event="$event" />
                 @endforeach
@@ -156,7 +156,7 @@
                     @endif
                 </p>
                 @if($category)
-                <a href="{{ route('events.index') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-300">
+                <a href="{{ route('events.index') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-300 min-h-[44px] inline-flex items-center justify-center">
                     View All Events
                 </a>
                 @endif
