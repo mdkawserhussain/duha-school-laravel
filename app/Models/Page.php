@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use Laravel\Scout\Searchable;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -17,6 +18,8 @@ class Page extends Model implements HasMedia
     protected $fillable = [
         'title',
         'slug',
+        'hero_badge',
+        'hero_subtitle',
         'content',
         'meta_title',
         'meta_description',
@@ -31,9 +34,63 @@ class Page extends Model implements HasMedia
         'published_at' => 'datetime',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($page) {
+            if (empty($page->slug) && !empty($page->title)) {
+                $page->slug = static::generateUniqueSlug($page->title);
+            }
+        });
+
+        static::updating(function ($page) {
+            // Regenerate slug if title changed and slug is empty or null
+            if ($page->isDirty('title') && (empty($page->slug) || is_null($page->slug))) {
+                $page->slug = static::generateUniqueSlug($page->title);
+            }
+        });
+
+        static::saving(function ($page) {
+            // Ensure slug is always set when saving (fallback for any missed cases)
+            if (empty($page->slug) && !empty($page->title)) {
+                $page->slug = static::generateUniqueSlug($page->title);
+            }
+        });
+    }
+
+    protected static function generateUniqueSlug(string $title): string
+    {
+        // Normalize title: trim and ensure it's not empty
+        $title = trim($title);
+        if (empty($title)) {
+            $title = 'page-' . time();
+        }
+        
+        // Generate slug from title
+        $slug = Str::slug($title);
+        
+        // Handle edge case: if slug is empty (e.g., only special characters), generate fallback
+        if (empty($slug)) {
+            $slug = 'page-' . time();
+        }
+        
+        $originalSlug = $slug;
+        $counter = 1;
+
+        // Ensure slug is unique
+        while (static::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $counter;
+            $counter++;
+        }
+
+        return $slug;
+    }
+
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('featured_image')->singleFile();
+        $this->addMediaCollection('hero_image')->singleFile();
         $this->addMediaCollection('gallery');
     }
 
@@ -43,6 +100,7 @@ class Page extends Model implements HasMedia
         $this->addMediaConversion('webp')
             ->format('webp')
             ->quality(90)
+            ->performOnCollections('featured_image', 'hero_image', 'gallery')
             ->nonQueued(); // Process immediately
 
         // Responsive conversions
@@ -51,14 +109,25 @@ class Page extends Model implements HasMedia
             ->height(300)
             ->sharpen(10)
             ->format('webp')
-            ->quality(85);
+            ->quality(85)
+            ->performOnCollections('featured_image', 'hero_image', 'gallery');
 
         $this->addMediaConversion('medium')
             ->width(600)
             ->height(400)
             ->sharpen(10)
             ->format('webp')
-            ->quality(85);
+            ->quality(85)
+            ->performOnCollections('featured_image', 'hero_image', 'gallery');
+
+        // Large conversion for hero images
+        $this->addMediaConversion('large')
+            ->width(1920)
+            ->height(1080)
+            ->format('webp')
+            ->quality(90)
+            ->performOnCollections('hero_image')
+            ->nonQueued();
     }
 
     public function toSearchableArray()

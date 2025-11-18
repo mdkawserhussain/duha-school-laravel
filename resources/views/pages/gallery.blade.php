@@ -28,20 +28,15 @@
 @endpush
 
 @section('content')
-    <!-- Page Header -->
-    <section class="bg-gray-50 py-8 sm:py-12 md:py-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">Media Gallery</h1>
-                <p class="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto px-4">
-                    Explore our collection of photos and videos showcasing school events, student activities, and campus life
-                </p>
-            </div>
-        </div>
-    </section>
+    <!-- Page Hero Section -->
+    <x-page-hero 
+        title="Media Gallery"
+        subtitle="Explore our collection of photos and videos showcasing school events, student activities, and campus life"
+        badge="School Life"
+    />
 
     <!-- Gallery Section -->
-    <section class="py-8 sm:py-12 md:py-16 bg-white">
+    <section class="py-12 sm:py-16 md:py-20 lg:py-24 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Gallery Categories -->
             <div class="mb-6 sm:mb-8">

@@ -37,32 +37,124 @@ class PageResource extends Resource
                             ->required()
                             ->maxLength(255)
                             ->live(onBlur: true)
-                            ->afterStateUpdated(function (string $state, $set) {
-                                $set('slug', str($state)->slug());
-                            }),
+                            ->afterStateUpdated(function ($state, $set, $get) {
+                                if (!empty($state)) {
+                                    // Handle both string and Stringable objects
+                                    $titleValue = is_string($state) ? $state : (string) $state;
+                                    $slug = str(trim($titleValue))->slug()->lower()->toString();
+                                    // Ensure slug is not empty
+                                    if (empty($slug)) {
+                                        $slug = 'page-' . time();
+                                    }
+                                    $set('slug', $slug);
+                                }
+                            })
+                            ->columnSpanFull(),
 
                         FormComponents\TextInput::make('slug')
                             ->required()
                             ->unique(ignoreRecord: true)
                             ->maxLength(255)
-                            ->rules(['alpha_dash']),
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(function ($state, $set, $get) {
+                                if (!empty($state)) {
+                                    // Handle both string and Stringable objects
+                                    $slugValue = is_string($state) ? $state : (string) $state;
+                                    $slug = str(trim($slugValue))->slug()->lower()->toString();
+                                    // Ensure slug is not empty
+                                    if (empty($slug)) {
+                                        // Fallback: use title if available, otherwise generate timestamp-based slug
+                                        $title = $get('title');
+                                        if (!empty($title)) {
+                                            $slug = str(trim($title))->slug()->lower()->toString();
+                                        }
+                                        if (empty($slug)) {
+                                            $slug = 'page-' . time();
+                                        }
+                                    }
+                                    $set('slug', $slug);
+                                }
+                            })
+                            ->dehydrateStateUsing(function ($state) {
+                                // Always ensure we return a valid string slug
+                                if (empty($state)) {
+                                    return '';
+                                }
+                                
+                                // Convert Stringable to string if needed
+                                if (!is_string($state)) {
+                                    $state = (string) $state;
+                                }
+                                
+                                // Normalize the slug
+                                $slug = str(trim($state))->slug()->lower()->toString();
+                                
+                                // Ensure slug is not empty
+                                if (empty($slug)) {
+                                    return 'page-' . time();
+                                }
+                                
+                                return $slug;
+                            })
+                            ->rules([
+                                'required',
+                                'string',
+                                'max:255',
+                                'regex:/^[a-z0-9_-]+$/',
+                            ])
+                            ->helperText('Only lowercase letters, numbers, dashes, and underscores are allowed')
+                            ->columnSpanFull(),
 
                         FormComponents\RichEditor::make('content')
                             ->required()
                             ->columnSpanFull(),
+                    ])
+                    ->columns(1),
 
-                        FormComponents\FileUpload::make('featured_image')
+                Components\Section::make('Hero Section')
+                    ->description('Upload a hero image for the page header. This will be displayed at the top of the page.')
+                    ->schema([
+                        FormComponents\FileUpload::make('hero_image')
+                            ->label('Hero Image')
                             ->image()
-                            ->directory('pages')
-                            ->visibility('public')
                             ->imageEditor()
-                            ->imageEditorAspectRatios([
-                                '16:9',
-                                '4:3',
-                                '1:1',
-                            ]),
+                            ->directory('pages/hero')
+                            ->visibility('public')
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                            ->maxSize(10240) // 10MB
+                            ->helperText('Recommended size: 1920x1080 pixels or larger. This image will be displayed in the page hero section.')
+                            ->columnSpanFull(),
+
+                        FormComponents\TextInput::make('hero_badge')
+                            ->label('Hero Badge Text')
+                            ->maxLength(100)
+                            ->placeholder('e.g., Since 2010 • Chattogram')
+                            ->helperText('Optional badge text displayed above the title in the hero section')
+                            ->columnSpan(1),
+
+                        FormComponents\TextInput::make('hero_subtitle')
+                            ->label('Hero Subtitle')
+                            ->maxLength(255)
+                            ->helperText('Optional subtitle displayed below the main title in the hero section')
+                            ->columnSpan(1),
                     ])
                     ->columns(2),
+
+                Components\Section::make('Featured Image')
+                    ->description('Featured image displayed within the page content (different from hero image)')
+                    ->schema([
+                        FormComponents\FileUpload::make('featured_image')
+                            ->label('Featured Image')
+                            ->image()
+                            ->imageEditor()
+                            ->directory('pages/featured')
+                            ->visibility('public')
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                            ->maxSize(5120) // 5MB
+                            ->helperText('Featured image displayed within the page content area')
+                            ->columnSpanFull(),
+                    ])
+                    ->columns(1),
 
                 Components\Section::make('SEO Settings')
                     ->schema([

@@ -8,27 +8,31 @@
 
 @section('content')
 
-    <!-- Page Header -->
-    <section class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-8 sm:py-12 md:py-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-4 sm:mb-6">Admission Going On</h1>
-                <p class="text-base sm:text-lg md:text-xl lg:text-2xl mb-6 sm:mb-8 max-w-3xl mx-auto px-4">
-                    Join our community of learners in the Islamic and Cambridge curriculum program for the 2025-26 academic year
-                </p>
-                <a href="#admission-form" class="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-3 px-6 sm:px-8 rounded-lg transition duration-300 min-h-[44px] inline-flex items-center justify-center">
-                    Apply Now
-                </a>
-            </div>
+    <!-- Page Hero Section -->
+    <x-page-hero 
+        title="Admission Going On"
+        subtitle="Join our community of learners in the Islamic and Cambridge curriculum program for the 2025-26 academic year"
+        badge="2025-26 Academic Year"
+    />
+
+    <!-- CTA Button Section -->
+    <section class="py-6 sm:py-8 bg-white border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <a href="#admission-form" class="inline-flex items-center justify-center rounded-xl border-2 border-aisd-gold bg-aisd-gold px-8 py-4 text-base font-semibold text-aisd-midnight transition-all hover:bg-aisd-gold/90 hover:border-aisd-gold/90 min-h-[44px] shadow-modern">
+                Apply Now
+                <svg class="ml-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+            </a>
         </div>
     </section>
 
     <!-- Admission Information -->
-    <section class="py-8 sm:py-12 md:py-16 bg-white">
+    <section class="py-12 sm:py-16 md:py-20 lg:py-24 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-8 sm:mb-12">
-                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">Why Choose {{ $siteName }}?</h2>
-                <p class="text-base sm:text-lg text-gray-600 px-4">A comprehensive Islamic education with Cambridge curriculum excellence</p>
+            <div class="text-center mb-12 sm:mb-16">
+                <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-aisd-midnight mb-4 sm:mb-6" style="font-family: 'Playfair Display', serif;">Why Choose {{ $siteName }}?</h2>
+                <p class="text-lg sm:text-xl text-gray-700 px-4 max-w-3xl mx-auto">A comprehensive Islamic education with Cambridge curriculum excellence</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16">
@@ -92,12 +96,12 @@
     </section>
 
     <!-- Admission Form -->
-    <section id="admission-form" class="py-8 sm:py-12 md:py-16 bg-gray-50">
+    <section id="admission-form" class="py-12 sm:py-16 md:py-20 lg:py-24 bg-gray-50">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-white rounded-lg shadow-lg p-4 sm:p-6 md:p-8">
-                <div class="text-center mb-6 sm:mb-8">
-                    <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">Admission Application Form</h2>
-                    <p class="text-sm sm:text-base text-gray-600 px-4">Please fill out all required fields. We will contact you within 3-5 business days.</p>
+            <div class="bg-white rounded-2xl shadow-modern p-6 sm:p-8 md:p-10">
+                <div class="text-center mb-8 sm:mb-10">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-aisd-midnight mb-4 sm:mb-6" style="font-family: 'Playfair Display', serif;">Admission Application Form</h2>
+                    <p class="text-base sm:text-lg text-gray-700 px-4">Please fill out all required fields. We will contact you within 3-5 business days.</p>
                 </div>
 
                 <form method="POST" action="{{ route('admission.store') }}" enctype="multipart/form-data" class="space-y-6">
@@ -206,10 +210,13 @@
 
                     <!-- Submit Button -->
                     <div class="text-center">
-                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <button type="submit" class="inline-flex items-center justify-center rounded-xl border-2 border-aisd-ocean bg-aisd-ocean px-8 py-4 text-base font-semibold text-white transition-all hover:bg-aisd-cobalt hover:border-aisd-cobalt min-h-[44px] shadow-modern disabled:opacity-50 disabled:cursor-not-allowed">
                             Submit Application
+                            <svg class="ml-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                            </svg>
                         </button>
-                        <p class="text-sm text-gray-600 mt-2">By submitting this form, you agree to our terms and conditions.</p>
+                        <p class="text-sm text-gray-600 mt-4">By submitting this form, you agree to our terms and conditions.</p>
                     </div>
                 </form>
             </div>

@@ -31,7 +31,7 @@ Route::get('/feed/events.atom', [EventController::class, 'feed'])->name('events.
 
 // Notices
 Route::get('/notices', [NoticeController::class, 'index'])->name('notices.index');
-Route::get('/notices/{notice}', [NoticeController::class, 'show'])->name('notices.show');
+Route::get('/notices/{notice:slug}', [NoticeController::class, 'show'])->name('notices.show');
 
 // Admission
 Route::get('/admission', [AdmissionController::class, 'index'])->name('admission.index');

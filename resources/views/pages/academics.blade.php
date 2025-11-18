@@ -8,24 +8,19 @@
 
 @section('content')
 
-    <!-- Page Header -->
-    <section class="bg-gradient-to-r from-green-600 to-green-800 text-white py-8 sm:py-12 md:py-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-4 sm:mb-6">Academic Excellence</h1>
-                <p class="text-base sm:text-lg md:text-xl lg:text-2xl mb-6 sm:mb-8 max-w-3xl mx-auto px-4">
-                    Comprehensive Islamic and Cambridge curriculum education for holistic development
-                </p>
-            </div>
-        </div>
-    </section>
+    <!-- Page Hero Section -->
+    <x-page-hero 
+        title="Academic Excellence"
+        subtitle="Comprehensive Islamic and Cambridge curriculum education for holistic development"
+        badge="Our Curriculum"
+    />
 
     <!-- Curriculum Overview -->
-    <section class="py-8 sm:py-12 md:py-16 bg-white">
+    <section class="py-12 sm:py-16 md:py-20 lg:py-24 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-8 sm:mb-12">
-                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">Our Curriculum</h2>
-                <p class="text-base sm:text-lg text-gray-600 px-4">A perfect blend of Islamic teachings and international academic standards</p>
+            <div class="text-center mb-12 sm:mb-16">
+                <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-aisd-midnight mb-4 sm:mb-6" style="font-family: 'Playfair Display', serif;">Our Curriculum</h2>
+                <p class="text-lg sm:text-xl text-gray-700 px-4 max-w-3xl mx-auto">A perfect blend of Islamic teachings and international academic standards</p>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 md:gap-12 items-center">

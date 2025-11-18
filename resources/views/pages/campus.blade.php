@@ -8,24 +8,19 @@
 
 @section('content')
 
-    <!-- Page Header -->
-    <section class="bg-gradient-to-r from-purple-600 to-purple-800 text-white py-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <h1 class="text-4xl md:text-6xl font-bold mb-6">Our Campus</h1>
-                <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
-                    A modern learning environment designed for academic excellence and spiritual growth
-                </p>
-            </div>
-        </div>
-    </section>
+    <!-- Page Hero Section -->
+    <x-page-hero 
+        title="Our Campus"
+        subtitle="A modern learning environment designed for academic excellence and spiritual growth"
+        badge="Visit Our Campus"
+    />
 
     <!-- Campus Overview -->
-    <section class="py-16 bg-white">
+    <section class="py-12 sm:py-16 md:py-20 lg:py-24 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div>
-                    <h2 class="text-3xl font-bold text-gray-900 mb-6">Modern Facilities for Modern Learning</h2>
+                    <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-aisd-midnight mb-6 sm:mb-8" style="font-family: 'Playfair Display', serif;">Modern Facilities for Modern Learning</h2>
                     <div class="space-y-4 text-gray-700">
                         <p>
                             Our campus in Chattogram spans over 50,000 square feet and features state-of-the-art

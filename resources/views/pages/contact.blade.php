@@ -7,25 +7,20 @@
 @section('meta-description', 'Get in touch with ' . $siteName . '. Find our contact information, office hours, and send us a message')
 
 @section('content')
-    <!-- Page Header -->
-    <section class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-8 sm:py-12 md:py-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-4 sm:mb-6">Contact Us</h1>
-                <p class="text-base sm:text-lg md:text-xl lg:text-2xl mb-6 sm:mb-8 max-w-3xl mx-auto px-4">
-                    We'd love to hear from you. Reach out with questions about admissions, academics, or anything else
-                </p>
-            </div>
-        </div>
-    </section>
+    <!-- Page Hero Section -->
+    <x-page-hero 
+        title="Contact Us"
+        subtitle="We'd love to hear from you. Reach out with questions about admissions, academics, or anything else"
+        badge="Get In Touch"
+    />
 
     <!-- Contact Information -->
-    <section class="py-8 sm:py-12 md:py-16 bg-white">
+    <section class="py-12 sm:py-16 md:py-20 lg:py-24 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12">
                 <!-- Contact Details -->
                 <div class="order-2 lg:order-1">
-                    <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 sm:mb-8">Get In Touch</h2>
+                    <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-aisd-midnight mb-8 sm:mb-10" style="font-family: 'Playfair Display', serif;">Get In Touch</h2>
 
                     <div class="space-y-6">
                         <!-- Address -->
@@ -117,8 +112,8 @@
 
                 <!-- Contact Form -->
                 <div class="order-1 lg:order-2">
-                    <div class="bg-gray-50 rounded-lg p-4 sm:p-6 md:p-8">
-                        <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Send Us a Message</h2>
+                    <div class="bg-gray-50 rounded-2xl p-6 sm:p-8 md:p-10 shadow-modern">
+                        <h2 class="text-2xl sm:text-3xl font-bold text-aisd-midnight mb-6 sm:mb-8" style="font-family: 'Playfair Display', serif;">Send Us a Message</h2>
 
                         <form method="POST" action="{{ route('contact.send') }}" class="space-y-4 sm:space-y-6">
                             @csrf
@@ -179,10 +174,13 @@
                             </div>
 
                             <div class="text-center">
-                                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 sm:px-8 rounded-lg transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px] w-full sm:w-auto">
+                                <button type="submit" class="inline-flex items-center justify-center rounded-xl border-2 border-aisd-ocean bg-aisd-ocean px-8 py-4 text-base font-semibold text-white transition-all hover:bg-aisd-cobalt hover:border-aisd-cobalt min-h-[44px] shadow-modern disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto">
                                     Send Message
+                                    <svg class="ml-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                    </svg>
                                 </button>
-                                <p class="text-xs sm:text-sm text-gray-600 mt-2 px-4">We typically respond within 24 hours during business days.</p>
+                                <p class="text-sm text-gray-600 mt-4 px-4">We typically respond within 24 hours during business days.</p>
                             </div>
                         </form>
                     </div>
@@ -192,15 +190,15 @@
     </section>
 
     <!-- Map Section -->
-    <section class="py-8 sm:py-12 md:py-16 bg-gray-50">
+    <section class="py-12 sm:py-16 md:py-20 lg:py-24 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-6 sm:mb-8">
-                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">Find Us</h2>
-                <p class="text-base sm:text-lg text-gray-600 px-4">Visit our campus in Chattogram, Bangladesh</p>
+            <div class="text-center mb-10 sm:mb-12">
+                <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-aisd-midnight mb-4 sm:mb-6" style="font-family: 'Playfair Display', serif;">Find Us</h2>
+                <p class="text-lg sm:text-xl text-gray-700 px-4">Visit our campus in Chattogram, Bangladesh</p>
             </div>
 
             <!-- Placeholder for Google Maps -->
-            <div class="bg-gray-300 rounded-lg h-64 sm:h-80 md:h-96 flex items-center justify-center">
+            <div class="bg-gray-300 rounded-2xl h-64 sm:h-80 md:h-96 flex items-center justify-center shadow-modern">
                 <div class="text-center">
                     <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>

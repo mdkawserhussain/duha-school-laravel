@@ -44,9 +44,17 @@
         </div>
 
         @php
-            // Use dynamic events from the controller if available, otherwise fetch upcoming events
-            $orderClause = \Illuminate\Support\Facades\Schema::hasColumn('events', 'start_at') ? 'COALESCE(start_at, event_date)' : 'event_date';
-            $events = $upcomingEvents ?? \App\Models\Event::with('media')->published()->upcoming()->orderByRaw($orderClause . ' asc')->limit(3)->get();
+            // Use dynamic events from the controller (always provided via HomeController)
+            // The HomeController passes 'upcomingEvents' which is fetched via EventService
+            // This ensures real-time updates when events are modified in the backend
+            $events = $upcomingEvents ?? collect([]);
+            
+            // Log for debugging (remove in production if needed)
+            // \Log::info('Homepage events section', [
+            //     'events_count' => $events->count(),
+            //     'has_upcomingEvents' => isset($upcomingEvents),
+            //     'events' => $events->pluck('title')->toArray(),
+            // ]);
             
             // Define category colors
             $categoryColors = [

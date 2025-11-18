@@ -23,6 +23,17 @@ class Event extends Model implements HasMedia
             if (empty($event->slug) && !empty($event->title)) {
                 $event->slug = static::generateUniqueSlug($event->title);
             }
+
+            // Ensure event_date is set (required field, NOT NULL)
+            // Sync from start_at if event_date is empty but start_at exists
+            if (empty($event->event_date) && !empty($event->start_at)) {
+                $event->event_date = $event->start_at;
+            } elseif (empty($event->event_date) && !empty($event->published_at)) {
+                $event->event_date = $event->published_at;
+            } elseif (empty($event->event_date)) {
+                // Last resort fallback
+                $event->event_date = now();
+            }
         });
 
         static::updating(function ($event) {
@@ -30,15 +41,61 @@ class Event extends Model implements HasMedia
             if ($event->isDirty('title') && empty($event->slug)) {
                 $event->slug = static::generateUniqueSlug($event->title);
             }
+
+            // Sync event_date from start_at if event_date is empty but start_at exists
+            if (empty($event->event_date) && !empty($event->start_at)) {
+                $event->event_date = $event->start_at;
+            } elseif (empty($event->event_date) && !empty($event->published_at)) {
+                $event->event_date = $event->published_at;
+            }
+
+            // Sync is_published with status field (published() scope requires is_published = true)
+            // This ensures consistency between status and is_published fields
+            if ($event->isDirty('status') && isset($event->status)) {
+                $event->is_published = ($event->status === 'published');
+            }
+        });
+
+        static::saving(function ($event) {
+            // Final safeguard: ensure event_date is always set
+            if (empty($event->event_date)) {
+                if (!empty($event->start_at)) {
+                    $event->event_date = $event->start_at;
+                } elseif (!empty($event->published_at)) {
+                    $event->event_date = $event->published_at;
+                } else {
+                    $event->event_date = now();
+                }
+            }
+
+            // Sync is_published with status field (published() scope requires is_published = true)
+            // This ensures consistency between status and is_published fields
+            if (isset($event->status)) {
+                $event->is_published = ($event->status === 'published');
+            }
         });
     }
 
     protected static function generateUniqueSlug(string $title): string
     {
+        // Normalize title: trim and ensure it's not empty
+        $title = trim($title);
+        if (empty($title)) {
+            $title = 'event-' . time();
+        }
+        
+        // Generate slug from title
         $slug = Str::slug($title);
+        
+        // Handle edge case: if slug is empty (e.g., only special characters), generate fallback
+        if (empty($slug)) {
+            $slug = 'event-' . time();
+        }
+        
         $originalSlug = $slug;
         $counter = 1;
 
+        // Ensure slug is unique
         while (static::where('slug', $slug)->exists()) {
             $slug = $originalSlug . '-' . $counter;
             $counter++;
@@ -129,6 +186,17 @@ class Event extends Model implements HasMedia
 
     public function scopeUpcoming($query)
     {
+        // Check if start_at column exists
+        if (\Illuminate\Support\Facades\Schema::hasColumn('events', 'start_at')) {
+            return $query->where(function ($q) {
+                $q->where('start_at', '>=', now())
+                  ->orWhere(function ($subQ) {
+                      $subQ->whereNull('start_at')
+                           ->where('event_date', '>=', now());
+                  });
+            });
+        }
+        
         return $query->where('event_date', '>=', now());
     }
 
