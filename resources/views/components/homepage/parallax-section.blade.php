@@ -23,10 +23,10 @@
         }
         
         // Try to get from dedicated background_image media collection (preferred)
-        // Use WebP conversion with fallback
+        // Use relative path extraction for consistent URL generation
         try {
             if ($section->hasMedia('background_image')) {
-                $backgroundImage = $section->getWebPMediaUrl('background_image', 'large');
+                $backgroundImage = $section->getMediaUrlRelative('background_image', 'large');
             }
         } catch (\Exception $e) {
             \Log::error('Parallax section: Failed to get background_image media', [
@@ -53,7 +53,7 @@
         // Fallback to images collection
         if (!$backgroundImage && $section->hasMedia('images')) {
             try {
-                $backgroundImage = $section->getWebPMediaUrl('images', 'large');
+                $backgroundImage = $section->getMediaUrlRelative('images', 'large');
             } catch (\Exception $e) {
                 // Silently continue
             }
