@@ -64,75 +64,13 @@
 
 <!-- Main Navigation Bar -->
 <header 
-    class="fixed top-0 left-0 w-full z-50 transition-all duration-300"
+    class="fixed top-0 left-0 w-full transition-all duration-300"
+    style="z-index: 9999 !important;"
     :style="{
         backgroundColor: (scrolled || !{{ request()->routeIs('home') ? 'true' : 'false' }}) ? '{{ $primaryColor }}' : 'rgba(255, 255, 255, 0.05)',
         boxShadow: scrolled ? '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)' : 'none'
     }"
-    x-data="{ 
-        scrolled: false, 
-        mobileMenuOpen: false,
-        hasAnnouncement: {{ $announcements->isNotEmpty() ? 'true' : 'false' }},
-        announcementHeight: 0
-    }"
-        x-init="
-            const header = $el;
-        const announcementBar = document.getElementById('announcement-bar');
-            
-            if (announcementBar && hasAnnouncement) {
-                const updateHeight = () => {
-                    const actualHeight = announcementBar.offsetHeight;
-                    announcementHeight = actualHeight;
-                    if (!scrolled) {
-                        header.style.setProperty('top', actualHeight + 'px', 'important');
-                    }
-                };
-                requestAnimationFrame(() => {
-                    updateHeight();
-                    setTimeout(() => {
-                        const computedTop = window.getComputedStyle(header).top;
-                        const expectedTop = announcementBar.offsetHeight + 'px';
-                        if (computedTop !== expectedTop) {
-                            updateHeight();
-                        }
-                    }, 50);
-                });
-                const resizeObserver = new ResizeObserver(() => {
-                    updateHeight();
-                });
-                resizeObserver.observe(announcementBar);
-                window.addEventListener('scroll', () => {
-                    scrolled = window.pageYOffset > 50;
-                    if (scrolled) {
-                        header.style.setProperty('top', '0', 'important');
-                    } else {
-                        updateHeight();
-                    }
-                });
-            } else {
-                header.style.setProperty('top', '0', 'important');
-                window.addEventListener('scroll', () => {
-                    scrolled = window.pageYOffset > 50;
-                });
-            }
-            
-            // Initial scroll check
-            scrolled = window.pageYOffset > 50;
-            
-        // Close mobile menu on escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && mobileMenuOpen) {
-                mobileMenuOpen = false;
-            }
-        });
-        
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (mobileMenuOpen && !$el.contains(e.target)) {
-                mobileMenuOpen = false;
-            }
-        });
-    "
+    x-data="navbarData({{ $announcements->isNotEmpty() ? 'true' : 'false' }})"
         id="main-navbar">
     
     <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -158,9 +96,7 @@
             <!-- Navigation Links - Right -->
             <div class="flex items-center space-x-6 md:space-x-8">
                 <a href="{{ route('home') }}" 
-                   class="relative text-sm font-medium transition-all duration-300 hover:text-white/90 group"
-                   :class="scrolled || !{{ request()->routeIs('home') ? 'true' : 'false' }} ? 'text-white' : 'text-white'"
-                   :class="{{ request()->routeIs('home') ? '(scrolled ? \'text-white\' : \'text-white\')' : '' }}">
+                   class="relative text-sm font-medium transition-all duration-300 hover:text-white/90 group text-white">
                     <span class="relative">
                         Home
                         <span class="absolute bottom-0 left-0 h-0.5 bg-white transition-all duration-300 {{ request()->routeIs('home') ? 'w-full' : 'w-0 group-hover:w-full' }}"></span>
@@ -230,8 +166,7 @@
                 </div>
                 
                 <a href="{{ route('admission.index') }}" 
-                   class="relative text-sm font-medium transition-all duration-300 hover:text-white/90 group text-white"
-                   :class="{{ request()->routeIs('admission.*') ? '\'text-white\' : \'text-white\'' : '' }}">
+                   class="relative text-sm font-medium transition-all duration-300 hover:text-white/90 group text-white">
                     <span class="relative">
                         Admission
                         <span class="absolute bottom-0 left-0 h-0.5 bg-white transition-all duration-300 {{ request()->routeIs('admission.*') ? 'w-full' : 'w-0 group-hover:w-full' }}"></span>
@@ -270,8 +205,7 @@
                 </div>
                 
                 <a href="{{ route('careers.index') }}" 
-                   class="relative text-sm font-medium transition-all duration-300 hover:text-white/90 group text-white"
-                   :class="{{ request()->routeIs('careers.*') ? '\'text-white\' : \'text-white\'' : '' }}">
+                   class="relative text-sm font-medium transition-all duration-300 hover:text-white/90 group text-white">
                     <span class="relative">
                         Career
                         <span class="absolute bottom-0 left-0 h-0.5 bg-white transition-all duration-300 {{ request()->routeIs('careers.*') ? 'w-full' : 'w-0 group-hover:w-full' }}"></span>
@@ -279,8 +213,7 @@
                 </a>
                 
                 <a href="{{ route('contact.index') }}" 
-                   class="relative text-sm font-medium transition-all duration-300 hover:text-white/90 group text-white"
-                   :class="{{ request()->routeIs('contact.*') ? '\'text-white\' : \'text-white\'' : '' }}">
+                   class="relative text-sm font-medium transition-all duration-300 hover:text-white/90 group text-white">
                     <span class="relative">
                         Contact
                         <span class="absolute bottom-0 left-0 h-0.5 bg-white transition-all duration-300 {{ request()->routeIs('contact.*') ? 'w-full' : 'w-0 group-hover:w-full' }}"></span>
@@ -306,7 +239,7 @@
         </div>
         
         <!-- Mobile Navigation -->
-        <div class="lg:hidden flex items-center justify-between h-20 relative z-[60]">
+        <div class="lg:hidden flex items-center justify-between h-20 relative" style="z-index: 100001 !important;">
             <!-- Logo -->
             <div class="flex-shrink-0">
                 <a href="{{ route('home') }}" class="flex items-center">
@@ -327,11 +260,11 @@
             <!-- Hamburger Menu Button -->
             <button 
                 type="button"
-                class="inline-flex items-center justify-center p-2 rounded-lg text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white/50 transition-colors duration-200 relative z-[60]"
+                class="inline-flex items-center justify-center p-2 rounded-lg text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white/50 transition-colors duration-200 relative"
                 @click="mobileMenuOpen = !mobileMenuOpen"
                 :aria-expanded="mobileMenuOpen"
                 aria-label="Toggle menu"
-                style="pointer-events: auto; z-index: 60;">
+                style="pointer-events: auto; z-index: 100001 !important;">
                 <svg class="h-6 w-6" :class="{ 'hidden': mobileMenuOpen, 'block': !mobileMenuOpen }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
@@ -344,20 +277,21 @@
     
     <!-- Mobile Menu Overlay -->
     <div 
-        class="fixed inset-0 z-[100] lg:hidden"
+        class="fixed inset-0 lg:hidden"
+        style="z-index: 99999 !important;"
         x-show="mobileMenuOpen"
+        x-cloak
+        @keydown.escape.window="mobileMenuOpen = false"
         x-transition:enter="transition ease-out duration-300"
         x-transition:enter-start="opacity-0"
         x-transition:enter-end="opacity-100"
         x-transition:leave="transition ease-in duration-200"
         x-transition:leave-start="opacity-100"
-        x-transition:leave-end="opacity-0"
-        @click.away="mobileMenuOpen = false">
-                <div class="fixed inset-0 bg-black/50" @click="mobileMenuOpen = false"></div>
-                <div class="fixed inset-y-0 right-0 w-full max-w-sm bg-white/95 shadow-xl overflow-y-auto"
-             :style="{
-                 backgroundColor: scrolled ? '{{ $primaryColor }}' : 'rgba(255, 255, 255, 0.95)'
-             }">
+        x-transition:leave-end="opacity-0">
+                <!-- Darkened backdrop to clearly separate the drawer from page content -->
+                <div class="fixed inset-0 bg-black/60" style="z-index: 99999 !important;" @click="mobileMenuOpen = false"></div>
+                <!-- Right-side drawer with strong contrast on all sections -->
+                <div class="fixed inset-y-0 right-0 w-full max-w-sm bg-white shadow-2xl border-l border-gray-200 overflow-y-auto" style="z-index: 100000 !important;">
             <div class="flex flex-col h-full">
                 <!-- Mobile Menu Header -->
                 <div class="flex items-center justify-between p-6 border-b border-gray-200">
@@ -482,3 +416,76 @@
         </div>
     </div>
 </header>
+
+<script>
+function navbarData(hasAnnouncement) {
+    return {
+        scrolled: false,
+        mobileMenuOpen: false,
+        hasAnnouncement: hasAnnouncement,
+        announcementHeight: 0,
+        scrollPosition: 0,
+        
+        init() {
+            const header = this.$el;
+            const announcementBar = document.getElementById('announcement-bar');
+            
+            // Watch for mobile menu changes with better body lock
+            this.$watch('mobileMenuOpen', (value) => {
+                if (value) {
+                    // Add class to body for CSS-based locking
+                    document.documentElement.classList.add('menu-open');
+                    document.body.classList.add('menu-open');
+                } else {
+                    // Remove class from body
+                    document.documentElement.classList.remove('menu-open');
+                    document.body.classList.remove('menu-open');
+                }
+            });
+            
+            if (announcementBar && this.hasAnnouncement) {
+                const updateHeight = () => {
+                    const actualHeight = announcementBar.offsetHeight;
+                    this.announcementHeight = actualHeight;
+                    if (!this.scrolled) {
+                        header.style.setProperty('top', actualHeight + 'px', 'important');
+                    }
+                };
+                
+                requestAnimationFrame(() => {
+                    updateHeight();
+                    setTimeout(() => {
+                        const computedTop = window.getComputedStyle(header).top;
+                        const expectedTop = announcementBar.offsetHeight + 'px';
+                        if (computedTop !== expectedTop) {
+                            updateHeight();
+                        }
+                    }, 50);
+                });
+                
+                const resizeObserver = new ResizeObserver(() => {
+                    updateHeight();
+                });
+                resizeObserver.observe(announcementBar);
+                
+                window.addEventListener('scroll', () => {
+                    this.scrolled = window.pageYOffset > 50;
+                    if (this.scrolled) {
+                        header.style.setProperty('top', '0', 'important');
+                    } else {
+                        updateHeight();
+                    }
+                });
+            } else {
+                header.style.setProperty('top', '0', 'important');
+                window.addEventListener('scroll', () => {
+                    this.scrolled = window.pageYOffset > 50;
+                });
+            }
+            
+            // Initial scroll check
+            this.scrolled = window.pageYOffset > 50;
+        }
+    }
+}
+</script>

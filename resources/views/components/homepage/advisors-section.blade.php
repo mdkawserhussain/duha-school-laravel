@@ -3,14 +3,14 @@
     <div class="container mx-auto px-6 lg:px-12">
         <!-- Section Header -->
         <div class="flex flex-col gap-6 text-center mb-14">
-            <p class="text-xs font-semibold uppercase tracking-[0.5em] text-white/50">Leadership</p>
-            <h2 class="text-3xl font-bold md:text-4xl lg:text-5xl text-white">Advisors & Board of Governors</h2>
+            <p class="text-xs font-semibold uppercase tracking-[0.5em] text-aisd-gold/70">Advisory Council</p>
+            <h2 class="text-3xl font-bold md:text-4xl lg:text-5xl text-white">Advisors</h2>
             <p class="mx-auto max-w-3xl text-white/70 leading-relaxed">Distinguished scholars, Cambridge examiners, and community leaders steward our Islamic ethos and academic rigor.</p>
         </div>
 
         @php
             $members = \App\Helpers\SiteSettingsHelper::advisors();
-            
+
             // Fallback to hardcoded data if no advisors are configured
             if (empty($members)) {
                 $members = [
@@ -53,7 +53,7 @@
         <!-- Advisors Grid -->
         <div class="grid gap-8 md:grid-cols-2 xl:grid-cols-4">
             @foreach ($members as $member)
-                <div 
+                <div
                     class="group rounded-3xl bg-white/5 border border-white/10 p-6 text-center shadow-card backdrop-blur-xl transition-all hover:bg-white/10 hover:shadow-soft hover:-translate-y-1"
                     x-data="{ expanded: false }"
                 >
@@ -78,24 +78,24 @@
                     </p>
 
                     <!-- Bio -->
-                    <p 
+                    <p
                         class="mt-4 text-sm text-white/70 leading-relaxed"
                         x-show="!expanded"
                         x-transition
                     >
                         {{ \Illuminate\Support\Str::limit($member['description'], 100) }}
                     </p>
-                    
-                    <p 
+
+                    <p
                         class="mt-4 text-sm text-white/70 leading-relaxed"
                         x-show="expanded"
                         x-transition
                     >
                         {{ $member['description'] }}
                     </p>
-                    
+
                     @if(strlen($member['description']) > 100)
-                        <button 
+                        <button
                             @click="expanded = !expanded"
                             class="mt-2 text-sm font-semibold text-aisd-gold"
                         >
@@ -119,7 +119,7 @@
                                 </svg>
                             </a>
                         @endif
-                        
+
                         @if(!empty($member['email']))
                             <a
                                 href="mailto:{{ $member['email'] }}"
