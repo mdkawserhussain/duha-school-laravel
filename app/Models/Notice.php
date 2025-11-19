@@ -10,15 +10,45 @@ class Notice extends Model
 {
     use HasFactory, Searchable;
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($notice) {
+            if (empty($notice->slug) && !empty($notice->title)) {
+                $notice->slug = static::generateUniqueSlug($notice->title);
+            }
+        });
+
+        static::updating(function ($notice) {
+            // Only regenerate slug if title changed and slug is empty
+            if ($notice->isDirty('title') && empty($notice->slug)) {
+                $notice->slug = static::generateUniqueSlug($notice->title);
+            }
+        });
+    }
+
+    protected static function generateUniqueSlug(string $title): string
+    {
+        $slug = \Illuminate\Support\Str::slug($title);
+        $originalSlug = $slug;
+        $counter = 1;
+
+        while (static::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $counter;
+            $counter++;
+        }
+
+        return $slug;
+    }
+
     protected $fillable = [
         'title',
         'slug',
         'excerpt',
         'content',
         'category',
-        'is_featured',
         'is_important',
-        'status',
         'is_published',
         'published_at',
     ];

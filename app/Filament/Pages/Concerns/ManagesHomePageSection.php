@@ -200,19 +200,9 @@ trait ManagesHomePageSection
             ]);
         }
         
-        // Check if data actually changed before saving
-        $originalData = $section->data ?? [];
-        $dataChanged = json_encode($originalData) !== json_encode($sectionData) ||
-                       $section->title !== ($data['title'] ?? $section->title) ||
-                       $section->subtitle !== ($data['subtitle'] ?? $section->subtitle) ||
-                       $section->description !== ($data['description'] ?? $section->description) ||
-                       $section->content !== ($data['content'] ?? $section->content) ||
-                       $section->button_text !== ($data['button_text'] ?? $section->button_text) ||
-                       $section->button_link !== ($data['button_link'] ?? $section->button_link) ||
-                       $section->is_active !== ($data['is_active'] ?? $section->is_active) ||
-                       $section->sort_order !== ($data['sort_order'] ?? $section->sort_order);
-        
+        // Always save the data - don't check for changes as JSON comparison can be unreliable
         $section->data = $sectionData;
+        $dataChanged = true; // Force save to ensure data is updated
         
         // Always set required fields explicitly before saving
         $section->section_key = $this->getSectionKey();
@@ -367,10 +357,11 @@ trait ManagesHomePageSection
 
     protected function clearCache(): void
     {
+        // Only clear specific cache keys - much faster than Artisan commands
         Cache::forget('homepage_v2_data');
-        Artisan::call('view:clear');
-        Artisan::call('config:clear');
-        Artisan::call('route:clear');
+        
+        // Don't clear view/config/route cache - they're not needed for content updates
+        // and they cause 10+ second delays on Windows
     }
 }
 

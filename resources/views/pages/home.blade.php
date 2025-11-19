@@ -26,9 +26,6 @@
 <!-- Upcoming Events -->
 @include('components.homepage.news-events-section')
 
-<!-- Vision & Mission -->
-@include('components.homepage.vision-section')
-
 <!-- Parallax Experience -->
 @include('components.homepage.parallax-section')
 
@@ -37,6 +34,9 @@
 
 <!-- Advisors & Board -->
 @include('components.homepage.advisors-section')
+
+<!-- Vision & Mission -->
+@include('components.homepage.vision-section')
 
 <!-- Board Members -->
 @include('components.homepage.board-members-section')

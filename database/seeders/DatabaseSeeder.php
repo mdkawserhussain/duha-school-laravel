@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             AnnouncementSeeder::class,
             HomePageSectionSeeder::class,
+            VisionMissionSectionSeeder::class, // Added Vision & Mission seeder
             PageSeeder::class,
             EventSeeder::class,
             NoticeSeeder::class,

@@ -36,40 +36,14 @@ class NoticeResource extends Resource
                         FormComponents\TextInput::make('title')
                             ->required()
                             ->maxLength(255)
-                            ->live(onBlur: true)
-                            ->afterStateUpdated(function (string $state, $set) {
-                                if (!empty($state)) {
-                                    $set('slug', str($state)->slug()->lower());
-                                }
-                            }),
+                            ->columnSpanFull(),
 
-                        FormComponents\TextInput::make('slug')
+                        FormComponents\Textarea::make('excerpt')
                             ->required()
-                            ->unique(ignoreRecord: true)
-                            ->maxLength(255)
-                            ->live(onBlur: true)
-                            ->afterStateUpdated(function ($state, $set) {
-                                if (!empty($state) && is_string($state)) {
-                                    $slug = str(trim($state))->slug()->lower()->toString();
-                                    $set('slug', $slug);
-                                }
-                            })
-                            ->dehydrateStateUsing(function ($state) {
-                                if (empty($state)) {
-                                    return '';
-                                }
-                                if (!is_string($state)) {
-                                    return (string) $state;
-                                }
-                                return str(trim($state))->slug()->lower()->toString();
-                            })
-                            ->rules([
-                                'required',
-                                'string',
-                                'max:255',
-                                'regex:/^[a-z0-9_-]+$/',
-                            ])
-                            ->helperText('Only lowercase letters, numbers, dashes, and underscores are allowed'),
+                            ->maxLength(500)
+                            ->rows(3)
+                            ->helperText('Brief summary of the notice (max 500 characters)')
+                            ->columnSpanFull(),
 
                         FormComponents\RichEditor::make('content')
                             ->required()
@@ -94,9 +68,10 @@ class NoticeResource extends Resource
                             ->maxLength(100)
                             ->placeholder('e.g., Academic, Administrative, Events, General'),
 
-                        FormComponents\Toggle::make('is_featured')
+                        FormComponents\Toggle::make('is_important')
                             ->label('Important Notice')
-                            ->helperText('Important notices appear prominently and get special styling'),
+                            ->helperText('Important notices appear prominently and get special styling')
+                            ->default(false),
 
                         FormComponents\DateTimePicker::make('published_at')
                             ->label('Publish At')
@@ -107,12 +82,10 @@ class NoticeResource extends Resource
 
                 Components\Section::make('Publishing')
                     ->schema([
-                        FormComponents\Select::make('status')
-                            ->options([
-                                'draft' => 'Draft',
-                                'published' => 'Published',
-                            ])
-                            ->default('published')
+                        FormComponents\Toggle::make('is_published')
+                            ->label('Published')
+                            ->helperText('Toggle to publish or unpublish this notice')
+                            ->default(true)
                             ->required(),
                     ]),
             ]);
@@ -141,19 +114,19 @@ class NoticeResource extends Resource
                         default => 'gray',
                     }),
 
-                Tables\Columns\IconColumn::make('is_featured')
+                Tables\Columns\IconColumn::make('is_important')
                     ->boolean()
                     ->label('Important')
                     ->trueIcon('heroicon-o-exclamation-triangle')
                     ->falseIcon('heroicon-o-minus'),
 
-                Tables\Columns\TextColumn::make('status')
-                    ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'draft' => 'secondary',
-                        'published' => 'success',
-                        default => 'gray',
-                    }),
+                Tables\Columns\IconColumn::make('is_published')
+                    ->boolean()
+                    ->label('Published')
+                    ->trueIcon('heroicon-o-check-circle')
+                    ->falseIcon('heroicon-o-x-circle')
+                    ->trueColor('success')
+                    ->falseColor('danger'),
 
                 Tables\Columns\TextColumn::make('published_at')
                     ->dateTime()
@@ -166,11 +139,9 @@ class NoticeResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('status')
-                    ->options([
-                        'draft' => 'Draft',
-                        'published' => 'Published',
-                    ]),
+                Tables\Filters\Filter::make('is_published')
+                    ->label('Published Only')
+                    ->query(fn (Builder $query): Builder => $query->where('is_published', true)),
 
                 Tables\Filters\SelectFilter::make('category')
                     ->options([
@@ -180,9 +151,9 @@ class NoticeResource extends Resource
                         'General' => 'General',
                     ]),
 
-                Tables\Filters\Filter::make('is_featured')
+                Tables\Filters\Filter::make('is_important')
                     ->label('Important Notices')
-                    ->query(fn (Builder $query): Builder => $query->where('is_featured', true)),
+                    ->query(fn (Builder $query): Builder => $query->where('is_important', true)),
             ])
             ->actions([
                 Actions\ViewAction::make(),
