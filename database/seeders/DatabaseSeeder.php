@@ -15,13 +15,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Seed in order: settings, roles, then content
+        // Seed in order: settings, roles, navigation, then content
         $this->call([
             SiteSettingsSeeder::class,
             RoleSeeder::class,
+            NavigationSeeder::class, // Navigation items for menu structure
             AnnouncementSeeder::class,
             HomePageSectionSeeder::class,
-            PageSeeder::class,
+            PagesSeeder::class, // Updated to use PagesSeeder (new comprehensive page structure)
             EventSeeder::class,
             NoticeSeeder::class,
             StaffSeeder::class,

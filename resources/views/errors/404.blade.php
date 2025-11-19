@@ -55,7 +55,7 @@
                     </div>
                     <h3 class="text-xl font-bold text-gray-900 mb-2">About Us</h3>
                     <p class="text-gray-600 mb-4">Learn about our mission, vision, and values</p>
-                    <a href="{{ route('about.show', 'principal') }}" class="text-blue-600 hover:text-blue-800 font-medium transition duration-300">
+                    <a href="{{ route('about.index') }}" class="text-blue-600 hover:text-blue-800 font-medium transition duration-300">
                         Learn More →
                     </a>
                 </div>
@@ -69,7 +69,7 @@
                     </div>
                     <h3 class="text-xl font-bold text-gray-900 mb-2">Academics</h3>
                     <p class="text-gray-600 mb-4">Discover our curriculum and programs</p>
-                    <a href="{{ route('academic.show', 'curriculum') }}" class="text-green-600 hover:text-green-800 font-medium transition duration-300">
+                    <a href="{{ route('academics.index') }}" class="text-green-600 hover:text-green-800 font-medium transition duration-300">
                         Learn More →
                     </a>
                 </div>

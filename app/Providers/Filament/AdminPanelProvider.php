@@ -66,7 +66,9 @@ class AdminPanelProvider extends PanelProvider
             ->navigationGroups([
                 'Dashboard',
                 'Content',    // Pages, Events, Notices
+                'Pages',      // Page management
                 'Site Settings',
+                'Settings',   // Navigation items
                 'People',      // Staff, Users
                 'Applications',
             ])

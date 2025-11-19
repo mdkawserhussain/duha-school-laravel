@@ -38,14 +38,34 @@ class HomeController extends Controller
             $sectionsByKey = $sections->keyBy('section_key');
             $heroSlides = $sections->where('section_type', 'hero')->values();
 
+            // Fetch events dynamically from EventService
+            // This ensures we get the latest events from the database
+            // The EventService handles its own caching, but we want fresh data here
+            // when the homepage cache is regenerated
+            $upcomingEvents = $this->eventService->getUpcomingEvents(3);
+            
+            // Ensure events have media relationships loaded
+            if ($upcomingEvents->isNotEmpty() && !$upcomingEvents->first()->relationLoaded('media')) {
+                $upcomingEvents->load('media');
+            }
+
+            // Fetch important notices for the news-events-section component
+            $importantNotices = $this->noticeService->getImportantNotices(3);
+            
+            // Ensure important notices have media relationships loaded
+            if ($importantNotices->isNotEmpty() && !$importantNotices->first()->relationLoaded('media')) {
+                $importantNotices->load('media');
+            }
+
             return [
                 'hero' => $this->mapHeroBlock($heroSlides, $sectionsByKey),
                 'featurePanels' => $this->mapFeaturePanels($sectionsByKey),
                 'statHighlights' => $this->mapStatHighlights($sectionsByKey),
                 'featuredEvents' => $this->eventService->getFeaturedEvents(),
                 'recentNotices' => $this->noticeService->getRecentNotices(),
+                'importantNotices' => $importantNotices, // Important notices for news-events-section
                 'featuredStaff' => $this->staffService->getFeaturedStaff(),
-                'upcomingEvents' => $this->eventService->getUpcomingEvents(3),
+                'upcomingEvents' => $upcomingEvents, // Dynamically fetched events
                 'visionPage' => \App\Models\Page::where('slug', 'vision')->published()->first(),
                 'homePageSections' => $sectionsByKey,
                 'heroSlides' => $heroSlides,

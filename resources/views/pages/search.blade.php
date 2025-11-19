@@ -91,9 +91,34 @@
                     <h2 class="text-2xl font-bold text-gray-900 mb-6">Pages ({{ $results['pages']->count() }})</h2>
                     <div class="space-y-4">
                         @foreach($results['pages'] as $page)
+                        @php
+                            // Generate URL based on page category or use generic route
+                            if ($page->url) {
+                                $pageUrl = $page->url;
+                            } elseif ($page->page_category && $page->parent_id) {
+                                // Child page in a category
+                                $categoryShowRoute = \App\Helpers\PageHelper::getCategoryShowRoute($page->page_category);
+                                try {
+                                    $pageUrl = $categoryShowRoute ? route($categoryShowRoute, $page->slug) : route('pages.show', $page->slug);
+                                } catch (\Exception $e) {
+                                    $pageUrl = route('pages.show', $page->slug);
+                                }
+                            } elseif ($page->page_category && !$page->parent_id) {
+                                // Category landing page
+                                $categoryIndexRoute = \App\Helpers\PageHelper::getCategoryIndexRoute($page->page_category);
+                                try {
+                                    $pageUrl = $categoryIndexRoute ? route($categoryIndexRoute) : route('pages.show', $page->slug);
+                                } catch (\Exception $e) {
+                                    $pageUrl = route('pages.show', $page->slug);
+                                }
+                            } else {
+                                // Generic page
+                                $pageUrl = route('pages.show', $page->slug);
+                            }
+                        @endphp
                         <div class="bg-gray-50 rounded-lg p-6 hover:shadow-md transition duration-300">
                             <h3 class="text-xl font-bold text-gray-900 mb-2">
-                                <a href="{{ route('about.show', $page->slug) }}" class="hover:text-blue-600 transition duration-300">
+                                <a href="{{ $pageUrl }}" class="hover:text-blue-600 transition duration-300">
                                     {{ $page->title }}
                                 </a>
                             </h3>

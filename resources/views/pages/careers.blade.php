@@ -8,26 +8,30 @@
 
 @section('content')
 
-    <!-- Page Header -->
-    <section class="bg-gradient-to-r from-green-600 to-green-800 text-white py-8 sm:py-12 md:py-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-4 sm:mb-6">Join Our Team</h1>
-                <p class="text-base sm:text-lg md:text-xl lg:text-2xl mb-6 sm:mb-8 max-w-3xl mx-auto px-4">
-                    Be part of our mission to provide quality Islamic and Cambridge curriculum education
-                </p>
-                <a href="#career-form" class="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-3 px-6 sm:px-8 rounded-lg transition duration-300 min-h-[44px] inline-flex items-center justify-center">
-                    Apply Now
-                </a>
-            </div>
+    <!-- Page Hero Section -->
+    <x-page-hero 
+        title="Join Our Team"
+        subtitle="Be part of our mission to provide quality Islamic and Cambridge curriculum education"
+        badge="Career Opportunities"
+    />
+
+    <!-- CTA Button Section -->
+    <section class="py-6 sm:py-8 bg-white border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <a href="#career-form" class="inline-flex items-center justify-center rounded-xl border-2 border-aisd-gold bg-aisd-gold px-8 py-4 text-base font-semibold text-aisd-midnight transition-all hover:bg-aisd-gold/90 hover:border-aisd-gold/90 min-h-[44px] shadow-modern">
+                Apply Now
+                <svg class="ml-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+            </a>
         </div>
     </section>
 
     <!-- Why Work With Us -->
-    <section class="py-8 sm:py-12 md:py-16 bg-white">
+    <section class="py-12 sm:py-16 md:py-20 lg:py-24 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-8 sm:mb-12">
-                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">Why Work at {{ $siteName }}?</h2>
+            <div class="text-center mb-12 sm:mb-16">
+                <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-aisd-midnight mb-4 sm:mb-6" style="font-family: 'Playfair Display', serif;">Why Work at {{ $siteName }}?</h2>
                 <p class="text-base sm:text-lg text-gray-600 px-4">A rewarding career in Islamic education</p>
             </div>
 

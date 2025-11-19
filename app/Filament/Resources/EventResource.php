@@ -37,9 +37,14 @@ class EventResource extends Resource
                             ->required()
                             ->maxLength(255)
                             ->live(onBlur: true)
-                            ->afterStateUpdated(function (string $state, $set) {
-                                if (!empty($state)) {
-                                    $set('slug', str($state)->slug()->lower());
+                            ->afterStateUpdated(function (string $state, $set, $get) {
+                                if (!empty(trim($state))) {
+                                    $slug = str(trim($state))->slug()->lower()->toString();
+                                    // Ensure slug is not empty (handle edge case of only special characters)
+                                    if (empty($slug)) {
+                                        $slug = 'event-' . time();
+                                    }
+                                    $set('slug', $slug);
                                 }
                             }),
 
@@ -48,20 +53,45 @@ class EventResource extends Resource
                             ->unique(ignoreRecord: true)
                             ->maxLength(255)
                             ->live(onBlur: true)
-                            ->afterStateUpdated(function ($state, $set) {
-                                if (!empty($state) && is_string($state)) {
-                                    $slug = str(trim($state))->slug()->lower()->toString();
+                            ->afterStateUpdated(function ($state, $set, $get) {
+                                if (!empty($state)) {
+                                    // Handle both string and Stringable objects
+                                    $slugValue = is_string($state) ? $state : (string) $state;
+                                    $slug = str(trim($slugValue))->slug()->lower()->toString();
+                                    // Ensure slug is not empty
+                                    if (empty($slug)) {
+                                        // Fallback: use title if available, otherwise generate timestamp-based slug
+                                        $title = $get('title');
+                                        if (!empty($title)) {
+                                            $slug = str(trim($title))->slug()->lower()->toString();
+                                        }
+                                        if (empty($slug)) {
+                                            $slug = 'event-' . time();
+                                        }
+                                    }
                                     $set('slug', $slug);
                                 }
                             })
                             ->dehydrateStateUsing(function ($state) {
+                                // Always ensure we return a valid string slug
                                 if (empty($state)) {
                                     return '';
                                 }
+                                
+                                // Convert Stringable to string if needed
                                 if (!is_string($state)) {
-                                    return (string) $state;
+                                    $state = (string) $state;
                                 }
-                                return str(trim($state))->slug()->lower()->toString();
+                                
+                                // Normalize the slug
+                                $slug = str(trim($state))->slug()->lower()->toString();
+                                
+                                // Ensure slug is not empty
+                                if (empty($slug)) {
+                                    return 'event-' . time();
+                                }
+                                
+                                return $slug;
                             })
                             ->rules([
                                 'required',
@@ -70,6 +100,13 @@ class EventResource extends Resource
                                 'regex:/^[a-z0-9_-]+$/',
                             ])
                             ->helperText('Only lowercase letters, numbers, dashes, and underscores are allowed'),
+
+                        FormComponents\Textarea::make('excerpt')
+                            ->label('Excerpt')
+                            ->helperText('Brief summary of the event (shown in listings)')
+                            ->maxLength(500)
+                            ->rows(3)
+                            ->columnSpanFull(),
 
                         FormComponents\RichEditor::make('content')
                             ->required()

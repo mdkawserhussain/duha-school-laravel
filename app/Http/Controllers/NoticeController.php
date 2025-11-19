@@ -16,23 +16,53 @@ class NoticeController extends Controller
 
     public function index(Request $request)
     {
-        $category = $request->get('category');
-        
-        $notices = $category 
-            ? $this->noticeService->getNoticesByCategory($category)
-            : $this->noticeService->getPublishedNotices();
+        try {
+            $category = $request->get('category');
+            
+            // Service handles caching internally
+            $notices = $category 
+                ? $this->noticeService->getNoticesByCategory($category)
+                : $this->noticeService->getPublishedNotices();
 
-        return view('pages.notices.index', compact('notices', 'category'));
+            $data = [
+                'notices' => $notices,
+                'category' => $category,
+            ];
+
+            return response()
+                ->view('pages.notices.index', $data)
+                ->header('Cache-Control', 'public, max-age=1800');
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Error displaying notices index', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            // Return view with empty notices on error
+            return view('pages.notices.index', [
+                'notices' => new \Illuminate\Pagination\LengthAwarePaginator([], 0, 12),
+                'category' => null,
+            ]);
+        }
     }
 
-    public function show($id)
+    public function show(\App\Models\Notice $notice)
     {
-        $notice = $this->noticeService->findPublishedNotice($id);
+        try {
+            // Ensure notice is published
+            if (!$notice->is_published || ($notice->published_at && $notice->published_at->isFuture())) {
+                abort(404);
+            }
 
-        if (!$notice) {
-            abort(404);
+            return view('pages.notices.show', compact('notice'));
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Error displaying notice', [
+                'error' => $e->getMessage(),
+                'notice_id' => $notice->id ?? null,
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            abort(500, 'An error occurred while loading the notice. Please try again later.');
         }
-
-        return view('pages.notices.show', compact('notice'));
     }
 }

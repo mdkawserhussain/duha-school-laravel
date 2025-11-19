@@ -64,17 +64,18 @@ class GenerateSitemap extends Command
 
         // Dynamic pages
         Page::published()->get()->each(function ($page) use ($sitemap) {
-            $url = match($page->slug) {
-                'principal', 'vision' => route('about.show', $page->slug),
-                'curriculum', 'policies' => route('academic.show', $page->slug),
-                default => null,
-            };
-
-            if ($url) {
-                $sitemap->add(Url::create($url)
-                    ->setPriority(0.8)
-                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
-                    ->setLastModificationDate($page->updated_at));
+            // Use the page's url attribute which handles route mapping correctly
+            try {
+                $url = $page->url;
+                if ($url) {
+                    $sitemap->add(Url::create($url)
+                        ->setPriority(0.8)
+                        ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
+                        ->setLastModificationDate($page->updated_at));
+                }
+            } catch (\Exception $e) {
+                // Skip if URL generation fails
+                return;
             }
         });
 

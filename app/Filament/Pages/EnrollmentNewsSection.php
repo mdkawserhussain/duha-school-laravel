@@ -22,6 +22,11 @@ class EnrollmentNewsSection extends Page implements HasForms
 
     protected static ?int $navigationSort = 3;
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false; // Hidden - Not used in homepage template
+    }
+
     protected string $view = 'filament.pages.enrollment-news-section';
 
     protected function getSectionKey(): string

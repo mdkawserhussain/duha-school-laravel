@@ -21,7 +21,7 @@
                 </span>
                 @endif
 
-                @if($notice->is_featured)
+                @if($notice->is_important)
                 <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800 mb-4 ml-2">
                     <svg class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
@@ -48,9 +48,18 @@
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
                 <!-- Main Content -->
                 <div class="lg:col-span-2">
-                    @if($notice->featured_image)
+                    @if($notice->hasMedia('featured_image'))
                     <div class="mb-8">
-                        <img src="{{ $notice->featured_image }}" alt="{{ $notice->title }}" class="w-full h-64 md:h-80 object-cover rounded-lg shadow-lg" loading="lazy">
+                        @php
+                            $featuredImage = $notice->getWebPMediaUrl('featured_image', 'large');
+                            $originalImage = $notice->getFirstMediaUrl('featured_image');
+                        @endphp
+                        <picture>
+                            @if($featuredImage)
+                                <source srcset="{{ $featuredImage }}" type="image/webp">
+                            @endif
+                            <img src="{{ $originalImage }}" alt="{{ $notice->title }}" class="w-full h-64 md:h-80 object-cover rounded-lg shadow-lg" loading="lazy">
+                        </picture>
                     </div>
                     @endif
 
@@ -81,7 +90,7 @@
                             :url="route('notices.show', $notice->slug)"
                             :title="$notice->title"
                             :description="Str::limit(strip_tags($notice->content), 160)"
-                            :image="$notice->getFirstMediaUrl('featured_image')"
+                            :image="$notice->hasMedia('featured_image') ? $notice->getFirstMediaUrl('featured_image') : null"
                         />
                     </div>
 
@@ -106,7 +115,7 @@
                             <div>
                                 <dt class="text-sm font-medium text-gray-500">Priority</dt>
                                 <dd class="text-sm text-gray-900 mt-1">
-                                    @if($notice->is_featured)
+                                    @if($notice->is_important)
                                         <span class="text-red-600 font-medium">High Priority</span>
                                     @else
                                         <span class="text-gray-600">Normal</span>
