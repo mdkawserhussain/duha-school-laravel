@@ -511,6 +511,34 @@ a:hover {
 /* Z-index utilities */
 .z-50 { z-index: 50; }
 
+/* Mobile nav overlay and drawer (fallback) */
+.mobile-nav-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: auto;
+}
+
+.mobile-nav-backdrop {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(15, 23, 42, 0.7);
+}
+
+.mobile-nav-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    max-width: 100vw;
+    background-color: #ffffff;
+    box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.75);
+    z-index: 10000;
+    overflow-y: auto;
+}
+
 /* Additional responsive utilities */
 @media (min-width: 640px) {
     .sm\\:px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }

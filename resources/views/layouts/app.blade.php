@@ -25,7 +25,7 @@
             $googleAnalyticsId = \App\Helpers\SiteSettingsHelper::googleAnalyticsId();
         @endphp
         <title>@yield('title', $metaTitle ?? $siteName)</title>
-        
+
         @hasSection('meta-description')
             <meta name="description" content="@yield('meta-description')">
         @elseif($metaDescription)
@@ -148,7 +148,7 @@
         <noscript>
             @vite('resources/css/fallback.css')
         </noscript>
-        
+
     </head>
     <body class="font-sans antialiased">
         @if(config('services.google_tag_manager.id'))
@@ -160,15 +160,17 @@
 
         <div style="margin: 0 !important; padding: 0 !important; min-height: 0;">
             <x-navbar :transparent="request()->routeIs('home')" />
+        </div>
 
+        <div style="margin: 0 !important; padding: 0 !important; min-height: 0;">
             <!-- Page Content -->
-            <main id="main-content" style="margin: 0 !important; padding: 0 !important; min-height: 0;">
+            <main id="main-content" class="pt-16 lg:pt-20" style="margin: 0 !important; min-height: 0;">
                 @yield('content')
             </main>
 
             <x-footer />
         </div>
-        
+
         <!-- Simple Vanilla JS Lightbox -->
         <div id="lightbox-overlay" class="lightbox-overlay" style="display: none;">
             <div class="lightbox-container">
@@ -177,7 +179,7 @@
                 <div id="lightbox-counter" class="lightbox-counter"></div>
             </div>
         </div>
-        
+
         <script>
             // Simple Vanilla JS Lightbox Implementation
             document.addEventListener('DOMContentLoaded', function() {
@@ -185,26 +187,26 @@
                 const image = document.getElementById('lightbox-image');
                 const closeBtn = document.getElementById('lightbox-close');
                 const counter = document.getElementById('lightbox-counter');
-                
+
                 let currentImages = [];
                 let currentIndex = 0;
-                
+
                 // Find all lightbox links
                 const lightboxLinks = document.querySelectorAll('a[data-lightbox]');
-                
+
                 lightboxLinks.forEach((link, index) => {
                     link.addEventListener('click', function(e) {
                         e.preventDefault();
-                        
+
                         // Get all images in the same gallery
                         const gallery = this.getAttribute('data-lightbox');
                         currentImages = Array.from(document.querySelectorAll(`a[data-lightbox="${gallery}"]`));
                         currentIndex = currentImages.indexOf(this);
-                        
+
                         showLightbox(this.href, this.getAttribute('data-title') || '');
                     });
                 });
-                
+
                 function showLightbox(src, title) {
                     image.src = src;
                     image.alt = title;
@@ -212,12 +214,12 @@
                     overlay.style.display = 'flex';
                     document.body.style.overflow = 'hidden';
                 }
-                
+
                 function hideLightbox() {
                     overlay.style.display = 'none';
                     document.body.style.overflow = '';
                 }
-                
+
                 function updateCounter() {
                     if (currentImages.length > 1) {
                         counter.textContent = `${currentIndex + 1} of ${currentImages.length}`;
@@ -226,7 +228,7 @@
                         counter.style.display = 'none';
                     }
                 }
-                
+
                 function showNext() {
                     if (currentIndex < currentImages.length - 1) {
                         currentIndex++;
@@ -234,7 +236,7 @@
                         showLightbox(nextLink.href, nextLink.getAttribute('data-title') || '');
                     }
                 }
-                
+
                 function showPrev() {
                     if (currentIndex > 0) {
                         currentIndex--;
@@ -242,7 +244,7 @@
                         showLightbox(prevLink.href, prevLink.getAttribute('data-title') || '');
                     }
                 }
-                
+
                 // Event listeners
                 closeBtn.addEventListener('click', hideLightbox);
                 overlay.addEventListener('click', function(e) {
@@ -250,7 +252,7 @@
                         hideLightbox();
                     }
                 });
-                
+
                 // Keyboard navigation
                 document.addEventListener('keydown', function(e) {
                     if (overlay.style.display === 'flex') {
@@ -269,9 +271,9 @@
                 });
             });
         </script>
-        
+
         @stack('scripts')
-        
+
         <!-- Custom JavaScript -->
         @if($customJs ?? null)
             <script>{!! $customJs !!}</script>

@@ -38,9 +38,12 @@
 <!-- Advisors & Board -->
 @include('components.homepage.advisors-section')
 
+<!-- Board Members -->
+@include('components.homepage.board-members-section')
+
 <!-- Programs Section -->
 @include('components.homepage.programs-section')
 
- 
+
 
 @endsection
