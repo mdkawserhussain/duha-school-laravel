@@ -65,7 +65,6 @@ class AdminPanelProvider extends PanelProvider
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->navigationGroups([
                 'Dashboard',
-<<<<<<< HEAD
                 'Homepage Settings',  // All homepage sections
                 'Content',           // Pages, Events, Notices
                 'Applications',      // Admissions, Careers
