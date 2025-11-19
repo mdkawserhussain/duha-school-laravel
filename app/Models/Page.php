@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 use Laravel\Scout\Searchable;
 use Spatie\MediaLibrary\HasMedia;
@@ -18,20 +20,34 @@ class Page extends Model implements HasMedia
     protected $fillable = [
         'title',
         'slug',
+        'parent_id',
+        'page_category',
+        'menu_title',
+        'menu_order',
+        'show_in_menu',
+        'menu_section',
+        'external_url',
+        'open_in_new_tab',
         'hero_badge',
         'hero_subtitle',
         'content',
+        'excerpt',
         'meta_title',
         'meta_description',
         'seo_keywords',
         'is_published',
+        'is_featured',
         'published_at',
     ];
 
     protected $casts = [
         'seo_keywords' => 'array',
         'is_published' => 'boolean',
+        'is_featured' => 'boolean',
+        'show_in_menu' => 'boolean',
+        'open_in_new_tab' => 'boolean',
         'published_at' => 'datetime',
+        'menu_order' => 'integer',
     ];
 
     protected static function boot()
@@ -151,6 +167,85 @@ class Page extends Model implements HasMedia
     {
         return $query->where('is_published', true)
                     ->where('published_at', '<=', now());
+    }
+
+    public function scopeInMenu($query, string $section = 'main')
+    {
+        return $query->where('show_in_menu', true)
+                    ->where(function ($q) use ($section) {
+                        $q->where('menu_section', $section)
+                          ->orWhere('menu_section', 'both');
+                    });
+    }
+
+    public function scopeByCategory($query, string $category)
+    {
+        return $query->where('page_category', $category);
+    }
+
+    public function scopeFeatured($query)
+    {
+        return $query->where('is_featured', true);
+    }
+
+    public function scopeOrdered($query)
+    {
+        return $query->orderBy('menu_order')->orderBy('title');
+    }
+
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(Page::class, 'parent_id');
+    }
+
+    public function children(): HasMany
+    {
+        return $this->hasMany(Page::class, 'parent_id')->ordered();
+    }
+
+    public function publishedChildren(): HasMany
+    {
+        return $this->children()->published()->inMenu();
+    }
+
+    public function getUrlAttribute(): string
+    {
+        if ($this->external_url) {
+            return $this->external_url;
+        }
+
+        // If page has a parent, it's a child page in a category
+        if ($this->parent_id && $this->parent) {
+            $parentCategory = $this->parent->page_category;
+            if ($parentCategory) {
+                $categoryShowRoute = \App\Helpers\PageHelper::getCategoryShowRoute($parentCategory);
+                if ($categoryShowRoute) {
+                    try {
+                        return route($categoryShowRoute, $this->slug);
+                    } catch (\Illuminate\Routing\Exceptions\RouteNotFoundException $e) {
+                        // Fallback to generic pages.show
+                    }
+                }
+            }
+            // Fallback if parent has no category
+            return route('pages.show', $this->slug);
+        }
+
+        // If page has a category and is a root page, use category.index
+        if ($this->page_category && !$this->parent_id) {
+            $categoryIndexRoute = \App\Helpers\PageHelper::getCategoryIndexRoute($this->page_category);
+            if ($categoryIndexRoute) {
+                try {
+                    return route($categoryIndexRoute);
+                } catch (\Illuminate\Routing\Exceptions\RouteNotFoundException $e) {
+                    // Fallback to generic pages.show
+                }
+            }
+            return route('pages.show', $this->slug);
+        }
+
+        // Fallback to generic pages.show route
+        return route('pages.show', $this->slug);
     }
 
     public function getRouteKeyName()

@@ -159,7 +159,7 @@
         @endif
 
         <div style="margin: 0 !important; padding: 0 !important; min-height: 0;">
-            <x-header />
+            <x-navbar :transparent="request()->routeIs('home')" />
 
             <!-- Page Content -->
             <main id="main-content" style="margin: 0 !important; padding: 0 !important; min-height: 0;">

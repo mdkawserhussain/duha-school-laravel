@@ -110,11 +110,11 @@
                     <div class="text-2xl mb-2">🏠</div>
                     <div class="font-semibold text-gray-900">Home</div>
                 </a>
-                <a href="{{ route('about.show', 'principal') }}" class="text-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition duration-300">
+                <a href="{{ route('about.index') }}" class="text-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition duration-300">
                     <div class="text-2xl mb-2">ℹ️</div>
                     <div class="font-semibold text-gray-900">About</div>
                 </a>
-                <a href="{{ route('academic.show', 'curriculum') }}" class="text-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition duration-300">
+                <a href="{{ route('academics.index') }}" class="text-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition duration-300">
                     <div class="text-2xl mb-2">📚</div>
                     <div class="font-semibold text-gray-900">Academics</div>
                 </a>

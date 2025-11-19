@@ -49,7 +49,7 @@
             <div class="mb-8 sm:mb-0">
                 <h3 class="text-lg sm:text-xl font-bold mb-4 sm:mb-6" style="color: #F4C430;">Quick Links</h3>
                 <ul class="space-y-2 sm:space-y-3">
-                    <li><a href="{{ route('academic.show', 'curriculum') }}" class="transition-colors duration-300 block py-2 min-h-[44px] flex items-center" style="color: rgba(255, 255, 255, 0.95);" onmouseover="this.style.color='#F4C430'" onmouseout="this.style.color='rgba(255, 255, 255, 0.95)'">Academics</a></li>
+                    <li><a href="{{ route('academics.index') }}" class="transition-colors duration-300 block py-2 min-h-[44px] flex items-center" style="color: rgba(255, 255, 255, 0.95);" onmouseover="this.style.color='#F4C430'" onmouseout="this.style.color='rgba(255, 255, 255, 0.95)'">Academics</a></li>
                     <li><a href="{{ route('admission.index') }}" class="transition-colors duration-300 block py-2 min-h-[44px] flex items-center" style="color: rgba(255, 255, 255, 0.95);" onmouseover="this.style.color='#F4C430'" onmouseout="this.style.color='rgba(255, 255, 255, 0.95)'">Admission</a></li>
                     <li><a href="{{ route('events.index') }}" class="transition-colors duration-300 block py-2 min-h-[44px] flex items-center" style="color: rgba(255, 255, 255, 0.95);" onmouseover="this.style.color='#F4C430'" onmouseout="this.style.color='rgba(255, 255, 255, 0.95)'">News and Events</a></li>
                     <li><a href="{{ route('careers.index') }}" class="transition-colors duration-300 block py-2 min-h-[44px] flex items-center" style="color: rgba(255, 255, 255, 0.95);" onmouseover="this.style.color='#F4C430'" onmouseout="this.style.color='rgba(255, 255, 255, 0.95)'">Career</a></li>

@@ -77,6 +77,13 @@ class EditPage extends EditRecord
         if (isset($formState['featured_image']) && !empty($formState['featured_image'])) {
             $this->handleMediaUpload($page, $formState['featured_image'], 'featured_image');
         }
+
+        // Cache is cleared by PageObserver
+        
+        Notification::make()
+            ->title('Page updated successfully')
+            ->success()
+            ->send();
     }
 
     protected function handleMediaUpload($page, $filePath, string $collection): void

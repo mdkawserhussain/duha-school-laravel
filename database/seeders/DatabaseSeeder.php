@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             AnnouncementSeeder::class,
             HomePageSectionSeeder::class,
-            PageSeeder::class,
+            PagesSeeder::class, // Updated to use PagesSeeder (new comprehensive page structure)
             EventSeeder::class,
             NoticeSeeder::class,
             StaffSeeder::class,

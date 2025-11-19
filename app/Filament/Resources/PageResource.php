@@ -105,11 +105,42 @@ class PageResource extends Resource
                             ->helperText('Only lowercase letters, numbers, dashes, and underscores are allowed')
                             ->columnSpanFull(),
 
+                        FormComponents\Select::make('parent_id')
+                            ->label('Parent Page')
+                            ->relationship('parent', 'title')
+                            ->searchable()
+                            ->preload()
+                            ->helperText('Select a parent page to create a hierarchical structure')
+                            ->columnSpan(1),
+
+                        FormComponents\Select::make('page_category')
+                            ->label('Page Category')
+                            ->options([
+                                'about-us' => 'About Us',
+                                'academics' => 'Academics',
+                                'facilities' => 'Facilities',
+                                'activities-programs' => 'Activities & Programs',
+                                'admissions' => 'Admissions',
+                                'parent-engagement' => 'Parent Engagement',
+                                'gallery' => 'Gallery',
+                                'contact' => 'Contact',
+                            ])
+                            ->searchable()
+                            ->helperText('Category for grouping related pages')
+                            ->columnSpan(1),
+
+                        FormComponents\Textarea::make('excerpt')
+                            ->label('Excerpt')
+                            ->maxLength(500)
+                            ->rows(3)
+                            ->helperText('Short summary for listing pages and meta descriptions')
+                            ->columnSpanFull(),
+
                         FormComponents\RichEditor::make('content')
                             ->required()
                             ->columnSpanFull(),
                     ])
-                    ->columns(1),
+                    ->columns(2),
 
                 Components\Section::make('Hero Section')
                     ->description('Upload a hero image for the page header. This will be displayed at the top of the page.')
@@ -172,6 +203,46 @@ class PageResource extends Resource
                             ->helperText('Open Graph image URL for social sharing'),
                     ]),
 
+                Components\Section::make('Menu Settings')
+                    ->schema([
+                        FormComponents\TextInput::make('menu_title')
+                            ->label('Menu Title')
+                            ->maxLength(255)
+                            ->helperText('Override page title in navigation menu'),
+
+                        FormComponents\Toggle::make('show_in_menu')
+                            ->label('Show in Menu')
+                            ->default(true)
+                            ->helperText('Display this page in navigation menu'),
+
+                        FormComponents\Select::make('menu_section')
+                            ->label('Menu Section')
+                            ->options([
+                                'main' => 'Main Navigation',
+                                'footer' => 'Footer',
+                                'both' => 'Both',
+                            ])
+                            ->default('main')
+                            ->required(),
+
+                        FormComponents\TextInput::make('menu_order')
+                            ->label('Menu Order')
+                            ->numeric()
+                            ->default(0)
+                            ->helperText('Lower numbers appear first'),
+
+                        FormComponents\TextInput::make('external_url')
+                            ->label('External URL')
+                            ->url()
+                            ->helperText('Optional external link (overrides page URL)'),
+
+                        FormComponents\Toggle::make('open_in_new_tab')
+                            ->label('Open in New Tab')
+                            ->default(false)
+                            ->helperText('For external URLs'),
+                    ])
+                    ->columns(2),
+
                 Components\Section::make('Publishing')
                     ->schema([
                         FormComponents\Select::make('status')
@@ -186,8 +257,12 @@ class PageResource extends Resource
                             ->label('Publish At')
                             ->default(now())
                             ->required(),
+
+                        FormComponents\Toggle::make('is_featured')
+                            ->label('Featured')
+                            ->helperText('Mark as featured page'),
                     ])
-                    ->columns(2),
+                    ->columns(3),
             ]);
     }
 
@@ -207,13 +282,27 @@ class PageResource extends Resource
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
-                Tables\Columns\TextColumn::make('status')
+                Tables\Columns\TextColumn::make('page_category')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'draft' => 'secondary',
-                        'published' => 'success',
-                        default => 'gray',
-                    }),
+                    ->color('info')
+                    ->toggleable(),
+
+                Tables\Columns\TextColumn::make('parent.title')
+                    ->label('Parent Page')
+                    ->sortable()
+                    ->toggleable(),
+
+                Tables\Columns\IconColumn::make('show_in_menu')
+                    ->boolean()
+                    ->toggleable(),
+
+                Tables\Columns\IconColumn::make('is_published')
+                    ->label('Status')
+                    ->boolean()
+                    ->trueIcon('heroicon-o-check-circle')
+                    ->falseIcon('heroicon-o-x-circle')
+                    ->trueColor('success')
+                    ->falseColor('gray'),
 
                 Tables\Columns\TextColumn::make('published_at')
                     ->dateTime()
@@ -226,10 +315,22 @@ class PageResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('status')
+                Tables\Filters\TernaryFilter::make('is_published')
+                    ->label('Published')
+                    ->placeholder('All')
+                    ->trueLabel('Published only')
+                    ->falseLabel('Draft only'),
+                Tables\Filters\SelectFilter::make('page_category')
+                    ->label('Category')
                     ->options([
-                        'draft' => 'Draft',
-                        'published' => 'Published',
+                        'about-us' => 'About Us',
+                        'academics' => 'Academics',
+                        'facilities' => 'Facilities',
+                        'activities-programs' => 'Activities & Programs',
+                        'admissions' => 'Admissions',
+                        'parent-engagement' => 'Parent Engagement',
+                        'gallery' => 'Gallery',
+                        'contact' => 'Contact',
                     ]),
             ])
             ->actions([

@@ -5,6 +5,35 @@
 
 @section('content')
 
+    @php
+        $breadcrumbs = [
+            ['title' => 'Home', 'url' => route('home')],
+        ];
+        
+        if ($page->parent) {
+            if ($page->parent->parent) {
+                $breadcrumbs[] = ['title' => $page->parent->parent->title, 'url' => $page->parent->parent->url];
+            }
+            $breadcrumbs[] = ['title' => $page->parent->title, 'url' => $page->parent->url];
+        } elseif ($page->page_category) {
+            $categoryTitle = ucfirst(str_replace('-', ' ', $page->page_category));
+            $categoryRoute = \App\Helpers\PageHelper::getCategoryIndexRoute($page->page_category);
+            try {
+                $categoryUrl = $categoryRoute ? route($categoryRoute) : $page->url;
+            } catch (\Exception $e) {
+                $categoryUrl = $page->url;
+            }
+            $breadcrumbs[] = ['title' => $categoryTitle, 'url' => $categoryUrl];
+        }
+        
+        $breadcrumbs[] = ['title' => $page->title, 'url' => $page->url];
+    @endphp
+
+    <!-- Breadcrumbs -->
+    @if(count($breadcrumbs) > 1)
+        <x-breadcrumbs :items="$breadcrumbs" />
+    @endif
+
     <!-- Page Hero Section -->
     @php
         $heroImage = $page->hasMedia('hero_image') 

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\PageResource\Pages;
 
 use App\Filament\Resources\PageResource;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\Storage;
 
@@ -45,6 +46,13 @@ class CreatePage extends CreateRecord
         if (isset($formState['featured_image']) && !empty($formState['featured_image'])) {
             $this->handleMediaUpload($page, $formState['featured_image'], 'featured_image');
         }
+
+        // Cache is cleared by PageObserver
+        
+        Notification::make()
+            ->title('Page created successfully')
+            ->success()
+            ->send();
     }
 
     protected function handleMediaUpload($page, $filePath, string $collection): void

@@ -20,6 +20,17 @@
     } catch (\Throwable $e) {
         $announcements = collect([]);
     }
+    
+    // Get dynamic menu pages from database
+    $menuPages = collect([]);
+    try {
+        if (!app()->bound('exception')) {
+            $pageService = app(\App\Services\PageService::class);
+            $menuPages = $pageService->getRootMenuPages('main');
+        }
+    } catch (\Throwable $e) {
+        $menuPages = collect([]);
+    }
 @endphp
 
 {{-- Static wrapper with x-data - never receives dynamic classes --}}
@@ -106,7 +117,7 @@
     <nav
         class="transition-all duration-300"
         :class="{
-            'bg-white/95 backdrop-blur-md shadow-lg': scrolled || !transparent,
+            'bg-white shadow-md': scrolled || !transparent,
             'bg-transparent': transparent && !scrolled
         }"
         :style="(scrolled || !transparent) ? 'background-color: {{ $primaryColor }}' : ''"
@@ -119,7 +130,8 @@
                 <div class="flex-shrink-0 z-10">
                     <a
                         href="{{ route('home') }}"
-                        class="navbar-logo navbar-focus focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 rounded-lg p-1"
+                        class="navbar-logo navbar-focus focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg p-1"
+                        :class="scrolled || (transparent && !scrolled) ? 'focus:ring-white' : 'focus:ring-gray-900'"
                         aria-label="Go to homepage"
                     >
                         @php
@@ -128,7 +140,7 @@
                         @endphp
                         <img
                             class="h-8 sm:h-10 lg:h-12 w-auto transition-all duration-300"
-                            :class="transparent && !scrolled ? 'brightness-0 invert' : ''"
+                            :class="scrolled || (transparent && !scrolled) ? 'brightness-0 invert' : ''"
                             src="{{ $logoUrl ?? asset('images/logo.svg') }}"
                             alt="{{ $siteName }} Logo"
                             onerror="this.onerror=null; this.src='{{ asset('images/logo.svg') }}'"
@@ -137,156 +149,172 @@
                 </div>
 
                 {{-- Desktop Navigation - Centered --}}
-                <div class="hidden lg:flex items-center space-x-1 flex-1 justify-center min-w-0 px-4">
+                <div class="hidden lg:flex items-center space-x-2 flex-1 justify-center min-w-0 px-6">
                     {{-- Home --}}
                     <a
                         href="{{ route('home') }}"
-                        class="nav-link px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2"
-                        :class="transparent && !scrolled ? 'text-white/90 hover:text-white hover:bg-white/10 focus:ring-white/50' : 'text-gray-700 hover:text-indigo-700 hover:bg-indigo-50 focus:ring-indigo-500'"
-                        :class="transparent && !scrolled && window.location.href.includes('home') ? 'bg-white/10 text-white font-semibold' : (!transparent || scrolled) && window.location.href.includes('home') ? 'bg-indigo-100 text-indigo-700 font-semibold' : ''"
+                        class="nav-link px-4 py-2.5 text-base font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors"
+                        :class="scrolled || (transparent && !scrolled) ? 'text-white hover:bg-white/10 focus:ring-white' : 'text-gray-900 hover:bg-gray-100 focus:ring-gray-900'"
+                        :class="request()->routeIs('home') ? (scrolled || (transparent && !scrolled) ? 'bg-white/20 font-semibold' : 'bg-gray-100 font-semibold') : ''"
                         aria-current="{{ request()->routeIs('home') ? 'page' : null }}"
                     >
                         Home
                     </a>
 
-                    {{-- About Dropdown --}}
-                    <div class="relative" x-data="{ open: false }">
-                        <button
-                            @click="open = !open"
-                            @keydown.escape="open = false"
-                            class="nav-link flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2"
-                            :class="transparent && !scrolled ? 'text-white/90 hover:text-white hover:bg-white/10 focus:ring-white/50' : 'text-gray-700 hover:text-indigo-700 hover:bg-indigo-50 focus:ring-indigo-500'"
-                            :aria-expanded="open"
-                            aria-haspopup="true"
-                        >
-                            About
-                            <svg class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </button>
+                    {{-- Dynamic Menu Pages --}}
+                    @foreach($menuPages as $page)
+                        @php
+                            // Pages are already filtered at repository level (menu_order > 0, has category)
+                            $children = $page->publishedChildren->where('show_in_menu', true)->sortBy('menu_order');
+                            $hasChildren = $children->count() > 0;
+                            
+                            // Generate page URL with proper route mapping
+                            // Priority: external_url > model url attribute > category route > pages.show
+                            if ($page->external_url) {
+                                $pageUrl = $page->external_url;
+                            } elseif ($page->url) {
+                                $pageUrl = $page->url;
+                            } elseif ($page->page_category) {
+                                $categoryRoute = \App\Helpers\PageHelper::getCategoryIndexRoute($page->page_category);
+                                try {
+                                    $pageUrl = $categoryRoute ? route($categoryRoute) : route('pages.show', $page->slug);
+                                } catch (\Exception $e) {
+                                    $pageUrl = route('pages.show', $page->slug);
+                                }
+                            } else {
+                                $pageUrl = route('pages.show', $page->slug);
+                            }
+                            
+                            // Check active state - improved detection
+                            $categoryRoutePrefix = $page->page_category ? \App\Helpers\PageHelper::categoryToRouteName($page->page_category) : null;
+                            $isActive = false;
+                            
+                            if ($categoryRoutePrefix) {
+                                // Check if current route matches category pattern
+                                $isActive = request()->routeIs($categoryRoutePrefix . '.*') || 
+                                           request()->routeIs($categoryRoutePrefix . '.index');
+                            }
+                            
+                            // Also check specific page match
+                            if (!$isActive && request()->routeIs('pages.show') && request()->route('page')) {
+                                $currentPage = request()->route('page');
+                                $isActive = ($currentPage->id === $page->id || 
+                                            $currentPage->slug === $page->slug ||
+                                            ($currentPage->parent_id === $page->id));
+                            }
+                            
+                            // Icon colors for dropdown items
+                            $iconColors = [
+                                'about-us' => ['bg-indigo-100', 'text-indigo-600'],
+                                'academics' => ['bg-green-100', 'text-green-600'],
+                                'facilities' => ['bg-blue-100', 'text-blue-600'],
+                                'activities-programs' => ['bg-purple-100', 'text-purple-600'],
+                                'admissions' => ['bg-orange-100', 'text-orange-600'],
+                                'parent-engagement' => ['bg-pink-100', 'text-pink-600'],
+                            ];
+                            $pageIcon = $iconColors[$page->page_category] ?? ['bg-gray-100', 'text-gray-600'];
+                            
+                            // Link attributes
+                            $linkAttrs = '';
+                            if ($page->external_url && $page->open_in_new_tab) {
+                                $linkAttrs = 'target="_blank" rel="noopener noreferrer"';
+                            }
+                        @endphp
 
-                        <div
-                            x-show="open"
-                            @click.away="open = false"
-                            class="dropdown-menu"
-                            :class="{ 'open': open }"
-                            style="display: none;"
-                        >
-                            <div class="p-2">
-                                <a
-                                    href="{{ route('about.show', 'principal') }}"
-                                    class="dropdown-item"
-                                    @click="open = false"
+                        @if($hasChildren)
+                            {{-- Dropdown Menu Item --}}
+                            <div class="relative" x-data="{ open: false }">
+                                <button
+                                    @click="open = !open"
+                                    @keydown.escape="open = false"
+                                    class="nav-link flex items-center gap-1.5 px-4 py-2.5 text-base font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors"
+                                    :class="scrolled || (transparent && !scrolled) ? 'text-white hover:bg-white/10 focus:ring-white' : 'text-gray-900 hover:bg-gray-100 focus:ring-gray-900'"
+                                    :class="(scrolled || (transparent && !scrolled)) && {{ $isActive ? 'true' : 'false' }} ? 'bg-white/20 font-semibold' : !(scrolled || (transparent && !scrolled)) && {{ $isActive ? 'true' : 'false' }} ? 'bg-gray-100 font-semibold' : ''"
+                                    :aria-expanded="open"
+                                    aria-haspopup="true"
                                 >
-                                    <div class="dropdown-item-icon bg-indigo-100">
-                                        <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <div class="font-medium">Principal's Message</div>
-                                        <div class="text-xs text-gray-500">Meet our leadership</div>
-                                    </div>
-                                </a>
-                                <a
-                                    href="{{ route('about.show', 'vision') }}"
-                                    class="dropdown-item"
-                                    @click="open = false"
+                                    <span>{{ $page->menu_title ?? $page->title }}</span>
+                                    <svg class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+
+                                <div
+                                    x-show="open"
+                                    @click.away="open = false"
+                                    x-transition:enter="transition ease-out duration-100"
+                                    x-transition:enter-start="opacity-0 scale-95"
+                                    x-transition:enter-end="opacity-100 scale-100"
+                                    x-transition:leave="transition ease-in duration-75"
+                                    x-transition:leave-start="opacity-100 scale-100"
+                                    x-transition:leave-end="opacity-0 scale-95"
+                                    class="absolute left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl min-w-[220px] z-50 py-1"
+                                    style="display: none;"
                                 >
-                                    <div class="dropdown-item-icon bg-purple-100">
-                                        <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <div class="font-medium">Vision & Mission</div>
-                                        <div class="text-xs text-gray-500">Our guiding principles</div>
-                                    </div>
-                                </a>
+                                    {{-- Category Landing Page Link --}}
+                                    <a
+                                        href="{{ $pageUrl }}"
+                                        class="block px-4 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-50 transition-colors border-b border-gray-100"
+                                        @click="open = false"
+                                        {!! $linkAttrs !!}
+                                    >
+                                        {{ $page->menu_title ?? $page->title }}
+                                    </a>
+
+                                    {{-- Child Pages --}}
+                                    @foreach($children as $child)
+                                        @php
+                                            // Generate child URL with proper route mapping
+                                            if ($child->url) {
+                                                $childUrl = $child->url;
+                                            } elseif ($page->page_category) {
+                                                $categoryShowRoute = \App\Helpers\PageHelper::getCategoryShowRoute($page->page_category);
+                                                try {
+                                                    $childUrl = $categoryShowRoute ? route($categoryShowRoute, $child->slug) : route('pages.show', $child->slug);
+                                                } catch (\Exception $e) {
+                                                    $childUrl = route('pages.show', $child->slug);
+                                                }
+                                            } else {
+                                                $childUrl = route('pages.show', $child->slug);
+                                            }
+                                        @endphp
+                                        <a
+                                            href="{{ $childUrl }}"
+                                            class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                                            @click="open = false"
+                                            {!! $child->external_url && $child->open_in_new_tab ? 'target="_blank" rel="noopener noreferrer"' : '' !!}
+                                        >
+                                            {{ $child->menu_title ?? $child->title }}
+                                        </a>
+                                    @endforeach
+                                </div>
                             </div>
-                        </div>
-                    </div>
-
-                    {{-- Academics Dropdown --}}
-                    <div class="relative" x-data="{ open: false }">
-                        <button
-                            @click="open = !open"
-                            @keydown.escape="open = false"
-                            class="nav-link flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2"
-                            :class="transparent && !scrolled ? 'text-white/90 hover:text-white hover:bg-white/10 focus:ring-white/50' : 'text-gray-700 hover:text-indigo-700 hover:bg-indigo-50 focus:ring-indigo-500'"
-                            :aria-expanded="open"
-                            aria-haspopup="true"
-                        >
-                            Academics
-                            <svg class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </button>
-
-                        <div
-                            x-show="open"
-                            @click.away="open = false"
-                            class="dropdown-menu"
-                            :class="{ 'open': open }"
-                            style="display: none;"
-                        >
-                            <div class="p-2">
-                                <a
-                                    href="{{ route('academic.show', 'curriculum') }}"
-                                    class="dropdown-item"
-                                    @click="open = false"
-                                >
-                                    <div class="dropdown-item-icon bg-green-100">
-                                        <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <div class="font-medium">Curriculum</div>
-                                        <div class="text-xs text-gray-500">Academic programs</div>
-                                    </div>
-                                </a>
-                                <a
-                                    href="{{ route('academic.show', 'policies') }}"
-                                    class="dropdown-item"
-                                    @click="open = false"
-                                >
-                                    <div class="dropdown-item-icon bg-blue-100">
-                                        <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <div class="font-medium">Policies</div>
-                                        <div class="text-xs text-gray-500">Academic guidelines</div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- Admission --}}
-                    <a
-                        href="{{ route('admission.index') }}"
-                        class="nav-link px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2"
-                        :class="transparent && !scrolled ? 'text-white/90 hover:text-white hover:bg-white/10 focus:ring-white/50' : 'text-gray-700 hover:text-indigo-700 hover:bg-indigo-50 focus:ring-indigo-500'"
-                        :class="transparent && !scrolled && window.location.href.includes('admission') ? 'bg-white/10 text-white font-semibold' : (!transparent || scrolled) && window.location.href.includes('admission') ? 'bg-indigo-100 text-indigo-700 font-semibold' : ''"
-                        aria-current="{{ request()->routeIs('admission.*') ? 'page' : null }}"
-                    >
-                        Admission
-                    </a>
+                        @else
+                            {{-- Simple Link Menu Item --}}
+                            <a
+                                href="{{ $pageUrl }}"
+                                class="nav-link px-4 py-2.5 text-base font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors"
+                                :class="scrolled || (transparent && !scrolled) ? 'text-white hover:bg-white/10 focus:ring-white' : 'text-gray-900 hover:bg-gray-100 focus:ring-gray-900'"
+                                :class="(scrolled || (transparent && !scrolled)) && {{ $isActive ? 'true' : 'false' }} ? 'bg-white/20 font-semibold' : !(scrolled || (transparent && !scrolled)) && {{ $isActive ? 'true' : 'false' }} ? 'bg-gray-100 font-semibold' : ''"
+                                aria-current="{{ $isActive ? 'page' : null }}"
+                                {!! $linkAttrs !!}
+                            >
+                                {{ $page->menu_title ?? $page->title }}
+                            </a>
+                        @endif
+                    @endforeach
 
                     {{-- News & Media Dropdown --}}
                     <div class="relative" x-data="{ open: false }">
                         <button
                             @click="open = !open"
                             @keydown.escape="open = false"
-                            class="nav-link flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2"
-                            :class="transparent && !scrolled ? 'text-white/90 hover:text-white hover:bg-white/10 focus:ring-white/50' : 'text-gray-700 hover:text-indigo-700 hover:bg-indigo-50 focus:ring-indigo-500'"
+                            class="nav-link flex items-center gap-1.5 px-4 py-2.5 text-base font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors"
+                            :class="scrolled || (transparent && !scrolled) ? 'text-white hover:bg-white/10 focus:ring-white' : 'text-gray-900 hover:bg-gray-100 focus:ring-gray-900'"
                             :aria-expanded="open"
                             aria-haspopup="true"
                         >
-                            News & Media
+                            <span>News & Media</span>
                             <svg class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
@@ -295,51 +323,38 @@
                         <div
                             x-show="open"
                             @click.away="open = false"
-                            class="dropdown-menu"
-                            :class="{ 'open': open }"
+                            x-transition:enter="transition ease-out duration-100"
+                            x-transition:enter-start="opacity-0 scale-95"
+                            x-transition:enter-end="opacity-100 scale-100"
+                            x-transition:leave="transition ease-in duration-75"
+                            x-transition:leave-start="opacity-100 scale-100"
+                            x-transition:leave-end="opacity-0 scale-95"
+                            class="absolute left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl min-w-[180px] z-50 py-1"
                             style="display: none;"
                         >
-                            <div class="p-2">
-                                <a
-                                    href="{{ route('events.index') }}"
-                                    class="dropdown-item"
-                                    @click="open = false"
-                                >
-                                    <div class="dropdown-item-icon bg-pink-100">
-                                        <svg class="w-4 h-4 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <div class="font-medium">Events</div>
-                                        <div class="text-xs text-gray-500">School activities</div>
-                                    </div>
-                                </a>
-                                <a
-                                    href="{{ route('notices.index') }}"
-                                    class="dropdown-item"
-                                    @click="open = false"
-                                >
-                                    <div class="dropdown-item-icon bg-yellow-100">
-                                        <svg class="w-4 h-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path>
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <div class="font-medium">Notices</div>
-                                        <div class="text-xs text-gray-500">Important announcements</div>
-                                    </div>
-                                </a>
-                            </div>
+                            <a
+                                href="{{ route('events.index') }}"
+                                class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                                @click="open = false"
+                            >
+                                Events
+                            </a>
+                            <a
+                                href="{{ route('notices.index') }}"
+                                class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                                @click="open = false"
+                            >
+                                Notices
+                            </a>
                         </div>
                     </div>
 
                     {{-- Career --}}
                     <a
                         href="{{ route('careers.index') }}"
-                        class="nav-link px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2"
-                        :class="transparent && !scrolled ? 'text-white/90 hover:text-white hover:bg-white/10 focus:ring-white/50' : 'text-gray-700 hover:text-indigo-700 hover:bg-indigo-50 focus:ring-indigo-500'"
-                        :class="transparent && !scrolled && window.location.href.includes('careers') ? 'bg-white/10 text-white font-semibold' : (!transparent || scrolled) && window.location.href.includes('careers') ? 'bg-indigo-100 text-indigo-700 font-semibold' : ''"
+                        class="nav-link px-4 py-2.5 text-base font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors"
+                        :class="scrolled || (transparent && !scrolled) ? 'text-white hover:bg-white/10 focus:ring-white' : 'text-gray-900 hover:bg-gray-100 focus:ring-gray-900'"
+                        :class="request()->routeIs('careers.*') ? (scrolled || (transparent && !scrolled) ? 'bg-white/20 font-semibold' : 'bg-gray-100 font-semibold') : ''"
                         aria-current="{{ request()->routeIs('careers.*') ? 'page' : null }}"
                     >
                         Career
@@ -348,9 +363,9 @@
                     {{-- Contact --}}
                     <a
                         href="{{ route('contact.index') }}"
-                        class="nav-link px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2"
-                        :class="transparent && !scrolled ? 'text-white/90 hover:text-white hover:bg-white/10 focus:ring-white/50' : 'text-gray-700 hover:text-indigo-700 hover:bg-indigo-50 focus:ring-indigo-500'"
-                        :class="transparent && !scrolled && window.location.href.includes('contact') ? 'bg-white/10 text-white font-semibold' : (!transparent || scrolled) && window.location.href.includes('contact') ? 'bg-indigo-100 text-indigo-700 font-semibold' : ''"
+                        class="nav-link px-4 py-2.5 text-base font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors"
+                        :class="scrolled || (transparent && !scrolled) ? 'text-white hover:bg-white/10 focus:ring-white' : 'text-gray-900 hover:bg-gray-100 focus:ring-gray-900'"
+                        :class="request()->routeIs('contact.*') ? (scrolled || (transparent && !scrolled) ? 'bg-white/20 font-semibold' : 'bg-gray-100 font-semibold') : ''"
                         aria-current="{{ request()->routeIs('contact.*') ? 'page' : null }}"
                     >
                         Contact
@@ -365,8 +380,8 @@
                             @csrf
                             <button
                                 type="submit"
-                                class="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                                :class="transparent && !scrolled ? 'text-white/90 hover:text-white hover:bg-white/10' : 'text-gray-600 hover:text-indigo-600 hover:bg-indigo-50'"
+                                class="px-4 py-2.5 rounded-lg text-base font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2"
+                                :class="scrolled || (transparent && !scrolled) ? 'text-white hover:bg-white/10 focus:ring-white' : 'text-gray-900 hover:bg-gray-100 focus:ring-gray-900'"
                             >
                                 Logout
                             </button>
@@ -378,8 +393,8 @@
                 <div class="lg:hidden flex-shrink-0 ml-auto z-10">
                     <button
                         @click.stop="mobileMenuOpen = !mobileMenuOpen"
-                        class="inline-flex items-center justify-center p-2.5 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 min-w-[44px] min-h-[44px]"
-                        :class="transparent && !scrolled ? 'text-white/90 hover:text-white hover:bg-white/10' : 'text-gray-600 hover:text-indigo-600 hover:bg-indigo-50'"
+                        class="inline-flex items-center justify-center p-2.5 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 min-w-[44px] min-h-[44px]"
+                        :class="scrolled || (transparent && !scrolled) ? 'text-white hover:bg-white/10 focus:ring-white' : 'text-gray-900 hover:bg-gray-100 focus:ring-gray-900'"
                         :aria-expanded="mobileMenuOpen"
                         aria-controls="mobile-menu"
                         aria-label="Toggle mobile menu"
@@ -396,35 +411,37 @@
         </div>
     </nav>
 
-    {{-- Mobile Menu Overlay - Sibling of nav, click-away on backdrop only --}}
+    {{-- Mobile Menu Overlay & Panel --}}
     <div
         x-show="mobileMenuOpen"
         x-cloak
-        @click.away="mobileMenuOpen = false"
         @keydown.escape.window="mobileMenuOpen = false"
-        x-transition:enter="transition ease-out duration-300"
-        x-transition:enter-start="opacity-0"
-        x-transition:enter-end="opacity-100"
-        x-transition:leave="transition ease-in duration-200"
-        x-transition:leave-start="opacity-100"
-        x-transition:leave-end="opacity-0"
-        class="fixed inset-0 z-40 bg-black/50 lg:hidden"
+        class="fixed inset-0 z-40 lg:hidden"
         style="display: none;"
     >
+        {{-- Backdrop Overlay --}}
+        <div 
+            class="fixed inset-0 bg-black/50 transition-opacity duration-300"
+            :class="mobileMenuOpen ? 'opacity-100' : 'opacity-0'"
+            @click="mobileMenuOpen = false"
+        ></div>
+
         {{-- Mobile Menu Panel --}}
         <div
             @click.stop
-            class="fixed inset-y-0 right-0 w-full max-w-sm bg-white shadow-2xl overflow-y-auto z-[60] transform transition-transform duration-300 ease-in-out"
+            class="fixed inset-y-0 right-0 w-full max-w-sm bg-white shadow-2xl overflow-y-auto z-50 transform"
             :class="mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'"
+            style="transition: transform 300ms ease-in-out;"
             :style="scrolled ? 'background-color: {{ $primaryColor }}' : ''"
         >
             <div class="flex flex-col h-full">
                 {{-- Mobile Header --}}
-                <div class="flex items-center justify-between p-4 border-b border-gray-200 bg-white">
-                    <span class="text-lg font-semibold text-gray-900">Menu</span>
+                <div class="flex items-center justify-between p-4 border-b" :class="scrolled ? 'bg-transparent border-white/20' : 'border-gray-200 bg-white'">
+                    <span class="text-lg font-semibold" :class="scrolled ? 'text-white' : 'text-gray-900'">Menu</span>
                     <button
                         @click="mobileMenuOpen = false"
-                        class="p-2.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
+                        class="p-2.5 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
+                        :class="scrolled ? 'text-white/80 hover:text-white hover:bg-white/10 focus:ring-white' : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100 focus:ring-gray-500'"
                         aria-label="Close mobile menu"
                     >
                         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -434,157 +451,225 @@
                 </div>
 
                 {{-- Mobile Menu Content --}}
-                <div class="flex-1 overflow-y-auto py-4 px-4">
+                <div class="flex-1 overflow-y-auto py-4 px-3">
                     <nav class="space-y-1">
                         {{-- Home --}}
                         <a
                             href="{{ route('home') }}"
                             @click="mobileMenuOpen = false"
-                            class="flex items-center gap-3 px-4 py-3.5 rounded-xl text-base font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-all duration-200 min-h-[48px]"
-                            :class="window.location.href.includes('home') ? 'bg-indigo-100 text-indigo-700 font-semibold' : ''"
+                            class="block px-4 py-3 text-base font-medium rounded-lg transition-colors"
+                            :class="scrolled ? 'text-white hover:bg-white/10' : 'text-gray-900 hover:bg-gray-100'"
+                            :class="request()->routeIs('home') ? (scrolled ? 'bg-white/20 font-semibold' : 'bg-gray-100 font-semibold') : ''"
                         >
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-                            </svg>
                             Home
                         </a>
 
-                        {{-- About Section --}}
-                        <div class="space-y-1">
-                            <div class="px-4 py-2 text-sm font-semibold text-gray-500 uppercase tracking-wide">About</div>
-                            <a
-                                href="{{ route('about.show', 'principal') }}"
-                                @click="mobileMenuOpen = false"
-                                class="flex items-center gap-3 px-6 py-3.5 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-xl transition-all duration-200 min-h-[48px]"
-                            >
-                                <div class="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
-                                    <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                                    </svg>
-                                </div>
-                                Principal's Message
-                            </a>
-                            <a
-                                href="{{ route('about.show', 'vision') }}"
-                                @click="mobileMenuOpen = false"
-                                class="flex items-center gap-3 px-6 py-3.5 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-xl transition-all duration-200 min-h-[48px]"
-                            >
-                                <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
-                                    <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                                    </svg>
-                                </div>
-                                Vision & Mission
-                            </a>
-                        </div>
+                        {{-- Dynamic Menu Pages --}}
+                        @foreach($menuPages as $page)
+                            @php
+                                // Pages are already filtered at repository level (menu_order > 0, has category)
+                                $children = $page->publishedChildren->where('show_in_menu', true)->sortBy('menu_order');
+                                $hasChildren = $children->count() > 0;
+                                
+                                // Generate page URL with proper route mapping
+                                // Priority: external_url > model url attribute > category route > pages.show
+                                if ($page->external_url) {
+                                    $pageUrl = $page->external_url;
+                                } elseif ($page->url) {
+                                    $pageUrl = $page->url;
+                                } elseif ($page->page_category) {
+                                    $categoryRoute = \App\Helpers\PageHelper::getCategoryIndexRoute($page->page_category);
+                                    try {
+                                        $pageUrl = $categoryRoute ? route($categoryRoute) : route('pages.show', $page->slug);
+                                    } catch (\Exception $e) {
+                                        $pageUrl = route('pages.show', $page->slug);
+                                    }
+                                } else {
+                                    $pageUrl = route('pages.show', $page->slug);
+                                }
+                                
+                                // Icon colors for menu items
+                                $iconColors = [
+                                    'about-us' => ['bg-indigo-100', 'text-indigo-600'],
+                                    'academics' => ['bg-green-100', 'text-green-600'],
+                                    'facilities' => ['bg-blue-100', 'text-blue-600'],
+                                    'activities-programs' => ['bg-purple-100', 'text-purple-600'],
+                                    'admissions' => ['bg-orange-100', 'text-orange-600'],
+                                    'parent-engagement' => ['bg-pink-100', 'text-pink-600'],
+                                ];
+                                $pageIcon = $iconColors[$page->page_category] ?? ['bg-gray-100', 'text-gray-600'];
+                                
+                                // Link attributes
+                                $linkAttrs = '';
+                                if ($page->external_url && $page->open_in_new_tab) {
+                                    $linkAttrs = 'target="_blank" rel="noopener noreferrer"';
+                                }
+                                
+                                // Check active state for mobile
+                                $isActiveMobile = false;
+                                $categoryRoutePrefix = $page->page_category ? \App\Helpers\PageHelper::categoryToRouteName($page->page_category) : null;
+                                if ($categoryRoutePrefix) {
+                                    $isActiveMobile = request()->routeIs($categoryRoutePrefix . '.*');
+                                }
+                                if (!$isActiveMobile && request()->routeIs('pages.show') && request()->route('page')) {
+                                    $currentPage = request()->route('page');
+                                    $isActiveMobile = ($currentPage->id === $page->id || 
+                                                      $currentPage->slug === $page->slug ||
+                                                      ($currentPage->parent_id === $page->id));
+                                }
+                            @endphp
 
-                        {{-- Academics Section --}}
-                        <div class="space-y-1">
-                            <div class="px-4 py-2 text-sm font-semibold text-gray-500 uppercase tracking-wide">Academics</div>
-                            <a
-                                href="{{ route('academic.show', 'curriculum') }}"
-                                @click="mobileMenuOpen = false"
-                                class="flex items-center gap-3 px-6 py-3.5 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-xl transition-all duration-200 min-h-[48px]"
-                            >
-                                <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                                    <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                                    </svg>
+                            @if($hasChildren)
+                                {{-- Category with Children --}}
+                                <div x-data="{ open: false }" class="space-y-1">
+                                    <button
+                                        @click="open = !open"
+                                        class="flex items-center justify-between w-full px-4 py-3 text-base font-medium rounded-lg transition-colors"
+                                        :class="scrolled ? 'text-white hover:bg-white/10' : 'text-gray-900 hover:bg-gray-100'"
+                                        :class="{{ $isActiveMobile ? 'true' : 'false' }} ? (scrolled ? 'bg-white/20 font-semibold' : 'bg-gray-100 font-semibold') : ''"
+                                    >
+                                        <span>{{ $page->menu_title ?? $page->title }}</span>
+                                        <svg class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </button>
+                                    <div 
+                                        x-show="open"
+                                        x-transition:enter="transition ease-out duration-200"
+                                        x-transition:enter-start="opacity-0 max-h-0"
+                                        x-transition:enter-end="opacity-100 max-h-96"
+                                        x-transition:leave="transition ease-in duration-150"
+                                        x-transition:leave-start="opacity-100 max-h-96"
+                                        x-transition:leave-end="opacity-0 max-h-0"
+                                        class="pl-4 space-y-1 ml-4 overflow-hidden"
+                                        :class="scrolled ? 'border-l-2 border-white/20' : 'border-l-2 border-gray-200'"
+                                    >
+                                        {{-- Category Landing Page Link --}}
+                                        <a
+                                            href="{{ $pageUrl }}"
+                                            @click="mobileMenuOpen = false"
+                                            class="block px-4 py-2.5 text-sm font-medium rounded-lg transition-colors"
+                                            :class="scrolled ? 'text-white hover:bg-white/10 border-b border-white/20' : 'text-gray-800 hover:bg-gray-100 border-b border-gray-100'"
+                                            {!! $linkAttrs !!}
+                                        >
+                                            {{ $page->menu_title ?? $page->title }}
+                                        </a>
+                                        {{-- Child Pages --}}
+                                        @foreach($children as $child)
+                                            @php
+                                                // Generate child URL with proper route mapping
+                                                if ($child->url) {
+                                                    $childUrl = $child->url;
+                                                } elseif ($page->page_category) {
+                                                    $categoryShowRoute = \App\Helpers\PageHelper::getCategoryShowRoute($page->page_category);
+                                                    try {
+                                                        $childUrl = $categoryShowRoute ? route($categoryShowRoute, $child->slug) : route('pages.show', $child->slug);
+                                                    } catch (\Exception $e) {
+                                                        $childUrl = route('pages.show', $child->slug);
+                                                    }
+                                                } else {
+                                                    $childUrl = route('pages.show', $child->slug);
+                                                }
+                                            @endphp
+                                            <a
+                                                href="{{ $childUrl }}"
+                                                @click="mobileMenuOpen = false"
+                                                class="block px-4 py-2.5 text-sm rounded-lg transition-colors"
+                                                :class="scrolled ? 'text-white/90 hover:bg-white/10 hover:text-white' : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'"
+                                                {!! $child->external_url && $child->open_in_new_tab ? 'target="_blank" rel="noopener noreferrer"' : '' !!}
+                                            >
+                                                {{ $child->menu_title ?? $child->title }}
+                                            </a>
+                                        @endforeach
+                                    </div>
                                 </div>
-                                Curriculum
-                            </a>
-                            <a
-                                href="{{ route('academic.show', 'policies') }}"
-                                @click="mobileMenuOpen = false"
-                                class="flex items-center gap-3 px-6 py-3.5 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-xl transition-all duration-200 min-h-[48px]"
-                            >
-                                <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                    </svg>
-                                </div>
-                                Policies
-                            </a>
-                        </div>
-
-                        {{-- Other Links --}}
-                        <a
-                            href="{{ route('admission.index') }}"
-                            @click="mobileMenuOpen = false"
-                            class="flex items-center gap-3 px-4 py-3.5 rounded-xl text-base font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-all duration-200 min-h-[48px]"
-                            :class="window.location.href.includes('admission') ? 'bg-indigo-100 text-indigo-700 font-semibold' : ''"
-                        >
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                            </svg>
-                            Admission
-                        </a>
+                            @else
+                                {{-- Simple Link Menu Item --}}
+                                <a
+                                    href="{{ $pageUrl }}"
+                                    @click="mobileMenuOpen = false"
+                                    class="block px-4 py-3 text-base font-medium rounded-lg transition-colors"
+                                    :class="scrolled ? 'text-white hover:bg-white/10' : 'text-gray-900 hover:bg-gray-100'"
+                                    :class="{{ $isActiveMobile ? 'true' : 'false' }} ? (scrolled ? 'bg-white/20 font-semibold' : 'bg-gray-100 font-semibold') : ''"
+                                    {!! $linkAttrs !!}
+                                >
+                                    {{ $page->menu_title ?? $page->title }}
+                                </a>
+                            @endif
+                        @endforeach
 
                         {{-- News & Media Section --}}
-                        <div class="space-y-1">
-                            <div class="px-4 py-2 text-sm font-semibold text-gray-500 uppercase tracking-wide">News & Media</div>
-                            <a
-                                href="{{ route('events.index') }}"
-                                @click="mobileMenuOpen = false"
-                                class="flex items-center gap-3 px-6 py-3.5 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-xl transition-all duration-200 min-h-[48px]"
+                        <div x-data="{ open: false }" class="space-y-1">
+                            <button
+                                @click="open = !open"
+                                class="flex items-center justify-between w-full px-4 py-3 text-base font-medium rounded-lg transition-colors"
+                                :class="scrolled ? 'text-white hover:bg-white/10' : 'text-gray-900 hover:bg-gray-100'"
                             >
-                                <div class="w-8 h-8 bg-pink-100 rounded-lg flex items-center justify-center">
-                                    <svg class="w-4 h-4 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                    </svg>
-                                </div>
-                                Events
-                            </a>
-                            <a
-                                href="{{ route('notices.index') }}"
-                                @click="mobileMenuOpen = false"
-                                class="flex items-center gap-3 px-6 py-3.5 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-xl transition-all duration-200 min-h-[48px]"
+                                <span>News & Media</span>
+                                <svg class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div 
+                                x-show="open"
+                                x-transition:enter="transition ease-out duration-200"
+                                x-transition:enter-start="opacity-0 max-h-0"
+                                x-transition:enter-end="opacity-100 max-h-96"
+                                x-transition:leave="transition ease-in duration-150"
+                                x-transition:leave-start="opacity-100 max-h-96"
+                                x-transition:leave-end="opacity-0 max-h-0"
+                                class="pl-4 space-y-1 ml-4 overflow-hidden"
+                                :class="scrolled ? 'border-l-2 border-white/20' : 'border-l-2 border-gray-200'"
                             >
-                                <div class="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center">
-                                    <svg class="w-4 h-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path>
-                                    </svg>
-                                </div>
-                                Notices
-                            </a>
+                                <a
+                                    href="{{ route('events.index') }}"
+                                    @click="mobileMenuOpen = false"
+                                    class="block px-4 py-2.5 text-sm rounded-lg transition-colors"
+                                    :class="scrolled ? 'text-white/90 hover:bg-white/10 hover:text-white' : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'"
+                                >
+                                    Events
+                                </a>
+                                <a
+                                    href="{{ route('notices.index') }}"
+                                    @click="mobileMenuOpen = false"
+                                    class="block px-4 py-2.5 text-sm rounded-lg transition-colors"
+                                    :class="scrolled ? 'text-white/90 hover:bg-white/10 hover:text-white' : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'"
+                                >
+                                    Notices
+                                </a>
+                            </div>
                         </div>
 
                         <a
                             href="{{ route('careers.index') }}"
                             @click="mobileMenuOpen = false"
-                            class="flex items-center gap-3 px-4 py-3.5 rounded-xl text-base font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-all duration-200 min-h-[48px]"
-                            :class="window.location.href.includes('careers') ? 'bg-indigo-100 text-indigo-700 font-semibold' : ''"
+                            class="block px-4 py-3 text-base font-medium rounded-lg transition-colors"
+                            :class="scrolled ? 'text-white hover:bg-white/10' : 'text-gray-900 hover:bg-gray-100'"
+                            :class="request()->routeIs('careers.*') ? (scrolled ? 'bg-white/20 font-semibold' : 'bg-gray-100 font-semibold') : ''"
                         >
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                            </svg>
                             Career
                         </a>
 
                         <a
                             href="{{ route('contact.index') }}"
                             @click="mobileMenuOpen = false"
-                            class="flex items-center gap-3 px-4 py-3.5 rounded-xl text-base font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-all duration-200 min-h-[48px]"
-                            :class="window.location.href.includes('contact') ? 'bg-indigo-100 text-indigo-700 font-semibold' : ''"
+                            class="block px-4 py-3 text-base font-medium rounded-lg transition-colors"
+                            :class="scrolled ? 'text-white hover:bg-white/10' : 'text-gray-900 hover:bg-gray-100'"
+                            :class="request()->routeIs('contact.*') ? (scrolled ? 'bg-white/20 font-semibold' : 'bg-gray-100 font-semibold') : ''"
                         >
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                            </svg>
                             Contact
                         </a>
 
                         {{-- Mobile Logout (only for logged-in users) --}}
                         @auth
-                            <div class="px-4 py-3 border-t border-gray-200 mt-auto">
+                            <div class="px-2 py-3 mt-auto" :class="scrolled ? 'border-t border-white/20' : 'border-t border-gray-200'">
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
                                     <button
                                         type="submit"
-                                        class="flex items-center gap-3 px-4 py-3.5 rounded-xl text-base font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-all duration-200 w-full text-left min-h-[48px]"
+                                        class="block w-full text-left px-4 py-3 text-base font-medium rounded-lg transition-colors"
+                                        :class="scrolled ? 'text-white hover:bg-white/10' : 'text-gray-900 hover:bg-gray-100'"
                                     >
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-                                        </svg>
                                         Logout
                                     </button>
                                 </form>
