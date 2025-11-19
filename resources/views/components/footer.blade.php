@@ -1,12 +1,12 @@
-<footer class="relative" style="background-color: #1e3a5f; color: #ffffff;">
+<footer class="relative mt-0" style="background-color: #1e3a5f; color: #ffffff; margin-top: -1px;">
     <!-- Curved Wave at Top -->
-    <div class="absolute top-0 left-0 w-full overflow-hidden" style="line-height: 0;">
+    <div class="absolute top-0 left-0 w-full overflow-hidden pointer-events-none" style="line-height: 0; z-index: 1;">
         <svg viewBox="0 0 1440 120" preserveAspectRatio="none" style="position: relative; display: block; width: 100%; height: 100px;">
             <path d="M0,0 C480,120 960,120 1440,0 L1440,120 L0,120 Z" style="fill: #1e3a5f;"></path>
         </svg>
     </div>
     
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16" style="padding-top: 5rem; padding-bottom: 3rem;">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 relative z-10" style="padding-top: 6rem; padding-bottom: 3rem;">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 lg:gap-12">
             <!-- Contact Us -->
             <div class="mb-8 sm:mb-0">

@@ -168,7 +168,10 @@
                 @yield('content')
             </main>
 
-            <x-footer />
+            <!-- Footer with proper spacing -->
+            <div class="relative" style="margin-top: 0;">
+                <x-footer />
+            </div>
         </div>
 
         <!-- Simple Vanilla JS Lightbox -->

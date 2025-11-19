@@ -138,7 +138,7 @@
     </div>
     
     <!-- Curved Wave at Bottom -->
-    <div class="absolute bottom-0 left-0 w-full overflow-hidden" style="line-height: 0;">
+    <div class="absolute bottom-0 left-0 w-full overflow-hidden pointer-events-none" style="line-height: 0; z-index: 0;">
         <svg viewBox="0 0 1440 120" preserveAspectRatio="none" style="position: relative; display: block; width: 100%; height: 100px;">
             <path d="M0,0 C480,120 960,120 1440,0 L1440,120 L0,120 Z" style="fill: #1e3a5f;"></path>
         </svg>
