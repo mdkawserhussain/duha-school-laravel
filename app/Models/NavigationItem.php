@@ -65,15 +65,36 @@ class NavigationItem extends Model
 
     public function getUrlAttribute(): ?string
     {
-        if ($this->is_external && $this->url) {
-            return $this->url;
+        // Access raw database value to avoid infinite recursion
+        $rawUrl = $this->attributes['url'] ?? null;
+        
+        if ($this->is_external && $rawUrl) {
+            return $rawUrl;
         }
 
         if ($this->route_name) {
             try {
                 return route($this->route_name);
             } catch (\Exception $e) {
-                return $this->url;
+                return $rawUrl;
+            }
+        }
+
+        // If item has a slug and a parent, try to generate URL from parent's route
+        if ($this->slug && $this->parent_id) {
+            $parent = $this->parent;
+            if ($parent && $parent->route_name) {
+                // Extract category from parent route (e.g., 'about.index' -> 'about')
+                $parentRoute = $parent->route_name;
+                if (str_ends_with($parentRoute, '.index')) {
+                    $category = str_replace('.index', '', $parentRoute);
+                    $childRoute = $category . '.show';
+                    try {
+                        return route($childRoute, $this->slug);
+                    } catch (\Exception $e) {
+                        // Fall through to slug-based URL
+                    }
+                }
             }
         }
 
@@ -81,6 +102,6 @@ class NavigationItem extends Model
             return url($this->slug);
         }
 
-        return $this->url;
+        return $rawUrl;
     }
 }

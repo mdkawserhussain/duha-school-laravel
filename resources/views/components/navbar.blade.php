@@ -21,15 +21,15 @@
         $announcements = collect([]);
     }
     
-    // Get dynamic menu pages from database
-    $menuPages = collect([]);
+    // Get dynamic navigation items from database (hybrid approach: Navigation Items control menu structure)
+    $navigationItems = collect([]);
     try {
         if (!app()->bound('exception')) {
-            $pageService = app(\App\Services\PageService::class);
-            $menuPages = $pageService->getRootMenuPages('main');
+            $navigationService = app(\App\Services\NavigationService::class);
+            $navigationItems = $navigationService->getActiveNavigation('main');
         }
     } catch (\Throwable $e) {
-        $menuPages = collect([]);
+        $navigationItems = collect([]);
     }
 @endphp
 
@@ -150,73 +150,66 @@
 
                 {{-- Desktop Navigation - Centered --}}
                 <div class="hidden lg:flex items-center space-x-2 flex-1 justify-center min-w-0 px-6">
-                    {{-- Home --}}
-                    <a
-                        href="{{ route('home') }}"
-                        class="nav-link px-4 py-2.5 text-base font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors"
-                        :class="scrolled || (transparent && !scrolled) ? 'text-white hover:bg-white/10 focus:ring-white' : 'text-gray-900 hover:bg-gray-100 focus:ring-gray-900'"
-                        :class="request()->routeIs('home') ? (scrolled || (transparent && !scrolled) ? 'bg-white/20 font-semibold' : 'bg-gray-100 font-semibold') : ''"
-                        aria-current="{{ request()->routeIs('home') ? 'page' : null }}"
-                    >
-                        Home
-                    </a>
-
-                    {{-- Dynamic Menu Pages --}}
-                    @foreach($menuPages as $page)
+                    {{-- Dynamic Navigation Items --}}
+                    @foreach($navigationItems as $navItem)
                         @php
-                            // Pages are already filtered at repository level (menu_order > 0, has category)
-                            $children = $page->publishedChildren->where('show_in_menu', true)->sortBy('menu_order');
+                            // Navigation Items already filtered at repository level (is_active = true, section = 'main')
+                            $children = $navItem->children ?? collect([]);
                             $hasChildren = $children->count() > 0;
                             
-                            // Generate page URL with proper route mapping
-                            // Priority: external_url > model url attribute > category route > pages.show
-                            if ($page->external_url) {
-                                $pageUrl = $page->external_url;
-                            } elseif ($page->url) {
-                                $pageUrl = $page->url;
-                            } elseif ($page->page_category) {
-                                $categoryRoute = \App\Helpers\PageHelper::getCategoryIndexRoute($page->page_category);
-                                try {
-                                    $pageUrl = $categoryRoute ? route($categoryRoute) : route('pages.show', $page->slug);
-                                } catch (\Exception $e) {
-                                    $pageUrl = route('pages.show', $page->slug);
-                                }
-                            } else {
-                                $pageUrl = route('pages.show', $page->slug);
-                            }
+                            // Get URL from NavigationItem (handles route_name, url, slug, external)
+                            $navUrl = $navItem->url ?? '#';
                             
                             // Check active state - improved detection
-                            $categoryRoutePrefix = $page->page_category ? \App\Helpers\PageHelper::categoryToRouteName($page->page_category) : null;
                             $isActive = false;
                             
-                            if ($categoryRoutePrefix) {
-                                // Check if current route matches category pattern
-                                $isActive = request()->routeIs($categoryRoutePrefix . '.*') || 
-                                           request()->routeIs($categoryRoutePrefix . '.index');
+                            // Check if route_name matches current route
+                            if ($navItem->route_name) {
+                                try {
+                                    $isActive = request()->routeIs($navItem->route_name) || 
+                                               request()->routeIs($navItem->route_name . '.*');
+                                } catch (\Exception $e) {
+                                    // Route doesn't exist, skip
+                                }
                             }
                             
-                            // Also check specific page match
-                            if (!$isActive && request()->routeIs('pages.show') && request()->route('page')) {
-                                $currentPage = request()->route('page');
-                                $isActive = ($currentPage->id === $page->id || 
-                                            $currentPage->slug === $page->slug ||
-                                            ($currentPage->parent_id === $page->id));
+                            // Also check URL match for non-route items
+                            if (!$isActive && $navItem->url && !$navItem->is_external) {
+                                $currentUrl = request()->fullUrl();
+                                $navUrlPath = parse_url($navItem->url, PHP_URL_PATH);
+                                $currentPath = request()->path();
+                                
+                                if ($navUrlPath && ($currentPath === ltrim($navUrlPath, '/') || str_starts_with($currentPath, ltrim($navUrlPath, '/')))) {
+                                    $isActive = true;
+                                }
                             }
                             
-                            // Icon colors for dropdown items
-                            $iconColors = [
-                                'about-us' => ['bg-indigo-100', 'text-indigo-600'],
-                                'academics' => ['bg-green-100', 'text-green-600'],
-                                'facilities' => ['bg-blue-100', 'text-blue-600'],
-                                'activities-programs' => ['bg-purple-100', 'text-purple-600'],
-                                'admissions' => ['bg-orange-100', 'text-orange-600'],
-                                'parent-engagement' => ['bg-pink-100', 'text-pink-600'],
-                            ];
-                            $pageIcon = $iconColors[$page->page_category] ?? ['bg-gray-100', 'text-gray-600'];
+                            // If parent has children, check if any child is active
+                            if (!$isActive && $hasChildren) {
+                                foreach ($children as $child) {
+                                    if ($child->route_name) {
+                                        try {
+                                            if (request()->routeIs($child->route_name) || request()->routeIs($child->route_name . '.*')) {
+                                                $isActive = true;
+                                                break;
+                                            }
+                                        } catch (\Exception $e) {
+                                            // Route doesn't exist, skip
+                                        }
+                                    } elseif ($child->url && !$child->is_external) {
+                                        $childUrlPath = parse_url($child->url, PHP_URL_PATH);
+                                        $currentPath = request()->path();
+                                        if ($childUrlPath && ($currentPath === ltrim($childUrlPath, '/') || str_starts_with($currentPath, ltrim($childUrlPath, '/')))) {
+                                            $isActive = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
                             
                             // Link attributes
                             $linkAttrs = '';
-                            if ($page->external_url && $page->open_in_new_tab) {
+                            if ($navItem->is_external || $navItem->target_blank) {
                                 $linkAttrs = 'target="_blank" rel="noopener noreferrer"';
                             }
                         @endphp
@@ -233,7 +226,10 @@
                                     :aria-expanded="open"
                                     aria-haspopup="true"
                                 >
-                                    <span>{{ $page->menu_title ?? $page->title }}</span>
+                                    @if($navItem->icon && !str_starts_with($navItem->icon, 'heroicon'))
+                                        <span class="inline-block mr-2">{!! $navItem->icon !!}</span>
+                                    @endif
+                                    <span>{{ $navItem->title }}</span>
                                     <svg class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                     </svg>
@@ -251,40 +247,48 @@
                                     class="absolute left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl min-w-[220px] z-50 py-1"
                                     style="display: none;"
                                 >
-                                    {{-- Category Landing Page Link --}}
-                                    <a
-                                        href="{{ $pageUrl }}"
-                                        class="block px-4 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-50 transition-colors border-b border-gray-100"
-                                        @click="open = false"
-                                        {!! $linkAttrs !!}
-                                    >
-                                        {{ $page->menu_title ?? $page->title }}
-                                    </a>
+                                    {{-- Parent Link (if route_name or url exists) --}}
+                                    @if($navItem->route_name || $navItem->url)
+                                        <a
+                                            href="{{ $navUrl }}"
+                                            class="block px-4 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-50 transition-colors border-b border-gray-100"
+                                            @click="open = false"
+                                            {!! $linkAttrs !!}
+                                        >
+                                            {{ $navItem->title }}
+                                        </a>
+                                    @endif
 
-                                    {{-- Child Pages --}}
+                                    {{-- Child Navigation Items --}}
                                     @foreach($children as $child)
                                         @php
-                                            // Generate child URL with proper route mapping
-                                            if ($child->url) {
-                                                $childUrl = $child->url;
-                                            } elseif ($page->page_category) {
-                                                $categoryShowRoute = \App\Helpers\PageHelper::getCategoryShowRoute($page->page_category);
+                                            $childUrl = $child->url ?? '#';
+                                            $childLinkAttrs = '';
+                                            if ($child->is_external || $child->target_blank) {
+                                                $childLinkAttrs = 'target="_blank" rel="noopener noreferrer"';
+                                            }
+                                            
+                                            // Check active state for child
+                                            $childActive = false;
+                                            if ($child->route_name) {
                                                 try {
-                                                    $childUrl = $categoryShowRoute ? route($categoryShowRoute, $child->slug) : route('pages.show', $child->slug);
+                                                    $childActive = request()->routeIs($child->route_name);
                                                 } catch (\Exception $e) {
-                                                    $childUrl = route('pages.show', $child->slug);
+                                                    // Route doesn't exist
                                                 }
-                                            } else {
-                                                $childUrl = route('pages.show', $child->slug);
                                             }
                                         @endphp
                                         <a
                                             href="{{ $childUrl }}"
-                                            class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                                            class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors {{ $childActive ? 'bg-gray-50 font-medium' : '' }}"
                                             @click="open = false"
-                                            {!! $child->external_url && $child->open_in_new_tab ? 'target="_blank" rel="noopener noreferrer"' : '' !!}
+                                            {!! $childLinkAttrs !!}
+                                            aria-current="{{ $childActive ? 'page' : null }}"
                                         >
-                                            {{ $child->menu_title ?? $child->title }}
+                                            @if($child->icon && !str_starts_with($child->icon, 'heroicon'))
+                                                <span class="inline-block mr-2">{!! $child->icon !!}</span>
+                                            @endif
+                                            {{ $child->title }}
                                         </a>
                                     @endforeach
                                 </div>
@@ -292,84 +296,20 @@
                         @else
                             {{-- Simple Link Menu Item --}}
                             <a
-                                href="{{ $pageUrl }}"
-                                class="nav-link px-4 py-2.5 text-base font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors"
+                                href="{{ $navUrl }}"
+                                class="nav-link flex items-center gap-1.5 px-4 py-2.5 text-base font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors"
                                 :class="scrolled || (transparent && !scrolled) ? 'text-white hover:bg-white/10 focus:ring-white' : 'text-gray-900 hover:bg-gray-100 focus:ring-gray-900'"
                                 :class="(scrolled || (transparent && !scrolled)) && {{ $isActive ? 'true' : 'false' }} ? 'bg-white/20 font-semibold' : !(scrolled || (transparent && !scrolled)) && {{ $isActive ? 'true' : 'false' }} ? 'bg-gray-100 font-semibold' : ''"
                                 aria-current="{{ $isActive ? 'page' : null }}"
                                 {!! $linkAttrs !!}
                             >
-                                {{ $page->menu_title ?? $page->title }}
+                                @if($navItem->icon && !str_starts_with($navItem->icon, 'heroicon'))
+                                    <span>{!! $navItem->icon !!}</span>
+                                @endif
+                                <span>{{ $navItem->title }}</span>
                             </a>
                         @endif
                     @endforeach
-
-                    {{-- News & Media Dropdown --}}
-                    <div class="relative" x-data="{ open: false }">
-                        <button
-                            @click="open = !open"
-                            @keydown.escape="open = false"
-                            class="nav-link flex items-center gap-1.5 px-4 py-2.5 text-base font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors"
-                            :class="scrolled || (transparent && !scrolled) ? 'text-white hover:bg-white/10 focus:ring-white' : 'text-gray-900 hover:bg-gray-100 focus:ring-gray-900'"
-                            :aria-expanded="open"
-                            aria-haspopup="true"
-                        >
-                            <span>News & Media</span>
-                            <svg class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </button>
-
-                        <div
-                            x-show="open"
-                            @click.away="open = false"
-                            x-transition:enter="transition ease-out duration-100"
-                            x-transition:enter-start="opacity-0 scale-95"
-                            x-transition:enter-end="opacity-100 scale-100"
-                            x-transition:leave="transition ease-in duration-75"
-                            x-transition:leave-start="opacity-100 scale-100"
-                            x-transition:leave-end="opacity-0 scale-95"
-                            class="absolute left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl min-w-[180px] z-50 py-1"
-                            style="display: none;"
-                        >
-                            <a
-                                href="{{ route('events.index') }}"
-                                class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors"
-                                @click="open = false"
-                            >
-                                Events
-                            </a>
-                            <a
-                                href="{{ route('notices.index') }}"
-                                class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors"
-                                @click="open = false"
-                            >
-                                Notices
-                            </a>
-                        </div>
-                    </div>
-
-                    {{-- Career --}}
-                    <a
-                        href="{{ route('careers.index') }}"
-                        class="nav-link px-4 py-2.5 text-base font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors"
-                        :class="scrolled || (transparent && !scrolled) ? 'text-white hover:bg-white/10 focus:ring-white' : 'text-gray-900 hover:bg-gray-100 focus:ring-gray-900'"
-                        :class="request()->routeIs('careers.*') ? (scrolled || (transparent && !scrolled) ? 'bg-white/20 font-semibold' : 'bg-gray-100 font-semibold') : ''"
-                        aria-current="{{ request()->routeIs('careers.*') ? 'page' : null }}"
-                    >
-                        Career
-                    </a>
-
-                    {{-- Contact --}}
-                    <a
-                        href="{{ route('contact.index') }}"
-                        class="nav-link px-4 py-2.5 text-base font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors"
-                        :class="scrolled || (transparent && !scrolled) ? 'text-white hover:bg-white/10 focus:ring-white' : 'text-gray-900 hover:bg-gray-100 focus:ring-gray-900'"
-                        :class="request()->routeIs('contact.*') ? (scrolled || (transparent && !scrolled) ? 'bg-white/20 font-semibold' : 'bg-gray-100 font-semibold') : ''"
-                        aria-current="{{ request()->routeIs('contact.*') ? 'page' : null }}"
-                    >
-                        Contact
-                    </a>
                 </div>
 
                 {{-- Right Side --}}
@@ -453,74 +393,71 @@
                 {{-- Mobile Menu Content --}}
                 <div class="flex-1 overflow-y-auto py-4 px-3">
                     <nav class="space-y-1">
-                        {{-- Home --}}
-                        <a
-                            href="{{ route('home') }}"
-                            @click="mobileMenuOpen = false"
-                            class="block px-4 py-3 text-base font-medium rounded-lg transition-colors"
-                            :class="scrolled ? 'text-white hover:bg-white/10' : 'text-gray-900 hover:bg-gray-100'"
-                            :class="request()->routeIs('home') ? (scrolled ? 'bg-white/20 font-semibold' : 'bg-gray-100 font-semibold') : ''"
-                        >
-                            Home
-                        </a>
-
-                        {{-- Dynamic Menu Pages --}}
-                        @foreach($menuPages as $page)
+                        {{-- Dynamic Navigation Items --}}
+                        @foreach($navigationItems as $navItem)
                             @php
-                                // Pages are already filtered at repository level (menu_order > 0, has category)
-                                $children = $page->publishedChildren->where('show_in_menu', true)->sortBy('menu_order');
+                                // Navigation Items already filtered at repository level (is_active = true, section = 'main')
+                                $children = $navItem->children ?? collect([]);
                                 $hasChildren = $children->count() > 0;
                                 
-                                // Generate page URL with proper route mapping
-                                // Priority: external_url > model url attribute > category route > pages.show
-                                if ($page->external_url) {
-                                    $pageUrl = $page->external_url;
-                                } elseif ($page->url) {
-                                    $pageUrl = $page->url;
-                                } elseif ($page->page_category) {
-                                    $categoryRoute = \App\Helpers\PageHelper::getCategoryIndexRoute($page->page_category);
-                                    try {
-                                        $pageUrl = $categoryRoute ? route($categoryRoute) : route('pages.show', $page->slug);
-                                    } catch (\Exception $e) {
-                                        $pageUrl = route('pages.show', $page->slug);
-                                    }
-                                } else {
-                                    $pageUrl = route('pages.show', $page->slug);
-                                }
-                                
-                                // Icon colors for menu items
-                                $iconColors = [
-                                    'about-us' => ['bg-indigo-100', 'text-indigo-600'],
-                                    'academics' => ['bg-green-100', 'text-green-600'],
-                                    'facilities' => ['bg-blue-100', 'text-blue-600'],
-                                    'activities-programs' => ['bg-purple-100', 'text-purple-600'],
-                                    'admissions' => ['bg-orange-100', 'text-orange-600'],
-                                    'parent-engagement' => ['bg-pink-100', 'text-pink-600'],
-                                ];
-                                $pageIcon = $iconColors[$page->page_category] ?? ['bg-gray-100', 'text-gray-600'];
-                                
-                                // Link attributes
-                                $linkAttrs = '';
-                                if ($page->external_url && $page->open_in_new_tab) {
-                                    $linkAttrs = 'target="_blank" rel="noopener noreferrer"';
-                                }
+                                // Get URL from NavigationItem (handles route_name, url, slug, external)
+                                $navUrl = $navItem->url ?? '#';
                                 
                                 // Check active state for mobile
                                 $isActiveMobile = false;
-                                $categoryRoutePrefix = $page->page_category ? \App\Helpers\PageHelper::categoryToRouteName($page->page_category) : null;
-                                if ($categoryRoutePrefix) {
-                                    $isActiveMobile = request()->routeIs($categoryRoutePrefix . '.*');
+                                
+                                // Check if route_name matches current route
+                                if ($navItem->route_name) {
+                                    try {
+                                        $isActiveMobile = request()->routeIs($navItem->route_name) || 
+                                                         request()->routeIs($navItem->route_name . '.*');
+                                    } catch (\Exception $e) {
+                                        // Route doesn't exist, skip
+                                    }
                                 }
-                                if (!$isActiveMobile && request()->routeIs('pages.show') && request()->route('page')) {
-                                    $currentPage = request()->route('page');
-                                    $isActiveMobile = ($currentPage->id === $page->id || 
-                                                      $currentPage->slug === $page->slug ||
-                                                      ($currentPage->parent_id === $page->id));
+                                
+                                // Also check URL match for non-route items
+                                if (!$isActiveMobile && $navItem->url && !$navItem->is_external) {
+                                    $navUrlPath = parse_url($navItem->url, PHP_URL_PATH);
+                                    $currentPath = request()->path();
+                                    
+                                    if ($navUrlPath && ($currentPath === ltrim($navUrlPath, '/') || str_starts_with($currentPath, ltrim($navUrlPath, '/')))) {
+                                        $isActiveMobile = true;
+                                    }
+                                }
+                                
+                                // If parent has children, check if any child is active
+                                if (!$isActiveMobile && $hasChildren) {
+                                    foreach ($children as $child) {
+                                        if ($child->route_name) {
+                                            try {
+                                                if (request()->routeIs($child->route_name) || request()->routeIs($child->route_name . '.*')) {
+                                                    $isActiveMobile = true;
+                                                    break;
+                                                }
+                                            } catch (\Exception $e) {
+                                                // Route doesn't exist, skip
+                                            }
+                                        } elseif ($child->url && !$child->is_external) {
+                                            $childUrlPath = parse_url($child->url, PHP_URL_PATH);
+                                            $currentPath = request()->path();
+                                            if ($childUrlPath && ($currentPath === ltrim($childUrlPath, '/') || str_starts_with($currentPath, ltrim($childUrlPath, '/')))) {
+                                                $isActiveMobile = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                                
+                                // Link attributes
+                                $linkAttrs = '';
+                                if ($navItem->is_external || $navItem->target_blank) {
+                                    $linkAttrs = 'target="_blank" rel="noopener noreferrer"';
                                 }
                             @endphp
 
                             @if($hasChildren)
-                                {{-- Category with Children --}}
+                                {{-- Navigation Item with Children --}}
                                 <div x-data="{ open: false }" class="space-y-1">
                                     <button
                                         @click="open = !open"
@@ -528,7 +465,12 @@
                                         :class="scrolled ? 'text-white hover:bg-white/10' : 'text-gray-900 hover:bg-gray-100'"
                                         :class="{{ $isActiveMobile ? 'true' : 'false' }} ? (scrolled ? 'bg-white/20 font-semibold' : 'bg-gray-100 font-semibold') : ''"
                                     >
-                                        <span>{{ $page->menu_title ?? $page->title }}</span>
+                                        <span class="flex items-center gap-2">
+                                            @if($navItem->icon && !str_starts_with($navItem->icon, 'heroicon'))
+                                                <span>{!! $navItem->icon !!}</span>
+                                            @endif
+                                            <span>{{ $navItem->title }}</span>
+                                        </span>
                                         <svg class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                         </svg>
@@ -544,41 +486,50 @@
                                         class="pl-4 space-y-1 ml-4 overflow-hidden"
                                         :class="scrolled ? 'border-l-2 border-white/20' : 'border-l-2 border-gray-200'"
                                     >
-                                        {{-- Category Landing Page Link --}}
-                                        <a
-                                            href="{{ $pageUrl }}"
-                                            @click="mobileMenuOpen = false"
-                                            class="block px-4 py-2.5 text-sm font-medium rounded-lg transition-colors"
-                                            :class="scrolled ? 'text-white hover:bg-white/10 border-b border-white/20' : 'text-gray-800 hover:bg-gray-100 border-b border-gray-100'"
-                                            {!! $linkAttrs !!}
-                                        >
-                                            {{ $page->menu_title ?? $page->title }}
-                                        </a>
-                                        {{-- Child Pages --}}
+                                        {{-- Parent Link (if route_name or url exists) --}}
+                                        @if($navItem->route_name || $navItem->url)
+                                            <a
+                                                href="{{ $navUrl }}"
+                                                @click="mobileMenuOpen = false"
+                                                class="block px-4 py-2.5 text-sm font-medium rounded-lg transition-colors"
+                                                :class="scrolled ? 'text-white hover:bg-white/10 border-b border-white/20' : 'text-gray-800 hover:bg-gray-100 border-b border-gray-100'"
+                                                {!! $linkAttrs !!}
+                                            >
+                                                {{ $navItem->title }}
+                                            </a>
+                                        @endif
+                                        {{-- Child Navigation Items --}}
                                         @foreach($children as $child)
                                             @php
-                                                // Generate child URL with proper route mapping
-                                                if ($child->url) {
-                                                    $childUrl = $child->url;
-                                                } elseif ($page->page_category) {
-                                                    $categoryShowRoute = \App\Helpers\PageHelper::getCategoryShowRoute($page->page_category);
+                                                $childUrl = $child->url ?? '#';
+                                                $childLinkAttrs = '';
+                                                if ($child->is_external || $child->target_blank) {
+                                                    $childLinkAttrs = 'target="_blank" rel="noopener noreferrer"';
+                                                }
+                                                
+                                                // Check active state for child
+                                                $childActive = false;
+                                                if ($child->route_name) {
                                                     try {
-                                                        $childUrl = $categoryShowRoute ? route($categoryShowRoute, $child->slug) : route('pages.show', $child->slug);
+                                                        $childActive = request()->routeIs($child->route_name);
                                                     } catch (\Exception $e) {
-                                                        $childUrl = route('pages.show', $child->slug);
+                                                        // Route doesn't exist
                                                     }
-                                                } else {
-                                                    $childUrl = route('pages.show', $child->slug);
                                                 }
                                             @endphp
                                             <a
                                                 href="{{ $childUrl }}"
                                                 @click="mobileMenuOpen = false"
-                                                class="block px-4 py-2.5 text-sm rounded-lg transition-colors"
+                                                class="block px-4 py-2.5 text-sm rounded-lg transition-colors {{ $childActive ? 'font-medium' : '' }}"
                                                 :class="scrolled ? 'text-white/90 hover:bg-white/10 hover:text-white' : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'"
-                                                {!! $child->external_url && $child->open_in_new_tab ? 'target="_blank" rel="noopener noreferrer"' : '' !!}
+                                                :class="scrolled && {{ $childActive ? 'true' : 'false' }} ? 'bg-white/10' : !scrolled && {{ $childActive ? 'true' : 'false' }} ? 'bg-gray-50' : ''"
+                                                {!! $childLinkAttrs !!}
+                                                aria-current="{{ $childActive ? 'page' : null }}"
                                             >
-                                                {{ $child->menu_title ?? $child->title }}
+                                                @if($child->icon && !str_starts_with($child->icon, 'heroicon'))
+                                                    <span class="inline-block mr-2">{!! $child->icon !!}</span>
+                                                @endif
+                                                {{ $child->title }}
                                             </a>
                                         @endforeach
                                     </div>
@@ -586,79 +537,22 @@
                             @else
                                 {{-- Simple Link Menu Item --}}
                                 <a
-                                    href="{{ $pageUrl }}"
+                                    href="{{ $navUrl }}"
                                     @click="mobileMenuOpen = false"
                                     class="block px-4 py-3 text-base font-medium rounded-lg transition-colors"
                                     :class="scrolled ? 'text-white hover:bg-white/10' : 'text-gray-900 hover:bg-gray-100'"
                                     :class="{{ $isActiveMobile ? 'true' : 'false' }} ? (scrolled ? 'bg-white/20 font-semibold' : 'bg-gray-100 font-semibold') : ''"
                                     {!! $linkAttrs !!}
                                 >
-                                    {{ $page->menu_title ?? $page->title }}
+                                    <span class="flex items-center gap-2">
+                                        @if($navItem->icon && !str_starts_with($navItem->icon, 'heroicon'))
+                                            <span>{!! $navItem->icon !!}</span>
+                                        @endif
+                                        <span>{{ $navItem->title }}</span>
+                                    </span>
                                 </a>
                             @endif
                         @endforeach
-
-                        {{-- News & Media Section --}}
-                        <div x-data="{ open: false }" class="space-y-1">
-                            <button
-                                @click="open = !open"
-                                class="flex items-center justify-between w-full px-4 py-3 text-base font-medium rounded-lg transition-colors"
-                                :class="scrolled ? 'text-white hover:bg-white/10' : 'text-gray-900 hover:bg-gray-100'"
-                            >
-                                <span>News & Media</span>
-                                <svg class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                </svg>
-                            </button>
-                            <div 
-                                x-show="open"
-                                x-transition:enter="transition ease-out duration-200"
-                                x-transition:enter-start="opacity-0 max-h-0"
-                                x-transition:enter-end="opacity-100 max-h-96"
-                                x-transition:leave="transition ease-in duration-150"
-                                x-transition:leave-start="opacity-100 max-h-96"
-                                x-transition:leave-end="opacity-0 max-h-0"
-                                class="pl-4 space-y-1 ml-4 overflow-hidden"
-                                :class="scrolled ? 'border-l-2 border-white/20' : 'border-l-2 border-gray-200'"
-                            >
-                                <a
-                                    href="{{ route('events.index') }}"
-                                    @click="mobileMenuOpen = false"
-                                    class="block px-4 py-2.5 text-sm rounded-lg transition-colors"
-                                    :class="scrolled ? 'text-white/90 hover:bg-white/10 hover:text-white' : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'"
-                                >
-                                    Events
-                                </a>
-                                <a
-                                    href="{{ route('notices.index') }}"
-                                    @click="mobileMenuOpen = false"
-                                    class="block px-4 py-2.5 text-sm rounded-lg transition-colors"
-                                    :class="scrolled ? 'text-white/90 hover:bg-white/10 hover:text-white' : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'"
-                                >
-                                    Notices
-                                </a>
-                            </div>
-                        </div>
-
-                        <a
-                            href="{{ route('careers.index') }}"
-                            @click="mobileMenuOpen = false"
-                            class="block px-4 py-3 text-base font-medium rounded-lg transition-colors"
-                            :class="scrolled ? 'text-white hover:bg-white/10' : 'text-gray-900 hover:bg-gray-100'"
-                            :class="request()->routeIs('careers.*') ? (scrolled ? 'bg-white/20 font-semibold' : 'bg-gray-100 font-semibold') : ''"
-                        >
-                            Career
-                        </a>
-
-                        <a
-                            href="{{ route('contact.index') }}"
-                            @click="mobileMenuOpen = false"
-                            class="block px-4 py-3 text-base font-medium rounded-lg transition-colors"
-                            :class="scrolled ? 'text-white hover:bg-white/10' : 'text-gray-900 hover:bg-gray-100'"
-                            :class="request()->routeIs('contact.*') ? (scrolled ? 'bg-white/20 font-semibold' : 'bg-gray-100 font-semibold') : ''"
-                        >
-                            Contact
-                        </a>
 
                         {{-- Mobile Logout (only for logged-in users) --}}
                         @auth
