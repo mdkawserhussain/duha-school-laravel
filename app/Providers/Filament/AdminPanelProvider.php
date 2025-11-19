@@ -65,19 +65,12 @@ class AdminPanelProvider extends PanelProvider
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->navigationGroups([
                 'Dashboard',
-                'Homepage Settings',  // All homepage sections
-                'Content',           // Pages, Events, Notices
-                'Applications',      // Admissions, Careers
-                'People',           // Staff, Users
-                'Site Settings',    // General settings, Announcements
-=======
-                'Content',    // Pages, Events, Notices
-                'Pages',      // Page management
-                'Site Settings',
-                'Settings',   // Navigation items
-                'People',      // Staff, Users
+                'Homepage Settings',
+                'Content',
+                'Pages',
                 'Applications',
->>>>>>> dev
+                'People',
+                'Site Settings',
             ])
             ->sidebarCollapsibleOnDesktop()
             ->spa()

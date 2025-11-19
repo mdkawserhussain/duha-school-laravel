@@ -68,38 +68,6 @@ class Notice extends Model implements HasMedia
         return $slug;
     }
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($notice) {
-            if (empty($notice->slug) && !empty($notice->title)) {
-                $notice->slug = static::generateUniqueSlug($notice->title);
-            }
-        });
-
-        static::updating(function ($notice) {
-            // Only regenerate slug if title changed and slug is empty
-            if ($notice->isDirty('title') && empty($notice->slug)) {
-                $notice->slug = static::generateUniqueSlug($notice->title);
-            }
-        });
-    }
-
-    protected static function generateUniqueSlug(string $title): string
-    {
-        $slug = \Illuminate\Support\Str::slug($title);
-        $originalSlug = $slug;
-        $counter = 1;
-
-        while (static::where('slug', $slug)->exists()) {
-            $slug = $originalSlug . '-' . $counter;
-            $counter++;
-        }
-
-        return $slug;
-    }
-
     protected $fillable = [
         'title',
         'slug',
