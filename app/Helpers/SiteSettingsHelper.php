@@ -95,12 +95,12 @@ class SiteSettingsHelper
     {
         try {
             $settings = static::all();
-            
+
             // Use the logo_url accessor which now uses relative paths with asset()
             if ($settings && $settings->logo_url) {
                 return $settings->logo_url;
             }
-            
+
             // Fallback to static method which also uses relative paths
             return SiteSettings::getLogoUrl();
         } catch (\Exception $e) {
@@ -381,14 +381,14 @@ class SiteSettingsHelper
             $section = \App\Models\HomePageSection::where('section_key', 'advisors')
                 ->where('is_active', true)
                 ->first();
-            
+
             if (!$section || empty($section->data['advisors'])) {
                 Log::info('No advisors found in HomePageSection');
                 return [];
             }
-            
+
             $advisors = $section->data['advisors'];
-            
+
             // Process each advisor
             foreach ($advisors as &$advisor) {
                 // Map 'photo_url' to 'profile_image_url' for consistency
@@ -406,7 +406,7 @@ class SiteSettingsHelper
                     // Use placeholder if no image
                     $advisor['profile_image_url'] = asset('images/placeholder.svg');
                 }
-                
+
                 // Ensure required fields have defaults
                 $advisor['name'] = $advisor['name'] ?? 'Unknown';
                 $advisor['title'] = $advisor['title'] ?? '';
@@ -415,12 +415,65 @@ class SiteSettingsHelper
                 $advisor['email'] = $advisor['email'] ?? '';
                 $advisor['accent_color'] = $advisor['accent_color'] ?? '#F4C430';
             }
-            
+
             Log::info('Advisors loaded successfully', ['count' => count($advisors)]);
             return $advisors;
-            
+
         } catch (\Exception $e) {
             Log::error('Error loading advisors from HomePageSection: ' . $e->getMessage());
+            return [];
+        }
+    }
+
+    /**
+     * Get active board members sorted by sort_order.
+     * Retrieves board members from HomePageSection (section_key='board_management')
+     */
+    public static function boardMembers(): array
+    {
+        try {
+            // Get board members from HomePageSection
+            $section = \App\Models\HomePageSection::where('section_key', 'board_management')
+                ->where('is_active', true)
+                ->first();
+
+            if (!$section || empty($section->data['members'])) {
+                Log::info('No board members found in HomePageSection');
+                return [];
+            }
+
+            $members = $section->data['members'];
+
+            // Process each member
+            foreach ($members as &$member) {
+                // Map 'photo_url' to 'profile_image_url' for consistency
+                if (isset($member['photo_url']) && !empty($member['photo_url'])) {
+                    $member['profile_image_url'] = $member['photo_url'];
+                } elseif (isset($member['profile_image'])) {
+                    // If it's already a full URL, use it as is
+                    if (filter_var($member['profile_image'], FILTER_VALIDATE_URL)) {
+                        $member['profile_image_url'] = $member['profile_image'];
+                    } else {
+                        // For local files, generate the URL directly
+                        $member['profile_image_url'] = url('storage/' . ltrim($member['profile_image'], '/'));
+                    }
+                } else {
+                    // Use placeholder if no image
+                    $member['profile_image_url'] = asset('images/placeholder.svg');
+                }
+
+                // Ensure required fields have defaults
+                $member['name'] = $member['name'] ?? 'Unknown';
+                $member['title'] = $member['title'] ?? '';
+                $member['organization'] = $member['organization'] ?? '';
+                $member['bio'] = $member['bio'] ?? '';
+            }
+
+            Log::info('Board members loaded successfully', ['count' => count($members)]);
+            return $members;
+
+        } catch (\Exception $e) {
+            Log::error('Error loading board members from HomePageSection: ' . $e->getMessage());
             return [];
         }
     }
