@@ -49,12 +49,21 @@ class HomeController extends Controller
                 $upcomingEvents->load('media');
             }
 
+            // Fetch important notices for the news-events-section component
+            $importantNotices = $this->noticeService->getImportantNotices(3);
+            
+            // Ensure important notices have media relationships loaded
+            if ($importantNotices->isNotEmpty() && !$importantNotices->first()->relationLoaded('media')) {
+                $importantNotices->load('media');
+            }
+
             return [
                 'hero' => $this->mapHeroBlock($heroSlides, $sectionsByKey),
                 'featurePanels' => $this->mapFeaturePanels($sectionsByKey),
                 'statHighlights' => $this->mapStatHighlights($sectionsByKey),
                 'featuredEvents' => $this->eventService->getFeaturedEvents(),
                 'recentNotices' => $this->noticeService->getRecentNotices(),
+                'importantNotices' => $importantNotices, // Important notices for news-events-section
                 'featuredStaff' => $this->staffService->getFeaturedStaff(),
                 'upcomingEvents' => $upcomingEvents, // Dynamically fetched events
                 'visionPage' => \App\Models\Page::where('slug', 'vision')->published()->first(),
