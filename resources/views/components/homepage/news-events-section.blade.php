@@ -45,8 +45,23 @@
 
         @php
             // Use dynamic events from the controller if available, otherwise fetch upcoming events
-            $orderClause = \Illuminate\Support\Facades\Schema::hasColumn('events', 'start_at') ? 'COALESCE(start_at, event_date)' : 'event_date';
-            $events = $upcomingEvents ?? \App\Models\Event::with('media')->published()->upcoming()->orderByRaw($orderClause . ' asc')->limit(3)->get();
+            // This ensures real-time updates when events are modified in the backend
+            // The HomeController passes 'upcomingEvents' which is fetched via EventService
+            if (isset($upcomingEvents)) {
+                // Use events passed from controller (preferred method)
+                $events = $upcomingEvents;
+            } else {
+                // Fallback: fetch directly if controller doesn't provide events
+                $orderClause = \Illuminate\Support\Facades\Schema::hasColumn('events', 'start_at') 
+                    ? 'COALESCE(start_at, event_date)' 
+                    : 'event_date';
+                $events = \App\Models\Event::with('media')
+                    ->published()
+                    ->upcoming()
+                    ->orderByRaw($orderClause . ' asc')
+                    ->limit(3)
+                    ->get();
+            }
 
             // Define category colors
             $categoryColors = [
@@ -79,8 +94,25 @@
         @endphp
 
         @php
-            // Fetch important notices
-            $notices = \App\Models\Notice::published()->important()->orderBy('published_at', 'desc')->limit(3)->get();
+            // Fetch important notices dynamically
+            // Use notices passed from controller if available, otherwise fetch directly
+            if (isset($importantNotices)) {
+                // Use notices passed from controller (preferred method)
+                $notices = $importantNotices;
+            } else {
+                // Fallback: fetch directly if controller doesn't provide notices
+                $notices = \App\Models\Notice::with('media')
+                    ->published()
+                    ->important()
+                    ->orderBy('published_at', 'desc')
+                    ->limit(3)
+                    ->get();
+            }
+            
+            // Ensure notices have media relationships loaded
+            if ($notices->isNotEmpty() && !$notices->first()->relationLoaded('media')) {
+                $notices->load('media');
+            }
         @endphp
 
         <!-- Two Column Layout -->
@@ -181,15 +213,19 @@
                                     {{ $notice->category ?? 'General' }}
                                 </span>
                                 <div class="text-sm font-medium" style="color: #4a5568;">
-                                    {{ $notice->published_at->format('M d, Y') }}
+                                    {{ $notice->published_at ? $notice->published_at->format('M d, Y') : ($notice->created_at ? $notice->created_at->format('M d, Y') : '') }}
                                 </div>
                             </div>
 
                             <!-- Title -->
                             <h4 class="text-xl font-semibold mb-3" style="color: #0C1B3D;">
-                                <a href="{{ route('notices.show', $notice) }}" class="hover:text-blue-600 transition duration-300">
+                                @if($notice->slug)
+                                    <a href="{{ route('notices.show', $notice) }}" class="hover:text-blue-600 transition duration-300">
+                                        {{ $notice->title }}
+                                    </a>
+                                @else
                                     {{ $notice->title }}
-                                </a>
+                                @endif
                             </h4>
 
                             <!-- Summary -->
@@ -200,12 +236,14 @@
                             @endif
 
                             <!-- Read More Link -->
-                            <a href="{{ route('notices.show', $notice) }}" class="inline-flex items-center text-sm font-medium transition-all" style="color: #173B7A;" onmouseover="this.style.color='#0F224C'" onmouseout="this.style.color='#173B7A'">
-                                Read More
-                                <svg class="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                                </svg>
-                            </a>
+                            @if($notice->slug)
+                                <a href="{{ route('notices.show', $notice) }}" class="inline-flex items-center text-sm font-medium transition-all" style="color: #173B7A;" onmouseover="this.style.color='#0F224C'" onmouseout="this.style.color='#173B7A'">
+                                    Read More
+                                    <svg class="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                    </svg>
+                                </a>
+                            @endif
                         </article>
                     @empty
                         <div class="text-center py-8">

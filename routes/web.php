@@ -31,7 +31,7 @@ Route::get('/feed/events.atom', [EventController::class, 'feed'])->name('events.
 
 // Notices
 Route::get('/notices', [NoticeController::class, 'index'])->name('notices.index');
-Route::get('/notices/{notice}', [NoticeController::class, 'show'])->name('notices.show');
+Route::get('/notices/{notice:slug}', [NoticeController::class, 'show'])->name('notices.show');
 
 // Admission
 Route::get('/admission', [AdmissionController::class, 'index'])->name('admission.index');
@@ -51,12 +51,29 @@ Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])
     ->middleware('throttle:3,1');
 
 
-// Dynamic Pages
-Route::get('/about/{page}', [PageController::class, 'show'])->name('about.show');
-Route::get('/academic/{page}', [PageController::class, 'show'])->name('academic.show');
+// Dynamic Pages - Category-based routes
+Route::get('/about-us', [PageController::class, 'category'])->name('about.index');
+Route::get('/about-us/{page}', [PageController::class, 'category'])->name('about.show');
+Route::get('/academics', [PageController::class, 'category'])->name('academics.index');
+Route::get('/academics/{page}', [PageController::class, 'category'])->name('academics.show');
+Route::get('/facilities', [PageController::class, 'category'])->name('facilities.index');
+Route::get('/facilities/{page}', [PageController::class, 'category'])->name('facilities.show');
+Route::get('/activities-programs', [PageController::class, 'category'])->name('activities.index');
+Route::get('/activities-programs/{page}', [PageController::class, 'category'])->name('activities.show');
+Route::get('/admissions', [PageController::class, 'category'])->name('admissions.index');
+Route::get('/admissions/{page}', [PageController::class, 'category'])->name('admissions.show');
+Route::get('/parent-engagement', [PageController::class, 'category'])->name('parent-engagement.index');
+Route::get('/parent-engagement/{page}', [PageController::class, 'category'])->name('parent-engagement.show');
+
+// Legacy routes for backward compatibility
+Route::get('/about/{page}', [PageController::class, 'show'])->name('about.legacy');
+Route::get('/academic/{page}', [PageController::class, 'show'])->name('academic.legacy');
 Route::get('/campus', [PageController::class, 'show'])->name('campus.show');
 Route::get('/privacy-policy', [PageController::class, 'show'])->name('privacy.show');
 Route::get('/terms-of-service', [PageController::class, 'show'])->name('terms.show');
+
+// Generic page route for Filament preview (fallback)
+Route::get('/pages/{page:slug}', [PageController::class, 'show'])->name('pages.show');
 
 // Staff Directory
 Route::get('/staff', [StaffController::class, 'index'])->name('staff.index');
@@ -67,7 +84,11 @@ Route::get('/media/gallery', [PageController::class, 'gallery'])->name('media.ga
 
 // Sitemap
 Route::get('/sitemap.xml', function () {
-    return response()->file(public_path('sitemap.xml'));
+    $sitemapPath = public_path('sitemap.xml');
+    if (file_exists($sitemapPath)) {
+        return response()->file($sitemapPath);
+    }
+    abort(404, 'Sitemap not found. Run: php artisan sitemap:generate');
 })->name('sitemap');
 
 // Authenticated Routes

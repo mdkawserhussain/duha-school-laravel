@@ -36,13 +36,76 @@ class NoticeResource extends Resource
                         FormComponents\TextInput::make('title')
                             ->required()
                             ->maxLength(255)
-                            ->columnSpanFull(),
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(function (string $state, $set, $get) {
+                                if (!empty(trim($state))) {
+                                    $slug = str(trim($state))->slug()->lower()->toString();
+                                    // Ensure slug is not empty (handle edge case of only special characters)
+                                    if (empty($slug)) {
+                                        $slug = 'notice-' . time();
+                                    }
+                                    $set('slug', $slug);
+                                }
+                            }),
 
                         FormComponents\Textarea::make('excerpt')
                             ->required()
+                            ->unique(ignoreRecord: true)
+                            ->maxLength(255)
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(function ($state, $set, $get) {
+                                if (!empty($state)) {
+                                    // Handle both string and Stringable objects
+                                    $slugValue = is_string($state) ? $state : (string) $state;
+                                    $slug = str(trim($slugValue))->slug()->lower()->toString();
+                                    // Ensure slug is not empty
+                                    if (empty($slug)) {
+                                        // Fallback: use title if available, otherwise generate timestamp-based slug
+                                        $title = $get('title');
+                                        if (!empty($title)) {
+                                            $slug = str(trim($title))->slug()->lower()->toString();
+                                        }
+                                        if (empty($slug)) {
+                                            $slug = 'notice-' . time();
+                                        }
+                                    }
+                                    $set('slug', $slug);
+                                }
+                            })
+                            ->dehydrateStateUsing(function ($state) {
+                                // Always ensure we return a valid string slug
+                                if (empty($state)) {
+                                    return '';
+                                }
+                                
+                                // Convert Stringable to string if needed
+                                if (!is_string($state)) {
+                                    $state = (string) $state;
+                                }
+                                
+                                // Normalize the slug
+                                $slug = str(trim($state))->slug()->lower()->toString();
+                                
+                                // Ensure slug is not empty
+                                if (empty($slug)) {
+                                    return 'notice-' . time();
+                                }
+                                
+                                return $slug;
+                            })
+                            ->rules([
+                                'required',
+                                'string',
+                                'max:255',
+                                'regex:/^[a-z0-9_-]+$/',
+                            ])
+                            ->helperText('Only lowercase letters, numbers, dashes, and underscores are allowed'),
+
+                        FormComponents\Textarea::make('excerpt')
+                            ->label('Excerpt')
+                            ->helperText('Brief summary of the notice (shown in listings)')
                             ->maxLength(500)
                             ->rows(3)
-                            ->helperText('Brief summary of the notice (max 500 characters)')
                             ->columnSpanFull(),
 
                         FormComponents\RichEditor::make('content')
@@ -84,7 +147,7 @@ class NoticeResource extends Resource
                     ->schema([
                         FormComponents\Toggle::make('is_published')
                             ->label('Published')
-                            ->helperText('Toggle to publish or unpublish this notice')
+                            ->helperText('Only published notices will be visible on the website')
                             ->default(true)
                             ->required(),
                     ]),
@@ -96,8 +159,17 @@ class NoticeResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\ImageColumn::make('featured_image')
+                    ->label('Featured Image')
                     ->circular()
-                    ->defaultImageUrl('/images/placeholder.svg'),
+                    ->defaultImageUrl('/images/placeholder.svg')
+                    ->state(function ($record) {
+                        if (!$record || !$record->exists) {
+                            return null;
+                        }
+                        return $record->hasMedia('featured_image') 
+                            ? $record->getFirstMediaUrl('featured_image', 'thumb') 
+                            : null;
+                    }),
 
                 Tables\Columns\TextColumn::make('title')
                     ->searchable()
@@ -124,9 +196,7 @@ class NoticeResource extends Resource
                     ->boolean()
                     ->label('Published')
                     ->trueIcon('heroicon-o-check-circle')
-                    ->falseIcon('heroicon-o-x-circle')
-                    ->trueColor('success')
-                    ->falseColor('danger'),
+                    ->falseIcon('heroicon-o-x-circle'),
 
                 Tables\Columns\TextColumn::make('published_at')
                     ->dateTime()
@@ -139,9 +209,11 @@ class NoticeResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Tables\Filters\Filter::make('is_published')
-                    ->label('Published Only')
-                    ->query(fn (Builder $query): Builder => $query->where('is_published', true)),
+                Tables\Filters\TernaryFilter::make('is_published')
+                    ->label('Published')
+                    ->placeholder('All')
+                    ->trueLabel('Published only')
+                    ->falseLabel('Draft only'),
 
                 Tables\Filters\SelectFilter::make('category')
                     ->options([
@@ -151,9 +223,11 @@ class NoticeResource extends Resource
                         'General' => 'General',
                     ]),
 
-                Tables\Filters\Filter::make('is_important')
+                Tables\Filters\TernaryFilter::make('is_important')
                     ->label('Important Notices')
-                    ->query(fn (Builder $query): Builder => $query->where('is_important', true)),
+                    ->placeholder('All')
+                    ->trueLabel('Important only')
+                    ->falseLabel('Regular only'),
             ])
             ->actions([
                 Actions\ViewAction::make(),
@@ -180,9 +254,21 @@ class NoticeResource extends Resource
         return [
             'index' => Pages\ListNotices::route('/'),
             'create' => Pages\CreateNotice::route('/create'),
-            'view' => Pages\ViewNotice::route('/{record}'),
-            'edit' => Pages\EditNotice::route('/{record}/edit'),
+            'view' => Pages\ViewNotice::route('/{record:id}'),
+            'edit' => Pages\EditNotice::route('/{record:id}/edit'),
         ];
+    }
+
+    public static function resolveRecordRouteBinding(string|int $key, ?\Closure $modifyQuery = null): ?Notice
+    {
+        // For admin routes, always resolve by ID, not slug
+        $query = static::getEloquentQuery()->where(static::getModel()::make()->getKeyName(), $key);
+        
+        if ($modifyQuery) {
+            $modifyQuery($query);
+        }
+        
+        return $query->first();
     }
 
     public static function getEloquentQuery(): Builder
@@ -201,6 +287,11 @@ class NoticeResource extends Resource
     }
 
     public static function canCreate(): bool
+    {
+        return static::currentUser()?->hasAnyRole(['admin', 'editor']) ?? false;
+    }
+
+    public static function canView($record): bool
     {
         return static::currentUser()?->hasAnyRole(['admin', 'editor']) ?? false;
     }

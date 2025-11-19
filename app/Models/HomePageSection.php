@@ -95,7 +95,7 @@ class HomePageSection extends Model implements HasMedia
 
     /**
      * Get media URL with proper path handling and conversion support.
-     * Uses Spatie's built-in method to return full URLs.
+     * Uses relative path extraction for consistent URL generation regardless of APP_URL.
      *
      * @param string $collectionName
      * @param string|null $conversionName
@@ -103,15 +103,8 @@ class HomePageSection extends Model implements HasMedia
      */
     public function getMediaUrl(string $collectionName = 'images', ?string $conversionName = null): ?string
     {
-        if (!$this->hasMedia($collectionName)) {
-            return null;
-        }
-
-        // Use Spatie's built-in method which returns proper full URLs
-        // This handles conversions, path generation, and URL formatting correctly
-        // Empty string means no conversion, null is converted to empty string
-        $conversion = $conversionName ?? '';
-        return $this->getFirstMediaUrl($collectionName, $conversion);
+        // Use the relative path extraction method from HasWebPMedia trait
+        return $this->getMediaUrlRelative($collectionName, $conversionName);
     }
 
     /**

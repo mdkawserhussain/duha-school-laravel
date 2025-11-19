@@ -8,20 +8,15 @@
 
 @section('content')
 
-    <!-- Page Header -->
-    <section class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-8 sm:py-12 md:py-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-4 sm:mb-6">About {{ $siteName }}</h1>
-                <p class="text-base sm:text-lg md:text-xl lg:text-2xl mb-6 sm:mb-8 max-w-3xl mx-auto px-4">
-                    Nurturing young minds with Islamic values and Cambridge curriculum excellence
-                </p>
-            </div>
-        </div>
-    </section>
+    <!-- Page Hero Section -->
+    <x-page-hero 
+        :title="'About ' . $siteName"
+        subtitle="Nurturing young minds with Islamic values and Cambridge curriculum excellence"
+        badge="Our Story"
+    />
 
     <!-- Mission & Vision -->
-    <section class="py-8 sm:py-12 md:py-16 bg-white">
+    <section class="py-12 sm:py-16 md:py-20 lg:py-24 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 md:gap-12">
                 <!-- Mission -->
@@ -32,7 +27,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                             </svg>
                         </div>
-                        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Our Mission</h2>
+                        <h2 class="text-3xl sm:text-4xl font-bold text-aisd-midnight" style="font-family: 'Playfair Display', serif;">Our Mission</h2>
                     </div>
                     <p class="text-gray-700 text-base sm:text-lg leading-relaxed">
                         To provide comprehensive Islamic and Cambridge curriculum education that nurtures academic excellence,
@@ -49,7 +44,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                             </svg>
                         </div>
-                        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Our Vision</h2>
+                        <h2 class="text-3xl sm:text-4xl font-bold text-aisd-midnight" style="font-family: 'Playfair Display', serif;">Our Vision</h2>
                     </div>
                     <p class="text-gray-700 text-base sm:text-lg leading-relaxed">
                         To be a leading Islamic international school that produces well-rounded individuals who excel
@@ -61,11 +56,11 @@
     </section>
 
     <!-- Core Values -->
-    <section class="py-8 sm:py-12 md:py-16 bg-gray-50">
+    <section class="py-12 sm:py-16 md:py-20 lg:py-24 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-8 sm:mb-12">
-                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">Our Core Values</h2>
-                <p class="text-base sm:text-lg text-gray-600 px-4">The principles that guide everything we do</p>
+            <div class="text-center mb-12 sm:mb-16">
+                <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-aisd-midnight mb-4 sm:mb-6" style="font-family: 'Playfair Display', serif;">Our Core Values</h2>
+                <p class="text-lg sm:text-xl text-gray-700 px-4 max-w-3xl mx-auto">The principles that guide everything we do</p>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
@@ -113,11 +108,11 @@
     </section>
 
     <!-- History & Background -->
-    <section class="py-8 sm:py-12 md:py-16 bg-white">
+    <section class="py-12 sm:py-16 md:py-20 lg:py-24 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 md:gap-12 items-center">
                 <div class="order-2 lg:order-1">
-                    <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6">Our Story</h2>
+                    <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-aisd-midnight mb-6 sm:mb-8" style="font-family: 'Playfair Display', serif;">Our Story</h2>
                     <div class="space-y-3 sm:space-y-4 text-sm sm:text-base text-gray-700">
                         <p>
                             Founded in 2025, {{ $siteName }} emerged from a vision to create an educational
@@ -164,11 +159,11 @@
     </section>
 
     <!-- Leadership -->
-    <section class="py-8 sm:py-12 md:py-16 bg-gray-50">
+    <section class="py-12 sm:py-16 md:py-20 lg:py-24 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-8 sm:mb-12">
-                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">Our Leadership</h2>
-                <p class="text-base sm:text-lg text-gray-600 px-4">Meet the dedicated professionals guiding our school</p>
+            <div class="text-center mb-12 sm:mb-16">
+                <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-aisd-midnight mb-4 sm:mb-6" style="font-family: 'Playfair Display', serif;">Our Leadership</h2>
+                <p class="text-lg sm:text-xl text-gray-700 px-4 max-w-3xl mx-auto">Meet the dedicated professionals guiding our school</p>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
@@ -218,16 +213,22 @@
     </section>
 
     <!-- Call to Action -->
-    <section class="py-8 sm:py-12 md:py-16 bg-blue-600 text-white">
+    <section class="py-12 sm:py-16 md:py-20 lg:py-24 bg-aisd-ocean text-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Join Our Community</h2>
-            <p class="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 px-4">Be part of our mission to provide exceptional Islamic education</p>
-            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-                <a href="{{ route('admission.index') }}" class="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-3 px-6 sm:px-8 rounded-lg transition duration-300 min-h-[44px] flex items-center justify-center">
+            <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6" style="font-family: 'Playfair Display', serif;">Join Our Community</h2>
+            <p class="text-lg sm:text-xl md:text-2xl mb-8 sm:mb-10 px-4 max-w-3xl mx-auto">Be part of our mission to provide exceptional Islamic education</p>
+            <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center">
+                <a href="{{ route('admission.index') }}" class="inline-flex items-center justify-center rounded-xl border-2 border-aisd-gold bg-aisd-gold px-8 py-4 text-base font-semibold text-aisd-midnight transition-all hover:bg-aisd-gold/90 hover:border-aisd-gold/90 min-h-[44px] shadow-modern">
                     Apply for Admission
+                    <svg class="ml-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
                 </a>
-                <a href="{{ route('contact.index') }}" class="bg-white bg-opacity-20 hover:bg-opacity-30 border border-white text-white font-semibold py-3 px-6 sm:px-8 rounded-lg transition duration-300 min-h-[44px] flex items-center justify-center">
+                <a href="{{ route('contact.index') }}" class="inline-flex items-center justify-center rounded-xl border-2 border-white/30 bg-white/10 px-8 py-4 text-base font-semibold text-white transition-all hover:bg-white/20 hover:border-white/50 min-h-[44px]">
                     Contact Us
+                    <svg class="ml-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
                 </a>
             </div>
         </div>

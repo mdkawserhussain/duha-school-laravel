@@ -158,8 +158,9 @@
         <!-- End Google Tag Manager (noscript) -->
         @endif
 
-        <!-- Fixed Header - Must be first in DOM for proper z-index stacking -->
-        <x-header />
+        <div style="margin: 0 !important; padding: 0 !important; min-height: 0;">
+            <x-navbar :transparent="request()->routeIs('home')" />
+        </div>
 
         <div style="margin: 0 !important; padding: 0 !important; min-height: 0;">
             <!-- Page Content -->
@@ -167,7 +168,10 @@
                 @yield('content')
             </main>
 
-            <x-footer />
+            <!-- Footer with proper spacing -->
+            <div class="relative" style="margin-top: 0;">
+                <x-footer />
+            </div>
         </div>
 
         <!-- Simple Vanilla JS Lightbox -->

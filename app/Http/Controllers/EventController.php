@@ -16,36 +16,66 @@ class EventController extends Controller
 
     public function index(Request $request)
     {
-        $category = $request->get('category');
-        $upcoming = $request->get('upcoming', 'all'); // 'all', 'upcoming', 'past'
-        $fromDate = $request->get('from_date');
-        $toDate = $request->get('to_date');
+        try {
+            $category = $request->get('category');
+            $upcoming = $request->get('upcoming', 'all'); // 'all', 'upcoming', 'past'
+            $fromDate = $request->get('from_date');
+            $toDate = $request->get('to_date');
 
-        $cacheKey = 'events_index_' . md5($category . $upcoming . $fromDate . $toDate . $request->get('page', 1));
-        $cacheTime = 1800; // 30 minutes
+            // Service handles caching internally
+            $events = $this->eventService->getPublishedEvents($category, $upcoming, 12, $fromDate, $toDate);
 
-        $data = cache()->remember($cacheKey, $cacheTime, function () use ($category, $upcoming, $fromDate, $toDate) {
-            return [
-                'events' => $this->eventService->getPublishedEvents($category, $upcoming, 12, $fromDate, $toDate),
+            $data = [
+                'events' => $events,
                 'category' => $category,
                 'upcoming' => $upcoming,
                 'fromDate' => $fromDate,
                 'toDate' => $toDate,
             ];
-        });
 
-        return response()
-            ->view('pages.events.index', $data)
-            ->header('Cache-Control', 'public, max-age=1800');
+            return response()
+                ->view('pages.events.index', $data)
+                ->header('Cache-Control', 'public, max-age=1800');
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Error displaying events index', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            // Return view with empty events on error
+            return view('pages.events.index', [
+                'events' => new \Illuminate\Pagination\LengthAwarePaginator([], 0, 12),
+                'category' => null,
+                'upcoming' => 'all',
+                'fromDate' => null,
+                'toDate' => null,
+            ]);
+        }
     }
 
     public function show(\App\Models\Event $event)
     {
-        if (!$event->is_published || $event->published_at > now()) {
-            abort(404);
-        }
+        try {
+            // Check if event is published
+            if (!$event->is_published || ($event->published_at && $event->published_at > now())) {
+                abort(404);
+            }
 
-        return view('pages.events.show', compact('event'));
+            // Eager load media if not already loaded
+            if (!$event->relationLoaded('media')) {
+                $event->load('media');
+            }
+
+            return view('pages.events.show', compact('event'));
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Error displaying event', [
+                'error' => $e->getMessage(),
+                'event_id' => $event->id ?? null,
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            abort(500, 'An error occurred while loading the event. Please try again later.');
+        }
     }
 
     public function exportIcs(\App\Models\Event $event)

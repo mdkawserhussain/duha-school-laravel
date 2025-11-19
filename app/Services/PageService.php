@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Repositories\PageRepository;
 use App\Models\Page;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Cache;
 
 class PageService
 {
@@ -16,11 +18,81 @@ class PageService
 
     public function findPublishedPageBySlug(string $slug): ?Page
     {
-        return $this->pageRepository->findPublishedPageBySlug($slug);
+        $cacheKey = 'page_' . md5($slug);
+        $cacheTime = 3600; // 1 hour
+
+        return Cache::remember($cacheKey, $cacheTime, function () use ($slug) {
+            return $this->pageRepository->findPublishedPageBySlug($slug);
+        });
     }
 
-    public function getPublishedPages(): \Illuminate\Database\Eloquent\Collection
+    public function findCategoryPage(string $category, string $pageSlug = null): ?Page
     {
-        return $this->pageRepository->getPublishedPages();
+        $cacheKey = 'category_page_' . md5($category . '_' . ($pageSlug ?? 'landing'));
+        $cacheTime = 3600;
+
+        return Cache::remember($cacheKey, $cacheTime, function () use ($category, $pageSlug) {
+            return $this->pageRepository->findCategoryPage($category, $pageSlug);
+        });
+    }
+
+    public function findCategoryChildPage(string $category, string $pageSlug): ?Page
+    {
+        $cacheKey = 'category_child_page_' . md5($category . '_' . $pageSlug);
+        $cacheTime = 3600;
+
+        return Cache::remember($cacheKey, $cacheTime, function () use ($category, $pageSlug) {
+            return $this->pageRepository->findCategoryChildPage($category, $pageSlug);
+        });
+    }
+
+    public function getPublishedPages(): Collection
+    {
+        $cacheKey = 'pages_published_all';
+        $cacheTime = 3600;
+
+        return Cache::remember($cacheKey, $cacheTime, function () {
+            return $this->pageRepository->getPublishedPages();
+        });
+    }
+
+    public function getMenuPages(string $section = 'main'): Collection
+    {
+        $cacheKey = 'menu_pages_' . $section;
+        $cacheTime = 3600;
+
+        return Cache::remember($cacheKey, $cacheTime, function () use ($section) {
+            return $this->pageRepository->getMenuPages($section);
+        });
+    }
+
+    public function getRootMenuPages(string $section = 'main'): Collection
+    {
+        $cacheKey = 'root_menu_pages_' . $section;
+        $cacheTime = 3600;
+
+        return Cache::remember($cacheKey, $cacheTime, function () use ($section) {
+            return $this->pageRepository->getRootMenuPages($section);
+        });
+    }
+
+    public function getCategoryPages(string $category): Collection
+    {
+        $cacheKey = 'category_pages_' . md5($category);
+        $cacheTime = 3600;
+
+        return Cache::remember($cacheKey, $cacheTime, function () use ($category) {
+            return $this->pageRepository->getCategoryPages($category);
+        });
+    }
+
+    public function getFeaturedPages(int $limit = 5): Collection
+    {
+        $cacheKey = 'featured_pages_' . $limit;
+        $cacheTime = 3600;
+
+        return Cache::remember($cacheKey, $cacheTime, function () use ($limit) {
+            return $this->pageRepository->getFeaturedPages($limit);
+        });
     }
 }

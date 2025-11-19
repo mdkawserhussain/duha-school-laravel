@@ -59,17 +59,19 @@
             </div>
 
             <!-- Notices Grid -->
-            @if($notices->count() > 0)
+            @if($notices && $notices->count() > 0)
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
                 @foreach($notices as $notice)
-                <x-notice-card :notice="$notice" />
+                    <x-notice-card :notice="$notice" />
                 @endforeach
             </div>
 
             <!-- Pagination -->
-            <div class="flex justify-center">
+            @if($notices->hasPages())
+            <div class="flex justify-center mt-8">
                 {{ $notices->links() }}
             </div>
+            @endif
             @else
             <div class="text-center py-16">
                 <svg class="mx-auto h-24 w-24 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -77,13 +79,13 @@
                 </svg>
                 <h3 class="text-lg font-medium text-gray-900 mb-2">No notices found</h3>
                 <p class="text-gray-600 mb-6">
-                    @if($category)
+                    @if($category ?? null)
                         No notices found in the "{{ $category }}" category.
                     @else
                         There are no notices at this time.
                     @endif
                 </p>
-                @if($category)
+                @if($category ?? null)
                 <a href="{{ route('notices.index') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-300">
                     View All Notices
                 </a>

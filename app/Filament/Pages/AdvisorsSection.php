@@ -25,6 +25,11 @@ class AdvisorsSection extends Page implements HasForms
 
     protected static ?int $navigationSort = 10;
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false; // Hidden - Advisors section uses SiteSettingsHelper instead
+    }
+
     protected string $view = 'filament.pages.advisors-section';
 
     protected function getSectionKey(): string

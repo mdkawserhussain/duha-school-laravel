@@ -27,7 +27,7 @@
     $imageTitle = $sectionData['image_title'] ?? 'Our Campus';
     $imageSubtitle = $sectionData['image_subtitle'] ?? 'Where tradition meets innovation';
     $campusImageUrl = $section && $section->hasMedia('images') 
-        ? $section->getFirstMediaUrl('images') 
+        ? $section->getMediaUrlRelative('images') 
         : asset('images/vision-campus.svg');
     
     // Core Values
