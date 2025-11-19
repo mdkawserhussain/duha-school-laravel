@@ -4,7 +4,7 @@
     $announcements = collect([]);
     try {
         // Only load if we're absolutely sure we're not in an error context
-        if (!app()->bound('exception') &&
+        if (!app()->bound('exception') && 
             !str_contains(request()->path() ?? '', 'errors') &&
             !str_contains(request()->path() ?? '', '_dusk') &&
             !str_contains(request()->path() ?? '', 'telescope')) {
@@ -14,7 +14,7 @@
         // Silently fail - never break the page
         $announcements = collect([]);
     }
-
+    
     // Get primary color from site settings
     $primaryColor = \App\Helpers\SiteSettingsHelper::primaryColor();
     // Ensure color format is correct (add # if missing)
@@ -24,13 +24,13 @@
 @endphp
 
 @if($announcements->isNotEmpty() && request()->routeIs('home'))
-<div class="announcement-bar text-white text-sm overflow-hidden"
-     id="announcement-bar"
+<div class="announcement-bar text-white text-sm overflow-hidden" 
+     id="announcement-bar" 
      style="position: fixed; top: 0; left: 0; right: 0; z-index: 60; width: 100%; margin: 0 !important; padding: 0.5rem 0 !important; background: rgba(255, 255, 255, 0.05) !important;"
      x-data="{ scrolled: false }"
      x-init="
          const announcementBar = $el;
-         window.addEventListener('scroll', () => {
+         window.addEventListener('scroll', () => { 
              scrolled = window.pageYOffset > 50;
          });
      "
@@ -63,23 +63,23 @@
 @endif
 
 <!-- Main Navigation Bar -->
-<header
-    class="fixed top-0 left-0 w-full transition-all duration-300"
-    style="z-index: 9999 !important;"
+<header 
+    class="fixed top-0 left-0 w-full z-50 transition-all duration-300"
     :style="{
         backgroundColor: (scrolled || !{{ request()->routeIs('home') ? 'true' : 'false' }}) ? '{{ $primaryColor }}' : 'rgba(255, 255, 255, 0.05)',
         boxShadow: scrolled ? '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)' : 'none'
     }"
-    x-data="{
-        scrolled: false,
+    x-data="{ 
+        scrolled: false, 
         mobileMenuOpen: false,
-        hasAnnouncement: {{ $announcements->isNotEmpty() ? 'true' : 'false' }},
-        announcementHeight: 0
+        hasAnnouncement: {{ ($announcements->isNotEmpty() && request()->routeIs('home')) ? 'true' : 'false' }},
+        announcementHeight: 0,
+        justOpenedMenu: false
     }"
         x-init="
             const header = $el;
         const announcementBar = document.getElementById('announcement-bar');
-
+            
             if (announcementBar && hasAnnouncement) {
                 const updateHeight = () => {
                     const actualHeight = announcementBar.offsetHeight;
@@ -103,39 +103,98 @@
                 });
                 resizeObserver.observe(announcementBar);
                 window.addEventListener('scroll', () => {
-                    scrolled = window.pageYOffset > 50;
-                    if (scrolled) {
-                        header.style.setProperty('top', '0', 'important');
-                    } else {
-                        updateHeight();
-                    }
+                    // Skip scroll updates when menu is open to prevent interference
+                    if (mobileMenuOpen) return;
+                    
+                    requestAnimationFrame(() => {
+                        const wasScrolled = scrolled;
+                        scrolled = window.pageYOffset > 50;
+                        console.log('[DEBUG] Scroll event - pageYOffset:', window.pageYOffset, 'scrolled:', scrolled, 'wasScrolled:', wasScrolled, 'mobileMenuOpen:', mobileMenuOpen);
+                        if (scrolled) {
+                            header.style.setProperty('top', '0', 'important');
+                        } else {
+                            updateHeight();
+                        }
+                    });
                 });
             } else {
                 header.style.setProperty('top', '0', 'important');
                 window.addEventListener('scroll', () => {
-                    scrolled = window.pageYOffset > 50;
+                    // Skip scroll updates when menu is open to prevent interference
+                    if (mobileMenuOpen) return;
+                    
+                    requestAnimationFrame(() => {
+                        const wasScrolled = scrolled;
+                        scrolled = window.pageYOffset > 50;
+                        console.log('[DEBUG] Scroll event (no announcement) - pageYOffset:', window.pageYOffset, 'scrolled:', scrolled, 'wasScrolled:', wasScrolled, 'mobileMenuOpen:', mobileMenuOpen);
+                    });
                 });
             }
-
+            
             // Initial scroll check
             scrolled = window.pageYOffset > 50;
-
+            
         // Close mobile menu on escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && mobileMenuOpen) {
                 mobileMenuOpen = false;
             }
         });
-
+        
         // Close mobile menu when clicking outside
+        // Use a closure to capture the Alpine component reference
+        const headerElement = $el;
+        const menuState = { justOpened: false };
+        
+        // Expose menuState to window for hamburger button access
+        headerElement._menuState = menuState;
+        
         document.addEventListener('click', (e) => {
-            if (mobileMenuOpen && !$el.contains(e.target)) {
-                mobileMenuOpen = false;
-            }
+            // Use setTimeout to ensure Alpine has processed any click handlers first
+            setTimeout(() => {
+                // Try multiple ways to access Alpine data
+                let alpineComponent = null;
+                if (headerElement.__x) {
+                    alpineComponent = headerElement.__x.$data;
+                } else if (typeof Alpine !== 'undefined' && Alpine.$data) {
+                    alpineComponent = Alpine.$data(headerElement);
+                }
+                
+                if (!alpineComponent) {
+                    console.log('[DEBUG] Document click - Alpine data not available');
+                    return;
+                }
+                
+                const currentMobileMenuOpen = alpineComponent.mobileMenuOpen;
+                const currentJustOpenedMenu = alpineComponent.justOpenedMenu || menuState.justOpened;
+                
+                console.log('[DEBUG] Document click - mobileMenuOpen:', currentMobileMenuOpen, 'contains target:', headerElement.contains(e.target), 'target:', e.target, 'justOpenedMenu:', currentJustOpenedMenu, 'menuState.justOpened:', menuState.justOpened);
+                
+                // Don't close if we just opened the menu (prevent immediate close)
+                if (currentJustOpenedMenu || menuState.justOpened) {
+                    console.log('[DEBUG] Ignoring click - menu just opened');
+                    if (alpineComponent) {
+                        alpineComponent.justOpenedMenu = false;
+                    }
+                    menuState.justOpened = false;
+                    return;
+                }
+                
+                // Don't close if clicking on hamburger button or its children - use class selector to avoid quote issues
+                const hamburgerButton = headerElement.querySelector('.mobile-menu-toggle');
+                const isClickOnHamburger = hamburgerButton && (hamburgerButton === e.target || hamburgerButton.contains(e.target));
+                
+                if (currentMobileMenuOpen && !headerElement.contains(e.target) && !isClickOnHamburger) {
+                    console.log('[DEBUG] Closing menu - clicked outside');
+                    if (alpineComponent) {
+                        alpineComponent.mobileMenuOpen = false;
+                    }
+                }
+            }, 0);
         });
     "
         id="main-navbar">
-
+    
     <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Desktop Navigation -->
         <div class="hidden lg:flex items-center justify-between h-20">
@@ -148,27 +207,27 @@
                         $settings = \App\Helpers\SiteSettingsHelper::all();
                         $cacheBuster = $settings->updated_at ? $settings->updated_at->timestamp : time();
                     @endphp
-                    <img
-                        class="h-12 w-auto object-contain transition-transform duration-200 group-hover:rotate-3"
-                        src="{{ $logoUrl ?? asset('images/logo.svg') }}?v={{ $cacheBuster }}"
-                        alt="{{ $siteName }} Logo"
+                    <img 
+                        class="h-12 w-auto object-contain transition-transform duration-200 group-hover:rotate-3" 
+                        src="{{ $logoUrl ?? asset('images/logo.svg') }}?v={{ $cacheBuster }}" 
+                        alt="{{ $siteName }} Logo" 
                         onerror="this.onerror=null; this.src='{{ asset('images/logo.svg') }}?v={{ $cacheBuster }}'">
                 </a>
             </div>
-
+            
             <!-- Navigation Links - Right -->
             <div class="flex items-center space-x-6 md:space-x-8">
-                <a href="{{ route('home') }}"
+                <a href="{{ route('home') }}" 
                    class="relative text-sm font-medium transition-all duration-300 hover:text-white/90 group text-white">
                     <span class="relative">
                         Home
                         <span class="absolute bottom-0 left-0 h-0.5 bg-white transition-all duration-300 {{ request()->routeIs('home') ? 'w-full' : 'w-0 group-hover:w-full' }}"></span>
                     </span>
                 </a>
-
+                
                 <!-- About Dropdown -->
                 <div class="relative group" x-data="{ open: false }">
-                    <button
+                    <button 
                         class="relative text-sm font-medium transition-all duration-300 hover:text-white/90 flex items-center text-white"
                         @mouseenter="open = true"
                         @mouseleave="open = false"
@@ -181,7 +240,7 @@
                         </svg>
                         <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full"></span>
                     </button>
-                    <div
+                    <div 
                         class="absolute left-0 mt-2 w-56 bg-white rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-gray-100"
                         x-show="open"
                         x-transition:enter="transition ease-out duration-200"
@@ -196,10 +255,10 @@
                         <a href="{{ route('about.show', 'vision') }}" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 rounded-b-xl transition-colors duration-200">Vision & Mission</a>
                     </div>
                 </div>
-
+                
                 <!-- Academics Dropdown -->
                 <div class="relative group" x-data="{ open: false }">
-                    <button
+                    <button 
                         class="relative text-sm font-medium transition-all duration-300 hover:text-white/90 flex items-center text-white"
                         @mouseenter="open = true"
                         @mouseleave="open = false"
@@ -212,7 +271,7 @@
                         </svg>
                         <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full"></span>
                     </button>
-                    <div
+                    <div 
                         class="absolute left-0 mt-2 w-56 bg-white rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-gray-100"
                         x-show="open"
                         x-transition:enter="transition ease-out duration-200"
@@ -227,18 +286,18 @@
                         <a href="{{ route('academic.show', 'policies') }}" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 rounded-b-xl transition-colors duration-200">Policies</a>
                     </div>
                 </div>
-
-                <a href="{{ route('admission.index') }}"
+                
+                <a href="{{ route('admission.index') }}" 
                    class="relative text-sm font-medium transition-all duration-300 hover:text-white/90 group text-white">
                     <span class="relative">
                         Admission
                         <span class="absolute bottom-0 left-0 h-0.5 bg-white transition-all duration-300 {{ request()->routeIs('admission.*') ? 'w-full' : 'w-0 group-hover:w-full' }}"></span>
                     </span>
                 </a>
-
+                
                 <!-- News & Media Dropdown -->
                 <div class="relative group" x-data="{ open: false }">
-                    <button
+                    <button 
                         class="relative text-sm font-medium transition-all duration-300 hover:text-white/90 flex items-center text-white"
                         @mouseenter="open = true"
                         @mouseleave="open = false"
@@ -251,7 +310,7 @@
                         </svg>
                         <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full"></span>
                     </button>
-                    <div
+                    <div 
                         class="absolute left-0 mt-2 w-56 bg-white rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 border border-gray-100"
                         x-show="open"
                         x-transition:enter="transition ease-out duration-200"
@@ -266,29 +325,29 @@
                         <a href="{{ route('notices.index') }}" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 rounded-b-xl transition-colors duration-200">Notices</a>
                     </div>
                 </div>
-
-                <a href="{{ route('careers.index') }}"
+                
+                <a href="{{ route('careers.index') }}" 
                    class="relative text-sm font-medium transition-all duration-300 hover:text-white/90 group text-white">
                     <span class="relative">
                         Career
                         <span class="absolute bottom-0 left-0 h-0.5 bg-white transition-all duration-300 {{ request()->routeIs('careers.*') ? 'w-full' : 'w-0 group-hover:w-full' }}"></span>
                     </span>
                 </a>
-
-                <a href="{{ route('contact.index') }}"
+                
+                <a href="{{ route('contact.index') }}" 
                    class="relative text-sm font-medium transition-all duration-300 hover:text-white/90 group text-white">
                     <span class="relative">
                         Contact
                         <span class="absolute bottom-0 left-0 h-0.5 bg-white transition-all duration-300 {{ request()->routeIs('contact.*') ? 'w-full' : 'w-0 group-hover:w-full' }}"></span>
                     </span>
                 </a>
-
+                
                 <!-- Logout Button (only for authenticated users) -->
                 @auth
                     <form method="POST" action="{{ route('logout') }}" class="inline">
                         @csrf
-                        <button
-                            type="submit"
+                        <button 
+                            type="submit" 
                             class="relative text-sm font-medium transition-all duration-300 hover:text-white/90 text-white">
                             <span class="relative">
                                 Logout
@@ -299,9 +358,9 @@
                 @endauth
             </div>
         </div>
-
+        
         <!-- Mobile Navigation -->
-        <div class="lg:hidden flex items-center justify-between h-20 relative" style="z-index: 100001 !important;">
+        <div class="lg:hidden flex items-center justify-between h-20 relative z-[60]">
             <!-- Logo -->
             <div class="flex-shrink-0">
                 <a href="{{ route('home') }}" class="flex items-center">
@@ -311,22 +370,22 @@
                         $settings = \App\Helpers\SiteSettingsHelper::all();
                         $cacheBuster = $settings->updated_at ? $settings->updated_at->timestamp : time();
                     @endphp
-                    <img
-                        class="h-10 w-auto object-contain"
-                        src="{{ $logoUrl ?? asset('images/logo.svg') }}?v={{ $cacheBuster }}"
-                        alt="{{ $siteName }} Logo"
+                    <img 
+                        class="h-10 w-auto object-contain" 
+                        src="{{ $logoUrl ?? asset('images/logo.svg') }}?v={{ $cacheBuster }}" 
+                        alt="{{ $siteName }} Logo" 
                         onerror="this.onerror=null; this.src='{{ asset('images/logo.svg') }}?v={{ $cacheBuster }}'">
                 </a>
             </div>
-
+            
             <!-- Hamburger Menu Button -->
-            <button
+            <button 
                 type="button"
-                class="inline-flex items-center justify-center p-2 rounded-lg text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white/50 transition-colors duration-200 relative z-[60]"
-                @click="mobileMenuOpen = !mobileMenuOpen"
+                class="mobile-menu-toggle inline-flex items-center justify-center p-2 rounded-lg text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white/50 transition-colors duration-200 relative z-[60]"
+                @click.stop="console.log('[DEBUG] Hamburger clicked - scrolled:', scrolled, 'mobileMenuOpen before:', mobileMenuOpen); mobileMenuOpen = !mobileMenuOpen; justOpenedMenu = mobileMenuOpen; const headerEl = document.getElementById('main-navbar'); if (headerEl && headerEl._menuState) { headerEl._menuState.justOpened = mobileMenuOpen; } console.log('[DEBUG] mobileMenuOpen after:', mobileMenuOpen, 'justOpenedMenu:', justOpenedMenu); setTimeout(() => { justOpenedMenu = false; if (headerEl && headerEl._menuState) { headerEl._menuState.justOpened = false; } }, 200);"
                 :aria-expanded="mobileMenuOpen"
                 aria-label="Toggle menu"
-                style="pointer-events: auto; z-index: 100001 !important;">
+                style="pointer-events: auto; z-index: 60;">
                 <svg class="h-6 w-6" :class="{ 'hidden': mobileMenuOpen, 'block': !mobileMenuOpen }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
@@ -336,21 +395,17 @@
             </button>
         </div>
     </nav>
-
+    
     <!-- Mobile Menu Overlay -->
-    <div
-        class="fixed inset-0 lg:hidden"
-        style="z-index: 99999 !important;"
+    <div 
+        class="fixed inset-0 z-[100] lg:hidden"
         x-show="mobileMenuOpen"
-        x-cloak
-        @keydown.escape.window="mobileMenuOpen = false"
         x-transition:enter="transition ease-out duration-300"
         x-transition:enter-start="opacity-0"
         x-transition:enter-end="opacity-100"
         x-transition:leave="transition ease-in duration-200"
         x-transition:leave-start="opacity-100"
-        x-transition:leave-end="opacity-0"
-        @click.away="mobileMenuOpen = false">
+        x-transition:leave-end="opacity-0">
                 <div class="fixed inset-0 bg-black/50" @click="mobileMenuOpen = false"></div>
                 <div class="fixed inset-y-0 right-0 w-full max-w-sm bg-white/95 shadow-xl overflow-y-auto"
              :style="{
@@ -366,13 +421,13 @@
                             $settings = \App\Helpers\SiteSettingsHelper::all();
                             $cacheBuster = $settings->updated_at ? $settings->updated_at->timestamp : time();
                         @endphp
-                        <img
-                            class="h-10 w-auto object-contain"
-                            src="{{ $logoUrl ?? asset('images/logo.svg') }}?v={{ $cacheBuster }}"
-                            alt="{{ $siteName }} Logo"
+                        <img 
+                            class="h-10 w-auto object-contain" 
+                            src="{{ $logoUrl ?? asset('images/logo.svg') }}?v={{ $cacheBuster }}" 
+                            alt="{{ $siteName }} Logo" 
                             onerror="this.onerror=null; this.src='{{ asset('images/logo.svg') }}?v={{ $cacheBuster }}'">
                     </a>
-                    <button
+                    <button 
                         type="button"
                         class="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-aisd-midnight transition-colors duration-200"
                         @click="mobileMenuOpen = false"
@@ -382,16 +437,16 @@
                         </svg>
                     </button>
                 </div>
-
+                
                 <!-- Mobile Menu Content -->
                 <nav class="flex-1 px-6 py-8 space-y-6">
-                    <a href="{{ route('home') }}"
+                    <a href="{{ route('home') }}" 
                        class="block text-base font-medium text-gray-900 hover:text-aisd-midnight transition-colors duration-200 {{ request()->routeIs('home') ? 'text-aisd-midnight' : '' }}"
                        @click="mobileMenuOpen = false">Home</a>
-
+                    
                     <!-- About Section -->
                     <div x-data="{ open: false }">
-                        <button
+                        <button 
                             class="flex items-center justify-between w-full text-base font-medium text-gray-900 hover:text-aisd-midnight transition-colors duration-200"
                             @click="open = !open">
                             <span>About</span>
@@ -400,18 +455,18 @@
                             </svg>
                         </button>
                         <div x-show="open" x-transition class="mt-2 space-y-2 pl-4">
-                            <a href="{{ route('about.show', 'principal') }}"
+                            <a href="{{ route('about.show', 'principal') }}" 
                                class="block text-sm text-gray-600 hover:text-aisd-midnight transition-colors duration-200"
                                @click="mobileMenuOpen = false">Principal's Message</a>
-                            <a href="{{ route('about.show', 'vision') }}"
+                            <a href="{{ route('about.show', 'vision') }}" 
                                class="block text-sm text-gray-600 hover:text-aisd-midnight transition-colors duration-200"
                                @click="mobileMenuOpen = false">Vision & Mission</a>
                         </div>
                     </div>
-
+                    
                     <!-- Academics Section -->
                     <div x-data="{ open: false }">
-                        <button
+                        <button 
                             class="flex items-center justify-between w-full text-base font-medium text-gray-900 hover:text-aisd-midnight transition-colors duration-200"
                             @click="open = !open">
                             <span>Academics</span>
@@ -420,22 +475,22 @@
                             </svg>
                         </button>
                         <div x-show="open" x-transition class="mt-2 space-y-2 pl-4">
-                            <a href="{{ route('academic.show', 'curriculum') }}"
+                            <a href="{{ route('academic.show', 'curriculum') }}" 
                                class="block text-sm text-gray-600 hover:text-aisd-midnight transition-colors duration-200"
                                @click="mobileMenuOpen = false">Curriculum</a>
-                            <a href="{{ route('academic.show', 'policies') }}"
+                            <a href="{{ route('academic.show', 'policies') }}" 
                                class="block text-sm text-gray-600 hover:text-aisd-midnight transition-colors duration-200"
                                @click="mobileMenuOpen = false">Policies</a>
                         </div>
                     </div>
-
-                    <a href="{{ route('admission.index') }}"
+                    
+                    <a href="{{ route('admission.index') }}" 
                        class="block text-base font-medium text-gray-900 hover:text-aisd-midnight transition-colors duration-200 {{ request()->routeIs('admission.*') ? 'text-aisd-midnight' : '' }}"
                        @click="mobileMenuOpen = false">Admission</a>
-
+                    
                     <!-- News & Media Section -->
                     <div x-data="{ open: false }">
-                        <button
+                        <button 
                             class="flex items-center justify-between w-full text-base font-medium text-gray-900 hover:text-aisd-midnight transition-colors duration-200"
                             @click="open = !open">
                             <span>News & Media</span>
@@ -444,31 +499,31 @@
                             </svg>
                         </button>
                         <div x-show="open" x-transition class="mt-2 space-y-2 pl-4">
-                            <a href="{{ route('events.index') }}"
+                            <a href="{{ route('events.index') }}" 
                                class="block text-sm text-gray-600 hover:text-aisd-midnight transition-colors duration-200"
                                @click="mobileMenuOpen = false">Events</a>
-                            <a href="{{ route('notices.index') }}"
+                            <a href="{{ route('notices.index') }}" 
                                class="block text-sm text-gray-600 hover:text-aisd-midnight transition-colors duration-200"
                                @click="mobileMenuOpen = false">Notices</a>
                         </div>
                     </div>
-
-                    <a href="{{ route('careers.index') }}"
+                    
+                    <a href="{{ route('careers.index') }}" 
                        class="block text-base font-medium text-gray-900 hover:text-aisd-midnight transition-colors duration-200 {{ request()->routeIs('careers.*') ? 'text-aisd-midnight' : '' }}"
                        @click="mobileMenuOpen = false">Career</a>
-
-                    <a href="{{ route('contact.index') }}"
+                    
+                    <a href="{{ route('contact.index') }}" 
                        class="block text-base font-medium text-gray-900 hover:text-aisd-midnight transition-colors duration-200 {{ request()->routeIs('contact.*') ? 'text-aisd-midnight' : '' }}"
                        @click="mobileMenuOpen = false">Contact</a>
                 </nav>
-
+                
                 <!-- Mobile Menu Footer (Logout) -->
                 @auth
                     <div class="px-6 py-6 border-t border-gray-200">
                         <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                            <button
-                                type="submit"
+                            <button 
+                                type="submit" 
                                 class="w-full text-left text-base font-medium text-gray-900 hover:text-aisd-midnight transition-colors duration-200">
                                 Logout
                             </button>
@@ -479,76 +534,3 @@
         </div>
     </div>
 </header>
-
-<script>
-function navbarData(hasAnnouncement) {
-    return {
-        scrolled: false,
-        mobileMenuOpen: false,
-        hasAnnouncement: hasAnnouncement,
-        announcementHeight: 0,
-        scrollPosition: 0,
-
-        init() {
-            const header = this.$el;
-            const announcementBar = document.getElementById('announcement-bar');
-
-            // Watch for mobile menu changes with better body lock
-            this.$watch('mobileMenuOpen', (value) => {
-                if (value) {
-                    // Add class to body for CSS-based locking
-                    document.documentElement.classList.add('menu-open');
-                    document.body.classList.add('menu-open');
-                } else {
-                    // Remove class from body
-                    document.documentElement.classList.remove('menu-open');
-                    document.body.classList.remove('menu-open');
-                }
-            });
-
-            if (announcementBar && this.hasAnnouncement) {
-                const updateHeight = () => {
-                    const actualHeight = announcementBar.offsetHeight;
-                    this.announcementHeight = actualHeight;
-                    if (!this.scrolled) {
-                        header.style.setProperty('top', actualHeight + 'px', 'important');
-                    }
-                };
-
-                requestAnimationFrame(() => {
-                    updateHeight();
-                    setTimeout(() => {
-                        const computedTop = window.getComputedStyle(header).top;
-                        const expectedTop = announcementBar.offsetHeight + 'px';
-                        if (computedTop !== expectedTop) {
-                            updateHeight();
-                        }
-                    }, 50);
-                });
-
-                const resizeObserver = new ResizeObserver(() => {
-                    updateHeight();
-                });
-                resizeObserver.observe(announcementBar);
-
-                window.addEventListener('scroll', () => {
-                    this.scrolled = window.pageYOffset > 50;
-                    if (this.scrolled) {
-                        header.style.setProperty('top', '0', 'important');
-                    } else {
-                        updateHeight();
-                    }
-                });
-            } else {
-                header.style.setProperty('top', '0', 'important');
-                window.addEventListener('scroll', () => {
-                    this.scrolled = window.pageYOffset > 50;
-                });
-            }
-
-            // Initial scroll check
-            this.scrolled = window.pageYOffset > 50;
-        }
-    }
-}
-</script>

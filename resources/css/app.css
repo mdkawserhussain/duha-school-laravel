@@ -1664,3 +1664,65 @@ body:has(.hero-section) > div > main {
     left: 0 !important;
     right: 0 !important;
 }
+
+/* FORCE HEADER TO ALWAYS BE ON TOP - MAXIMUM Z-INDEX */
+header[x-data="header"] {
+    z-index: 2147483647 !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    transform: translateZ(0) !important;
+    -webkit-transform: translateZ(0) !important;
+    will-change: transform !important;
+}
+
+/* FORCE MOBILE MENU TO ALWAYS BE ON TOP */
+header[x-data="header"] .fixed.inset-0.lg\:hidden {
+    z-index: 2147483647 !important;
+    position: fixed !important;
+    transform: translateZ(0) !important;
+    -webkit-transform: translateZ(0) !important;
+    will-change: transform !important;
+}
+
+header[x-data="header"] .fixed.inset-y-0.right-0.w-full.max-w-sm.overflow-y-auto {
+    z-index: 2147483647 !important;
+    position: fixed !important;
+    transform: translateZ(0) !important;
+    -webkit-transform: translateZ(0) !important;
+    will-change: transform !important;
+}
+
+/* PREVENT MOBILE MENU FROM BEING CLIPPED BY OVERFLOW-HIDDEN SECTIONS */
+header[x-data="header"] .fixed.inset-0.lg\:hidden,
+header[x-data="header"] .fixed.inset-y-0.right-0.w-full.max-w-sm.overflow-y-auto {
+    contain: none !important;
+    overflow: visible !important;
+    clip-path: none !important;
+    -webkit-clip-path: none !important;
+}
+
+/* ENSURE MOBILE MENU OVERLAY IS NEVER CLIPPED */
+section[style*="overflow-hidden"],
+div[style*="overflow-hidden"],
+*[style*="overflow: hidden"] {
+    contain: layout style paint !important;
+}
+
+section[style*="overflow-hidden"] header[x-data="header"] .fixed.inset-0.lg\:hidden,
+section[style*="overflow-hidden"] header[x-data="header"] .fixed.inset-y-0.right-0.w-full.max-w-sm.overflow-y-auto,
+div[style*="overflow-hidden"] header[x-data="header"] .fixed.inset-0.lg\:hidden,
+div[style*="overflow-hidden"] header[x-data="header"] .fixed.inset-y-0.right-0.w-full.max-w-sm.overflow-y-auto,
+*[style*="overflow: hidden"] header[x-data="header"] .fixed.inset-0.lg\:hidden,
+*[style*="overflow: hidden"] header[x-data="header"] .fixed.inset-y-0.right-0.w-full.max-w-sm.overflow-y-auto {
+    position: fixed !important;
+    z-index: 2147483647 !important;
+    contain: none !important;
+    overflow: visible !important;
+    clip-path: none !important;
+    -webkit-clip-path: none !important;
+    transform: none !important;
+    -webkit-transform: none !important;
+}
