@@ -164,7 +164,7 @@
 
         <div style="margin: 0 !important; padding: 0 !important; min-height: 0;">
             <!-- Page Content -->
-            <main id="main-content" class="pt-16 lg:pt-20" style="margin: 0 !important; min-height: 0;">
+            <main id="main-content" class="{{ request()->routeIs('home') ? '' : 'pt-16 lg:pt-20' }}" style="margin: 0 !important; min-height: 0;">
                 @yield('content')
             </main>
 

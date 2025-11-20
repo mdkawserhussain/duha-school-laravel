@@ -48,7 +48,7 @@ class NoticeResource extends Resource
                                 }
                             }),
 
-                        FormComponents\TextInput::make('slug')
+                        FormComponents\Textarea::make('excerpt')
                             ->required()
                             ->unique(ignoreRecord: true)
                             ->maxLength(255)

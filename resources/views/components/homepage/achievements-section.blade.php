@@ -1,5 +1,5 @@
 <!-- Achievements Card Deck - AISD Style with Glassmorphism -->
-<section class="relative py-24 overflow-hidden" style="background-color: #0F224C;">
+<section class="relative py-24 overflow-hidden bg-aisd-midnight">
     <!-- Background decorative elements -->
     <div class="absolute inset-0 opacity-10" style="background-image:url('data:image/svg+xml,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;160&quot; height=&quot;160&quot; viewBox=&quot;0 0 160 160&quot;><g fill=&quot;none&quot; fill-rule=&quot;evenodd&quot; opacity=&quot;.16&quot;><path d=&quot;M0 0h160v160H0z&quot;/><path d=&quot;M80 40l40 80H40z&quot; stroke=&quot;%23F4C430&quot; stroke-width=&quot;0.6&quot; opacity=&quot;.3&quot;/></g></svg>');"></div>
     
@@ -43,23 +43,23 @@
 
         @if($section && $section->is_active && count($achievements) > 0)
         <div class="mb-10 sm:mb-14 text-center px-4">
-            <p class="text-xs font-semibold uppercase tracking-[0.5em]" style="color: #7F8DB2;">{{ $subtitle }}</p>
+            <p class="text-xs font-semibold uppercase tracking-[0.5em] text-aisd-slate">{{ $subtitle }}</p>
             <h2 class="mt-3 sm:mt-4 text-2xl sm:text-3xl font-bold text-white md:text-4xl">{{ $title }}</h2>
             <p class="mt-2 sm:mt-3 text-sm sm:text-base text-white max-w-3xl mx-auto opacity-90 px-4">{{ $description }}</p>
         </div>
 
         <div class="grid gap-4 sm:gap-6 md:grid-cols-2 xl:grid-cols-4">
             @foreach ($achievements as $achievement)
-                <div class="group relative rounded-3xl border border-white/20 p-4 sm:p-6 md:p-8 backdrop-blur-xl shadow-card transition-all hover:-translate-y-1 hover:shadow-soft" style="background-color: rgba(255, 255, 255, 0.08);">
+                <div class="group relative rounded-3xl border border-white/20 p-4 sm:p-6 md:p-8 backdrop-blur-xl shadow-card transition-all hover:-translate-y-1 hover:shadow-soft bg-white/8">
                     <!-- Icon -->
-                    <div class="mb-3 sm:mb-4 inline-flex rounded-2xl p-2.5 sm:p-3" style="background-color: rgba(244, 196, 48, 0.2); color: #F4C430;">
+                    <div class="mb-3 sm:mb-4 inline-flex rounded-2xl p-2.5 sm:p-3 bg-aisd-gold/20 text-aisd-gold">
                         <svg class="h-5 w-5 sm:h-6 sm:w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="24" height="24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $achievement['icon'] }}" />
                         </svg>
                     </div>
                     
                     <!-- Badge -->
-                    <span class="inline-flex items-center rounded-full px-3 sm:px-4 py-1 text-xs font-semibold uppercase tracking-wide" style="background-color: rgba(244, 196, 48, 0.2); border: 1px solid rgba(244, 196, 48, 0.3); color: #F4C430;">{{ $achievement['badge'] }}</span>
+                    <span class="inline-flex items-center rounded-full px-3 sm:px-4 py-1 text-xs font-semibold uppercase tracking-wide bg-aisd-gold/20 border border-aisd-gold/30 text-aisd-gold">{{ $achievement['badge'] }}</span>
                     
                     <!-- Content -->
                     <h3 class="mt-3 sm:mt-4 text-xl sm:text-2xl font-semibold text-white">{{ $achievement['title'] }}</h3>
@@ -67,7 +67,7 @@
                     
                     <!-- Call-to-Action Button -->
                     @if(!empty($achievement['link']) && !empty($achievement['button_text']))
-                    <a href="{{ $achievement['link'] }}" class="mt-4 sm:mt-6 flex items-center text-sm font-semibold transition-colors min-h-[44px]" style="color: #6EC1F5;">
+                    <a href="{{ $achievement['link'] }}" class="mt-4 sm:mt-6 flex items-center text-sm font-semibold transition-colors min-h-[44px] text-aisd-sky">
                         {{ $achievement['button_text'] }}
                         <svg class="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />

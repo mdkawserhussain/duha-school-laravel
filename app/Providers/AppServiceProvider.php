@@ -16,6 +16,7 @@ use App\Observers\NavigationItemObserver;
 use App\Observers\NoticeObserver;
 use App\Observers\PageObserver;
 use App\Services\NavigationService;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -34,6 +35,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Register View Composers
+        View::composer('components.navbar', \App\View\Composers\NavbarComposer::class);
+
         // Register observers to clear cache on homepage section updates
         HomePageSection::observe(HomePageSectionObserver::class);
         HomePageContent::observe(HomePageContentObserver::class);

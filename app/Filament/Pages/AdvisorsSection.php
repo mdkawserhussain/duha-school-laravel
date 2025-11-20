@@ -51,40 +51,57 @@ class AdvisorsSection extends Page implements HasForms
     {
         return $schema
             ->schema([
-                Components\Section::make($this->getSectionTitle())
+                Components\Section::make('Section Settings')
+                    ->description('Configure the advisors section heading and visibility')
                     ->schema([
                         FormComponents\TextInput::make('title')
-                            ->label('Title')
+                            ->label('Section Title')
+                            ->default('Advisors & Board of Governors')
                             ->maxLength(255)
-                            ->columnSpanFull(),
+                            ->columnSpan(1),
 
                         FormComponents\TextInput::make('subtitle')
-                            ->label('Subtitle')
+                            ->label('Section Subtitle')
+                            ->default('Leadership')
                             ->maxLength(255)
-                            ->columnSpanFull(),
+                            ->columnSpan(1),
 
+                        FormComponents\Textarea::make('description')
+                            ->label('Section Description')
+                            ->default('Distinguished scholars, Cambridge examiners, and community leaders steward our Islamic ethos and academic rigor.')
+                            ->maxLength(500)
+                            ->rows(2)
+                            ->columnSpanFull(),
+                    ])
+                    ->columns(2)
+                    ->collapsible(),
+
+                Components\Section::make('Advisors')
+                    ->description('Add and manage advisor profiles')
+                    ->schema([
                         FormComponents\Repeater::make('advisors')
-                            ->label('Advisors')
+                            ->label('')
                             ->schema([
                                 FormComponents\TextInput::make('name')
-                                    ->label('Name')
+                                    ->label('Full Name')
                                     ->required()
                                     ->maxLength(255)
+                                    ->placeholder('Dr. John Doe')
                                     ->columnSpan(1),
                                 
                                 FormComponents\TextInput::make('title')
                                     ->label('Title/Role')
                                     ->required()
                                     ->maxLength(255)
-                                    ->placeholder('e.g., Chair, Board of Governors')
+                                    ->placeholder('Chair, Board of Governors')
                                     ->columnSpan(1),
-                                
+
                                 FormComponents\Textarea::make('description')
-                                    ->label('Description')
+                                    ->label('Bio/Description')
                                     ->required()
                                     ->maxLength(500)
-                                    ->rows(3)
-                                    ->placeholder('e.g., Former Cambridge examiner & Islamic pedagogy researcher.')
+                                    ->rows(2)
+                                    ->placeholder('Brief professional background...')
                                     ->columnSpanFull(),
                                 
                                 FormComponents\TextInput::make('photo_url')
@@ -92,47 +109,48 @@ class AdvisorsSection extends Page implements HasForms
                                     ->url()
                                     ->maxLength(500)
                                     ->placeholder('https://example.com/photo.jpg')
-                                    ->helperText('URL to the advisor\'s profile photo')
-                                    ->columnSpanFull(),
+                                    ->columnSpan(1),
                                 
                                 FormComponents\TextInput::make('linkedin_url')
-                                    ->label('LinkedIn URL')
+                                    ->label('LinkedIn')
                                     ->url()
                                     ->maxLength(500)
                                     ->placeholder('https://linkedin.com/in/username')
                                     ->columnSpan(1),
-                                
-                                FormComponents\TextInput::make('email')
-                                    ->label('Email')
-                                    ->email()
-                                    ->maxLength(255)
-                                    ->placeholder('advisor@example.com')
-                                    ->columnSpan(1),
-                                
-                                FormComponents\TextInput::make('accent_color')
-                                    ->label('Accent Color')
-                                    ->maxLength(20)
-                                    ->placeholder('#F4C430')
-                                    ->helperText('Hex color code for the advisor\'s accent color (optional)')
-                                    ->columnSpan(1),
                             ])
                             ->columns(2)
-                            ->defaultItems(3)
+                            ->defaultItems(1)
                             ->minItems(1)
+                            ->maxItems(10)
                             ->collapsible()
-                            ->itemLabel(fn (array $state): ?string => ($state['name'] ?? 'New Advisor') . ' - ' . ($state['title'] ?? ''))
-                            ->columnSpanFull(),
+                            ->cloneable()
+                            ->reorderable()
+                            ->itemLabel(fn (array $state): ?string => 
+                                !empty($state['name']) 
+                                    ? $state['name'] . (!empty($state['title']) ? ' - ' . $state['title'] : '')
+                                    : 'New Advisor'
+                            )
+                            ->columnSpanFull()
+                            ->addActionLabel('Add Advisor'),
+                    ]),
 
+                Components\Section::make('Display Settings')
+                    ->schema([
                         FormComponents\TextInput::make('sort_order')
                             ->label('Sort Order')
                             ->numeric()
-                            ->default(0),
+                            ->default(0)
+                            ->helperText('Lower numbers appear first on the homepage')
+                            ->columnSpan(1),
 
                         FormComponents\Toggle::make('is_active')
-                            ->label('Active')
-                            ->default(true),
+                            ->label('Show Section on Homepage')
+                            ->default(true)
+                            ->helperText('Toggle to show/hide this section')
+                            ->columnSpan(1),
                     ])
-                    ->columns(1),
+                    ->columns(2)
+                    ->collapsible(),
             ])
             ->statePath('data');
     }

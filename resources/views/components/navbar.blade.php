@@ -40,33 +40,58 @@
         transparent: {{ $transparent ? 'true' : 'false' }},
         scrolled: false
     }"
-    x-init="
-        const header = $el;
-        const announcementBar = header.querySelector('.announcement-bar');
-        
-        function updatePosition() {
-            if (announcementBar && !scrolled) {
-                const height = announcementBar.offsetHeight;
-                header.style.top = height + 'px';
-            } else {
-                header.style.top = '0';
+    @keydown.window.tab="
+        if (mobileMenuOpen) {
+            const menu = document.getElementById('mobile-menu');
+            if (menu) {
+                const focusable = menu.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex=\'-1\'])');
+                if (focusable.length) {
+                    const first = focusable[0];
+                    const last = focusable[focusable.length - 1];
+                    if ($event.shiftKey) {
+                        if (document.activeElement === first) {
+                            $event.preventDefault();
+                            last.focus();
+                        }
+                    } else {
+                        if (document.activeElement === last) {
+                            $event.preventDefault();
+                            first.focus();
+                        }
+                    }
+                }
             }
         }
+    "
+    x-init="
+        // Watch mobile menu state to lock/unlock body scroll
+        $watch('mobileMenuOpen', value => {
+            if (value) {
+                document.body.classList.add('overflow-hidden');
+                document.documentElement.classList.add('overflow-hidden');
+                // Focus first element
+                setTimeout(() => {
+                    const menu = document.getElementById('mobile-menu');
+                    if (menu) {
+                        const focusable = menu.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex=\'-1\'])');
+                        if (focusable.length) focusable[0].focus();
+                    }
+                }, 100);
+            } else {
+                document.body.classList.remove('overflow-hidden');
+                document.documentElement.classList.remove('overflow-hidden');
+            }
+        });
         
         function handleScroll() {
             scrolled = window.pageYOffset > 50;
-            updatePosition();
-        }
-        
-        if (announcementBar) {
-            updatePosition();
-            new ResizeObserver(() => updatePosition()).observe(announcementBar);
         }
         
         handleScroll();
         window.addEventListener('scroll', () => handleScroll());
     "
-    class="fixed top-0 left-0 w-full z-50"
+    class="fixed top-0 left-0 w-full z-[9999]"
+    style="z-index: 9999;"
     role="banner"
 >
     {{-- Top Announcement Bar --}}
@@ -120,7 +145,7 @@
             'bg-white shadow-md': scrolled || !transparent,
             'bg-transparent': transparent && !scrolled
         }"
-        :style="(scrolled || !transparent) ? 'background-color: {{ $primaryColor }}' : ''"
+        :style="(transparent && !scrolled) ? 'background-color: {{ $primaryColor }}' : ''"
         role="navigation"
         aria-label="Main navigation"
     >
@@ -131,7 +156,10 @@
                     <a
                         href="{{ route('home') }}"
                         class="navbar-logo navbar-focus focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg p-1"
-                        :class="scrolled || (transparent && !scrolled) ? 'focus:ring-white' : 'focus:ring-gray-900'"
+                        :class="{
+                            'focus:ring-white': transparent && !scrolled,
+                            'focus:ring-gray-900': scrolled || !transparent
+                        }"
                         aria-label="Go to homepage"
                     >
                         @php
@@ -140,7 +168,6 @@
                         @endphp
                         <img
                             class="h-8 sm:h-10 lg:h-12 w-auto transition-all duration-300"
-                            :class="scrolled || (transparent && !scrolled) ? 'brightness-0 invert' : ''"
                             src="{{ $logoUrl ?? asset('images/logo.svg') }}"
                             alt="{{ $siteName }} Logo"
                             onerror="this.onerror=null; this.src='{{ asset('images/logo.svg') }}'"
@@ -148,8 +175,8 @@
                     </a>
                 </div>
 
-                {{-- Desktop Navigation - Centered --}}
-                <div class="hidden lg:flex items-center space-x-2 flex-1 justify-center min-w-0 px-6">
+                {{-- Desktop Navigation - Centered (only on xl screens and above) --}}
+                <div class="hidden xl:flex items-center gap-1 2xl:gap-2 flex-1 justify-center min-w-0 px-4 2xl:px-6">
                     {{-- Dynamic Navigation Items --}}
                     @foreach($navigationItems as $navItem)
                         @php
@@ -161,51 +188,8 @@
                             $navUrl = $navItem->url ?? '#';
                             
                             // Check active state - improved detection
-                            $isActive = false;
-                            
-                            // Check if route_name matches current route
-                            if ($navItem->route_name) {
-                                try {
-                                    $isActive = request()->routeIs($navItem->route_name) || 
-                                               request()->routeIs($navItem->route_name . '.*');
-                                } catch (\Exception $e) {
-                                    // Route doesn't exist, skip
-                                }
-                            }
-                            
-                            // Also check URL match for non-route items
-                            if (!$isActive && $navItem->url && !$navItem->is_external) {
-                                $currentUrl = request()->fullUrl();
-                                $navUrlPath = parse_url($navItem->url, PHP_URL_PATH);
-                                $currentPath = request()->path();
-                                
-                                if ($navUrlPath && ($currentPath === ltrim($navUrlPath, '/') || str_starts_with($currentPath, ltrim($navUrlPath, '/')))) {
-                                    $isActive = true;
-                                }
-                            }
-                            
-                            // If parent has children, check if any child is active
-                            if (!$isActive && $hasChildren) {
-                                foreach ($children as $child) {
-                                    if ($child->route_name) {
-                                        try {
-                                            if (request()->routeIs($child->route_name) || request()->routeIs($child->route_name . '.*')) {
-                                                $isActive = true;
-                                                break;
-                                            }
-                                        } catch (\Exception $e) {
-                                            // Route doesn't exist, skip
-                                        }
-                                    } elseif ($child->url && !$child->is_external) {
-                                        $childUrlPath = parse_url($child->url, PHP_URL_PATH);
-                                        $currentPath = request()->path();
-                                        if ($childUrlPath && ($currentPath === ltrim($childUrlPath, '/') || str_starts_with($currentPath, ltrim($childUrlPath, '/')))) {
-                                            $isActive = true;
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
+                            // Check active state using View Composer helper
+                            $activeState = $isActive($navItem);
                             
                             // Link attributes
                             $linkAttrs = '';
@@ -220,9 +204,13 @@
                                 <button
                                     @click="open = !open"
                                     @keydown.escape="open = false"
-                                    class="nav-link flex items-center gap-1.5 px-4 py-2.5 text-base font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors"
-                                    :class="scrolled || (transparent && !scrolled) ? 'text-white hover:bg-white/10 focus:ring-white' : 'text-gray-900 hover:bg-gray-100 focus:ring-gray-900'"
-                                    :class="(scrolled || (transparent && !scrolled)) && {{ $isActive ? 'true' : 'false' }} ? 'bg-white/20 font-semibold' : !(scrolled || (transparent && !scrolled)) && {{ $isActive ? 'true' : 'false' }} ? 'bg-gray-100 font-semibold' : ''"
+                                    class="nav-link flex items-center gap-1 px-2 2xl:px-3 py-2 text-xs 2xl:text-sm font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors whitespace-nowrap"
+                                    :class="{
+                                        'text-white hover:bg-white/10 focus:ring-white': transparent && !scrolled,
+                                        'text-gray-900 hover:bg-gray-100 focus:ring-gray-900': scrolled || !transparent,
+                                        'bg-white/20 font-semibold': (transparent && !scrolled) && {{ $activeState ? 'true' : 'false' }},
+                                        'bg-gray-100 font-semibold': (scrolled || !transparent) && {{ $activeState ? 'true' : 'false' }}
+                                    }"
                                     :aria-expanded="open"
                                     aria-haspopup="true"
                                 >
@@ -297,9 +285,13 @@
                             {{-- Simple Link Menu Item --}}
                             <a
                                 href="{{ $navUrl }}"
-                                class="nav-link flex items-center gap-1.5 px-4 py-2.5 text-base font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors"
-                                :class="scrolled || (transparent && !scrolled) ? 'text-white hover:bg-white/10 focus:ring-white' : 'text-gray-900 hover:bg-gray-100 focus:ring-gray-900'"
-                                :class="(scrolled || (transparent && !scrolled)) && {{ $isActive ? 'true' : 'false' }} ? 'bg-white/20 font-semibold' : !(scrolled || (transparent && !scrolled)) && {{ $isActive ? 'true' : 'false' }} ? 'bg-gray-100 font-semibold' : ''"
+                                class="nav-link flex items-center gap-1 px-2 2xl:px-3 py-2 text-xs 2xl:text-sm font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors whitespace-nowrap"
+                                :class="{
+                                    'text-white hover:bg-white/10 focus:ring-white': transparent && !scrolled,
+                                    'text-gray-900 hover:bg-gray-100 focus:ring-gray-900': scrolled || !transparent,
+                                    'bg-white/20 font-semibold': (transparent && !scrolled) && {{ $activeState ? 'true' : 'false' }},
+                                    'bg-gray-100 font-semibold': (scrolled || !transparent) && {{ $activeState ? 'true' : 'false' }}
+                                }"
                                 aria-current="{{ $isActive ? 'page' : null }}"
                                 {!! $linkAttrs !!}
                             >
@@ -321,7 +313,10 @@
                             <button
                                 type="submit"
                                 class="px-4 py-2.5 rounded-lg text-base font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2"
-                                :class="scrolled || (transparent && !scrolled) ? 'text-white hover:bg-white/10 focus:ring-white' : 'text-gray-900 hover:bg-gray-100 focus:ring-gray-900'"
+                                :class="{
+                                    'text-white hover:bg-white/10 focus:ring-white': transparent && !scrolled,
+                                    'text-gray-900 hover:bg-gray-100 focus:ring-gray-900': scrolled || !transparent
+                                }"
                             >
                                 Logout
                             </button>
@@ -329,12 +324,15 @@
                     @endauth
                 </div>
 
-                {{-- Mobile Menu Button --}}
-                <div class="lg:hidden flex-shrink-0 ml-auto z-10">
+                {{-- Mobile Menu Button (show on screens below xl) --}}
+                <div class="xl:hidden flex-shrink-0 ml-auto z-10">
                     <button
-                        @click.stop="mobileMenuOpen = !mobileMenuOpen"
+                        @click.stop="mobileMenuOpen = !mobileMenuOpen; $dispatch('mobile-menu-toggle', { open: mobileMenuOpen })"
                         class="inline-flex items-center justify-center p-2.5 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 min-w-[44px] min-h-[44px]"
-                        :class="scrolled || (transparent && !scrolled) ? 'text-white hover:bg-white/10 focus:ring-white' : 'text-gray-900 hover:bg-gray-100 focus:ring-gray-900'"
+                        :class="{
+                            'text-white hover:bg-white/10 focus:ring-white': transparent && !scrolled,
+                            'text-gray-900 hover:bg-gray-100 focus:ring-gray-900': scrolled || !transparent
+                        }"
                         :aria-expanded="mobileMenuOpen"
                         aria-controls="mobile-menu"
                         aria-label="Toggle mobile menu"
@@ -350,49 +348,32 @@
             </div>
         </div>
     </nav>
+</header>
 
-    {{-- Mobile Menu Overlay & Panel --}}
+{{-- Mobile Menu Dropdown (inline accordion - show on screens below xl) --}}
+<div 
+    x-data="{ mobileMenuOpen: false }"
+    @mobile-menu-toggle.window="mobileMenuOpen = $event.detail.open"
+    class="xl:hidden"
+>
     <div
         x-show="mobileMenuOpen"
         x-cloak
         @keydown.escape.window="mobileMenuOpen = false"
-        class="fixed inset-0 z-40 lg:hidden"
-        style="display: none;"
+        x-transition:enter="transition ease-out duration-200"
+        x-transition:enter-start="opacity-0 -translate-y-2"
+        x-transition:enter-end="opacity-100 translate-y-0"
+        x-transition:leave="transition ease-in duration-150"
+        x-transition:leave-start="opacity-100 translate-y-0"
+        x-transition:leave-end="opacity-0 -translate-y-2"
+        class="fixed top-16 left-0 right-0 bg-white shadow-lg border-t border-gray-200 max-h-[calc(100vh-4rem)] overflow-y-auto"
+        style="z-index: 9998;"
+        id="mobile-menu"
+        role="navigation"
+        aria-label="Mobile navigation"
     >
-        {{-- Backdrop Overlay --}}
-        <div 
-            class="fixed inset-0 bg-black/50 transition-opacity duration-300"
-            :class="mobileMenuOpen ? 'opacity-100' : 'opacity-0'"
-            @click="mobileMenuOpen = false"
-        ></div>
-
-        {{-- Mobile Menu Panel --}}
-        <div
-            @click.stop
-            class="fixed inset-y-0 right-0 w-full max-w-sm bg-white shadow-2xl overflow-y-auto z-50 transform"
-            :class="mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'"
-            style="transition: transform 300ms ease-in-out;"
-            :style="scrolled ? 'background-color: {{ $primaryColor }}' : ''"
-        >
-            <div class="flex flex-col h-full">
-                {{-- Mobile Header --}}
-                <div class="flex items-center justify-between p-4 border-b" :class="scrolled ? 'bg-transparent border-white/20' : 'border-gray-200 bg-white'">
-                    <span class="text-lg font-semibold" :class="scrolled ? 'text-white' : 'text-gray-900'">Menu</span>
-                    <button
-                        @click="mobileMenuOpen = false"
-                        class="p-2.5 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
-                        :class="scrolled ? 'text-white/80 hover:text-white hover:bg-white/10 focus:ring-white' : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100 focus:ring-gray-500'"
-                        aria-label="Close mobile menu"
-                    >
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                </div>
-
-                {{-- Mobile Menu Content --}}
-                <div class="flex-1 overflow-y-auto py-4 px-3">
-                    <nav class="space-y-1">
+        <div class="py-4 px-4">
+            <nav class="space-y-1">
                         {{-- Dynamic Navigation Items --}}
                         @foreach($navigationItems as $navItem)
                             @php
@@ -406,48 +387,8 @@
                                 // Check active state for mobile
                                 $isActiveMobile = false;
                                 
-                                // Check if route_name matches current route
-                                if ($navItem->route_name) {
-                                    try {
-                                        $isActiveMobile = request()->routeIs($navItem->route_name) || 
-                                                         request()->routeIs($navItem->route_name . '.*');
-                                    } catch (\Exception $e) {
-                                        // Route doesn't exist, skip
-                                    }
-                                }
-                                
-                                // Also check URL match for non-route items
-                                if (!$isActiveMobile && $navItem->url && !$navItem->is_external) {
-                                    $navUrlPath = parse_url($navItem->url, PHP_URL_PATH);
-                                    $currentPath = request()->path();
-                                    
-                                    if ($navUrlPath && ($currentPath === ltrim($navUrlPath, '/') || str_starts_with($currentPath, ltrim($navUrlPath, '/')))) {
-                                        $isActiveMobile = true;
-                                    }
-                                }
-                                
-                                // If parent has children, check if any child is active
-                                if (!$isActiveMobile && $hasChildren) {
-                                    foreach ($children as $child) {
-                                        if ($child->route_name) {
-                                            try {
-                                                if (request()->routeIs($child->route_name) || request()->routeIs($child->route_name . '.*')) {
-                                                    $isActiveMobile = true;
-                                                    break;
-                                                }
-                                            } catch (\Exception $e) {
-                                                // Route doesn't exist, skip
-                                            }
-                                        } elseif ($child->url && !$child->is_external) {
-                                            $childUrlPath = parse_url($child->url, PHP_URL_PATH);
-                                            $currentPath = request()->path();
-                                            if ($childUrlPath && ($currentPath === ltrim($childUrlPath, '/') || str_starts_with($currentPath, ltrim($childUrlPath, '/')))) {
-                                                $isActiveMobile = true;
-                                                break;
-                                            }
-                                        }
-                                    }
-                                }
+                                // Check active state using View Composer helper
+                                $isActiveMobile = $isActive($navItem);
                                 
                                 // Link attributes
                                 $linkAttrs = '';
@@ -461,9 +402,8 @@
                                 <div x-data="{ open: false }" class="space-y-1">
                                     <button
                                         @click="open = !open"
-                                        class="flex items-center justify-between w-full px-4 py-3 text-base font-medium rounded-lg transition-colors"
-                                        :class="scrolled ? 'text-white hover:bg-white/10' : 'text-gray-900 hover:bg-gray-100'"
-                                        :class="{{ $isActiveMobile ? 'true' : 'false' }} ? (scrolled ? 'bg-white/20 font-semibold' : 'bg-gray-100 font-semibold') : ''"
+                                        class="flex items-center justify-between w-full px-4 py-3 text-base font-medium rounded-lg text-gray-900 hover:bg-gray-100 transition-colors"
+                                        :class="{{ $isActiveMobile ? 'true' : 'false' }} ? 'bg-gray-100 font-semibold' : ''"
                                     >
                                         <span class="flex items-center gap-2">
                                             @if($navItem->icon && !str_starts_with($navItem->icon, 'heroicon'))
@@ -483,16 +423,14 @@
                                         x-transition:leave="transition ease-in duration-150"
                                         x-transition:leave-start="opacity-100 max-h-96"
                                         x-transition:leave-end="opacity-0 max-h-0"
-                                        class="pl-4 space-y-1 ml-4 overflow-hidden"
-                                        :class="scrolled ? 'border-l-2 border-white/20' : 'border-l-2 border-gray-200'"
+                                        class="pl-4 space-y-1 ml-4 overflow-hidden border-l-2 border-gray-200"
                                     >
                                         {{-- Parent Link (if route_name or url exists) --}}
                                         @if($navItem->route_name || $navItem->url)
                                             <a
                                                 href="{{ $navUrl }}"
                                                 @click="mobileMenuOpen = false"
-                                                class="block px-4 py-2.5 text-sm font-medium rounded-lg transition-colors"
-                                                :class="scrolled ? 'text-white hover:bg-white/10 border-b border-white/20' : 'text-gray-800 hover:bg-gray-100 border-b border-gray-100'"
+                                                class="block px-4 py-2.5 text-sm font-medium rounded-lg transition-colors text-gray-800 hover:bg-gray-100 border-b border-gray-100"
                                                 {!! $linkAttrs !!}
                                             >
                                                 {{ $navItem->title }}
@@ -520,9 +458,7 @@
                                             <a
                                                 href="{{ $childUrl }}"
                                                 @click="mobileMenuOpen = false"
-                                                class="block px-4 py-2.5 text-sm rounded-lg transition-colors {{ $childActive ? 'font-medium' : '' }}"
-                                                :class="scrolled ? 'text-white/90 hover:bg-white/10 hover:text-white' : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'"
-                                                :class="scrolled && {{ $childActive ? 'true' : 'false' }} ? 'bg-white/10' : !scrolled && {{ $childActive ? 'true' : 'false' }} ? 'bg-gray-50' : ''"
+                                                class="block px-4 py-2.5 text-sm rounded-lg transition-colors text-gray-700 hover:bg-gray-100 hover:text-gray-900 {{ $childActive ? 'font-medium bg-gray-50' : '' }}"
                                                 {!! $childLinkAttrs !!}
                                                 aria-current="{{ $childActive ? 'page' : null }}"
                                             >
@@ -539,9 +475,8 @@
                                 <a
                                     href="{{ $navUrl }}"
                                     @click="mobileMenuOpen = false"
-                                    class="block px-4 py-3 text-base font-medium rounded-lg transition-colors"
-                                    :class="scrolled ? 'text-white hover:bg-white/10' : 'text-gray-900 hover:bg-gray-100'"
-                                    :class="{{ $isActiveMobile ? 'true' : 'false' }} ? (scrolled ? 'bg-white/20 font-semibold' : 'bg-gray-100 font-semibold') : ''"
+                                    class="block px-4 py-3 text-base font-medium rounded-lg transition-colors text-gray-900 hover:bg-gray-100"
+                                    :class="{{ $isActiveMobile ? 'true' : 'false' }} ? 'bg-gray-100 font-semibold' : ''"
                                     {!! $linkAttrs !!}
                                 >
                                     <span class="flex items-center gap-2">
@@ -556,22 +491,19 @@
 
                         {{-- Mobile Logout (only for logged-in users) --}}
                         @auth
-                            <div class="px-2 py-3 mt-auto" :class="scrolled ? 'border-t border-white/20' : 'border-t border-gray-200'">
+                            <div class="px-2 py-3 mt-auto border-t border-gray-200">
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
                                     <button
                                         type="submit"
-                                        class="block w-full text-left px-4 py-3 text-base font-medium rounded-lg transition-colors"
-                                        :class="scrolled ? 'text-white hover:bg-white/10' : 'text-gray-900 hover:bg-gray-100'"
+                                        class="block w-full text-left px-4 py-3 text-base font-medium rounded-lg transition-colors text-gray-900 hover:bg-gray-100"
                                     >
                                         Logout
                                     </button>
                                 </form>
                             </div>
                         @endauth
-                    </nav>
-                </div>
-            </div>
+            </nav>
         </div>
     </div>
-</header>
+</div>

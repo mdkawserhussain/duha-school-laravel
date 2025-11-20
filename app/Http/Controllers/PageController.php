@@ -43,6 +43,18 @@ class PageController extends Controller
             return view('pages.category', compact('page', 'children'));
         }
 
+        // Use leadership template for specific pages
+        $leadershipPages = [
+            'founder-director-message',
+            'principal-message',
+            'founder-message',
+            'director-message',
+        ];
+        
+        if (in_array($slug, $leadershipPages)) {
+            return view('pages.leadership', compact('page'));
+        }
+
         return view('pages.page', compact('page'));
     }
 
@@ -99,6 +111,19 @@ class PageController extends Controller
             if (!$page) {
                 abort(404);
             }
+            
+            // Use leadership template for specific pages
+            $leadershipPages = [
+                'founder-director-message',
+                'principal-message',
+                'founder-message',
+                'director-message',
+            ];
+            
+            if (in_array($pageSlug, $leadershipPages)) {
+                return view('pages.leadership', compact('page'));
+            }
+            
             return view('pages.page', compact('page'));
         }
 

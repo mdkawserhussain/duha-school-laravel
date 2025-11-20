@@ -3,10 +3,8 @@
 namespace App\Filament\Resources\NoticeResource\Pages;
 
 use App\Filament\Resources\NoticeResource;
-use Filament\Resources\Pages\CreateRecord;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Storage;
 use Filament\Notifications\Notification;
+use Filament\Resources\Pages\CreateRecord;
 
 class CreateNotice extends CreateRecord
 {

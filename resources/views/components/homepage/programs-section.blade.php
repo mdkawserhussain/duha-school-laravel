@@ -33,9 +33,9 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:flex lg:flex-row gap-4 sm:gap-6 md:gap-8 mb-12 sm:mb-16">
             @foreach($programs as $program)
             <div class="group relative lg:flex-1 lg:min-w-0">
-                <div class="rounded-2xl p-4 sm:p-6 md:p-8 h-full transition-all duration-500 border" style="background-color: #ffffff; border-color: #d1d5db; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);" onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)';">
+                <div class="card-aisd-elevated h-full p-4 sm:p-6 md:p-8">
                     <!-- Icon -->
-                    <div class="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center mb-4 sm:mb-6 transition-transform duration-300" style="background-color: <?php echo $program['icon_bg_color'] ?? '#6EC1F5'; ?>;" onmouseover="this.style.transform='scale(1.1)';" onmouseout="this.style.transform='scale(1)';">
+                    <div class="icon-hover w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center mb-4 sm:mb-6" style="background-color: <?php echo $program['icon_bg_color'] ?? '#6EC1F5'; ?>;">
                         @if(isset($program['icon']) && $program['icon'])
                         <svg class="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" fill="currentColor" viewBox="0 0 24 24" style="color: #ffffff;">
                             <path d="{{ $program['icon'] }}" />
@@ -122,7 +122,7 @@
                             Discover how our programs can nurture your child's potential
                         </p>
                         @if(isset($specialFeatures['cta']['text']) && isset($specialFeatures['cta']['link']))
-                        <a href="{{ $specialFeatures['cta']['link'] }}" class="inline-flex items-center justify-center font-bold py-3 px-6 sm:px-8 rounded-lg transition-all duration-300 min-h-[44px] w-full sm:w-auto" style="background-color: #F4C430; color: #0C1B3D;" onmouseover="this.style.backgroundColor='#ffdc5c'; this.style.transform='scale(1.05)'" onmouseout="this.style.backgroundColor='#F4C430'; this.style.transform='scale(1)'">
+                        <a href="{{ $specialFeatures['cta']['link'] }}" class="btn-aisd-gold w-full sm:w-auto font-bold px-6 sm:px-8 py-3">
                             {{ $specialFeatures['cta']['text'] }}
                             <svg class="ml-2 w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>

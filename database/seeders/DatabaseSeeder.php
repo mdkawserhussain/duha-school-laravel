@@ -22,7 +22,8 @@ class DatabaseSeeder extends Seeder
             NavigationSeeder::class, // Navigation items for menu structure
             AnnouncementSeeder::class,
             HomePageSectionSeeder::class,
-            PagesSeeder::class, // Updated to use PagesSeeder (new comprehensive page structure)
+            VisionMissionSectionSeeder::class, // Vision & Mission with Islamic content
+            PagesSeeder::class, // Comprehensive page structure with navigation
             EventSeeder::class,
             NoticeSeeder::class,
             StaffSeeder::class,
