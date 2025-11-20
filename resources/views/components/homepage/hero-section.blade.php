@@ -63,7 +63,7 @@
 
 @if($heroSlide && $heroSlide->is_active)
 <section class="hero-section relative w-full flex items-center overflow-hidden bg-aisd-midnight" 
-         style="position: relative; top: 0; left: 0; margin: 0 !important; padding: 0 !important; min-height: 100vh; height: 100vh; width: 100vw; max-width: 100vw; overflow-x: hidden; pointer-events: none;">
+         style="position: relative; top: 0; left: 0; margin: 0 !important; padding: 0 !important; min-height: 100vh; height: 100vh; width: 100vw; max-width: 100vw; overflow-x: hidden;">
     <!-- Background Video Container - Handle both direct video URLs and YouTube URLs -->
     <div class="absolute inset-0 w-full h-full overflow-hidden" 
          style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; width: 100vw; height: 100vh; margin: 0 !important; padding: 0 !important; min-width: 100vw;">
@@ -120,7 +120,7 @@
 
     <!-- Content Container - Positioned to account for navbar overlay without creating gaps -->
     <div class="relative z-10 w-full mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16 md:pb-20 lg:pb-24"
-         style="margin: 0; padding-top: 0 !important; padding-left: 1rem; padding-right: 1rem; padding-bottom: 3rem; pointer-events: auto;">
+         style="margin: 0; padding-top: 0 !important; padding-left: 1rem; padding-right: 1rem; padding-bottom: 3rem;">
         <div class="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-8 sm:gap-12 lg:gap-16 items-center">
             <!-- Text content - Left side -->
             <div class="text-white space-y-6 sm:space-y-8">

@@ -360,6 +360,14 @@ trait ManagesHomePageSection
         // Only clear specific cache keys - much faster than Artisan commands
         Cache::forget('homepage_v2_data');
         
+        // Clear section-specific caches
+        $sectionKey = $this->getSectionKey();
+        if ($sectionKey === 'advisors') {
+            Cache::forget('site_settings_advisors');
+        } elseif ($sectionKey === 'board_management') {
+            Cache::forget('site_settings_board_members');
+        }
+        
         // Don't clear view/config/route cache - they're not needed for content updates
         // and they cause 10+ second delays on Windows
     }

@@ -199,37 +199,33 @@ class SiteSettings extends Model implements HasMedia
         if ($settings && $settings->hasMedia('logo')) {
             $media = $settings->getFirstMedia('logo');
             if ($media) {
-                // Try to get WebP conversion first, fallback to original
-                $webpPath = null;
-                
-                // Check if WebP conversion exists
+                // Determine which path to use (WebP > Thumb > Original)
+                $targetPath = $media->getPath();
                 if ($media->hasGeneratedConversion('webp')) {
-                    $webpPath = $media->getPath('webp');
+                    $targetPath = $media->getPath('webp');
                 } elseif ($media->hasGeneratedConversion('thumb')) {
-                    // Fallback to thumb conversion if webp doesn't exist yet
-                    $webpPath = $media->getPath('thumb');
-                } else {
-                    // Use original path (will be WebP after conversion)
-                    $webpPath = $media->getPath();
+                    $targetPath = $media->getPath('thumb');
                 }
+
+                // Robustly convert absolute path to URL
+                $storageRoot = storage_path('app/public');
                 
-                // Extract relative path from storage/app/public
-                if ($webpPath && str_contains($webpPath, 'storage/app/public/')) {
-                    $relativePath = 'storage/' . substr($webpPath, strpos($webpPath, 'storage/app/public/') + strlen('storage/app/public/'));
-                    return asset($relativePath);
-                } else {
-                    // Fallback: construct from media attributes
-                    $fileName = $media->file_name ?? '';
-                    if ($fileName) {
-                        // If WebP conversion exists, use it
-                        if ($media->hasGeneratedConversion('webp')) {
-                            $relativePath = 'storage/' . $media->id . '/conversions/' . pathinfo($fileName, PATHINFO_FILENAME) . '.webp';
-                        } else {
-                            $relativePath = 'storage/' . $media->id . '/' . $fileName;
-                        }
-                        return asset($relativePath);
-                    }
+                // Normalize slashes for consistent comparison
+                $normalizedTarget = str_replace('\\', '/', $targetPath);
+                $normalizedRoot = str_replace('\\', '/', $storageRoot);
+
+                if (str_starts_with($normalizedTarget, $normalizedRoot)) {
+                    // Extract relative path (e.g., /1/conversions/logo.webp)
+                    $relative = substr($normalizedTarget, strlen($normalizedRoot));
+                    return asset('storage' . $relative);
                 }
+
+                // Fallback: Manual construction if path matching fails
+                $fileName = $media->file_name;
+                if ($media->hasGeneratedConversion('webp')) {
+                    return asset('storage/' . $media->id . '/conversions/' . pathinfo($fileName, PATHINFO_FILENAME) . '.webp');
+                }
+                return asset('storage/' . $media->id . '/' . $fileName);
             }
         }
 
@@ -245,34 +241,25 @@ class SiteSettings extends Model implements HasMedia
         if ($this->hasMedia('logo')) {
             $media = $this->getFirstMedia('logo');
             if ($media) {
-                // Try to get WebP conversion first
-                $webpPath = null;
-                
-                // Check if WebP conversion exists
+                $targetPath = $media->hasGeneratedConversion('webp') 
+                    ? $media->getPath('webp') 
+                    : $media->getPath();
+
+                $storageRoot = storage_path('app/public');
+                $normalizedTarget = str_replace('\\', '/', $targetPath);
+                $normalizedRoot = str_replace('\\', '/', $storageRoot);
+
+                if (str_starts_with($normalizedTarget, $normalizedRoot)) {
+                    $relative = substr($normalizedTarget, strlen($normalizedRoot));
+                    return asset('storage' . $relative);
+                }
+
+                // Fallback
+                $fileName = $media->file_name;
                 if ($media->hasGeneratedConversion('webp')) {
-                    $webpPath = $media->getPath('webp');
-                } else {
-                    // Use original path (will be WebP after conversion)
-                    $webpPath = $media->getPath();
+                    return asset('storage/' . $media->id . '/conversions/' . pathinfo($fileName, PATHINFO_FILENAME) . '.webp');
                 }
-                
-                // Extract relative path from storage/app/public
-                if ($webpPath && str_contains($webpPath, 'storage/app/public/')) {
-                    $relativePath = 'storage/' . substr($webpPath, strpos($webpPath, 'storage/app/public/') + strlen('storage/app/public/'));
-                    return asset($relativePath);
-                } else {
-                    // Fallback: construct from media attributes
-                    $fileName = $media->file_name ?? '';
-                    if ($fileName) {
-                        // If WebP conversion exists, use it
-                        if ($media->hasGeneratedConversion('webp')) {
-                            $relativePath = 'storage/' . $media->id . '/conversions/' . pathinfo($fileName, PATHINFO_FILENAME) . '.webp';
-                        } else {
-                            $relativePath = 'storage/' . $media->id . '/' . $fileName;
-                        }
-                        return asset($relativePath);
-                    }
-                }
+                return asset('storage/' . $media->id . '/' . $fileName);
             }
         }
         
@@ -297,28 +284,25 @@ class SiteSettings extends Model implements HasMedia
         if ($this->hasMedia('favicon')) {
             $media = $this->getFirstMedia('favicon');
             if ($media) {
-                // Try to get WebP conversion first
-                $webpPath = null;
+                $targetPath = $media->hasGeneratedConversion('webp') 
+                    ? $media->getPath('webp') 
+                    : $media->getPath();
+
+                $storageRoot = storage_path('app/public');
+                $normalizedTarget = str_replace('\\', '/', $targetPath);
+                $normalizedRoot = str_replace('\\', '/', $storageRoot);
+
+                if (str_starts_with($normalizedTarget, $normalizedRoot)) {
+                    $relative = substr($normalizedTarget, strlen($normalizedRoot));
+                    return asset('storage' . $relative);
+                }
+
+                // Fallback
+                $fileName = $media->file_name;
                 if ($media->hasGeneratedConversion('webp')) {
-                    $webpPath = $media->getPath('webp');
-                } else {
-                    $webpPath = $media->getPath();
+                    return asset('storage/' . $media->id . '/conversions/' . pathinfo($fileName, PATHINFO_FILENAME) . '.webp');
                 }
-                
-                if ($webpPath && str_contains($webpPath, 'storage/app/public/')) {
-                    $relativePath = 'storage/' . substr($webpPath, strpos($webpPath, 'storage/app/public/') + strlen('storage/app/public/'));
-                    return asset($relativePath);
-                } else {
-                    $fileName = $media->file_name ?? '';
-                    if ($fileName) {
-                        if ($media->hasGeneratedConversion('webp')) {
-                            $relativePath = 'storage/' . $media->id . '/conversions/' . pathinfo($fileName, PATHINFO_FILENAME) . '.webp';
-                        } else {
-                            $relativePath = 'storage/' . $media->id . '/' . $fileName;
-                        }
-                        return asset($relativePath);
-                    }
-                }
+                return asset('storage/' . $media->id . '/' . $fileName);
             }
         }
         
@@ -342,28 +326,25 @@ class SiteSettings extends Model implements HasMedia
         if ($this->hasMedia('og_image')) {
             $media = $this->getFirstMedia('og_image');
             if ($media) {
-                // Try to get WebP conversion first
-                $webpPath = null;
+                $targetPath = $media->hasGeneratedConversion('webp') 
+                    ? $media->getPath('webp') 
+                    : $media->getPath();
+
+                $storageRoot = storage_path('app/public');
+                $normalizedTarget = str_replace('\\', '/', $targetPath);
+                $normalizedRoot = str_replace('\\', '/', $storageRoot);
+
+                if (str_starts_with($normalizedTarget, $normalizedRoot)) {
+                    $relative = substr($normalizedTarget, strlen($normalizedRoot));
+                    return asset('storage' . $relative);
+                }
+
+                // Fallback
+                $fileName = $media->file_name;
                 if ($media->hasGeneratedConversion('webp')) {
-                    $webpPath = $media->getPath('webp');
-                } else {
-                    $webpPath = $media->getPath();
+                    return asset('storage/' . $media->id . '/conversions/' . pathinfo($fileName, PATHINFO_FILENAME) . '.webp');
                 }
-                
-                if ($webpPath && str_contains($webpPath, 'storage/app/public/')) {
-                    $relativePath = 'storage/' . substr($webpPath, strpos($webpPath, 'storage/app/public/') + strlen('storage/app/public/'));
-                    return asset($relativePath);
-                } else {
-                    $fileName = $media->file_name ?? '';
-                    if ($fileName) {
-                        if ($media->hasGeneratedConversion('webp')) {
-                            $relativePath = 'storage/' . $media->id . '/conversions/' . pathinfo($fileName, PATHINFO_FILENAME) . '.webp';
-                        } else {
-                            $relativePath = 'storage/' . $media->id . '/' . $fileName;
-                        }
-                        return asset($relativePath);
-                    }
-                }
+                return asset('storage/' . $media->id . '/' . $fileName);
             }
         }
         

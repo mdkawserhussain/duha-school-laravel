@@ -1,4 +1,30 @@
 <!-- Upcoming Events Section - AISD Style with Date Badges & Category Chips -->
+@php
+    $section = $homePageSections['news_events'] ?? null;
+    $sectionData = $section && $section->is_active ? $section->data : [];
+    
+    // Get settings from admin or use defaults
+    $sectionTitle = $section?->title ?? 'Upcoming Events & Key Dates';
+    $sectionSubtitle = $section?->subtitle ?? 'Calendar';
+    $sectionDescription = $section?->description ?? 'Stay aligned with admission briefings, community gatherings, and student showcases inspired by Duha\'s rhythm.';
+    
+    $eventsTitle = $sectionData['events_title'] ?? 'Upcoming Events';
+    $eventsCount = $sectionData['events_count'] ?? 3;
+    $showEvents = $sectionData['show_events'] ?? true;
+    
+    $noticesTitle = $sectionData['notices_title'] ?? 'Important Notices';
+    $noticesCount = $sectionData['notices_count'] ?? 3;
+    $showNotices = $sectionData['show_notices'] ?? true;
+    
+    $ctaText = $sectionData['cta_text'] ?? 'Download Academic Calendar';
+    $ctaLink = $sectionData['cta_link'] ?? '#calendar';
+    $showCta = $sectionData['show_cta'] ?? true;
+    
+    $showViewAllEvents = $sectionData['show_view_all_events'] ?? true;
+    $showViewAllNotices = $sectionData['show_view_all_notices'] ?? true;
+@endphp
+
+@if($section && $section->is_active)
 <section class="py-24" id="events" style="background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);">
     <style>
         .category-chip-academic {
@@ -31,16 +57,18 @@
         <!-- Section Header -->
         <div class="flex flex-col gap-4 sm:gap-6 lg:flex-row lg:items-center lg:justify-between mb-8 sm:mb-12 px-4">
             <div>
-                <p class="text-xs font-semibold uppercase tracking-[0.5em]" style="color: #173B7A;">Calendar</p>
-                <h2 class="mt-2 sm:mt-3 text-2xl sm:text-3xl font-bold md:text-4xl lg:text-5xl" style="color: #0C1B3D;">Upcoming Events & Key Dates</h2>
-                <p class="mt-2 sm:mt-3 text-sm sm:text-base max-w-2xl leading-relaxed" style="color: #4a5568;">Stay aligned with admission briefings, community gatherings, and student showcases inspired by Duha's rhythm.</p>
+                <p class="text-xs font-semibold uppercase tracking-[0.5em] text-aisd-cobalt">{{ $sectionSubtitle }}</p>
+                <h2 class="mt-2 sm:mt-3 text-2xl sm:text-3xl font-bold md:text-4xl lg:text-5xl text-aisd-ocean">{{ $sectionTitle }}</h2>
+                <p class="mt-2 sm:mt-3 text-sm sm:text-base max-w-2xl leading-relaxed text-gray-600">{{ $sectionDescription }}</p>
             </div>
-            <a href="#calendar" class="inline-flex items-center rounded-full border px-4 sm:px-6 py-3 text-xs sm:text-sm font-semibold tracking-wide backdrop-blur-sm transition-all min-h-[44px] justify-center" style="border-color: #173B7A; background-color: #ffffff; color: #173B7A; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);" onmouseover="this.style.backgroundColor='#173B7A'; this.style.color='#ffffff'" onmouseout="this.style.backgroundColor='#ffffff'; this.style.color='#173B7A'">
-                Download Academic Calendar
+            @if($showCta)
+            <a href="{{ $ctaLink }}" class="btn-aisd-primary text-xs sm:text-sm px-4 sm:px-6 tracking-wide backdrop-blur-sm">
+                {{ $ctaText }}
                 <svg class="ml-2 h-3.5 w-3.5 sm:h-4 sm:w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
             </a>
+            @endif
         </div>
 
         @php
@@ -116,10 +144,11 @@
         @endphp
 
         <!-- Two Column Layout -->
-        <div class="grid lg:grid-cols-2 gap-8 lg:gap-12">
+        <div class="grid {{ ($showEvents && $showNotices) ? 'lg:grid-cols-2' : 'lg:grid-cols-1' }} gap-8 lg:gap-12">
             <!-- Left Column: Upcoming Events -->
+            @if($showEvents)
             <div>
-                <h3 class="text-2xl font-bold mb-6" style="color: #0C1B3D;">Upcoming Events</h3>
+                <h3 class="text-2xl font-bold mb-6" style="color: #0C1B3D;">{{ $eventsTitle }}</h3>
                 <div class="space-y-6">
                     @forelse ($events as $event)
                         @php
@@ -148,7 +177,7 @@
                             $formattedDate = $start ? $start->format('M d, Y') : '';
                             $formattedTime = $event->start_at ? $event->start_at->format('g:i A') : '';
                         @endphp
-                        <article class="group flex flex-col gap-4 rounded-2xl border p-5 transition-all hover:-translate-y-1" style="border-color: #d1d5db; background-color: #ffffff; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);" onmouseover="this.style.boxShadow='0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'" onmouseout="this.style.boxShadow='0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'">
+                        <article class="card-aisd group flex flex-col gap-4 p-5">
                             <!-- Header: Category & Date -->
                             <div class="flex items-center justify-between">
                                 <span class="inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-wide category-chip-{{ \Illuminate\Support\Str::slug($categoryKey) }}">
@@ -163,7 +192,7 @@
                             </div>
 
                             <!-- Title -->
-                            <h4 class="text-xl font-semibold" style="color: #0C1B3D;">{{ $event->title }}</h4>
+                            <h4 class="text-xl font-semibold text-aisd-ocean">{{ $event->title }}</h4>
 
                             <!-- Location -->
                             @if($event->location)
@@ -180,7 +209,7 @@
                             <p class="leading-relaxed text-sm" style="color: #4a5568;">{{ Str::limit(strip_tags($event->excerpt ?? $event->content ?? $event->description), 120) }}</p>
 
                             <!-- Details Button -->
-                            <a href="{{ route('events.show', $event) }}" class="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-all self-start mt-2" style="background-color: #F4C430; color: #0C1B3D; box-shadow: 0 4px 6px rgba(244, 196, 48, 0.2);" onmouseover="this.style.backgroundColor='#ffdc5c'; this.style.boxShadow='0 10px 15px -3px rgba(244, 196, 48, 0.5)'; this.style.transform='scale(1.05)'" onmouseout="this.style.backgroundColor='#F4C430'; this.style.boxShadow='0 4px 6px rgba(244, 196, 48, 0.2)'; this.style.transform='scale(1)'">
+                            <a href="{{ route('events.show', $event) }}" class="btn-aisd-gold self-start mt-2">
                                 Details
                                 <svg class="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -194,13 +223,15 @@
                     @endforelse
                 </div>
             </div>
+            @endif
 
             <!-- Right Column: Important Notices -->
+            @if($showNotices)
             <div>
-                <h3 class="text-2xl font-bold mb-6" style="color: #0C1B3D;">Important Notices</h3>
+                <h3 class="text-2xl font-bold mb-6" style="color: #0C1B3D;">{{ $noticesTitle }}</h3>
                 <div class="space-y-6">
                     @forelse ($notices as $notice)
-                        <article class="group rounded-2xl border p-5 transition-all hover:-translate-y-1" style="border-color: #d1d5db; background-color: #ffffff; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);" onmouseover="this.style.boxShadow='0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'" onmouseout="this.style.boxShadow='0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'">
+                        <article class="card-aisd group p-5">
                             <!-- Header: Category & Date -->
                             <div class="flex items-center justify-between mb-3">
                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
@@ -218,7 +249,7 @@
                             </div>
 
                             <!-- Title -->
-                            <h4 class="text-xl font-semibold mb-3" style="color: #0C1B3D;">
+                            <h4 class="text-xl font-semibold mb-3 text-aisd-ocean">
                                 @if($notice->slug)
                                     <a href="{{ route('notices.show', $notice) }}" class="hover:text-blue-600 transition duration-300">
                                         {{ $notice->title }}
@@ -237,7 +268,7 @@
 
                             <!-- Read More Link -->
                             @if($notice->slug)
-                                <a href="{{ route('notices.show', $notice) }}" class="inline-flex items-center text-sm font-medium transition-all" style="color: #173B7A;" onmouseover="this.style.color='#0F224C'" onmouseout="this.style.color='#173B7A'">
+                                <a href="{{ route('notices.show', $notice) }}" class="inline-flex items-center text-sm font-medium transition-all text-aisd-cobalt hover:text-aisd-midnight">
                                     Read More
                                     <svg class="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
@@ -252,26 +283,34 @@
                     @endforelse
                 </div>
             </div>
+            @endif
         </div>
 
         <!-- View All CTAs -->
-        <div class="mt-12 grid md:grid-cols-2 gap-6">
+        @if($showViewAllEvents || $showViewAllNotices)
+        <div class="mt-12 grid {{ ($showViewAllEvents && $showViewAllNotices) ? 'md:grid-cols-2' : 'md:grid-cols-1' }} gap-6">
+            @if($showViewAllEvents)
             <div class="text-center">
-                <a href="{{ route('events.index') }}" class="inline-flex items-center rounded-full border-2 px-8 py-4 text-base font-semibold backdrop-blur-sm transition-all" style="border-color: #173B7A; background-color: #ffffff; color: #173B7A; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);" onmouseover="this.style.backgroundColor='#173B7A'; this.style.color='#ffffff'; this.style.boxShadow='0 10px 15px -3px rgba(23, 59, 122, 0.3)'" onmouseout="this.style.backgroundColor='#ffffff'; this.style.color='#173B7A'; this.style.boxShadow='0 4px 6px rgba(0, 0, 0, 0.1)'">
+                <a href="{{ route('events.index') }}" class="btn-aisd-primary text-base px-8 py-4">
                     View All Events
                     <svg class="ml-3 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                     </svg>
                 </a>
             </div>
+            @endif
+            @if($showViewAllNotices)
             <div class="text-center">
-                <a href="{{ route('notices.index') }}" class="inline-flex items-center rounded-full border-2 px-8 py-4 text-base font-semibold backdrop-blur-sm transition-all" style="border-color: #173B7A; background-color: #ffffff; color: #173B7A; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);" onmouseover="this.style.backgroundColor='#173B7A'; this.style.color='#ffffff'; this.style.boxShadow='0 10px 15px -3px rgba(23, 59, 122, 0.3)'" onmouseout="this.style.backgroundColor='#ffffff'; this.style.color='#173B7A'; this.style.boxShadow='0 4px 6px rgba(0, 0, 0, 0.1)'">
+                <a href="{{ route('notices.index') }}" class="btn-aisd-primary text-base px-8 py-4">
                     View All Notices
                     <svg class="ml-3 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                     </svg>
                 </a>
             </div>
+            @endif
         </div>
+        @endif
     </div>
 </section>
+@endif

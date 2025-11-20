@@ -376,18 +376,22 @@ class SiteSettingsHelper
      */
     public static function advisors(): array
     {
-        try {
-            // Get advisors from HomePageSection instead of SiteSettings
-            $section = \App\Models\HomePageSection::where('section_key', 'advisors')
-                ->where('is_active', true)
-                ->first();
+        $cacheKey = 'site_settings_advisors';
+        $cacheTime = 3600; // 1 hour
 
-            if (!$section || empty($section->data['advisors'])) {
-                Log::info('No advisors found in HomePageSection');
-                return [];
-            }
+        return \Illuminate\Support\Facades\Cache::remember($cacheKey, $cacheTime, function () {
+            try {
+                // Get advisors from HomePageSection instead of SiteSettings
+                $section = \App\Models\HomePageSection::where('section_key', 'advisors')
+                    ->where('is_active', true)
+                    ->first();
 
-            $advisors = $section->data['advisors'];
+                if (!$section || empty($section->data['advisors'])) {
+                    Log::info('No advisors found in HomePageSection');
+                    return [];
+                }
+
+                $advisors = $section->data['advisors'];
 
             // Process each advisor
             foreach ($advisors as &$advisor) {
@@ -416,13 +420,14 @@ class SiteSettingsHelper
                 $advisor['accent_color'] = $advisor['accent_color'] ?? '#F4C430';
             }
 
-            Log::info('Advisors loaded successfully', ['count' => count($advisors)]);
-            return $advisors;
+                Log::info('Advisors loaded successfully', ['count' => count($advisors)]);
+                return $advisors;
 
-        } catch (\Exception $e) {
-            Log::error('Error loading advisors from HomePageSection: ' . $e->getMessage());
-            return [];
-        }
+            } catch (\Exception $e) {
+                Log::error('Error loading advisors from HomePageSection: ' . $e->getMessage());
+                return [];
+            }
+        });
     }
 
     /**
@@ -431,18 +436,22 @@ class SiteSettingsHelper
      */
     public static function boardMembers(): array
     {
-        try {
-            // Get board members from HomePageSection
-            $section = \App\Models\HomePageSection::where('section_key', 'board_management')
-                ->where('is_active', true)
-                ->first();
+        $cacheKey = 'site_settings_board_members';
+        $cacheTime = 3600; // 1 hour
 
-            if (!$section || empty($section->data['members'])) {
-                Log::info('No board members found in HomePageSection');
-                return [];
-            }
+        return \Illuminate\Support\Facades\Cache::remember($cacheKey, $cacheTime, function () {
+            try {
+                // Get board members from HomePageSection
+                $section = \App\Models\HomePageSection::where('section_key', 'board_management')
+                    ->where('is_active', true)
+                    ->first();
 
-            $members = $section->data['members'];
+                if (!$section || empty($section->data['members'])) {
+                    Log::info('No board members found in HomePageSection');
+                    return [];
+                }
+
+                $members = $section->data['members'];
 
             // Process each member
             foreach ($members as &$member) {
@@ -469,13 +478,14 @@ class SiteSettingsHelper
                 $member['bio'] = $member['bio'] ?? '';
             }
 
-            Log::info('Board members loaded successfully', ['count' => count($members)]);
-            return $members;
+                Log::info('Board members loaded successfully', ['count' => count($members)]);
+                return $members;
 
-        } catch (\Exception $e) {
-            Log::error('Error loading board members from HomePageSection: ' . $e->getMessage());
-            return [];
-        }
+            } catch (\Exception $e) {
+                Log::error('Error loading board members from HomePageSection: ' . $e->getMessage());
+                return [];
+            }
+        });
     }
 }
 
