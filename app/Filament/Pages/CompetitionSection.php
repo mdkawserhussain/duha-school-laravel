@@ -54,6 +54,13 @@ class CompetitionSection extends Page implements HasForms
                             ->columnSpanFull()
                             ->placeholder('Excellence in Academic & Islamic Pursuits'),
 
+                        FormComponents\TextInput::make('data.badge')
+                            ->label('Badge Text')
+                            ->maxLength(100)
+                            ->columnSpanFull()
+                            ->placeholder('e.g., Achievements')
+                            ->helperText('Small badge text displayed above the section title'),
+
                         FormComponents\Textarea::make('description')
                             ->label('Section Description')
                             ->maxLength(500)
@@ -61,9 +68,15 @@ class CompetitionSection extends Page implements HasForms
                             ->columnSpanFull()
                             ->placeholder('Celebrating our students\' achievements in tournaments, Olympiads, and Qur\'anic competitions...'),
 
-                        FormComponents\Repeater::make('competitions')
+                        FormComponents\Repeater::make('data.competitions')
                             ->label('Competitions')
                             ->schema([
+                                FormComponents\TextInput::make('badge')
+                                    ->label('Badge Text')
+                                    ->maxLength(100)
+                                    ->placeholder('e.g., Achievement 1, Gold Medal, Champion')
+                                    ->helperText('Small badge shown on the card'),
+
                                 FormComponents\TextInput::make('title')
                                     ->label('Competition Title')
                                     ->required()

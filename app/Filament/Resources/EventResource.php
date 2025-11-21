@@ -35,58 +35,23 @@ class EventResource extends Resource
                     ->schema([
                         FormComponents\TextInput::make('title')
                             ->required()
-                            ->maxLength(255)
-                            ->live(onBlur: true)
-                            ->afterStateUpdated(function (string $state, $set, $get) {
-                                if (!empty(trim($state))) {
-                                    $slug = str(trim($state))->slug()->lower()->toString();
-                                    // Ensure slug is not empty (handle edge case of only special characters)
-                                    if (empty($slug)) {
-                                        $slug = 'event-' . time();
-                                    }
-                                    $set('slug', $slug);
-                                }
-                            }),
+                            ->maxLength(255),
 
                         FormComponents\TextInput::make('slug')
                             ->required()
                             ->unique(ignoreRecord: true)
                             ->maxLength(255)
-                            ->live(onBlur: true)
-                            ->afterStateUpdated(function ($state, $set, $get) {
-                                if (!empty($state)) {
-                                    // Handle both string and Stringable objects
-                                    $slugValue = is_string($state) ? $state : (string) $state;
-                                    $slug = str(trim($slugValue))->slug()->lower()->toString();
-                                    // Ensure slug is not empty
-                                    if (empty($slug)) {
-                                        // Fallback: use title if available, otherwise generate timestamp-based slug
-                                        $title = $get('title');
-                                        if (!empty($title)) {
-                                            $slug = str(trim($title))->slug()->lower()->toString();
-                                        }
-                                        if (empty($slug)) {
-                                            $slug = 'event-' . time();
-                                        }
-                                    }
-                                    $set('slug', $slug);
-                                }
-                            })
                             ->dehydrateStateUsing(function ($state) {
-                                // Always ensure we return a valid string slug
                                 if (empty($state)) {
                                     return '';
                                 }
                                 
-                                // Convert Stringable to string if needed
                                 if (!is_string($state)) {
                                     $state = (string) $state;
                                 }
                                 
-                                // Normalize the slug
                                 $slug = str(trim($state))->slug()->lower()->toString();
                                 
-                                // Ensure slug is not empty
                                 if (empty($slug)) {
                                     return 'event-' . time();
                                 }
@@ -99,7 +64,10 @@ class EventResource extends Resource
                                 'max:255',
                                 'regex:/^[a-z0-9_-]+$/',
                             ])
-                            ->helperText('Only lowercase letters, numbers, dashes, and underscores are allowed'),
+                            ->hint(fn ($get) => !empty($get('title')) && empty($get('slug')) 
+                                ? 'Suggested: ' . str($get('title'))->slug()->lower()->toString() 
+                                : null)
+                            ->helperText('Enter a URL-friendly slug. Only lowercase letters, numbers, dashes, and underscores are allowed'),
 
                         FormComponents\Textarea::make('excerpt')
                             ->label('Excerpt')
@@ -114,17 +82,6 @@ class EventResource extends Resource
 
                         FormComponents\TextInput::make('location')
                             ->maxLength(255),
-
-                        FormComponents\FileUpload::make('featured_image')
-                            ->image()
-                            ->directory('events')
-                            ->visibility('public')
-                            ->imageEditor()
-                            ->imageEditorAspectRatios([
-                                '16:9',
-                                '4:3',
-                                '1:1',
-                            ]),
                     ])
                     ->columns(2),
 
