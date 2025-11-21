@@ -87,7 +87,7 @@
                     <div class="bg-white border border-gray-200 rounded-lg p-6 mb-6">
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">Share This Notice</h3>
                         <x-social-share 
-                            :url="route('notices.show', $notice->slug)"
+                            :url="route('notices.show', ['notice' => $notice->slug])"
                             :title="$notice->title"
                             :description="Str::limit(strip_tags($notice->content), 160)"
                             :image="$notice->hasMedia('featured_image') ? $notice->getFirstMediaUrl('featured_image') : null"
@@ -142,12 +142,14 @@
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">Related Notices</h3>
                         <div class="space-y-3">
                             @foreach($relatedNotices as $related)
-                            <div class="border-l-4 border-blue-400 pl-4">
-                                <a href="{{ route('notices.show', $related) }}" class="text-blue-600 hover:text-blue-800 font-medium transition duration-300">
-                                    {{ Str::limit($related->title, 50) }}
-                                </a>
-                                <p class="text-sm text-gray-600 mt-1">{{ $related->time_ago }}</p>
-                            </div>
+                                @if($related->slug)
+                                <div class="border-l-4 border-blue-400 pl-4">
+                                    <a href="{{ route('notices.show', ['notice' => $related->slug]) }}" class="text-blue-600 hover:text-blue-800 font-medium transition duration-300">
+                                        {{ Str::limit($related->title, 50) }}
+                                    </a>
+                                    <p class="text-sm text-gray-600 mt-1">{{ $related->time_ago }}</p>
+                                </div>
+                                @endif
                             @endforeach
                         </div>
                     </div>
