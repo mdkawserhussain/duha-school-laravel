@@ -145,7 +145,7 @@
             'bg-white shadow-md': scrolled || !transparent,
             'bg-transparent': transparent && !scrolled
         }"
-        :style="(transparent && !scrolled) ? 'background-color: {{ $primaryColor }}' : ''"
+        :style="(transparent && !scrolled) ? 'background-color: transparent' : ''"
         role="navigation"
         aria-label="Main navigation"
     >
