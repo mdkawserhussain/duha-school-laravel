@@ -17,13 +17,13 @@ class AchievementsSection extends Page implements HasForms
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-trophy';
 
-    protected static ?string $navigationLabel = 'Achievements';
+    protected static ?string $navigationLabel = 'Achievements Deck';
 
     protected static ?string $title = 'Achievements Section';
 
     protected static string|UnitEnum|null $navigationGroup = 'Homepage Settings';
 
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 2;
 
     protected string $view = 'filament.pages.achievements-section';
 

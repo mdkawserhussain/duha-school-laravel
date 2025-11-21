@@ -20,13 +20,13 @@
 <!-- Achievements Deck -->
 @include('components.homepage.achievements-section')
 
-<!-- Stats Section -->
+<!-- Our School in Numbers -->
 @include('components.homepage.stats-section')
 
-<!-- Upcoming Events -->
+<!-- Events-Notices -->
 @include('components.homepage.news-events-section')
 
-<!-- Parallax Experience -->
+<!-- Why Choose US -->
 @include('components.homepage.parallax-section')
 
 <!-- Competitions -->

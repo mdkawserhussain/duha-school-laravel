@@ -1,4 +1,4 @@
-<!-- Upcoming Events Section - AISD Style with Date Badges & Category Chips -->
+<!-- Events-Notices Section - AISD Style with Date Badges & Category Chips -->
 @php
     $section = $homePageSections['news_events'] ?? null;
     $sectionData = $section && $section->is_active ? $section->data : [];
