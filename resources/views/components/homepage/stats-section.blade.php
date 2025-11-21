@@ -1,4 +1,4 @@
-<!-- Stats Section -->
+<!-- Our School in Numbers -->
 <section class="relative overflow-hidden py-20 bg-aisd-ink-50">
     <div class="absolute inset-0" style="background-image:url('data:image/svg+xml,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;200&quot; height=&quot;200&quot; viewBox=&quot;0 0 200 200&quot;><g fill=&quot;none&quot; fill-rule=&quot;evenodd&quot; opacity=&quot;.12&quot;><circle stroke=&quot;%230C1B3D&quot; stroke-width=&quot;0.4&quot; cx=&quot;100&quot; cy=&quot;100&quot; r=&quot;96&quot;/><circle stroke=&quot;%236EC1F5&quot; stroke-width=&quot;0.4&quot; cx=&quot;100&quot; cy=&quot;100&quot; r=&quot;70&quot;/></g></svg>');"></div>
     <div class="container relative z-10 mx-auto px-6 lg:px-12">

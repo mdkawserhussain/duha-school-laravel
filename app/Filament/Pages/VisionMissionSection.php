@@ -23,7 +23,7 @@ class VisionMissionSection extends Page implements HasForms
 
     protected static string|UnitEnum|null $navigationGroup = 'Homepage Settings';
 
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 8;
 
     protected string $view = 'filament.pages.vision-mission-section';
 

@@ -17,9 +17,9 @@ class NewsEventsSection extends Page implements HasForms
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-calendar';
 
-    protected static ?string $navigationLabel = 'News & Events';
+    protected static ?string $navigationLabel = 'Events-Notices';
 
-    protected static ?string $title = 'News & Events Section';
+    protected static ?string $title = 'Events-Notices Section';
 
     protected static string|UnitEnum|null $navigationGroup = 'Homepage Settings';
 
@@ -39,7 +39,7 @@ class NewsEventsSection extends Page implements HasForms
 
     protected function getSectionTitle(): string
     {
-        return 'News & Events Section';
+        return 'Events-Notices Section';
     }
 
     public function form(Schema $schema): Schema

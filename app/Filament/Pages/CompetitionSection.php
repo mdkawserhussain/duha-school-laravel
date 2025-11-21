@@ -17,13 +17,13 @@ class CompetitionSection extends Page implements HasForms
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-video-camera';
 
-    protected static ?string $navigationLabel = 'Competition Section';
+    protected static ?string $navigationLabel = 'Competitions';
 
     protected static ?string $title = 'Competition Section';
 
     protected static string|UnitEnum|null $navigationGroup = 'Homepage Settings';
 
-    protected static ?int $navigationSort = 8;
+    protected static ?int $navigationSort = 6;
 
     protected string $view = 'filament.pages.competition-section';
 
