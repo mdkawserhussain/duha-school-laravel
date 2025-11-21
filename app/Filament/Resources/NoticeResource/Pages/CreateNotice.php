@@ -5,6 +5,7 @@ namespace App\Filament\Resources\NoticeResource\Pages;
 use App\Filament\Resources\NoticeResource;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Support\Facades\Cache;
 
 class CreateNotice extends CreateRecord
 {
@@ -31,9 +32,6 @@ class CreateNotice extends CreateRecord
         // Remove any non-existent fields (status, is_featured if they somehow got in)
         unset($data['status'], $data['is_featured']);
 
-        // Remove file upload fields from data as we'll handle them manually
-        unset($data['featured_image']);
-
         return $data;
     }
 
@@ -42,84 +40,9 @@ class CreateNotice extends CreateRecord
      */
     protected function afterCreate(): void
     {
-        $notice = $this->record;
-        $formState = $this->form->getRawState();
-
-        // Handle featured_image upload
-        if (isset($formState['featured_image']) && !empty($formState['featured_image'])) {
-            $this->handleMediaUpload($notice, $formState['featured_image'], 'featured_image');
-        }
-
         // Clear notice-related caches when notice is created
         Cache::forget('homepage_v2_data');
         $this->clearNoticeCaches();
-
-        Notification::make()
-            ->title('Notice created successfully')
-            ->success()
-            ->send();
-    }
-
-    /**
-     * Handle media upload from Filament FileUpload to Spatie Media Library.
-     */
-    protected function handleMediaUpload($notice, $filePath, string $collection): void
-    {
-        if (!$filePath) {
-            return;
-        }
-
-        // Handle array of file paths (Filament uses associative arrays with UUID keys)
-        if (is_array($filePath)) {
-            if (empty($filePath)) {
-                return;
-            }
-            // Get the first value from the array
-            if (!empty($filePath[0])) {
-                $filePath = $filePath[0];
-            } else {
-                $filePath = reset($filePath); // Get first value from associative array
-            }
-        }
-
-        if (!$filePath || !is_string($filePath)) {
-            return;
-        }
-
-        // Skip if it's a URL (already uploaded and in media collection)
-        if (filter_var($filePath, FILTER_VALIDATE_URL)) {
-            return;
-        }
-
-        // Clear existing media in collection (for single file collections)
-        $notice->clearMediaCollection($collection);
-
-        // Handle Livewire temporary files
-        if (str_starts_with($filePath, 'livewire-tmp/')) {
-            $fullPath = storage_path('app/public/' . $filePath);
-            if (file_exists($fullPath) && is_file($fullPath)) {
-                $notice->addMedia($fullPath)->toMediaCollection($collection);
-            } elseif (\Illuminate\Support\Facades\Storage::disk('public')->exists($filePath)) {
-                $notice->addMediaFromDisk($filePath, 'public')->toMediaCollection($collection);
-            }
-        } else {
-            // Handle files in notices directory
-            $possiblePaths = [
-                'notices/' . basename($filePath),
-                $filePath,
-            ];
-
-            foreach ($possiblePaths as $testPath) {
-                $fullPath = storage_path('app/public/' . $testPath);
-                if (file_exists($fullPath) && is_file($fullPath)) {
-                    $notice->addMedia($fullPath)->toMediaCollection($collection);
-                    break;
-                } elseif (\Illuminate\Support\Facades\Storage::disk('public')->exists($testPath)) {
-                    $notice->addMediaFromDisk($testPath, 'public')->toMediaCollection($collection);
-                    break;
-                }
-            }
-        }
     }
 
     /**

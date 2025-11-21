@@ -32,6 +32,8 @@ class HeroSliderManager extends Page
     public $image = null;
     public $videoPoster = null;
 
+    protected $listeners = ['refreshComponent' => '$refresh'];
+
     public function mount(): void
     {
         $this->loadSlides();
@@ -40,8 +42,7 @@ class HeroSliderManager extends Page
     public function loadSlides(): void
     {
         $this->slides = HomePageSection::where('section_type', 'hero')
-            ->active()
-            ->ordered()
+            ->orderBy('sort_order')
             ->get()
             ->map(function ($slide) {
                 $data = $slide->data ?? [];
@@ -89,6 +90,7 @@ class HeroSliderManager extends Page
         $this->previewSlide = $this->editingSlide;
         $this->image = null;
         $this->videoPoster = null;
+        $this->dispatch('refreshComponent');
     }
 
     public function editSlide($slideId): void
@@ -117,6 +119,7 @@ class HeroSliderManager extends Page
             ];
             $this->showForm = true;
             $this->previewSlide = $this->editingSlide;
+            $this->dispatch('refreshComponent');
         }
     }
 
