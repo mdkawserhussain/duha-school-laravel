@@ -12,6 +12,37 @@ export default {
     theme: {
         extend: {
             colors: {
+                // Zaitoon Academy Brand Colors (New Design System)
+                za: {
+                    // Primary Green Shades
+                    'green-primary': '#1a5e4a',
+                    'green-dark': '#0f3d30',
+                    'green-light': '#e8f5f1',
+                    'green-50': '#f0fdf7',
+                    'green-100': '#d1fae5',
+                    'green-200': '#a7f3d0',
+                    'green-300': '#6ee7b7',
+                    'green-400': '#34d399',
+                    'green-500': '#10b981',
+                    'green-600': '#059669',
+                    'green-700': '#047857',
+                    'green-800': '#065f46',
+                    'green-900': '#064e3b',
+                    // Yellow Accent Shades
+                    'yellow-accent': '#fbbf24',
+                    'yellow-light': '#fef3c7',
+                    'yellow-dark': '#d97706',
+                    'yellow-50': '#fffbeb',
+                    'yellow-100': '#fef3c7',
+                    'yellow-200': '#fde68a',
+                    'yellow-300': '#fcd34d',
+                    'yellow-400': '#fbbf24',
+                    'yellow-500': '#f59e0b',
+                    'yellow-600': '#d97706',
+                    'yellow-700': '#b45309',
+                    'yellow-800': '#92400e',
+                    'yellow-900': '#78350f',
+                },
                 // AISD Brand Colors - Matching CSS variables exactly
                 aisd: {
                     midnight: '#0F224C',      // rgb(15, 34, 76) - Deep blue
@@ -109,7 +140,9 @@ export default {
             },
             fontFamily: {
                 sans: ['"Plus Jakarta Sans"', '"Inter"', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'],
+                serif: ['"Playfair Display"', '"Merriweather"', 'Georgia', 'serif'],
                 display: ['"Playfair Display"', 'serif'],
+                mono: ['"JetBrains Mono"', '"Fira Code"', 'Consolas', 'Monaco', 'monospace'],
             },
             fontSize: {
                 xs: ['0.75rem', { lineHeight: '1rem' }],
@@ -125,7 +158,13 @@ export default {
             },
             spacing: {
                 '18': '4.5rem',
+                '22': '5.5rem',
+                '26': '6.5rem',
+                '30': '7.5rem',
+                '34': '8.5rem',
                 '88': '22rem',
+                '100': '25rem',
+                '112': '28rem',
                 '128': '32rem',
             },
             borderRadius: {
@@ -150,6 +189,10 @@ export default {
                 'navbar': '0 4px 20px -2px rgba(0, 0, 0, 0.1), 0 2px 8px -2px rgba(0, 0, 0, 0.06)',
                 'dropdown': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
                 'search': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                // Zaitoon-specific shadows
+                'za-green': '0 10px 30px rgba(26, 94, 74, 0.15)',
+                'za-green-lg': '0 20px 40px rgba(26, 94, 74, 0.2)',
+                'za-yellow': '0 10px 30px rgba(251, 191, 36, 0.15)',
             },
             backgroundImage: {
                 'hero-gradient': 'linear-gradient(135deg, #0d1d4d 0%, #1a379e 40%, #365de0 100%)',
@@ -165,6 +208,10 @@ export default {
                 'gradient-violet-pink': 'linear-gradient(135deg, #7C3AED 0%, #EC4899 100%)',
                 'gradient-pink-amber': 'linear-gradient(135deg, #EC4899 0%, #F59E0B 100%)',
                 'gradient-amber-emerald': 'linear-gradient(135deg, #F59E0B 0%, #10B981 100%)',
+                // Zaitoon-specific gradients
+                'za-green-gradient': 'linear-gradient(135deg, #1a5e4a 0%, #0f3d30 100%)',
+                'za-green-soft': 'linear-gradient(135deg, #e8f5f1 0%, #d1fae5 100%)',
+                'za-hero': 'linear-gradient(135deg, rgba(15, 61, 48, 0.9) 0%, rgba(26, 94, 74, 0.85) 100%)',
             },
             animation: {
                 'gradient-shift': 'gradientShift 8s ease infinite',

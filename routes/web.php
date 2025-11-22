@@ -16,6 +16,11 @@ use App\Http\Controllers\NewsletterController;
 // Public Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+// Zaitoon Academy Component Demo
+Route::get('/zaitoon-demo', function () {
+    return view('pages.zaitoon-demo');
+})->name('zaitoon.demo');
+
 // Language
 Route::get('/lang/{locale}', [\App\Http\Controllers\LanguageController::class, 'switch'])->name('language.switch');
 

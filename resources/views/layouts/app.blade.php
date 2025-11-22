@@ -158,19 +158,37 @@
         <!-- End Google Tag Manager (noscript) -->
         @endif
 
+        {{-- Skip to Main Content Link (Accessibility - FR-16.4.4) --}}
+        <a href="#main-content" 
+           class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-za-green-primary focus:text-white focus:rounded-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-za-yellow-accent">
+            Skip to main content
+        </a>
+
         <div style="margin: 0 !important; padding: 0 !important; min-height: 0;">
-            <x-navbar :transparent="request()->routeIs('home')" />
+            @php
+                $useZaitoonHeader = config('app.use_zaitoon_header', env('USE_ZAITOON_HEADER', true));
+            @endphp
+            
+            @if($useZaitoonHeader)
+                <x-header-zaitoon :transparent="request()->routeIs('home')" />
+            @else
+                <x-navbar :transparent="request()->routeIs('home')" />
+            @endif
         </div>
 
         <div style="margin: 0 !important; padding: 0 !important; min-height: 0;">
             <!-- Page Content -->
-            <main id="main-content" class="{{ request()->routeIs('home') ? '' : 'pt-16 lg:pt-20' }}" style="margin: 0 !important; min-height: 0;">
+            <main id="main-content" class="{{ request()->routeIs('home') ? '' : 'pt-16 lg:pt-20' }}" style="margin: 0 !important; padding: 0 !important; min-height: 0;">
                 @yield('content')
             </main>
 
-            <!-- Footer with proper spacing -->
+            {{-- Footer with proper spacing --}}
             <div class="relative" style="margin-top: 0;">
-                <x-footer />
+                @if($useZaitoonHeader)
+                    <x-footer-zaitoon />
+                @else
+                    <x-footer />
+                @endif
             </div>
         </div>
 

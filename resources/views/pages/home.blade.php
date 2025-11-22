@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @php
-    $siteName = \App\Helpers\SiteHelper::getSiteName();
+    $siteName = \App\Helpers\SiteSettingsHelper::websiteName() ?? 'Zaitoon Academy';
 @endphp
 @section('title', 'Welcome to ' . $siteName)
 @section('meta-description', 'Islamic and Cambridge curriculum school providing quality education in Chattogram, Bangladesh')
@@ -12,38 +12,36 @@
 @endpush
 
 @section('content')
-<!-- Include Component-Based Homepage Sections -->
+<!-- Zaitoon Academy Homepage Design -->
 
-<!-- Hero Section -->
-@include('components.homepage.hero-section')
+<!-- Hero Section with Green Background and Yellow Curve -->
+@include('components.homepage.zaitoon-hero')
 
-<!-- Achievements Deck -->
-@include('components.homepage.achievements-section')
+<!-- News Ticker/Announcement Bar -->
+@include('components.homepage.zaitoon-news-ticker')
 
-<!-- Our School in Numbers -->
-@include('components.homepage.stats-section')
+<!-- Introduction Section: Islamic Scholars -->
+@include('components.homepage.zaitoon-introduction')
 
-<!-- Events-Notices -->
-@include('components.homepage.news-events-section')
+<!-- Recent Notices & Chairman's Message (Two Columns) -->
+@include('components.homepage.zaitoon-notices-chairman')
 
-<!-- Why Choose US -->
-@include('components.homepage.parallax-section')
+<!-- Explore Our Services -->
+@include('components.homepage.zaitoon-services')
 
-<!-- Competitions -->
-@include('components.homepage.competitions-section')
+<!-- Campus Activities & Events -->
+@include('components.homepage.zaitoon-events')
 
-<!-- Advisors & Board -->
-@include('components.homepage.advisors-section')
+<!-- Recent Videos -->
+@include('components.homepage.zaitoon-videos')
 
-<!-- Vision & Mission -->
-@include('components.homepage.vision-section')
+<!-- Recent News -->
+@include('components.homepage.zaitoon-news')
 
-<!-- Board Members -->
-@include('components.homepage.board-members-section')
+<!-- Testimonials -->
+@include('components.homepage.zaitoon-testimonials')
 
-<!-- Programs Section -->
-@include('components.homepage.programs-section')
-
-
+<!-- Partners -->
+@include('components.homepage.zaitoon-partners')
 
 @endsection
