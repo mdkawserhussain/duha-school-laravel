@@ -17,7 +17,7 @@ class HeroSliderManager extends Page
 
     protected string $view = 'filament.pages.hero-slider-manager';
 
-    protected static ?string $navigationLabel = 'Hero Slider';
+    protected static ?string $navigationLabel = 'Hero Section';
 
     protected static ?string $title = 'Hero Slider Management';
 

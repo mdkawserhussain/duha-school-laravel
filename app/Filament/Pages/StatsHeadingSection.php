@@ -17,24 +17,24 @@ class StatsHeadingSection extends Page implements HasForms
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-chart-bar';
 
-    protected static ?string $navigationLabel = 'Stats Heading';
+    protected static ?string $navigationLabel = 'Our School in Numbers';
 
-    protected static ?string $title = 'Stats Heading Section';
+    protected static ?string $title = 'Our School in Numbers';
 
     protected static string|UnitEnum|null $navigationGroup = 'Homepage Settings';
 
-    protected static ?int $navigationSort = 6;
+    protected static ?int $navigationSort = 3;
 
     public static function shouldRegisterNavigation(): bool
     {
-        return false;
+        return true;
     }
 
     protected string $view = 'filament.pages.stats-heading-section';
 
     protected function getSectionKey(): string
     {
-        return 'hero_stats';
+        return 'stats_main';
     }
 
     protected function getSectionType(): string
@@ -44,7 +44,7 @@ class StatsHeadingSection extends Page implements HasForms
 
     protected function getSectionTitle(): string
     {
-        return 'Stats Heading Section';
+        return 'Our School in Numbers';
     }
 
     public function form(Schema $schema): Schema

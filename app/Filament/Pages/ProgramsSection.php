@@ -17,13 +17,13 @@ class ProgramsSection extends Page implements HasForms
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-academic-cap';
 
-    protected static ?string $navigationLabel = 'Academic Programs';
+    protected static ?string $navigationLabel = 'Programs Section';
 
     protected static ?string $title = 'Academic Programs Section';
 
     protected static string|UnitEnum|null $navigationGroup = 'Homepage Settings';
 
-    protected static ?int $navigationSort = 9;
+    protected static ?int $navigationSort = 10;
 
     protected string $view = 'filament.pages.programs-section';
 

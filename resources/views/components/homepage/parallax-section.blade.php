@@ -1,4 +1,4 @@
-<!-- Parallax Impact Strip - AISD Style -->
+<!-- Why Choose US Section - AISD Style -->
 @php
     // Get the section data
     $section = $homePageSections['parallax_experience'] ?? null;

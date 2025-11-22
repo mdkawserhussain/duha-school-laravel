@@ -17,17 +17,17 @@ class AdvisorsSection extends Page implements HasForms
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-user-group';
 
-    protected static ?string $navigationLabel = 'Advisors';
+    protected static ?string $navigationLabel = 'Advisors & Board';
 
     protected static ?string $title = 'Advisors Section';
 
     protected static string|UnitEnum|null $navigationGroup = 'Homepage Settings';
 
-    protected static ?int $navigationSort = 10;
+    protected static ?int $navigationSort = 7;
 
     public static function shouldRegisterNavigation(): bool
     {
-        return false; // Hidden - Advisors section uses SiteSettingsHelper instead
+        return true;
     }
 
     protected string $view = 'filament.pages.advisors-section';

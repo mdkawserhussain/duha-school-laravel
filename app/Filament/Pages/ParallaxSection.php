@@ -18,13 +18,13 @@ class ParallaxSection extends Page implements HasForms
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-photo';
 
-    protected static ?string $navigationLabel = 'Parallax Section';
+    protected static ?string $navigationLabel = 'Why Choose US';
 
-    protected static ?string $title = 'Parallax Experience Section';
+    protected static ?string $title = 'Why Choose US Section';
 
     protected static string|UnitEnum|null $navigationGroup = 'Homepage Settings';
 
-    protected static ?int $navigationSort = 7;
+    protected static ?int $navigationSort = 5;
 
     protected string $view = 'filament.pages.parallax-section';
 
@@ -40,7 +40,7 @@ class ParallaxSection extends Page implements HasForms
 
     protected function getSectionTitle(): string
     {
-        return 'Parallax Experience Section';
+        return 'Why Choose US Section';
     }
 
     public function mount(): void
