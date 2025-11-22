@@ -36,7 +36,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // Register View Composers
-        View::composer('components.navbar', \App\View\Composers\NavbarComposer::class);
+        // View::composer('components.navbar', \App\View\Composers\NavbarComposer::class);
 
         // Register observers to clear cache on homepage section updates
         HomePageSection::observe(HomePageSectionObserver::class);

@@ -1,6 +1,6 @@
 @props(['notice'])
 
-<div class="event-card bg-white rounded-2xl shadow-md overflow-hidden border border-slate-200/80 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+<div class="event-card relative bg-white rounded-2xl shadow-md overflow-hidden border border-slate-200/80 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
     @if($notice->hasMedia('featured_image'))
         <img src="{{ $notice->getFirstMediaUrl('featured_image', 'medium') }}" alt="{{ $notice->title }}" class="w-full h-40 sm:h-48 object-cover" loading="lazy">
     @else
@@ -35,7 +35,7 @@
 
         <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3 line-clamp-2">
             @if($notice->slug)
-            <a href="{{ route('notices.show', $notice) }}" class="hover:text-blue-600 transition duration-300 min-h-[44px] flex items-center">
+            <a href="{{ route('notices.show', $notice) }}" class="hover:text-blue-600 transition duration-300 min-h-[44px] flex items-center before:absolute before:inset-0 z-10">
                 {{ $notice->title }}
             </a>
             @else
@@ -57,7 +57,7 @@
         @endif
 
         @if($notice->slug)
-        <a href="{{ route('notices.show', $notice) }}" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium transition duration-300 min-h-[44px] py-2">
+        <a href="{{ route('notices.show', $notice) }}" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium transition duration-300 min-h-[44px] py-2 relative z-20">
             Read More
             <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>

@@ -16,6 +16,7 @@ class NoticeSeeder extends Seeder
         $notices = [
             [
                 'title' => 'Admission Open for Academic Year 2025-2026',
+                'slug' => 'admission-open-2025-2026',
                 'excerpt' => 'We are now accepting applications for the academic year 2025-2026. Limited seats available.',
                 'content' => '<p>Duha International School is pleased to announce that admissions are now open for the academic year 2025-2026. We welcome applications from students seeking quality Islamic and Cambridge curriculum education.</p>
                 
@@ -45,6 +46,7 @@ class NoticeSeeder extends Seeder
             ],
             [
                 'title' => 'School Holiday - Eid al-Fitr',
+                'slug' => 'school-holiday-eid-al-fitr',
                 'excerpt' => 'School will be closed for Eid al-Fitr celebrations. Classes will resume on the following week.',
                 'content' => '<p>In observance of Eid al-Fitr, Duha International School will be closed from <strong>April 10, 2025 to April 14, 2025</strong>.</p>
                 
@@ -60,6 +62,7 @@ class NoticeSeeder extends Seeder
             ],
             [
                 'title' => 'Mid-Term Examination Schedule',
+                'slug' => 'mid-term-examination-schedule',
                 'excerpt' => 'Mid-term examinations will be held from February 10-20, 2025. Please review the schedule carefully.',
                 'content' => '<p>The mid-term examination schedule for the current academic term has been published. All students are required to review the schedule and prepare accordingly.</p>
                 
@@ -86,6 +89,7 @@ class NoticeSeeder extends Seeder
             ],
             [
                 'title' => 'Library Hours Extended',
+                'slug' => 'library-hours-extended',
                 'excerpt' => 'School library will now be open until 5:00 PM on weekdays to accommodate students.',
                 'content' => '<p>We are pleased to announce that the school library hours have been extended to better serve our students.</p>
                 
@@ -105,6 +109,7 @@ class NoticeSeeder extends Seeder
             ],
             [
                 'title' => 'Career Opportunities - Teaching Positions Available',
+                'slug' => 'career-opportunities-teaching-positions',
                 'excerpt' => 'We are seeking qualified and dedicated teachers to join our team. Multiple positions available.',
                 'content' => '<p>Duha International School is looking for passionate and qualified educators to join our teaching team.</p>
                 
