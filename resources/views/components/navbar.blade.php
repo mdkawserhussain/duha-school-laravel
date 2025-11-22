@@ -1,37 +1,5 @@
 {{-- Enhanced Navbar Component with Alpine.js --}}
-@props(['transparent' => false])
-
-@php
-    // Get primary color from site settings
-    $primaryColor = \App\Helpers\SiteSettingsHelper::primaryColor();
-    if (!str_starts_with($primaryColor, '#')) {
-        $primaryColor = '#' . ltrim($primaryColor, '#');
-    }
-    
-    // Completely disable announcements during exception rendering
-    $announcements = collect([]);
-    try {
-        if (!app()->bound('exception') && 
-            !str_contains(request()->path() ?? '', 'errors') &&
-            !str_contains(request()->path() ?? '', '_dusk') &&
-            !str_contains(request()->path() ?? '', 'telescope')) {
-            $announcements = \App\Helpers\AnnouncementHelper::getSafe();
-        }
-    } catch (\Throwable $e) {
-        $announcements = collect([]);
-    }
-    
-    // Get dynamic navigation items from database (hybrid approach: Navigation Items control menu structure)
-    $navigationItems = collect([]);
-    try {
-        if (!app()->bound('exception')) {
-            $navigationService = app(\App\Services\NavigationService::class);
-            $navigationItems = $navigationService->getActiveNavigation('main');
-        }
-    } catch (\Throwable $e) {
-        $navigationItems = collect([]);
-    }
-@endphp
+{{-- Props are now handled by the View Component class --}}
 
 {{-- Static wrapper with x-data - never receives dynamic classes --}}
 <header
@@ -142,10 +110,10 @@
     <nav
         class="transition-all duration-300"
         :class="{
-            'bg-white shadow-md': scrolled || !transparent,
-            'bg-transparent': transparent && !scrolled
+            'bg-white shadow-md': !transparent,
+            'bg-transparent': transparent
         }"
-        :style="(transparent && !scrolled) ? 'background-color: {{ $primaryColor }}' : ''"
+        :style="(transparent) ? 'background-color: {{ $primaryColor }}' : ''"
         role="navigation"
         aria-label="Main navigation"
     >
@@ -157,8 +125,8 @@
                         href="{{ route('home') }}"
                         class="navbar-logo navbar-focus focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg p-1"
                         :class="{
-                            'focus:ring-white': transparent && !scrolled,
-                            'focus:ring-gray-900': scrolled || !transparent
+                            'focus:ring-white': transparent,
+                            'focus:ring-gray-900': !transparent
                         }"
                         aria-label="Go to homepage"
                     >
@@ -189,7 +157,7 @@
                             
                             // Check active state - improved detection
                             // Check active state using View Composer helper
-                            $activeState = $isActive($navItem);
+                            $activeState = $navItem->isActive ?? false;
                             
                             // Link attributes
                             $linkAttrs = '';
@@ -206,10 +174,10 @@
                                     @keydown.escape="open = false"
                                     class="nav-link flex items-center gap-1 px-2 2xl:px-3 py-2 text-xs 2xl:text-sm font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors whitespace-nowrap"
                                     :class="{
-                                        'text-white hover:bg-white/10 focus:ring-white': transparent && !scrolled,
-                                        'text-gray-900 hover:bg-gray-100 focus:ring-gray-900': scrolled || !transparent,
-                                        'bg-white/20 font-semibold': (transparent && !scrolled) && {{ $activeState ? 'true' : 'false' }},
-                                        'bg-gray-100 font-semibold': (scrolled || !transparent) && {{ $activeState ? 'true' : 'false' }}
+                                        'text-white hover:bg-white/10 focus:ring-white': transparent,
+                                        'text-gray-900 hover:bg-gray-100 focus:ring-gray-900': !transparent,
+                                        'bg-white/20 font-semibold': transparent && {{ $activeState ? 'true' : 'false' }},
+                                        'bg-gray-100 font-semibold': !transparent && {{ $activeState ? 'true' : 'false' }}
                                     }"
                                     :aria-expanded="open"
                                     aria-haspopup="true"
@@ -287,12 +255,12 @@
                                 href="{{ $navUrl }}"
                                 class="nav-link flex items-center gap-1 px-2 2xl:px-3 py-2 text-xs 2xl:text-sm font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors whitespace-nowrap"
                                 :class="{
-                                    'text-white hover:bg-white/10 focus:ring-white': transparent && !scrolled,
-                                    'text-gray-900 hover:bg-gray-100 focus:ring-gray-900': scrolled || !transparent,
-                                    'bg-white/20 font-semibold': (transparent && !scrolled) && {{ $activeState ? 'true' : 'false' }},
-                                    'bg-gray-100 font-semibold': (scrolled || !transparent) && {{ $activeState ? 'true' : 'false' }}
+                                    'text-white hover:bg-white/10 focus:ring-white': transparent,
+                                    'text-gray-900 hover:bg-gray-100 focus:ring-gray-900': !transparent,
+                                    'bg-white/20 font-semibold': transparent && {{ $activeState ? 'true' : 'false' }},
+                                    'bg-gray-100 font-semibold': !transparent && {{ $activeState ? 'true' : 'false' }}
                                 }"
-                                aria-current="{{ $isActive ? 'page' : null }}"
+                                aria-current="{{ $activeState ? 'page' : null }}"
                                 {!! $linkAttrs !!}
                             >
                                 @if($navItem->icon && !str_starts_with($navItem->icon, 'heroicon'))
@@ -314,8 +282,8 @@
                                 type="submit"
                                 class="px-4 py-2.5 rounded-lg text-base font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2"
                                 :class="{
-                                    'text-white hover:bg-white/10 focus:ring-white': transparent && !scrolled,
-                                    'text-gray-900 hover:bg-gray-100 focus:ring-gray-900': scrolled || !transparent
+                                    'text-white hover:bg-white/10 focus:ring-white': transparent,
+                                    'text-gray-900 hover:bg-gray-100 focus:ring-gray-900': !transparent
                                 }"
                             >
                                 Logout
@@ -330,8 +298,8 @@
                         @click.stop="mobileMenuOpen = !mobileMenuOpen; $dispatch('mobile-menu-toggle', { open: mobileMenuOpen })"
                         class="inline-flex items-center justify-center p-2.5 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 min-w-[44px] min-h-[44px]"
                         :class="{
-                            'text-white hover:bg-white/10 focus:ring-white': transparent && !scrolled,
-                            'text-gray-900 hover:bg-gray-100 focus:ring-gray-900': scrolled || !transparent
+                            'text-white hover:bg-white/10 focus:ring-white': transparent,
+                            'text-gray-900 hover:bg-gray-100 focus:ring-gray-900': !transparent
                         }"
                         :aria-expanded="mobileMenuOpen"
                         aria-controls="mobile-menu"
@@ -388,7 +356,7 @@
                                 $isActiveMobile = false;
                                 
                                 // Check active state using View Composer helper
-                                $isActiveMobile = $isActive($navItem);
+                                $isActiveMobile = $navItem->isActive ?? false;
                                 
                                 // Link attributes
                                 $linkAttrs = '';

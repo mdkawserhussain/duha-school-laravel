@@ -126,18 +126,7 @@
                     </div>
 
                     <!-- Related Notices -->
-                    @php
-                        $relatedNotices = \App\Models\Notice::published()
-                            ->where('id', '!=', $notice->id)
-                            ->when($notice->category, function($query) use ($notice) {
-                                return $query->where('category', $notice->category);
-                            })
-                            ->orderBy('published_at', 'desc')
-                            ->limit(3)
-                            ->get();
-                    @endphp
-
-                    @if($relatedNotices->count() > 0)
+                    @if(isset($relatedNotices) && $relatedNotices->count() > 0)
                     <div class="bg-blue-50 rounded-lg p-6 mb-6">
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">Related Notices</h3>
                         <div class="space-y-3">
@@ -166,11 +155,11 @@
                                 </svg>
                                 {{ config('contact.phone_display') }}
                             </a>
-                            <a href="mailto:info@almaghribschool.com" class="flex items-center text-green-600 hover:text-green-800 transition duration-300">
+                            <a href="mailto:{{ config('contact.email.info') }}" class="flex items-center text-green-600 hover:text-green-800 transition duration-300">
                                 <svg class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                                 </svg>
-                                info@almaghribschool.com
+                                {{ config('contact.email.info') }}
                             </a>
                         </div>
                     </div>
