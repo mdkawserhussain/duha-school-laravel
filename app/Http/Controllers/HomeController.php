@@ -87,10 +87,10 @@ class HomeController extends Controller
         ])->filter()->join(' '));
 
         $description = optional($primary)->description
-            ?: 'Igniting young minds with a harmonised Cambridge and Islamic curriculum designed for the future.';
+            ?: config('homepage.hero.default_description');
 
         $badge = data_get($primary, 'data.badge')
-            ?: 'One School Serving the Purposes of Here & Hereafter';
+            ?: config('homepage.hero.default_badge');
 
         return [
             'badge' => $badge,
@@ -123,12 +123,7 @@ class HomeController extends Controller
                 ->all();
         }
 
-        return [
-            ['value' => '2012', 'label' => 'Founded'],
-            ['value' => '750+', 'label' => 'Students'],
-            ['value' => '120+', 'label' => 'Expert Faculty'],
-            ['value' => '3', 'label' => 'Campuses'],
-        ];
+        return config('homepage.hero_stats');
     }
 
     protected function mapFeaturePanels(Collection $sections): array
@@ -174,23 +169,6 @@ class HomeController extends Controller
         }
 
         // Fallback to default values if no section found
-        return [
-            [
-                'value' => 'Cambridge | Edexcel',
-                'label' => 'Dual International Curriculum Tracks',
-            ],
-            [
-                'value' => 'Hifzul Qur\'an',
-                'label' => 'Structured memorisation with daily coaching',
-            ],
-            [
-                'value' => 'STEAM Labs',
-                'label' => 'Robotics, coding & design thinking from primary years',
-            ],
-            [
-                'value' => 'Whole-child focus',
-                'label' => 'Character, wellness & co-curricular growth',
-            ],
-        ];
+        return config('homepage.stat_highlights');
     }
 }

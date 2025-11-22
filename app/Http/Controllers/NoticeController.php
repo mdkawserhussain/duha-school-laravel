@@ -54,7 +54,17 @@ class NoticeController extends Controller
                 abort(404);
             }
 
-            return view('pages.notices.show', compact('notice'));
+            // Fetch related notices
+            $relatedNotices = \App\Models\Notice::published()
+                ->where('id', '!=', $notice->id)
+                ->when($notice->category, function($query) use ($notice) {
+                    return $query->where('category', $notice->category);
+                })
+                ->orderBy('published_at', 'desc')
+                ->limit(3)
+                ->get();
+
+            return view('pages.notices.show', compact('notice', 'relatedNotices'));
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error('Error displaying notice', [
                 'error' => $e->getMessage(),
