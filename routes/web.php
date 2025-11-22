@@ -16,6 +16,11 @@ use App\Http\Controllers\NewsletterController;
 // Public Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+// Zaitoon Academy Component Demo
+Route::get('/zaitoon-demo', function () {
+    return view('pages.zaitoon-demo');
+})->name('zaitoon.demo');
+
 // Language
 Route::get('/lang/{locale}', [\App\Http\Controllers\LanguageController::class, 'switch'])->name('language.switch');
 
@@ -72,7 +77,7 @@ Route::get('/campus', [PageController::class, 'show'])->name('campus.show');
 Route::get('/privacy-policy', [PageController::class, 'show'])->name('privacy.show');
 Route::get('/terms-of-service', [PageController::class, 'show'])->name('terms.show');
 
-// Generic page route for Filament preview (fallback)
+// Generic page route
 Route::get('/pages/{page:slug}', [PageController::class, 'show'])->name('pages.show');
 
 // Staff Directory
@@ -104,3 +109,6 @@ Route::middleware('auth')->group(function () {
 
 // Authentication Routes (Breeze)
 require __DIR__.'/auth.php';
+
+// Admin Routes
+require __DIR__.'/admin.php';

@@ -11,7 +11,10 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasRoles;
+    use HasFactory, Notifiable, HasRoles {
+        HasRoles::hasRole as traitHasRole;
+        HasRoles::hasAnyRole as traitHasAnyRole;
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -61,8 +64,8 @@ class User extends Authenticatable
             return true;
         }
         
-        // For other roles, use the parent implementation
-        return parent::hasRole($roles, $guard);
+        // For other roles, use the trait implementation
+        return $this->traitHasRole($roles, $guard);
     }
 
     /**
@@ -79,7 +82,7 @@ class User extends Authenticatable
             return true;
         }
         
-        // For other roles, use the parent implementation
-        return parent::hasAnyRole($roles, $guard);
+        // For other roles, use the trait implementation
+        return $this->traitHasAnyRole($roles, $guard);
     }
 }

@@ -24,6 +24,18 @@ class Event extends Model implements HasMedia
                 $event->slug = static::generateUniqueSlug($event->title);
             }
 
+            // Ensure description is set (required field, NOT NULL)
+            if (empty($event->description) && !empty($event->content)) {
+                $event->description = $event->content;
+            } elseif (empty($event->description)) {
+                $event->description = '';
+            }
+
+            // Ensure excerpt is set (required field, NOT NULL)
+            if (empty($event->excerpt)) {
+                $event->excerpt = '';
+            }
+
             // Ensure event_date is set (required field, NOT NULL)
             // Sync from start_at if event_date is empty but start_at exists
             if (empty($event->event_date) && !empty($event->start_at)) {
@@ -53,6 +65,11 @@ class Event extends Model implements HasMedia
             // This ensures consistency between status and is_published fields
             if ($event->isDirty('status') && isset($event->status)) {
                 $event->is_published = ($event->status === 'published');
+            }
+
+            // Ensure excerpt is set (required field, NOT NULL)
+            if (empty($event->excerpt)) {
+                $event->excerpt = '';
             }
         });
 
