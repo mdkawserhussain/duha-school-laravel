@@ -17,7 +17,7 @@ class CheckMaintenanceMode
     public function handle(Request $request, Closure $next): Response
     {
         // Skip maintenance check for admin routes
-        if ($request->is('admin*') || $request->is('filament*')) {
+        if ($request->is('admin*')) {
             return $next($request);
         }
 

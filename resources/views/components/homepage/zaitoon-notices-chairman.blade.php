@@ -20,14 +20,12 @@
     
     $chairmanMessage = $chairman?->bio ?? 'Zaitoon Academy is committed to providing excellence in both Islamic and modern education. Our curriculum is designed to nurture well-rounded individuals who excel academically while maintaining strong Islamic values.';
     $chairmanName = $chairman?->name ?? 'Chairman';
-    // Get chairman image with WebP support (FR-6.3.2)
+    // Get chairman image with WebP support (FR-6.3.2) - FIXED: Using proper method with asset()
     $chairmanImage = null;
     $chairmanMedia = null;
     if ($chairman && $chairman->hasMedia('photo')) {
         $chairmanMedia = $chairman->getFirstMedia('photo');
-        $chairmanImage = $chairmanMedia->hasGeneratedConversion('webp') 
-            ? $chairmanMedia->getUrl('webp') 
-            : $chairmanMedia->getUrl('medium');
+        $chairmanImage = $chairman->getMediaUrl('photo', 'webp') ?: $chairman->getMediaUrl('photo', 'medium');
     }
 @endphp
 
@@ -80,7 +78,7 @@
                     <div class="flex-shrink-0">
                         <picture>
                             @if($chairmanMedia->hasGeneratedConversion('webp'))
-                                <source srcset="{{ $chairmanMedia->getUrl('webp') }}" type="image/webp">
+                                <source srcset="{{ $chairman->getMediaUrl('photo', 'webp') }}" type="image/webp">
                             @endif
                             <img 
                                 src="{{ $chairmanImage }}" 

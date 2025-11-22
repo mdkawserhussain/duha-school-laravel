@@ -95,15 +95,13 @@
                             @if($item->hasMedia('images'))
                             <div class="relative h-48 overflow-hidden">
                                 @php
-                                    $media = $item->getFirstMedia('images');
-                                    $webpUrl = $media && $media->hasGeneratedConversion('webp') 
-                                        ? $media->getUrl('webp') 
-                                        : null;
-                                    $imageUrl = $media ? $media->getUrl('medium') : null;
+                                    // FIXED: Using proper method with asset()
+                                    $webpUrl = $item->getMediaUrl('images', 'webp');
+                                    $imageUrl = $item->getMediaUrl('images', 'medium');
                                 @endphp
                                 <picture>
                                     @if($webpUrl)
-                                        <source srcset="{{ $webpUrl }}" type="image/webp">
+                                        <source srcset="{{ $item->getMediaUrl('images', 'webp') }}" type="image/webp">
                                     @endif
                                     <img 
                                         src="{{ $imageUrl }}" 

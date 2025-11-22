@@ -12,20 +12,11 @@
     $image1 = null;
     $image2 = null;
     if ($introSection && $introSection->hasMedia('images')) {
-        $media = $introSection->getMedia('images');
-        $firstMedia = $media->first();
-        $secondMedia = $media->skip(1)->first();
-        
-        // Get WebP URLs if available (FR-5.2.4)
-        if ($firstMedia) {
-            $image1 = $firstMedia->hasGeneratedConversion('webp') 
-                ? $firstMedia->getUrl('webp') 
-                : $firstMedia->getUrl('large');
-        }
+        // Get WebP URLs if available (FR-5.2.4) - FIXED: Using proper method with asset()
+        $image1 = $introSection->getMediaUrl('images', 'webp') ?: $introSection->getMediaUrl('images', 'large');
+        $secondMedia = $introSection->getMedia('images')->skip(1)->first();
         if ($secondMedia) {
-            $image2 = $secondMedia->hasGeneratedConversion('webp') 
-                ? $secondMedia->getUrl('webp') 
-                : $secondMedia->getUrl('large');
+            $image2 = $introSection->getMediaUrl('images', 'webp') ?: $introSection->getMediaUrl('images', 'large');
         }
     }
 @endphp
@@ -44,7 +35,7 @@
                                 : null;
                         @endphp
                         @if($firstMedia && $firstMedia->hasGeneratedConversion('webp'))
-                            <source srcset="{{ $firstMedia->getUrl('webp') }}" type="image/webp">
+                            <source srcset="{{ $introSection->getMediaUrl('images', 'webp') }}" type="image/webp">
                         @endif
                         <img 
                             src="{{ $image1 }}" 
@@ -69,7 +60,7 @@
                                 : null;
                         @endphp
                         @if($secondMedia && $secondMedia->hasGeneratedConversion('webp'))
-                            <source srcset="{{ $secondMedia->getUrl('webp') }}" type="image/webp">
+                            <source srcset="{{ $introSection->getMediaUrl('images', 'webp') }}" type="image/webp">
                         @endif
                         <img 
                             src="{{ $image2 }}" 
@@ -112,4 +103,3 @@
         </div>
     </div>
 </section>
-

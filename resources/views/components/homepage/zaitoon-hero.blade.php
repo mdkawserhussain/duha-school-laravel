@@ -1,4 +1,3 @@
-{{-- Zaitoon Academy Hero Section (FR-3) --}}
 @php
     $heroSlides = $heroSlides ?? collect([]);
     // Get all active hero slides for carousel (FR-3.10)
@@ -69,13 +68,10 @@
                     $primaryButtonText = $slide->button_text ?? $defaultButtonText;
                     $primaryButtonLink = $slide->button_link ?? $defaultButtonLink;
                     
-                    // Get hero image with WebP support (FR-3.8)
+                    // Get hero image with WebP support (FR-3.8) - FIXED: Using proper method with asset()
                     $heroImage = null;
                     if ($slide->hasMedia('images')) {
-                        $media = $slide->getFirstMedia('images');
-                        $heroImage = $media->hasGeneratedConversion('webp') 
-                            ? $media->getUrl('webp') 
-                            : $media->getUrl();
+                        $heroImage = $slide->getMediaUrl('images', 'webp') ?: $slide->getMediaUrl('images');
                     } else {
                         $heroImage = asset('images/hero-poster.jpg');
                     }
@@ -91,7 +87,7 @@
                     x-transition:leave-start="opacity-100"
                     x-transition:leave-end="opacity-0"
                     class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center w-full"
-                    style="display: {{ $index === 0 ? 'grid' : 'none' }};"
+                    {!! $index === 0 ? 'style="display: grid;"' : 'style="display: none;"' !!}
                 >
                     {{-- Left Side: Text Content on Green Background (FR-3.4) --}}
                     <div class="text-white space-y-6 z-20">
@@ -130,7 +126,7 @@
                                     $media = $slide->hasMedia('images') ? $slide->getFirstMedia('images') : null;
                                 @endphp
                                 @if($media && $media->hasGeneratedConversion('webp'))
-                                    <source srcset="{{ $media->getUrl('webp') }}" type="image/webp">
+                                    <source srcset="{{ $slide->getMediaUrl('images', 'webp') }}" type="image/webp">
                                 @endif
                                 <img 
                                     src="{{ $heroImage }}" 
@@ -223,4 +219,3 @@
     </div>
     @endif
 </section>
-

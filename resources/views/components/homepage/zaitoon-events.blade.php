@@ -97,15 +97,13 @@
                             @if($event->hasMedia('images'))
                             <div class="relative h-48 overflow-hidden">
                                 @php
-                                    $media = $event->getFirstMedia('images');
-                                    $webpUrl = $media && $media->hasGeneratedConversion('webp') 
-                                        ? $media->getUrl('webp') 
-                                        : null;
-                                    $imageUrl = $media ? $media->getUrl('medium') : null;
+                                    // FIXED: Using proper method with asset()
+                                    $webpUrl = $event->getMediaUrl('images', 'webp');
+                                    $imageUrl = $event->getMediaUrl('images', 'medium');
                                 @endphp
                                 <picture>
                                     @if($webpUrl)
-                                        <source srcset="{{ $webpUrl }}" type="image/webp">
+                                        <source srcset="{{ $event->getMediaUrl('images', 'webp') }}" type="image/webp">
                                     @endif
                                     <img 
                                         src="{{ $imageUrl }}" 

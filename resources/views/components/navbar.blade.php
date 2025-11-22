@@ -383,7 +383,7 @@
                     
                     {{-- Login Icon/Button --}}
                     @auth
-                        <a href="{{ route('filament.admin.pages.dashboard') }}" 
+                        <a href="{{ route('admin.dashboard') }}" 
                            class="text-white hover:text-za-yellow-accent transition-colors p-2 rounded-lg hover:bg-white/10"
                            aria-label="Admin Dashboard">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

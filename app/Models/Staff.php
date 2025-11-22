@@ -17,13 +17,13 @@ class Staff extends Model implements HasMedia
     protected $fillable = [
         'name',
         'position',
-        'role_title', // Alias for position (for Filament compatibility)
+        'role_title', // Alias for position
         'bio',
         'email',
         'phone',
         'is_active',
         'sort_order',
-        'order', // Alias for sort_order (for Filament compatibility)
+        'order', // Alias for sort_order
         'social_links', // JSON field for social media links
     ];
 
@@ -32,25 +32,25 @@ class Staff extends Model implements HasMedia
         'social_links' => 'array',
     ];
 
-    // Accessor for role_title (Filament compatibility)
+    // Accessor for role_title
     public function getRoleTitleAttribute()
     {
         return $this->position;
     }
 
-    // Mutator for role_title (Filament compatibility)
+    // Mutator for role_title
     public function setRoleTitleAttribute($value)
     {
         $this->attributes['position'] = $value;
     }
 
-    // Accessor for order (Filament compatibility)
+    // Accessor for order
     public function getOrderAttribute()
     {
         return $this->sort_order;
     }
 
-    // Mutator for order (Filament compatibility)
+    // Mutator for order
     public function setOrderAttribute($value)
     {
         $this->attributes['sort_order'] = $value;

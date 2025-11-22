@@ -16,7 +16,7 @@ class EnsureUserHasRole
     public function handle(Request $request, Closure $next, string ...$roles): Response
     {
         if (!auth()->check()) {
-            return redirect()->route('filament.admin.auth.login');
+            return redirect()->route('login');
         }
 
         $user = auth()->user();
