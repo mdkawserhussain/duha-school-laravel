@@ -12,36 +12,41 @@ export default {
     theme: {
         extend: {
             colors: {
-                // Zaitoon Academy Brand Colors (Exact Match from Reference Site)
+                // Zaitoon Academy Brand Colors (100% Exact Match from beta.zaitoonacademy.com)
                 za: {
-                    // Primary Green Shades
-                    'green-primary': '#0d5a47',  // Main green from reference
-                    'green-dark': '#0a4536',     // Darker shade
-                    'green-light': '#e8f5f1',
-                    'green-50': '#f0fdf7',
-                    'green-100': '#d1fae5',
-                    'green-200': '#a7f3d0',
-                    'green-300': '#6ee7b7',
-                    'green-400': '#34d399',
-                    'green-500': '#10b981',
-                    'green-600': '#059669',
-                    'green-700': '#047857',
-                    'green-800': '#065f46',
-                    'green-900': '#064e3b',
+                    // Primary Green Shades (Exact from site analysis)
+                    'green-dark': '#0B5D1E',      // Dark green for top bar/footer (RGB: 11, 93, 30)
+                    'green-primary': '#16A34A',  // Main green for buttons (RGB: 22, 163, 74)
+                    'green-light': '#F0FDF4',    // Light green backgrounds (RGB: 240, 253, 244)
+                    'green-pastel': '#DCFCE7',   // Pastel green for sections (RGB: 220, 252, 231)
+                    'green-50': '#F0FDF4',
+                    'green-100': '#DCFCE7',
+                    'green-200': '#BBF7D0',
+                    'green-300': '#86EFAC',
+                    'green-400': '#4ADE80',
+                    'green-500': '#22C55E',
+                    'green-600': '#16A34A',      // Primary
+                    'green-700': '#15803D',
+                    'green-800': '#166534',
+                    'green-900': '#14532D',
                     // Yellow Accent Shades (Exact Match)
-                    'yellow-accent': '#fbbf24',  // Bright yellow from reference
-                    'yellow-light': '#fef3c7',
-                    'yellow-dark': '#f59e0b',
-                    'yellow-50': '#fffbeb',
-                    'yellow-100': '#fef3c7',
-                    'yellow-200': '#fde68a',
-                    'yellow-300': '#fcd34d',
-                    'yellow-400': '#fbbf24',
-                    'yellow-500': '#f59e0b',
-                    'yellow-600': '#d97706',
-                    'yellow-700': '#b45309',
-                    'yellow-800': '#92400e',
-                    'yellow-900': '#78350f',
+                    'yellow-accent': '#FBBF24',  // Bright yellow for CTA buttons (RGB: 251, 191, 36)
+                    'yellow-light': '#FEF3C7',
+                    'yellow-dark': '#F59E0B',    // Darker yellow for hover
+                    'yellow-50': '#FFFBEB',
+                    'yellow-100': '#FEF3C7',
+                    'yellow-200': '#FDE68A',
+                    'yellow-300': '#FCD34D',
+                    'yellow-400': '#FBBF24',     // Primary yellow
+                    'yellow-500': '#F59E0B',
+                    'yellow-600': '#D97706',
+                    'yellow-700': '#B45309',
+                    'yellow-800': '#92400E',
+                    'yellow-900': '#78350F',
+                    // Orange Accent (for decorative elements)
+                    'orange': '#FB923C',         // RGB: 251, 146, 60
+                    // Blue (for navigation arrows)
+                    'blue': '#3B82F6',           // RGB: 59, 130, 246
                 },
                 // AISD Brand Colors - Matching CSS variables exactly
                 aisd: {
