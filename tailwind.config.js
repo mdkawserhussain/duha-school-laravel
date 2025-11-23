@@ -12,11 +12,11 @@ export default {
     theme: {
         extend: {
             colors: {
-                // Zaitoon Academy Brand Colors (New Design System)
+                // Zaitoon Academy Brand Colors (Exact Match from Reference Site)
                 za: {
                     // Primary Green Shades
-                    'green-primary': '#1a5e4a',
-                    'green-dark': '#0f3d30',
+                    'green-primary': '#0d5a47',  // Main green from reference
+                    'green-dark': '#0a4536',     // Darker shade
                     'green-light': '#e8f5f1',
                     'green-50': '#f0fdf7',
                     'green-100': '#d1fae5',
@@ -28,10 +28,10 @@ export default {
                     'green-700': '#047857',
                     'green-800': '#065f46',
                     'green-900': '#064e3b',
-                    // Yellow Accent Shades
-                    'yellow-accent': '#fbbf24',
+                    // Yellow Accent Shades (Exact Match)
+                    'yellow-accent': '#fbbf24',  // Bright yellow from reference
                     'yellow-light': '#fef3c7',
-                    'yellow-dark': '#d97706',
+                    'yellow-dark': '#f59e0b',
                     'yellow-50': '#fffbeb',
                     'yellow-100': '#fef3c7',
                     'yellow-200': '#fde68a',

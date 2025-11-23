@@ -142,7 +142,8 @@
         <!-- Scripts -->
         @vite([
             'resources/css/app.css',
-            'resources/js/app.js'
+            'resources/js/app.js',
+            'resources/js/scroll-animations.js'
         ])
 
         <noscript>

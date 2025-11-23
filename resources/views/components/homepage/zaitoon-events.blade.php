@@ -12,59 +12,53 @@
     $totalEvents = $allEvents->count();
 @endphp
 
-<section class="py-16 lg:py-24 bg-white" 
+<section class="py-16 lg:py-24" style="background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%);" 
          x-data="{
              currentIndex: 0,
              totalItems: {{ $totalEvents }},
              itemsPerView: 4,
              autoplayInterval: null,
-             isPaused: false
-         }"
-         x-init="
-             // Calculate items per view based on screen size
-             function updateItemsPerView() {
-                 if (window.innerWidth >= 1024) {
-                     itemsPerView = 4;
-                 } else if (window.innerWidth >= 640) {
-                     itemsPerView = 2;
-                 } else {
-                     itemsPerView = 1;
+             isPaused: false,
+             init() {
+                 this.updateItemsPerView();
+                 window.addEventListener('resize', () => this.updateItemsPerView());
+                 if (this.totalItems > this.itemsPerView) {
+                     this.startAutoplay();
                  }
-             }
-             updateItemsPerView();
-             window.addEventListener('resize', updateItemsPerView);
-             
-             // Optional autoplay (FR-8.5)
-             if (totalItems > itemsPerView) {
-                 autoplayInterval = setInterval(function() {
-                     if (!isPaused) {
-                         currentIndex = (currentIndex + 1) % (totalItems - itemsPerView + 1);
+                 this.$el.addEventListener('mouseenter', () => { this.isPaused = true; });
+                 this.$el.addEventListener('mouseleave', () => { this.isPaused = false; });
+             },
+             updateItemsPerView() {
+                 if (window.innerWidth >= 1024) {
+                     this.itemsPerView = 4;
+                 } else if (window.innerWidth >= 640) {
+                     this.itemsPerView = 2;
+                 } else {
+                     this.itemsPerView = 1;
+                 }
+             },
+             startAutoplay() {
+                 this.autoplayInterval = setInterval(() => {
+                     if (!this.isPaused) {
+                         this.currentIndex = (this.currentIndex + 1) % (this.totalItems - this.itemsPerView + 1);
                      }
                  }, 5000);
              }
-             
-             $el.addEventListener('mouseenter', function() {
-                 isPaused = true;
-             });
-             $el.addEventListener('mouseleave', function() {
-                 isPaused = false;
-             });
+         }"
          ">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {{-- Section Header (FR-8.1, FR-8.2) --}}
-        <div class="text-center mb-12">
-            <div class="flex items-center justify-center gap-3 mb-4">
-                <div class="w-10 h-10 bg-za-yellow-accent rounded-full flex items-center justify-center">
-                    <svg class="w-6 h-6 text-za-green-dark" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                    </svg>
-                </div>
-                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-za-green-primary">
+        {{-- Section Header --}}
+        <div class="text-center mb-12 fade-in">
+            <div class="flex items-center justify-center gap-2 mb-3">
+                <svg class="w-8 h-8" style="color: #fbbf24;" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
+                </svg>
+                <h2 class="text-3xl sm:text-4xl font-bold" style="color: #0d5a47;">
                     Campus Activities & Events
                 </h2>
             </div>
-            <p class="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto">
-                Stay updated with our latest campus activities and events
+            <p class="text-sm sm:text-base text-gray-600 max-w-3xl mx-auto">
+                Explore the latest events, cultural programs, and activities happening at our campus. Stay engaged and celebrate every moment of learning and fun!
             </p>
         </div>
         
@@ -91,13 +85,11 @@
                     :style="'transform: translateX(-' + (currentIndex * (100 / itemsPerView)) + '%)'"
                 >
                     @foreach($allEvents as $event)
-                    <div class="w-full sm:w-1/2 lg:w-1/4 flex-shrink-0 px-3">
-                        <a href="{{ route('events.show', $event->slug ?? $event->id, false) }}" 
-                           class="group bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 block h-full">
+                    <div class="w-full sm:w-1/2 lg:w-1/4 flex-shrink-0 px-3 zoom-in">
+                        <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 h-full flex flex-col">
                             @if($event->hasMedia('images'))
                             <div class="relative h-48 overflow-hidden">
                                 @php
-                                    // FIXED: Using proper method with asset()
                                     $webpUrl = $event->getMediaUrl('images', 'webp');
                                     $imageUrl = $event->getMediaUrl('images', 'medium');
                                 @endphp
@@ -108,38 +100,35 @@
                                     <img 
                                         src="{{ $imageUrl }}" 
                                         alt="{{ $event->title }}"
-                                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                                        class="w-full h-full object-cover"
                                         loading="lazy"
                                     >
                                 </picture>
-                                <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-lg">
-                                    <p class="text-xs font-semibold text-za-green-primary">
-                                        {{ $event->start_date ? $event->start_date->format('d M Y') : 'Date' }}
-                                    </p>
-                                </div>
                             </div>
                             @else
-                            <div class="h-48 bg-za-green-light flex items-center justify-center">
-                                <span class="text-za-green-primary">Event Image</span>
+                            <div class="h-48 bg-gray-100 flex items-center justify-center">
+                                <span class="text-gray-400">Event Image</span>
                             </div>
                             @endif
-                            <div class="p-4">
-                                <h3 class="text-lg font-semibold text-gray-900 mb-2 group-hover:text-za-green-primary transition-colors line-clamp-2">
+                            <div class="p-4 flex-1 flex flex-col">
+                                <h3 class="text-base font-semibold text-gray-900 mb-2 line-clamp-2">
                                     {{ $event->title }}
                                 </h3>
-                                @if($event->description)
-                                <p class="text-sm text-gray-600 line-clamp-3 mb-4">
-                                    {{ \Illuminate\Support\Str::limit(strip_tags($event->description), 100) }}
-                                </p>
-                                @endif
-                                <span class="inline-flex items-center text-za-green-primary text-sm font-medium">
-                                    Read More
-                                    <svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                    </svg>
-                                </span>
+                                <div class="mt-auto flex items-center justify-between text-xs text-gray-500">
+                                    <div class="flex items-center gap-1">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                        </svg>
+                                        <span>{{ $event->start_at ? $event->start_at->format('d M Y') : ($event->event_date ? $event->event_date->format('d M Y') : 'Date TBA') }}</span>
+                                    </div>
+                                    <a href="{{ route('events.show', $event->slug ?? $event->id, false) }}" 
+                                       class="text-xs font-medium hover:underline"
+                                       style="color: #0d5a47;">
+                                        Read More →
+                                    </a>
+                                </div>
                             </div>
-                        </a>
+                        </div>
                     </div>
                     @endforeach
                 </div>
@@ -176,14 +165,14 @@
         </div>
         @endif
         
-        {{-- View All Events Button (FR-8.7) --}}
-        <div class="text-center mt-8">
+        {{-- View All Events Button --}}
+        <div class="text-center mt-10">
             <a href="{{ route('events.index', [], false) }}" 
-               class="inline-flex items-center justify-center bg-za-green-primary hover:bg-za-green-dark text-white font-semibold px-8 py-3 rounded-lg transition-all duration-200 hover:scale-105 shadow-md hover:shadow-lg">
+               class="inline-flex items-center justify-center text-white font-semibold px-8 py-3 rounded-full transition-all duration-200 hover:shadow-lg"
+               style="background-color: #0d5a47;"
+               onmouseover="this.style.backgroundColor='#0a4536'"
+               onmouseout="this.style.backgroundColor='#0d5a47'">
                 View All Events
-                <svg class="ml-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
             </a>
         </div>
         @else

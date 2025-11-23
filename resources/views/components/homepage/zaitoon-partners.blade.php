@@ -11,102 +11,68 @@
     // Default partners if none provided (FR-12.4.4)
     if (empty($partners)) {
         $partners = [
-            ['name' => 'SADAGAH', 'logo' => null, 'website' => null],
-            ['name' => 'ILANNOOR INSTITUTE', 'logo' => null, 'website' => null],
             ['name' => 'VISION', 'logo' => null, 'website' => null],
-            ['name' => 'Partner 4', 'logo' => null, 'website' => null],
-            ['name' => 'Partner 5', 'logo' => null, 'website' => null],
+            ['name' => 'ILANNOOR', 'logo' => null, 'website' => null],
+            ['name' => 'PARTNER 3', 'logo' => null, 'website' => null],
+            ['name' => 'SADAQAH TV', 'logo' => null, 'website' => null],
+            ['name' => 'SADAQAH', 'logo' => null, 'website' => null],
+            ['name' => 'PARTNER 6', 'logo' => null, 'website' => null],
         ];
     }
 @endphp
 
-<section class="py-16 lg:py-24 bg-white"
-         x-data="{ isPaused: false }"
-         @mouseenter="isPaused = true"
-         @mouseleave="isPaused = false">
+<section class="py-16 lg:py-24 bg-gray-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {{-- Section Header (FR-12.1) --}}
-        <div class="text-center mb-12">
-            <div class="inline-flex items-center justify-center w-12 h-12 bg-za-green-primary rounded-full mb-4">
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-            </div>
-            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-za-green-primary mb-4">
-                Our Partners
+        <div class="text-center mb-16">
+            <h2 class="text-3xl sm:text-4xl font-serif font-bold mb-3" style="color: #0d5a47;">
+                🤝 Our Partners
             </h2>
-            <p class="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
+            <p class="text-base text-gray-600 max-w-2xl mx-auto">
                 We are proud to be associated with leading organizations worldwide.
             </p>
         </div>
         
-        {{-- Partners Carousel (FR-12.2, FR-12.3) --}}
-        <div class="overflow-hidden">
-            <div 
-                class="flex gap-6 lg:gap-8 animate-scroll"
-                :style="isPaused ? 'animation-play-state: paused;' : 'animation-play-state: running;'"
-            >
-                {{-- Duplicate partners for seamless loop --}}
-                @foreach(array_merge($partners, $partners) as $index => $partner)
-                @php
-                    $hasWebsite = isset($partner['website']) && !empty($partner['website']);
-                    $partnerUrl = $hasWebsite ? $partner['website'] : '#';
-                @endphp
-                @if($hasWebsite)
-                <a href="{{ $partnerUrl }}" 
-                   target="_blank" 
-                   rel="noopener noreferrer"
-                   class="flex-shrink-0 bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center min-h-[120px] w-48 border-2 border-gray-100 hover:border-za-green-primary"
-                   aria-label="Visit {{ $partner['name'] ?? 'Partner' }} website">
+        {{-- Partners Grid (FR-12.2, FR-12.3) --}}
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 lg:gap-12 items-center">
+            @foreach($partners as $partner)
+            @php
+                $hasWebsite = isset($partner['website']) && !empty($partner['website']);
+                $partnerUrl = $hasWebsite ? $partner['website'] : '#';
+            @endphp
+            @if($hasWebsite)
+            <a href="{{ $partnerUrl }}" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="flex items-center justify-center p-4 transition-all duration-300 hover:scale-110 grayscale hover:grayscale-0"
+               aria-label="Visit {{ $partner['name'] ?? 'Partner' }} website">
+            @else
+            <div class="flex items-center justify-center p-4 transition-all duration-300 hover:scale-110">
+            @endif
+                @if(isset($partner['logo']) && $partner['logo'])
+                <picture>
+                    <source srcset="{{ $partner['logo'] }}" type="image/webp">
+                    <img 
+                        src="{{ $partner['logo'] }}" 
+                        alt="{{ $partner['name'] ?? 'Partner' }}"
+                        class="max-w-full h-16 object-contain opacity-60 hover:opacity-100 transition-opacity duration-300"
+                        loading="lazy"
+                    >
+                </picture>
                 @else
-                <div class="flex-shrink-0 bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center min-h-[120px] w-48 border-2 border-gray-100 hover:border-za-green-primary">
-                @endif
-                    @if(isset($partner['logo']) && $partner['logo'])
-                    <picture>
-                        <source srcset="{{ $partner['logo'] }}" type="image/webp">
-                        <img 
-                            src="{{ $partner['logo'] }}" 
-                            alt="{{ $partner['name'] ?? 'Partner' }}"
-                            class="max-w-full max-h-16 object-contain"
-                            loading="lazy"
-                        >
-                    </picture>
-                    @else
-                    <div class="text-center w-full">
-                        <div class="w-16 h-16 bg-za-green-light rounded-lg flex items-center justify-center mx-auto mb-2">
-                            <span class="text-za-green-primary text-2xl font-bold">
-                                {{ substr($partner['name'] ?? 'P', 0, 1) }}
-                            </span>
-                        </div>
-                        <p class="text-sm font-semibold text-gray-700">{{ $partner['name'] ?? 'Partner' }}</p>
-                    </div>
-                    @endif
-                @if($hasWebsite)
-                </a>
-                @else
+                <div class="w-full h-16 bg-white rounded-lg flex items-center justify-center px-3 border border-gray-200">
+                    <span class="text-xs font-bold text-gray-400 text-center leading-tight">
+                        {{ $partner['name'] ?? 'Partner' }}
+                    </span>
                 </div>
                 @endif
-                @endforeach
+            @if($hasWebsite)
+            </a>
+            @else
             </div>
+            @endif
+            @endforeach
         </div>
     </div>
 </section>
-
-@push('styles')
-<style>
-    @keyframes scroll {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(-50%); }
-    }
-    
-    .animate-scroll {
-        animation: scroll 30s linear infinite;
-        display: flex;
-    }
-    
-    .animate-scroll:hover {
-        animation-play-state: paused;
-    }
-</style>
-@endpush
 
