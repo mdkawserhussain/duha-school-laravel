@@ -12,51 +12,41 @@
 @endphp
 
 <section 
-    class="relative w-full overflow-hidden bg-za-green-primary hero-section" 
-    style="margin: 0 !important; padding: 0 !important; min-height: 90vh; position: relative; margin-top: 0 !important; padding-top: 0 !important;"
+    class="relative w-full overflow-hidden hero-section" 
+    style="margin: 0 !important; padding: 0 !important; min-height: 85vh; position: relative; margin-top: 0 !important; padding-top: 0 !important; background-color: #0d5a47;"
     x-data="{
         currentSlide: 0,
         totalSlides: {{ $allSlides->count() ?: 1 }},
         autoplayInterval: null,
-        isPaused: false
-    }"
-    x-init="
-        // Initialize autoplay (FR-3.8)
-        if (totalSlides > 1) {
-            autoplayInterval = setInterval(function() {
-                if (!isPaused) {
-                    currentSlide = (currentSlide + 1) % totalSlides;
+        isPaused: false,
+        init() {
+            if (this.totalSlides > 1) {
+                this.startAutoplay();
+            }
+            this.$el.addEventListener('mouseenter', () => { this.isPaused = true; });
+            this.$el.addEventListener('mouseleave', () => { this.isPaused = false; });
+            this.$watch('currentSlide', () => {
+                if (this.totalSlides > 1 && !this.isPaused) {
+                    clearInterval(this.autoplayInterval);
+                    this.startAutoplay();
+                }
+            });
+        },
+        startAutoplay() {
+            this.autoplayInterval = setInterval(() => {
+                if (!this.isPaused) {
+                    this.currentSlide = (this.currentSlide + 1) % this.totalSlides;
                 }
             }, 5000);
         }
-        
-        // Reset autoplay on slide change (FR-3.10)
-        $watch('currentSlide', function() {
-            if (totalSlides > 1 && !isPaused) {
-                clearInterval(autoplayInterval);
-                autoplayInterval = setInterval(function() {
-                    if (!isPaused) {
-                        currentSlide = (currentSlide + 1) % totalSlides;
-                    }
-                }, 5000);
-            }
-        });
-        
-        // Pause on hover (FR-3.9)
-        $el.addEventListener('mouseenter', function() {
-            isPaused = true;
-        });
-        $el.addEventListener('mouseleave', function() {
-            isPaused = false;
-        });
-    "
+    }"
 >
-    {{-- Green Background (FR-3.1) --}}
-    <div class="absolute inset-0 bg-za-green-primary z-0" style="background-color: #1a5e4a;"></div>
+    {{-- Dark Green Background --}}
+    <div class="absolute inset-0 z-0" style="background-color: #0d5a47;"></div>
     
     {{-- Carousel Slides Container --}}
-    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24"
-         style="padding-top: 10rem; min-height: 90vh; display: flex; align-items: center;">
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16"
+         style="padding-top: 8rem; min-height: 85vh; display: flex; align-items: center;">
         
         @if($allSlides->count() > 0)
             @foreach($allSlides as $index => $slide)
@@ -112,14 +102,14 @@
                         @endif
                     </div>
                     
-                    {{-- Right Side: Yellow Curved Shape with Image (FR-3.2) --}}
-                    <div class="relative z-10 h-[500px] lg:h-[600px]">
-                        {{-- Yellow Curved Background Shape (FR-3.2) --}}
-                        <div class="absolute inset-0 bg-za-yellow-accent rounded-tl-[100px] rounded-br-[100px] transform rotate-3 opacity-90" 
-                             style="clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%); width: 100%; height: 100%; background-color: #fbbf24;"></div>
+                    {{-- Right Side: Yellow Curved Shape with Image --}}
+                    <div class="relative z-10 h-[450px] lg:h-[550px]">
+                        {{-- Yellow Curved Background Shape --}}
+                        <div class="absolute inset-0 rounded-3xl transform rotate-2" 
+                             style="background-color: #fbbf24; width: 100%; height: 100%;"></div>
                         
-                        {{-- Image Container (FR-3.4, FR-3.8) --}}
-                        <div class="relative z-10 rounded-2xl overflow-hidden shadow-2xl h-full" style="transform: rotate(-2deg);">
+                        {{-- Image Container --}}
+                        <div class="relative z-10 rounded-2xl overflow-hidden shadow-xl h-full" style="transform: rotate(-1deg);">
                             @if($heroImage)
                             <picture>
                                 @php

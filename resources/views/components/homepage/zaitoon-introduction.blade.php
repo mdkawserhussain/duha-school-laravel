@@ -21,11 +21,11 @@
     }
 @endphp
 
-<section class="py-16 lg:py-24 bg-white">
+<section class="py-16 lg:py-24" style="background: linear-gradient(180deg, #ffffff 0%, #f0fdf4 50%, #ffffff 100%);">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             {{-- Left Side: Images --}}
-            <div class="space-y-6">
+            <div class="space-y-6 slide-left">
                 @if($image1)
                 <div class="rounded-xl overflow-hidden shadow-lg">
                     <picture>
@@ -78,11 +78,11 @@
             </div>
             
             {{-- Right Side: Text Content --}}
-            <div class="space-y-6">
-                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-za-green-primary leading-tight">
+            <div class="space-y-6 slide-right">
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold leading-tight" style="color: #0d5a47;">
                     {{ $title }}
                 </h2>
-                <div class="space-y-4 text-gray-700 leading-relaxed">
+                <div class="space-y-4 text-gray-600 leading-relaxed">
                     <p class="text-base sm:text-lg">
                         {{ $description }}
                     </p>
@@ -93,7 +93,10 @@
                     @endif
                 </div>
                 <a href="{{ $buttonLink }}" 
-                   class="inline-flex items-center justify-center bg-za-green-primary hover:bg-za-green-dark text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 hover:scale-105 shadow-md hover:shadow-lg">
+                   class="inline-flex items-center justify-center text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 hover:shadow-lg"
+                   style="background-color: #0d5a47;"
+                   onmouseover="this.style.backgroundColor='#0a4536'"
+                   onmouseout="this.style.backgroundColor='#0d5a47'">
                     {{ $buttonText }}
                     <svg class="ml-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />

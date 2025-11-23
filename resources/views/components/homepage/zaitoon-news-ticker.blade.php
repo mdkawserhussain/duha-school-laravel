@@ -21,8 +21,8 @@
 
 @if($newsItems->isNotEmpty())
 <section 
-    class="bg-za-green-primary text-white py-2 overflow-hidden relative"
-    style="background-color: #1a5e4a;"
+    class="text-white py-2 overflow-hidden relative"
+    style="background-color: #0d5a47;"
     x-data="{ isPaused: false }"
     @mouseenter="isPaused = true"
     @mouseleave="isPaused = false"

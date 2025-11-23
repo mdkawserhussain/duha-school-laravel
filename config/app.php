@@ -123,4 +123,16 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Use Zaitoon Header
+    |--------------------------------------------------------------------------
+    |
+    | This determines whether to use the Zaitoon Academy header design or
+    | the default header. Set to true to use Zaitoon header.
+    |
+    */
+
+    'use_zaitoon_header' => env('USE_ZAITOON_HEADER', true),
+
 ];

@@ -13,11 +13,11 @@
     $logoUrl = \App\Helpers\SiteSettingsHelper::logoUrl();
 @endphp
 
-<footer class="relative bg-za-green-dark text-white" style="margin-top: -1px; background-color: #0f3d30;">
+<footer class="relative text-white" style="margin-top: -1px; background-color: #0d5a47;">
     {{-- Curved Wave at Top --}}
     <div class="absolute top-0 left-0 w-full overflow-hidden pointer-events-none" style="line-height: 0; transform: translateY(-1px);">
         <svg viewBox="0 0 1440 120" preserveAspectRatio="none" class="relative block w-full h-20 lg:h-24">
-            <path d="M0,0 C480,100 960,100 1440,0 L1440,120 L0,120 Z" class="fill-current text-za-green-dark"></path>
+            <path d="M0,0 C480,100 960,100 1440,0 L1440,120 L0,120 Z" style="fill: #0d5a47;"></path>
         </svg>
     </div>
 
@@ -87,7 +87,8 @@
                         </div>
                         <button 
                             type="submit"
-                            class="px-8 py-4 bg-za-yellow-accent hover:bg-za-yellow-dark text-za-green-dark font-bold rounded-full transition-all duration-200 hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+                            class="px-8 py-4 font-bold rounded-full transition-all duration-200 hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+                            style="background-color: #fbbf24; color: #0d5a47;"
                             :disabled="loading"
                         >
                             <span x-show="!loading">Subscribe</span>
@@ -131,11 +132,11 @@
                     {{-- Important Links (FR-13.2.2, FR-13.2.3) --}}
                     <h4 class="text-lg font-bold mb-4 text-za-yellow-accent uppercase tracking-wide">Important Links</h4>
                     <ul class="space-y-3">
-                        <li><a href="{{ route('about.index', [], false) }}" class="text-white hover:text-za-yellow-accent transition-colors duration-200 block">About Us</a></li>
-                        <li><a href="#" class="text-white hover:text-za-yellow-accent transition-colors duration-200 block">Payment Instruction</a></li>
-                        <li><a href="{{ route('notices.index', [], false) }}" class="text-white hover:text-za-yellow-accent transition-colors duration-200 block">News</a></li>
-                        <li><a href="#" class="text-white hover:text-za-yellow-accent transition-colors duration-200 block">FAQ</a></li>
-                        <li><a href="{{ route('contact.index', [], false) }}" class="text-white hover:text-za-yellow-accent transition-colors duration-200 block">Contact</a></li>
+                        <li><a href="{{ route('about.index', [], false) }}" class="text-white/90 hover:text-white transition-colors duration-200 block">About Us</a></li>
+                        <li><a href="#" class="text-white/90 hover:text-white transition-colors duration-200 block">Payment Instruction</a></li>
+                        <li><a href="{{ route('notices.index', [], false) }}" class="text-white/90 hover:text-white transition-colors duration-200 block">News</a></li>
+                        <li><a href="#" class="text-white/90 hover:text-white transition-colors duration-200 block">FAQ</a></li>
+                        <li><a href="{{ route('contact.index', [], false) }}" class="text-white/90 hover:text-white transition-colors duration-200 block">Contact</a></li>
                     </ul>
                 </div>
 
@@ -239,9 +240,9 @@
         @scroll.window="show = window.pageYOffset > 300"
         @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
         x-transition
-        class="fixed bottom-8 right-8 w-12 h-12 bg-za-yellow-accent hover:bg-za-yellow-dark text-za-green-dark rounded-full shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110 flex items-center justify-center z-40"
+        class="fixed bottom-8 right-8 w-12 h-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110 flex items-center justify-center z-40"
+        style="background-color: #fbbf24; color: #0d5a47; display: none;"
         aria-label="Back to top"
-        style="display: none;"
     >
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
