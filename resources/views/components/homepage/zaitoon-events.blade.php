@@ -53,7 +53,7 @@
                 <svg class="w-8 h-8" style="color: #fbbf24;" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
                 </svg>
-                <h2 class="text-3xl sm:text-4xl font-bold" style="color: #0d5a47;">
+                <h2 class="text-3xl sm:text-4xl font-bold" style="color: #008236;">
                     Campus Activities & Events
                 </h2>
             </div>
@@ -123,7 +123,7 @@
                                     </div>
                                     <a href="{{ route('events.show', $event->slug ?? $event->id, false) }}" 
                                        class="text-xs font-medium hover:underline"
-                                       style="color: #0d5a47;">
+                                       style="color: #008236;">
                                         Read More →
                                     </a>
                                 </div>
@@ -169,9 +169,9 @@
         <div class="text-center mt-10">
             <a href="{{ route('events.index', [], false) }}" 
                class="inline-flex items-center justify-center text-white font-semibold px-8 py-3 rounded-full transition-all duration-200 hover:shadow-lg"
-               style="background-color: #0d5a47;"
+               style="background-color: #008236;"
                onmouseover="this.style.backgroundColor='#0a4536'"
-               onmouseout="this.style.backgroundColor='#0d5a47'">
+               onmouseout="this.style.backgroundColor='#008236'">
                 View All Events
             </a>
         </div>

@@ -13,11 +13,11 @@
     $logoUrl = \App\Helpers\SiteSettingsHelper::logoUrl();
 @endphp
 
-<footer class="relative text-white" style="margin-top: -1px; background-color: #0d5a47;">
+<footer class="relative text-white" style="margin-top: -1px; background-color: #008236;">
     {{-- Curved Wave at Top --}}
     <div class="absolute top-0 left-0 w-full overflow-hidden pointer-events-none" style="line-height: 0; transform: translateY(-1px);">
         <svg viewBox="0 0 1440 120" preserveAspectRatio="none" class="relative block w-full h-20 lg:h-24">
-            <path d="M0,0 C480,100 960,100 1440,0 L1440,120 L0,120 Z" style="fill: #0d5a47;"></path>
+            <path d="M0,0 C480,100 960,100 1440,0 L1440,120 L0,120 Z" style="fill: #008236;"></path>
         </svg>
     </div>
 
@@ -88,7 +88,7 @@
                         <button 
                             type="submit"
                             class="px-8 py-4 font-bold rounded-full transition-all duration-200 hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
-                            style="background-color: #fbbf24; color: #0d5a47;"
+                            style="background-color: #fbbf24; color: #008236;"
                             :disabled="loading"
                         >
                             <span x-show="!loading">Subscribe</span>
@@ -241,7 +241,7 @@
         @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
         x-transition
         class="fixed bottom-8 right-8 w-12 h-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110 flex items-center justify-center z-40"
-        style="background-color: #fbbf24; color: #0d5a47; display: none;"
+        style="background-color: #fbbf24; color: #008236; display: none;"
         aria-label="Back to top"
     >
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

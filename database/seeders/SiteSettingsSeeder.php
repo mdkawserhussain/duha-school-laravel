@@ -65,7 +65,7 @@ class SiteSettingsSeeder extends Seeder
                 // Additional Settings
                 'footer_text' => null,
                 'copyright_notice' => '© {year} Duha International School. All rights reserved.',
-                'primary_color' => '#0F4C81',
+                'primary_color' => '#008236',
                 'secondary_color' => '#1E3A8A',
                 'accent_color' => '#F4C430',
                 'google_analytics_id' => null,

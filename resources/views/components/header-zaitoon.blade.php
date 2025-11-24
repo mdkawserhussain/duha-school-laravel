@@ -3,7 +3,7 @@
 
 @php
     // Get site settings
-    $primaryColor = \App\Helpers\SiteSettingsHelper::primaryColor() ?: '#0d5a47';
+    $primaryColor = \App\Helpers\SiteSettingsHelper::primaryColor() ?: '#008236';
     if (!str_starts_with($primaryColor, '#')) {
         $primaryColor = '#' . ltrim($primaryColor, '#');
     }
@@ -77,7 +77,7 @@
         $siteName = \App\Helpers\SiteSettingsHelper::websiteName();
         $socialLinks = \App\Helpers\SiteSettingsHelper::socialLinks();
     @endphp
-    <div class="text-white py-2 text-xs hidden lg:block relative z-60" style="background-color: #0d5a47;">
+    <div class="text-white py-2 text-xs hidden lg:block relative z-60" style="background-color: #008236;">
         <div class="px-6 lg:px-12">
             <div class="flex items-center justify-between">
                 {{-- Left: Social Media Icons --}}
@@ -169,35 +169,35 @@
                     <div class="flex items-center gap-2">
                         <a href="{{ route('notices.index', [], false) }}" 
                            class="px-3 py-1 text-xs font-medium rounded transition-colors"
-                           style="background-color: #fbbf24; color: #0d5a47;"
+                           style="background-color: #fbbf24; color: #008236;"
                            onmouseover="this.style.backgroundColor='#f59e0b'"
                            onmouseout="this.style.backgroundColor='#fbbf24'">
                             Notice
                         </a>
                         <a href="{{ route('events.index', [], false) }}" 
                            class="px-3 py-1 text-xs font-medium rounded transition-colors"
-                           style="background-color: #fbbf24; color: #0d5a47;"
+                           style="background-color: #fbbf24; color: #008236;"
                            onmouseover="this.style.backgroundColor='#f59e0b'"
                            onmouseout="this.style.backgroundColor='#fbbf24'">
                             News
                         </a>
                         <a href="{{ route('careers.index', [], false) }}" 
                            class="px-3 py-1 text-xs font-medium rounded transition-colors"
-                           style="background-color: #fbbf24; color: #0d5a47;"
+                           style="background-color: #fbbf24; color: #008236;"
                            onmouseover="this.style.backgroundColor='#f59e0b'"
                            onmouseout="this.style.backgroundColor='#fbbf24'">
                             Careers
                         </a>
                         <a href="#faq" 
                            class="px-3 py-1 text-xs font-medium rounded transition-colors"
-                           style="background-color: #fbbf24; color: #0d5a47;"
+                           style="background-color: #fbbf24; color: #008236;"
                            onmouseover="this.style.backgroundColor='#f59e0b'"
                            onmouseout="this.style.backgroundColor='#fbbf24'">
                             FAQ
                         </a>
                         <a href="{{ route('admission.index', [], false) }}" 
                            class="px-3 py-1 text-xs font-medium rounded transition-colors"
-                           style="background-color: #fbbf24; color: #0d5a47;"
+                           style="background-color: #fbbf24; color: #008236;"
                            onmouseover="this.style.backgroundColor='#f59e0b'"
                            onmouseout="this.style.backgroundColor='#fbbf24'">
                             Apply Online
@@ -232,7 +232,7 @@
                             onerror="this.onerror=null; this.src='{{ asset('images/logo.svg') }}'"
                         >
                         <div class="hidden sm:block">
-                            <h1 class="text-base lg:text-lg font-bold leading-tight" style="color: #0d5a47;">
+                            <h1 class="text-base lg:text-lg font-bold leading-tight" style="color: #008236;">
                                 {{ $siteName }}
                             </h1>
                             <p class="text-xs text-gray-600">
@@ -264,7 +264,7 @@
                                     @mouseenter="open = true"
                                     @mouseleave="open = false"
                                     class="flex items-center gap-1 px-2 py-1 text-sm font-semibold transition-colors duration-200 focus:outline-none hover:text-za-green-primary"
-                                    :style="'color: ' + ({{ $activeState ? 'true' : 'false' }} ? '#0d5a47' : '#1f2937')"
+                                    :style="'color: ' + ({{ $activeState ? 'true' : 'false' }} ? '#008236' : '#1f2937')"
                                     :aria-expanded="open"
                                 >
                                     <span>{{ $navItem->title }}</span>
@@ -310,7 +310,7 @@
                             <a
                                 href="{{ $navUrl }}"
                                 class="px-2 py-1 text-sm font-semibold transition-colors duration-200 focus:outline-none hover:text-za-green-primary"
-                                :style="'color: ' + ({{ $activeState ? 'true' : 'false' }} ? '#0d5a47' : '#1f2937')"
+                                :style="'color: ' + ({{ $activeState ? 'true' : 'false' }} ? '#008236' : '#1f2937')"
                                 {!! $linkAttrs !!}
                             >
                                 {{ $navItem->title }}
@@ -321,7 +321,7 @@
                     {{-- Apply Button --}}
                     <a href="{{ route('admission.index', [], false) }}" 
                        class="px-5 py-2 text-sm font-semibold rounded-md transition-all duration-200 hover:shadow-md"
-                       style="background-color: #fbbf24; color: #0d5a47;">
+                       style="background-color: #fbbf24; color: #008236;">
                         Apply Online
                     </a>
                 </div>

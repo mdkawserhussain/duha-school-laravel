@@ -98,7 +98,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {{-- Section Header (FR-11.1) --}}
         <div class="text-center mb-16">
-            <h2 class="text-2xl sm:text-3xl font-bold" style="color: #0d5a47;">
+            <h2 class="text-2xl sm:text-3xl font-bold" style="color: #008236;">
                 What Parents Say About Zaitoon Academy
             </h2>
         </div>
@@ -149,7 +149,7 @@
                 <button 
                     @click="currentTestimonial = currentTestimonial === 0 ? totalTestimonials - 1 : currentTestimonial - 1"
                     class="w-12 h-12 rounded-full flex items-center justify-center transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-                    style="background-color: #0d5a47;"
+                    style="background-color: #008236;"
                     aria-label="Previous testimonial"
                 >
                     <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -163,7 +163,7 @@
                     <button 
                         @click="currentTestimonial = {{ $index }}"
                         class="w-2.5 h-2.5 rounded-full transition-all duration-200 focus:outline-none"
-                        :style="currentTestimonial === {{ $index }} ? 'background-color: #0d5a47;' : 'background-color: #d1d5db;'"
+                        :style="currentTestimonial === {{ $index }} ? 'background-color: #008236;' : 'background-color: #d1d5db;'"
                         :aria-selected="currentTestimonial === {{ $index }}"
                         aria-label="Go to testimonial {{ $index + 1 }}"
                         role="tab"
@@ -176,7 +176,7 @@
                 <button 
                     @click="currentTestimonial = (currentTestimonial + 1) % totalTestimonials"
                     class="w-12 h-12 rounded-full flex items-center justify-center transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-                    style="background-color: #0d5a47;"
+                    style="background-color: #008236;"
                     aria-label="Next testimonial"
                 >
                     <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

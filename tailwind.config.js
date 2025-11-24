@@ -15,7 +15,7 @@ export default {
                 // Zaitoon Academy Brand Colors (Exact Match from Reference Site)
                 za: {
                     // Primary Green Shades
-                    'green-primary': '#0d5a47',  // Main green from reference
+                    'green-primary': '#008236',  // Main green from reference
                     'green-dark': '#0a4536',     // Darker shade
                     'green-light': '#e8f5f1',
                     'green-50': '#f0fdf7',
@@ -209,7 +209,7 @@ export default {
                 'gradient-pink-amber': 'linear-gradient(135deg, #EC4899 0%, #F59E0B 100%)',
                 'gradient-amber-emerald': 'linear-gradient(135deg, #F59E0B 0%, #10B981 100%)',
                 // Zaitoon-specific gradients
-                'za-green-gradient': 'linear-gradient(135deg, #1a5e4a 0%, #0f3d30 100%)',
+                'za-green-gradient': 'linear-gradient(135deg, #008236 0%, #0f3d30 100%)',
                 'za-green-soft': 'linear-gradient(135deg, #e8f5f1 0%, #d1fae5 100%)',
                 'za-hero': 'linear-gradient(135deg, rgba(15, 61, 48, 0.9) 0%, rgba(26, 94, 74, 0.85) 100%)',
             },

@@ -112,7 +112,7 @@
                             </div>
                             @endif
                             <div class="p-5">
-                                <h3 class="text-base font-bold mb-2 line-clamp-2 leading-snug" style="color: #0d5a47;">
+                                <h3 class="text-base font-bold mb-2 line-clamp-2 leading-snug" style="color: #008236;">
                                     {{ $item->title }}
                                 </h3>
                                 @if($item->content)
@@ -176,7 +176,7 @@
         <div class="text-center mt-10">
             <a href="{{ route('notices.index', [], false) }}" 
                class="inline-flex items-center justify-center bg-za-green-primary hover:bg-za-green-dark text-white font-semibold px-8 py-3 rounded-full transition-all duration-200 hover:scale-105 shadow-md hover:shadow-lg"
-               style="background-color: #0d5a47;">
+               style="background-color: #008236;">
                 View All News
             </a>
         </div>

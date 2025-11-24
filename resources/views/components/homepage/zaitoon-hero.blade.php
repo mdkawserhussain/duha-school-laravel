@@ -101,14 +101,14 @@
             
             // Gradient colors for placeholders (green theme variations)
             $gradients = [
-                'linear-gradient(135deg, #0d5a47 0%, #7AB91E 100%)',
+                'linear-gradient(135deg, #008236 0%, #7AB91E 100%)',
                 'linear-gradient(135deg, #165e4a 0%, #88C443 100%)',
-                'linear-gradient(135deg, #0a4839 0%, #9ED45C 100%)',
+                'linear-gradient(135deg, #006a2b 0%, #9ED45C 100%)',
                 'linear-gradient(135deg, #1a6b55 0%, #C8D96F 100%)',
-                'linear-gradient(135deg, #0d5a47 0%, #A8D86E 100%)',
+                'linear-gradient(135deg, #008236 0%, #A8D86E 100%)',
                 'linear-gradient(135deg, #0f6350 0%, #B5DC7A 100%)',
                 'linear-gradient(135deg, #12574a 0%, #7AB91E 100%)',
-                'linear-gradient(135deg, #0d5a47 0%, #95CA55 100%)',
+                'linear-gradient(135deg, #008236 0%, #95CA55 100%)',
                 'linear-gradient(135deg, #1a6b55 0%, #6FB018 100%)',
                 'linear-gradient(135deg, #165e4a 0%, #C8D96F 100%)',
             ];

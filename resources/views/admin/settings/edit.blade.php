@@ -135,7 +135,7 @@
             <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
                 <div>
                     <label for="primary_color" class="block text-sm font-medium text-gray-700">Primary Color</label>
-                    <input type="color" name="primary_color" id="primary_color" value="{{ old('primary_color', $settings->primary_color ?? '#0F4C81') }}" class="mt-1 block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-za-green-primary focus:ring-za-green-primary">
+                    <input type="color" name="primary_color" id="primary_color" value="{{ old('primary_color', $settings->primary_color ?? '#008236') }}" class="mt-1 block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-za-green-primary focus:ring-za-green-primary">
                     @error('primary_color')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror

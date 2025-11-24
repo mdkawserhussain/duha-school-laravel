@@ -60,7 +60,7 @@
 
 <section 
     class="text-white py-3 overflow-hidden relative"
-    style="background-color: #0d5a47;"
+    style="background-color: #008236;"
     role="region"
     aria-label="Latest news ticker"
 >

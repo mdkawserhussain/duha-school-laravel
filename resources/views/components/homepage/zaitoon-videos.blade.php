@@ -81,7 +81,7 @@
             
             {{-- Right Side: Recent Videos List (42% width) --}}
             <div class="w-full lg:w-[42%]">
-                <h2 class="text-lg font-bold mb-4 tracking-tight" style="color: #0d5a47;">Recent Videos</h2>
+                <h2 class="text-lg font-bold mb-4 tracking-tight" style="color: #008236;">Recent Videos</h2>
                 <div class="space-y-2.5">
                     <template x-for="(video, index) in allVideos" :key="index">
                         <button
@@ -90,7 +90,7 @@
                             :style="currentVideo.youtube_id === video.youtube_id
                                 ? 'background-color: #d4f1e5; border: 1px solid #a8e6d2;'
                                 : 'background-color: white; border: 1px solid #e5e7eb;'"
-                            style="focus:ring-color: #0d5a47;"
+                            style="focus:ring-color: #008236;"
                         >
                             <div class="shrink-0 w-32 h-[72px] bg-black rounded-md overflow-hidden">
                                 <img 

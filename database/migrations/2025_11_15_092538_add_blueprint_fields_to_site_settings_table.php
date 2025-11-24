@@ -118,7 +118,7 @@ return new class extends Migration
                 $table->string('copyright_notice')->nullable();
             }
             if (!Schema::hasColumn('site_settings', 'primary_color')) {
-                $table->string('primary_color')->default('#0F4C81');
+                $table->string('primary_color')->default('#008236');
             }
             if (!Schema::hasColumn('site_settings', 'secondary_color')) {
                 $table->string('secondary_color')->default('#1E3A8A');

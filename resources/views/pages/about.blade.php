@@ -10,7 +10,7 @@
                 {{-- Left Content --}}
                 <div x-data="{ show: false }" x-init="setTimeout(() => show = true, 300)" 
                      class="text-center lg:text-left space-y-6">
-                    <h1 class="text-4xl lg:text-6xl font-bold text-[#0d5a47] opacity-0 transform translate-y-8 transition-all duration-1000 ease-out"
+                    <h1 class="text-4xl lg:text-6xl font-bold text-[#008236] opacity-0 transform translate-y-8 transition-all duration-1000 ease-out"
                         :class="{ 'opacity-100 translate-y-0': show }">
                         Welcome to Al-Maghrib
                     </h1>
@@ -20,10 +20,10 @@
                     </p>
                     <div class="flex flex-wrap gap-4 justify-center lg:justify-start opacity-0 transform translate-y-8 transition-all duration-1000 delay-500 ease-out"
                          :class="{ 'opacity-100 translate-y-0': show }">
-                        <a href="{{ route('admission.index') }}" class="px-8 py-3 bg-[#0d5a47] text-white font-semibold rounded hover:bg-[#0a4839] transition-colors shadow-lg hover:shadow-xl">
+                        <a href="{{ route('admission.index') }}" class="px-8 py-3 bg-[#008236] text-white font-semibold rounded hover:bg-[#006a2b] transition-colors shadow-lg hover:shadow-xl">
                             Apply Online
                         </a>
-                        <a href="#" class="px-8 py-3 bg-white text-[#0d5a47] border border-[#0d5a47] font-semibold rounded hover:bg-gray-50 transition-colors shadow-sm hover:shadow-md">
+                        <a href="#" class="px-8 py-3 bg-white text-[#008236] border border-[#008236] font-semibold rounded hover:bg-gray-50 transition-colors shadow-sm hover:shadow-md">
                             Learn More
                         </a>
                     </div>
@@ -51,13 +51,13 @@
         
         {{-- Decorative Background Elements --}}
         <div class="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-[#7AB91E]/10 to-transparent skew-x-12 transform origin-top-right"></div>
-        <div class="absolute bottom-0 left-0 w-1/4 h-1/2 bg-gradient-to-t from-[#0d5a47]/5 to-transparent rounded-tr-full"></div>
+        <div class="absolute bottom-0 left-0 w-1/4 h-1/2 bg-gradient-to-t from-[#008236]/5 to-transparent rounded-tr-full"></div>
     </section>
 
     {{-- Introduction Section --}}
     <section class="py-16 bg-white">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-3xl font-bold text-[#0d5a47] mb-8">Al-Maghrib</h2>
+            <h2 class="text-3xl font-bold text-[#008236] mb-8">Al-Maghrib</h2>
             <div class="space-y-6 text-gray-700 leading-relaxed text-justify">
                 <p>
                     Al-Maghrib was conceived, founded, and promoted by Dr. Muhammad Aminul Hoque, Associate Professor and Former Chairman of the Department of Da’wah & Islamic Studies at the International Islamic University Chittagong. Al-Maghrib commenced operations in a hired building at Jalalabad Housing Society in West Khulshi, Chattogram Metropolitan, on March 1, 2023.
@@ -75,7 +75,7 @@
     {{-- Mission & Vision --}}
     <section class="py-16 bg-[#F9FAFB]">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-3xl font-bold text-[#0d5a47] mb-6">Our Mission & Vision</h2>
+            <h2 class="text-3xl font-bold text-[#008236] mb-6">Our Mission & Vision</h2>
             <p class="text-gray-700 text-lg italic">
                 "Growing a generation of students who are intellectually competent, spiritually mature, and socially responsible leaders for the community and the nation."
             </p>
@@ -85,17 +85,17 @@
     {{-- Core Values --}}
     <section class="py-16 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold text-[#0d5a47] text-center mb-12">Our Core Values</h2>
+            <h2 class="text-3xl font-bold text-[#008236] text-center mb-12">Our Core Values</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach(['Islamic Faith & Culture', 'Prophetic Character', 'Lifelong Learning', 'Quality Community', 'Skill-based Learning', 'Intellectual Development'] as $value)
                 <div class="group bg-white border border-gray-100 rounded-xl p-6 shadow-sm hover:shadow-xl transition duration-500 ease-in-out hover:scale-105">
                     <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-full bg-[#E8F5E9] flex items-center justify-center group-hover:bg-[#0d5a47] group-hover:scale-110 transition duration-500 ease-in-out">
-                            <svg class="w-5 h-5 text-[#0d5a47] group-hover:text-white transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-10 h-10 rounded-full bg-[#E8F5E9] flex items-center justify-center group-hover:bg-[#008236] group-hover:scale-110 transition duration-500 ease-in-out">
+                            <svg class="w-5 h-5 text-[#008236] group-hover:text-white transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                             </svg>
                         </div>
-                        <span class="font-semibold text-gray-800 group-hover:text-[#0d5a47] transition-colors duration-300">{{ $value }}</span>
+                        <span class="font-semibold text-gray-800 group-hover:text-[#008236] transition-colors duration-300">{{ $value }}</span>
                     </div>
                 </div>
                 @endforeach
@@ -106,12 +106,12 @@
     {{-- Specialties --}}
     <section class="py-16 bg-[#F0FDF4]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold text-[#0d5a47] text-center mb-12">Specialties of Al-Maghrib</h2>
+            <h2 class="text-3xl font-bold text-[#008236] text-center mb-12">Specialties of Al-Maghrib</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
                 @foreach(['Hifzul Quran with schooling', 'Special proficiency in Arabic Language', 'Modern education integrated with moral values', 'Certificate of Hifzul Quran'] as $specialty)
                 <div class="bg-[#E8F5E9] rounded-lg p-6 flex items-center gap-4 hover:shadow-lg transition duration-500 ease-in-out hover:scale-105">
-                    <div class="w-2 h-8 bg-[#0d5a47] rounded-full"></div>
-                    <span class="font-semibold text-[#0d5a47]">{{ $specialty }}</span>
+                    <div class="w-2 h-8 bg-[#008236] rounded-full"></div>
+                    <span class="font-semibold text-[#008236]">{{ $specialty }}</span>
                 </div>
                 @endforeach
             </div>
@@ -121,7 +121,7 @@
     {{-- Facilities --}}
     <section class="py-16 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold text-[#0d5a47] text-center mb-12">Our Facilities</h2>
+            <h2 class="text-3xl font-bold text-[#008236] text-center mb-12">Our Facilities</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 @php
                     $facilities = [
@@ -136,12 +136,12 @@
                 
                 @foreach($facilities as $facility)
                 <div class="bg-white border border-gray-100 rounded-xl p-8 text-center shadow-sm hover:shadow-xl transition duration-500 ease-in-out hover:scale-105 group">
-                    <div class="w-16 h-16 mx-auto bg-[#E8F5E9] rounded-full flex items-center justify-center mb-4 group-hover:bg-[#0d5a47] group-hover:scale-110 transition duration-500 ease-in-out">
-                        <svg class="w-8 h-8 text-[#0d5a47] group-hover:text-white transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-16 h-16 mx-auto bg-[#E8F5E9] rounded-full flex items-center justify-center mb-4 group-hover:bg-[#008236] group-hover:scale-110 transition duration-500 ease-in-out">
+                        <svg class="w-8 h-8 text-[#008236] group-hover:text-white transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="{{ $facility['icon'] }}"></path>
                         </svg>
                     </div>
-                    <h3 class="font-semibold text-gray-800 group-hover:text-[#0d5a47] transition-colors duration-300">{{ $facility['title'] }}</h3>
+                    <h3 class="font-semibold text-gray-800 group-hover:text-[#008236] transition-colors duration-300">{{ $facility['title'] }}</h3>
                 </div>
                 @endforeach
             </div>
@@ -151,7 +151,7 @@
     {{-- Salient Facilities --}}
     <section class="py-16 bg-[#F9FAFB]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold text-[#0d5a47] text-center mb-12">The salient facilities of the Al-Maghrib are as follows</h2>
+            <h2 class="text-3xl font-bold text-[#008236] text-center mb-12">The salient facilities of the Al-Maghrib are as follows</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
                 @foreach([
                     'We use female-prophetic soft spoken tone',
@@ -176,7 +176,7 @@
                     'Residential & Day care facilities for boys & girls'
                 ] as $item)
                 <div class="flex items-start gap-3 bg-white p-4 rounded-lg shadow-sm border-l-4 border-[#7AB91E] hover:shadow-md transition-shadow duration-300">
-                    <div class="mt-1 flex-shrink-0 w-4 h-4 rounded-full bg-[#0d5a47] flex items-center justify-center">
+                    <div class="mt-1 flex-shrink-0 w-4 h-4 rounded-full bg-[#008236] flex items-center justify-center">
                         <svg class="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
                         </svg>

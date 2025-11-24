@@ -25,7 +25,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {{-- Section Header (FR-12.1) --}}
         <div class="text-center mb-16">
-            <h2 class="text-3xl sm:text-4xl font-serif font-bold mb-3" style="color: #0d5a47;">
+            <h2 class="text-3xl sm:text-4xl font-serif font-bold mb-3" style="color: #008236;">
                 🤝 Our Partners
             </h2>
             <p class="text-base text-gray-600 max-w-2xl mx-auto">

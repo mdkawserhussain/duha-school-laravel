@@ -23,7 +23,7 @@ class SiteSettingsHelper
                 'default_currency' => 'USD',
                 'default_language' => 'en',
                 'timezone' => 'UTC',
-                'primary_color' => '#0F4C81',
+                'primary_color' => '#008236',
                 'secondary_color' => '#1E3A8A',
                 'accent_color' => '#F4C430',
             ]);
@@ -327,7 +327,7 @@ class SiteSettingsHelper
      */
     public static function primaryColor(): string
     {
-        return static::get('primary_color', '#0F4C81');
+        return static::get('primary_color', '#008236');
     }
 
     /**

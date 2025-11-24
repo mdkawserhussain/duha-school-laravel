@@ -53,7 +53,7 @@
     
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div class="text-center mb-12 fade-in">
-            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold mb-4" style="color: #0d5a47;">
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold mb-4" style="color: #008236;">
                 Explore Our Services
             </h2>
         </div>
