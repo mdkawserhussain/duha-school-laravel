@@ -46,6 +46,7 @@ Homestead.yaml
 
 # Agent workflow files
 .agent/
+!.agent/workflows/*.md
 
 # Admin credentials file
 ADMIN_CREDENTIALS.txt

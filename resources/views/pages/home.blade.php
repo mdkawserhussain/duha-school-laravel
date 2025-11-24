@@ -29,8 +29,8 @@
 <!-- Explore Our Services -->
 @include('components.homepage.zaitoon-services')
 
-<!-- Academic Programs -->
-@include('components.homepage.zaitoon-programs')
+{{-- Academic Programs (Removed as requested) --}}
+{{-- @include('components.homepage.zaitoon-programs') --}}
 
 <!-- Campus Activities & Events -->
 @include('components.homepage.zaitoon-events')
