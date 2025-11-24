@@ -68,19 +68,24 @@ class NavigationItem extends Model
         // Access raw database value to avoid infinite recursion
         $rawUrl = $this->attributes['url'] ?? null;
         
+        // 1. External URLs take priority
         if ($this->is_external && $rawUrl) {
             return $rawUrl;
         }
 
+        // 2. Try route_name if it exists
         if ($this->route_name) {
             try {
-                return route($this->route_name);
+                // Check if route exists before using it
+                if (\Illuminate\Support\Facades\Route::has($this->route_name)) {
+                    return route($this->route_name);
+                }
             } catch (\Exception $e) {
-                return $rawUrl;
+                // Route doesn't exist or error occurred, fall through to slug
             }
         }
 
-        // If item has a slug and a parent, try to generate URL from parent's route
+        // 3. If item has a slug and a parent, try to generate URL from parent's route
         if ($this->slug && $this->parent_id) {
             $parent = $this->parent;
             if ($parent && $parent->route_name) {
@@ -90,18 +95,23 @@ class NavigationItem extends Model
                     $category = str_replace('.index', '', $parentRoute);
                     $childRoute = $category . '.show';
                     try {
-                        return route($childRoute, $this->slug);
+                        // Check if route exists before using it
+                        if (\Illuminate\Support\Facades\Route::has($childRoute)) {
+                            return route($childRoute, $this->slug);
+                        }
                     } catch (\Exception $e) {
-                        // Fall through to slug-based URL
+                        // Route doesn't exist, fall through to slug-based URL
                     }
                 }
             }
         }
 
+        // 4. Fallback to slug-based URL
         if ($this->slug) {
             return url($this->slug);
         }
 
-        return $rawUrl;
+        // 5. Final fallback: use url field if provided
+        return $rawUrl ?: '#';
     }
 }

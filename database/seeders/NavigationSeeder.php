@@ -21,72 +21,76 @@ class NavigationSeeder extends Seeder
             [
                 'title' => 'Home',
                 'route_name' => 'home',
+                'slug' => null,
                 'icon' => 'heroicon-o-home',
                 'sort_order' => 1,
                 'section' => 'main',
             ],
             [
-                'title' => 'About Us',
-                'route_name' => 'about.index',
+                'title' => 'About',
+                'route_name' => null,
+                'slug' => 'about',
                 'icon' => 'heroicon-o-information-circle',
                 'sort_order' => 2,
                 'section' => 'main',
             ],
             [
-                'title' => 'Academics',
-                'route_name' => 'academics.index',
-                'icon' => 'heroicon-o-academic-cap',
+                'title' => 'Admission',
+                'route_name' => null,
+                'slug' => 'admission',
+                'icon' => 'heroicon-o-clipboard-document-check',
                 'sort_order' => 3,
                 'section' => 'main',
             ],
             [
-                'title' => 'Facilities',
-                'route_name' => 'facilities.index',
-                'icon' => 'heroicon-o-building-office',
+                'title' => 'Academic',
+                'route_name' => null,
+                'slug' => 'academic',
+                'icon' => 'heroicon-o-academic-cap',
                 'sort_order' => 4,
                 'section' => 'main',
             ],
             [
-                'title' => 'Activities & Programs',
-                'route_name' => 'activities.index',
-                'icon' => 'heroicon-o-sparkles',
+                'title' => 'Faculty',
+                'route_name' => null,
+                'slug' => 'faculty',
+                'icon' => 'heroicon-o-users',
                 'sort_order' => 5,
                 'section' => 'main',
             ],
             [
-                'title' => 'Admissions',
-                'route_name' => 'admissions.index',
-                'icon' => 'heroicon-o-clipboard-document-check',
+                'title' => 'Facilities',
+                'route_name' => null,
+                'slug' => 'facilities',
+                'icon' => 'heroicon-o-building-office',
                 'sort_order' => 6,
                 'section' => 'main',
             ],
             [
-                'title' => 'Parent Engagement',
-                'route_name' => 'parent-engagement.index',
-                'icon' => 'heroicon-o-users',
+                'title' => 'Tahfeez',
+                'route_name' => null,
+                'slug' => 'tahfeez',
+                'icon' => 'heroicon-o-book-open',
                 'sort_order' => 7,
-                'section' => 'main',
-            ],
-            [
-                'title' => 'Events',
-                'route_name' => 'events.index',
-                'icon' => 'heroicon-o-calendar',
-                'sort_order' => 8,
-                'section' => 'main',
-            ],
-            [
-                'title' => 'Notices',
-                'route_name' => 'notices.index',
-                'icon' => 'heroicon-o-megaphone',
-                'sort_order' => 9,
                 'section' => 'main',
             ],
             [
                 'title' => 'Contact',
                 'route_name' => 'contact.index',
+                'slug' => 'contact',
                 'icon' => 'heroicon-o-envelope',
-                'sort_order' => 10,
+                'sort_order' => 8,
                 'section' => 'main',
+            ],
+            [
+                'title' => 'Login',
+                'route_name' => null,
+                'slug' => null,
+                'url' => 'https://duhais.com/login',
+                'icon' => 'heroicon-o-lock-closed',
+                'sort_order' => 9,
+                'section' => 'main',
+                'is_external' => true,
             ],
         ];
 
@@ -94,31 +98,35 @@ class NavigationSeeder extends Seeder
         $parentItems = [];
 
         foreach ($mainNav as $item) {
-            $parentItem = NavigationItem::create(array_merge($item, [
+            $defaults = [
                 'is_active' => true,
-                'is_external' => false,
+                'is_external' => $item['is_external'] ?? false,
                 'target_blank' => false,
-            ]));
+            ];
+            $parentItem = NavigationItem::create(array_merge($item, $defaults));
             $parentItems[$item['title']] = $parentItem;
         }
 
         // Create child navigation items for dropdown menus
-        // About Us Children
-        if (isset($parentItems['About Us'])) {
-            $aboutUsChildren = [
-                ['title' => 'Vision, Mission & Core Values', 'route_name' => 'about', 'slug' => null, 'sort_order' => 1],
-                ['title' => 'Founder & Director\'s Message', 'route_name' => null, 'slug' => 'founder-director-message', 'sort_order' => 2],
-                ['title' => 'Principal\'s Message', 'route_name' => null, 'slug' => 'principal-message', 'sort_order' => 3],
-                ['title' => 'Key Features', 'route_name' => null, 'slug' => 'key-features', 'sort_order' => 4],
-                ['title' => 'Our Team', 'route_name' => null, 'slug' => 'our-team', 'sort_order' => 5],
+        // About Children
+        if (isset($parentItems['About'])) {
+            $aboutChildren = [
+                ['title' => 'About Duha', 'route_name' => null, 'slug' => 'about', 'sort_order' => 1],
+                ['title' => 'Chairman Message', 'route_name' => null, 'slug' => 'chairman-message', 'sort_order' => 2],
+                ['title' => 'Principal Message', 'route_name' => null, 'slug' => 'principal-message', 'sort_order' => 3],
+                ['title' => 'Governing Body', 'route_name' => null, 'slug' => 'governing-body', 'sort_order' => 4],
+                ['title' => 'Academic Committee', 'route_name' => null, 'slug' => 'academic-committee', 'sort_order' => 5],
+                ['title' => 'Campus Facilities', 'route_name' => null, 'slug' => 'campus-facilities', 'sort_order' => 6],
+                ['title' => 'School Uniform', 'route_name' => null, 'slug' => 'school-uniform', 'sort_order' => 7],
+                ['title' => 'FAQ', 'route_name' => null, 'slug' => 'faq', 'sort_order' => 8],
             ];
             
-            foreach ($aboutUsChildren as $child) {
+            foreach ($aboutChildren as $child) {
                 NavigationItem::create([
                     'title' => $child['title'],
                     'route_name' => $child['route_name'],
                     'slug' => $child['slug'],
-                    'parent_id' => $parentItems['About Us']->id,
+                    'parent_id' => $parentItems['About']->id,
                     'sort_order' => $child['sort_order'],
                     'section' => 'main',
                     'is_active' => true,
@@ -128,22 +136,29 @@ class NavigationSeeder extends Seeder
             }
         }
 
-        // Academics Children
-        if (isset($parentItems['Academics'])) {
-            $academicsChildren = [
-                ['title' => 'Hifzul Quran Program', 'route_name' => null, 'slug' => 'hifzul-quran-program', 'sort_order' => 1],
-                ['title' => 'Islamic Curriculum', 'route_name' => null, 'slug' => 'islamic-curriculum', 'sort_order' => 2],
-                ['title' => 'National Curriculum (English Version)', 'route_name' => null, 'slug' => 'national-curriculum-english', 'sort_order' => 3],
-                ['title' => 'Cambridge + Islamic Curriculum', 'route_name' => null, 'slug' => 'cambridge-islamic-curriculum', 'sort_order' => 4],
-                ['title' => 'Academic Enrichment', 'route_name' => null, 'slug' => 'academic-enrichment', 'sort_order' => 5],
+        // Academic Children
+        if (isset($parentItems['Academic'])) {
+            $academicChildren = [
+                ['title' => 'Academic Program', 'route_name' => null, 'slug' => 'academic-program', 'sort_order' => 1],
+                ['title' => 'Academic Calendar', 'route_name' => null, 'slug' => 'academic-calendar', 'sort_order' => 2],
+                ['title' => 'Subjects We Teach', 'route_name' => null, 'slug' => 'subjects', 'sort_order' => 3],
+                ['title' => 'Tahfeez Program', 'route_name' => null, 'slug' => 'tahfeez-program', 'sort_order' => 4],
+                ['title' => 'Tahili Program', 'route_name' => null, 'slug' => 'tahili-program', 'sort_order' => 5],
+                ['title' => 'Future Progression', 'route_name' => null, 'slug' => 'future-progression', 'sort_order' => 6],
+                ['title' => 'Duha Curriculum', 'route_name' => null, 'slug' => 'curriculum', 'sort_order' => 7],
+                ['title' => 'Exam System', 'route_name' => null, 'slug' => 'exam-system', 'sort_order' => 8],
+                ['title' => 'ZA Policies', 'route_name' => null, 'slug' => 'policies', 'sort_order' => 9],
+                ['title' => 'Class Routine', 'route_name' => null, 'slug' => 'class-routine', 'sort_order' => 10],
+                ['title' => 'Sports & Recreation', 'route_name' => null, 'slug' => 'sports', 'sort_order' => 11],
+                ['title' => 'Events & Activities', 'route_name' => null, 'slug' => 'events-activities', 'sort_order' => 12],
             ];
             
-            foreach ($academicsChildren as $child) {
+            foreach ($academicChildren as $child) {
                 NavigationItem::create([
                     'title' => $child['title'],
                     'route_name' => $child['route_name'],
                     'slug' => $child['slug'],
-                    'parent_id' => $parentItems['Academics']->id,
+                    'parent_id' => $parentItems['Academic']->id,
                     'sort_order' => $child['sort_order'],
                     'section' => 'main',
                     'is_active' => true,
@@ -153,24 +168,19 @@ class NavigationSeeder extends Seeder
             }
         }
 
-        // Activities & Programs Children
-        if (isset($parentItems['Activities & Programs'])) {
-            $activitiesChildren = [
-                ['title' => 'Islamic Activities', 'route_name' => null, 'slug' => 'islamic-activities', 'sort_order' => 1],
-                ['title' => 'Academic Enrichment', 'route_name' => null, 'slug' => 'academic-enrichment-activities', 'sort_order' => 2],
-                ['title' => 'Arts, Culture & Nasheed', 'route_name' => null, 'slug' => 'arts-culture-nasheed', 'sort_order' => 3],
-                ['title' => 'Sports & Physical Education', 'route_name' => null, 'slug' => 'sports-physical-education', 'sort_order' => 4],
-                ['title' => 'Life Skills & Community Service', 'route_name' => null, 'slug' => 'life-skills-community-service', 'sort_order' => 5],
-                ['title' => 'Technology & Innovation', 'route_name' => null, 'slug' => 'technology-innovation', 'sort_order' => 6],
-                ['title' => 'Annual Cultural Program', 'route_name' => null, 'slug' => 'annual-cultural-program', 'sort_order' => 7],
+        // Faculty Children
+        if (isset($parentItems['Faculty'])) {
+            $facultyChildren = [
+                ['title' => 'Male Faculty', 'route_name' => null, 'slug' => 'male-faculty', 'sort_order' => 1],
+                ['title' => 'Female Faculty', 'route_name' => null, 'slug' => 'female-faculty', 'sort_order' => 2],
             ];
             
-            foreach ($activitiesChildren as $child) {
+            foreach ($facultyChildren as $child) {
                 NavigationItem::create([
                     'title' => $child['title'],
                     'route_name' => $child['route_name'],
                     'slug' => $child['slug'],
-                    'parent_id' => $parentItems['Activities & Programs']->id,
+                    'parent_id' => $parentItems['Faculty']->id,
                     'sort_order' => $child['sort_order'],
                     'section' => 'main',
                     'is_active' => true,
@@ -180,24 +190,45 @@ class NavigationSeeder extends Seeder
             }
         }
 
-        // Admissions Children
-        if (isset($parentItems['Admissions'])) {
-            $admissionsChildren = [
-                ['title' => 'Admission Procedure', 'route_name' => null, 'slug' => 'admission-procedure', 'sort_order' => 1],
-                ['title' => 'Fee Structure – National Curriculum', 'route_name' => null, 'slug' => 'fee-structure-national', 'sort_order' => 2],
-                ['title' => 'Fee Structure – Cambridge Curriculum', 'route_name' => null, 'slug' => 'fee-structure-cambridge', 'sort_order' => 3],
-                ['title' => 'Class Timings', 'route_name' => null, 'slug' => 'class-timings', 'sort_order' => 4],
-                ['title' => 'Grades & Subjects Overview', 'route_name' => null, 'slug' => 'grades-subjects', 'sort_order' => 5],
-                ['title' => 'Transport Fees & Policy', 'route_name' => null, 'slug' => 'transport-fees-policy', 'sort_order' => 6],
-                ['title' => 'Download Admission Form (PDF)', 'route_name' => null, 'slug' => 'download-admission-form', 'sort_order' => 7],
+        // Admission Children
+        if (isset($parentItems['Admission'])) {
+            $admissionChildren = [
+                ['title' => 'Admission Procedure', 'route_name' => null, 'slug' => 'admission-process', 'sort_order' => 1],
+                ['title' => 'Why Us?', 'route_name' => null, 'slug' => 'why-us', 'sort_order' => 2],
+                ['title' => 'Enroll Online', 'route_name' => null, 'slug' => 'choose-apply', 'sort_order' => 3],
+                ['title' => 'Fees', 'route_name' => null, 'slug' => 'fees', 'sort_order' => 4],
+                ['title' => 'Student Year Group and Age Range', 'route_name' => null, 'slug' => 'year-group', 'sort_order' => 5],
             ];
             
-            foreach ($admissionsChildren as $child) {
+            foreach ($admissionChildren as $child) {
                 NavigationItem::create([
                     'title' => $child['title'],
                     'route_name' => $child['route_name'],
                     'slug' => $child['slug'],
-                    'parent_id' => $parentItems['Admissions']->id,
+                    'parent_id' => $parentItems['Admission']->id,
+                    'sort_order' => $child['sort_order'],
+                    'section' => 'main',
+                    'is_active' => true,
+                    'is_external' => false,
+                    'target_blank' => false,
+                ]);
+            }
+        }
+
+        // Facilities Children
+        if (isset($parentItems['Facilities'])) {
+            $facilitiesChildren = [
+                ['title' => 'Residential Facilities', 'route_name' => null, 'slug' => 'residential-facilities', 'sort_order' => 1],
+                ['title' => 'Support for learning and spiritual development', 'route_name' => null, 'slug' => 'support-learning', 'sort_order' => 2],
+                ['title' => 'Parent Teacher Association', 'route_name' => null, 'slug' => 'parent-association', 'sort_order' => 3],
+            ];
+            
+            foreach ($facilitiesChildren as $child) {
+                NavigationItem::create([
+                    'title' => $child['title'],
+                    'route_name' => $child['route_name'],
+                    'slug' => $child['slug'],
+                    'parent_id' => $parentItems['Facilities']->id,
                     'sort_order' => $child['sort_order'],
                     'section' => 'main',
                     'is_active' => true,
@@ -236,5 +267,10 @@ class NavigationSeeder extends Seeder
                 'target_blank' => false,
             ]));
         }
+
+        // Clear navigation cache after seeding
+        $navigationService = app(\App\Services\NavigationService::class);
+        $navigationService->clearNavigationCache('main');
+        $navigationService->clearNavigationCache('footer');
     }
 }
