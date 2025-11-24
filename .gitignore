@@ -44,5 +44,8 @@ Homestead.yaml
 # Vite specific ignores
 .vite/
 
+# Agent workflow files
+.agent/
+
 # Admin credentials file
 ADMIN_CREDENTIALS.txt
