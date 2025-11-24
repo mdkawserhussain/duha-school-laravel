@@ -45,7 +45,7 @@ class NavigationSeeder extends Seeder
             [
                 'title' => 'Academic',
                 'route_name' => null,
-                'slug' => 'academic',
+                'slug' => 'academics',
                 'icon' => 'heroicon-o-academic-cap',
                 'sort_order' => 4,
                 'section' => 'main',
@@ -193,7 +193,7 @@ class NavigationSeeder extends Seeder
         // Admission Children
         if (isset($parentItems['Admission'])) {
             $admissionChildren = [
-                ['title' => 'Admission Procedure', 'route_name' => null, 'slug' => 'admission-process', 'sort_order' => 1],
+                ['title' => 'Admission Procedure', 'route_name' => null, 'slug' => 'admission-procedure', 'sort_order' => 1],
                 ['title' => 'Why Us?', 'route_name' => null, 'slug' => 'why-us', 'sort_order' => 2],
                 ['title' => 'Enroll Online', 'route_name' => null, 'slug' => 'choose-apply', 'sort_order' => 3],
                 ['title' => 'Fees', 'route_name' => null, 'slug' => 'fees', 'sort_order' => 4],

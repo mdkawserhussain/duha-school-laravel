@@ -16,6 +16,7 @@ class PageHelper
             'activities-programs' => 'activities',
             'admissions' => 'admissions',
             'parent-engagement' => 'parent-engagement',
+            'faculty' => 'faculty',
         ];
 
         return $categoryMap[$pageCategory] ?? null;

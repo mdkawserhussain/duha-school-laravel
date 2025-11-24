@@ -78,6 +78,8 @@ class PageController extends Controller
             'admissions.show' => 'admissions',
             'parent-engagement.index' => 'parent-engagement',
             'parent-engagement.show' => 'parent-engagement',
+            'faculty.index' => 'faculty',
+            'faculty.show' => 'faculty',
         ];
         
         // Try to get category from route name first
@@ -96,6 +98,7 @@ class PageController extends Controller
                 'activities-programs' => 'activities-programs',
                 'admissions' => 'admissions',
                 'parent-engagement' => 'parent-engagement',
+                'faculty' => 'faculty',
             ];
             
             $pageCategory = $pathToCategoryMap[$firstSegment] ?? $firstSegment;
@@ -109,6 +112,15 @@ class PageController extends Controller
             // Show specific child page
             $page = $this->pageService->findCategoryChildPage($pageCategory, $pageSlug);
             if (!$page) {
+                // Check if the slug matches a route name (e.g., 'about' -> route('about'))
+                // This handles cases like /about-us/about where 'about' is a route, not a page
+                try {
+                    if (\Illuminate\Support\Facades\Route::has($pageSlug)) {
+                        return redirect()->route($pageSlug);
+                    }
+                } catch (\Exception $e) {
+                    // Route doesn't exist, continue to 404
+                }
                 abort(404);
             }
             
