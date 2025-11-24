@@ -56,6 +56,9 @@ Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])
     ->middleware('throttle:3,1');
 
 
+// About Page (Custom Design)
+Route::get('/about', [\App\Http\Controllers\AboutController::class, 'index'])->name('about');
+
 // Dynamic Pages - Category-based routes
 Route::get('/about-us', [PageController::class, 'category'])->name('about.index');
 Route::get('/about-us/{page}', [PageController::class, 'category'])->name('about.show');

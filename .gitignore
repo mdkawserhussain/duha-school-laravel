@@ -20,7 +20,6 @@ database/database.sqlite
 .DS_Store
 Thumbs.db
 *.log
-*.md
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -44,6 +43,10 @@ Homestead.yaml
 
 # Vite specific ignores
 .vite/
+
+# Agent workflow files
+.agent/
+!.agent/workflows/*.md
 
 # Admin credentials file
 ADMIN_CREDENTIALS.txt

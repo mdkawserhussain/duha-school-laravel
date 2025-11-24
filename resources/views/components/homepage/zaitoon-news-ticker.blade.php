@@ -1,6 +1,6 @@
-{{-- Zaitoon Academy News Ticker (FR-4) --}}
+{{-- Zaitoon Academy News Ticker --}}
 @php
-    // Pull news items from Notice model (FR-4.4)
+    // Pull news items from Notice model
     $newsItems = collect([]);
     try {
         if (!app()->bound('exception')) {
@@ -17,80 +17,93 @@
     } catch (\Throwable $e) {
         $newsItems = collect([]);
     }
+    
+    // Add placeholder news if empty
+    if ($newsItems->isEmpty()) {
+        $newsItems = collect([
+            (object)['id' => 1, 'title' => '📚 New Academic Year Registration Open - Enroll Now!', 'published_at' => now(), 'slug' => '#'],
+            (object)['id' => 2, 'title' => '🎓 Outstanding Results in Cambridge Examinations 2024', 'published_at' => now()->subDays(1), 'slug' => '#'],
+            (object)['id' => 3, 'title' => '🕌 Ramadan Schedule: Special Prayer Times Announced', 'published_at' => now()->subDays(2), 'slug' => '#'],
+            (object)['id' => 4, 'title' => '🏆 Students Win National Quran Competition', 'published_at' => now()->subDays(3), 'slug' => '#'],
+            (object)['id' => 5, 'title' => '📢 Parent-Teacher Conference Scheduled for Next Week', 'published_at' => now()->subDays(4), 'slug' => '#'],
+            (object)['id' => 6, 'title' => '🌟 New Science Lab Facilities Now Open', 'published_at' => now()->subDays(5), 'slug' => '#'],
+            (object)['id' => 7, 'title' => '📖 Arabic Language Competition Registration Starts', 'published_at' => now()->subDays(6), 'slug' => '#'],
+            (object)['id' => 8, 'title' => '🎨 Annual Art Exhibition Featuring Student Work', 'published_at' => now()->subDays(7), 'slug' => '#'],
+        ]);
+    }
 @endphp
 
 @if($newsItems->isNotEmpty())
+<style>
+    @keyframes ticker-scroll {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+    }
+    
+    .ticker-wrapper {
+        overflow: hidden;
+        position: relative;
+        width: 100%;
+    }
+    
+    .ticker-content {
+        display: inline-flex;
+        white-space: nowrap;
+        animation: ticker-scroll 40s linear infinite;
+        will-change: transform;
+    }
+    
+    .ticker-content:hover {
+        animation-play-state: paused;
+    }
+</style>
+
 <section 
-    class="text-white py-2 overflow-hidden relative"
+    class="text-white py-3 overflow-hidden relative"
     style="background-color: #0d5a47;"
-    x-data="{ isPaused: false }"
-    @mouseenter="isPaused = true"
-    @mouseleave="isPaused = false"
     role="region"
     aria-label="Latest news ticker"
 >
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="px-6 lg:px-12">
         <div class="flex items-center gap-4">
-            {{-- "Latest:" Label (FR-4.2) --}}
+            {{-- "Latest:" Label in Box --}}
             <div class="flex-shrink-0">
-                <span class="text-white font-semibold text-xs uppercase tracking-wide">Latest:</span>
+                <span class="bg-white/20 px-3 py-1 rounded text-white font-semibold text-xs uppercase tracking-wide">
+                    Latest:
+                </span>
             </div>
             
-            {{-- Scrolling News Items (FR-4.3, FR-4.5) --}}
-            <div class="flex-1 overflow-hidden">
-                <div 
-                    class="marquee-content inline-block whitespace-nowrap"
-                    :style="isPaused ? 'animation-play-state: paused;' : 'animation-play-state: running;'"
-                >
-                    @foreach($newsItems as $notice)
-                        @if($notice && $notice->title)
-                        <span class="inline-block px-8">
-                            <a 
-                                href="{{ route('notices.show', $notice->slug ?? $notice->id, false) }}" 
-                                class="text-white hover:text-za-yellow-accent transition-colors text-xs"
-                                aria-label="Read notice: {{ $notice->title }}"
-                            >
-                                {{ $notice->title }}
-                            </a>
-                        </span>
-                        @endif
-                    @endforeach
-                    {{-- Duplicate for seamless loop (FR-4.5) --}}
-                    @foreach($newsItems as $notice)
-                        @if($notice && $notice->title)
-                        <span class="inline-block px-8">
-                            <a 
-                                href="{{ route('notices.show', $notice->slug ?? $notice->id, false) }}" 
-                                class="text-white hover:text-za-yellow-accent transition-colors text-xs"
-                                aria-label="Read notice: {{ $notice->title }}"
-                            >
-                                {{ $notice->title }}
-                            </a>
-                        </span>
-                        @endif
+            {{-- Scrolling News Items --}}
+            <div class="ticker-wrapper flex-1">
+                <div class="ticker-content">
+                    {{-- Repeat news items 4 times for smooth continuous scroll --}}
+                    @foreach(range(1, 4) as $iteration)
+                        @foreach($newsItems as $notice)
+                            @if($notice && $notice->title)
+                            <span class="inline-flex items-center gap-2 px-6">
+                                {{-- Date Box --}}
+                                @if($notice->published_at)
+                                <span class="bg-white/20 px-2 py-0.5 rounded text-xs font-medium whitespace-nowrap">
+                                    {{ $notice->published_at->format('d-M-Y') }}
+                                </span>
+                                @endif
+                                {{-- Title --}}
+                                <a 
+                                    href="{{ route('notices.show', $notice->slug ?? $notice->id, false) }}" 
+                                    class="text-white hover:text-yellow-300 transition-colors text-sm whitespace-nowrap"
+                                    aria-label="Read notice: {{ $notice->title }}"
+                                >
+                                    {{ $notice->title }}
+                                </a>
+                                {{-- Separator --}}
+                                <span class="text-yellow-300 mx-2">•</span>
+                            </span>
+                            @endif
+                        @endforeach
                     @endforeach
                 </div>
             </div>
         </div>
     </div>
 </section>
-
-@push('styles')
-<style>
-    @keyframes marquee-scroll {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(-50%); }
-    }
-    
-    .marquee-content {
-        animation: marquee-scroll 20s linear infinite;
-        display: inline-block;
-    }
-    
-    .marquee-content:hover {
-        animation-play-state: paused;
-    }
-</style>
-@endpush
 @endif
-

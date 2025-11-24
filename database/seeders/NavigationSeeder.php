@@ -106,7 +106,7 @@ class NavigationSeeder extends Seeder
         // About Us Children
         if (isset($parentItems['About Us'])) {
             $aboutUsChildren = [
-                ['title' => 'Vision, Mission & Core Values', 'route_name' => null, 'slug' => 'vision-mission-core-values', 'sort_order' => 1],
+                ['title' => 'Vision, Mission & Core Values', 'route_name' => 'about', 'slug' => null, 'sort_order' => 1],
                 ['title' => 'Founder & Director\'s Message', 'route_name' => null, 'slug' => 'founder-director-message', 'sort_order' => 2],
                 ['title' => 'Principal\'s Message', 'route_name' => null, 'slug' => 'principal-message', 'sort_order' => 3],
                 ['title' => 'Key Features', 'route_name' => null, 'slug' => 'key-features', 'sort_order' => 4],
