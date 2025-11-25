@@ -5,10 +5,18 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\Admin\StoreNavigationItemRequest;
 use App\Http\Requests\Admin\UpdateNavigationItemRequest;
 use App\Models\NavigationItem;
+use App\Services\NavigationService;
 use Illuminate\Http\Request;
 
 class NavigationItemController extends BaseController
 {
+    protected NavigationService $navigationService;
+
+    public function __construct(NavigationService $navigationService)
+    {
+        $this->navigationService = $navigationService;
+    }
+
     public function index(Request $request)
     {
         $query = NavigationItem::with('parent')->withCount('children');
@@ -42,7 +50,13 @@ class NavigationItemController extends BaseController
 
     public function store(StoreNavigationItemRequest $request)
     {
-        NavigationItem::create($request->validated());
+        $navigationItem = NavigationItem::create($request->validated());
+
+        // Refresh the model to ensure data is up to date
+        $navigationItem->refresh();
+
+        // Explicitly clear navigation cache (observer should also handle this, but this ensures it)
+        $this->navigationService->clearNavigationCache($navigationItem->section ?? null);
 
         return redirect()->route('admin.navigation-items.index')
             ->with('success', 'Navigation item created successfully.');
@@ -65,7 +79,19 @@ class NavigationItemController extends BaseController
 
     public function update(UpdateNavigationItemRequest $request, NavigationItem $navigationItem)
     {
+        // Store old section before update to clear its cache
+        $oldSection = $navigationItem->section;
+        
         $navigationItem->update($request->validated());
+
+        // Refresh the model to ensure data is up to date
+        $navigationItem->refresh();
+
+        // Clear cache for both old and new sections (in case section changed)
+        $this->navigationService->clearNavigationCache($oldSection);
+        if ($navigationItem->section !== $oldSection) {
+            $this->navigationService->clearNavigationCache($navigationItem->section);
+        }
 
         return redirect()->route('admin.navigation-items.index')
             ->with('success', 'Navigation item updated successfully.');
@@ -73,7 +99,13 @@ class NavigationItemController extends BaseController
 
     public function destroy(NavigationItem $navigationItem)
     {
+        // Store section before deletion to clear its cache
+        $section = $navigationItem->section;
+        
         $navigationItem->delete();
+
+        // Explicitly clear navigation cache (observer should also handle this, but this ensures it)
+        $this->navigationService->clearNavigationCache($section ?? null);
 
         return redirect()->route('admin.navigation-items.index')
             ->with('success', 'Navigation item deleted successfully.');

@@ -1,5 +1,15 @@
 {{-- Zaitoon Academy: Recent Notices & Chairman's Message (Two Columns) --}}
 @php
+    // Get settings from HomePageSection
+    $noticesChairmanSection = $homePageSections['notices_chairman'] ?? null;
+    $sectionData = $noticesChairmanSection?->data ?? [];
+    
+    // Get settings with defaults
+    $showNotices = filter_var($sectionData['show_notices'] ?? true, FILTER_VALIDATE_BOOLEAN);
+    $noticesCount = (int) ($sectionData['notices_count'] ?? 5);
+    $showChairman = filter_var($sectionData['show_chairman'] ?? true, FILTER_VALIDATE_BOOLEAN);
+    $chairmanExcerptLimit = (int) ($sectionData['chairman_excerpt_limit'] ?? 150);
+    
     // Get recent notices
     $recentNotices = $recentNotices ?? collect([]);
     $importantNotices = $importantNotices ?? collect([]);
@@ -7,7 +17,7 @@
     if ($notices->isEmpty() && $importantNotices->isNotEmpty()) {
         $notices = $importantNotices;
     }
-    $notices = $notices->take(5);
+    $notices = $notices->take($noticesCount);
     
     // Get Chairman's message from staff or page
     $featuredStaff = $featuredStaff ?? collect([]);
@@ -29,10 +39,12 @@
     }
 @endphp
 
+@if($showNotices || $showChairman)
 <section class="py-16 lg:py-24 bg-gray-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+        <div class="grid grid-cols-1 {{ ($showNotices && $showChairman) ? 'lg:grid-cols-2' : '' }} gap-8 lg:gap-12">
             {{-- Left Column: Recent Notices --}}
+            @if($showNotices)
             <div class="bg-white rounded-2xl p-6 lg:p-8 shadow-lg">
                 <div class="flex items-center gap-3 mb-6">
                     <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
@@ -70,8 +82,10 @@
                     </svg>
                 </a>
             </div>
+            @endif
             
             {{-- Right Column: Chairman's Message --}}
+            @if($showChairman)
             <div class="bg-white rounded-2xl p-6 lg:p-8 shadow-lg">
                 <div class="flex items-start gap-6 mb-6">
                     @if($chairmanImage && $chairmanMedia)
@@ -100,7 +114,7 @@
                 </div>
                 
                 <p class="text-gray-700 leading-relaxed mb-6">
-                    {{ \Illuminate\Support\Str::limit($chairmanMessage, 250) }}
+                    {{ \Illuminate\Support\Str::limit($chairmanMessage, $chairmanExcerptLimit) }}
                 </p>
                 
                 <a href="{{ route('about.show', ['page' => 'about']) }}" 
@@ -111,7 +125,9 @@
                     </svg>
                 </a>
             </div>
+            @endif
         </div>
     </div>
 </section>
+@endif
 

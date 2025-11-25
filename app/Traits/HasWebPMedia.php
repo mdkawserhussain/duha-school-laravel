@@ -211,5 +211,18 @@ trait HasWebPMedia
             'fallback' => $fallbackUrl ?: $webpUrl, // Use WebP as fallback if no original
         ];
     }
+
+    /**
+     * Get media URL - convenience method that uses getMediaUrlRelative.
+     * This method provides a consistent API across models.
+     * 
+     * @param string $collectionName
+     * @param string|null $conversion
+     * @return string|null
+     */
+    public function getMediaUrl(string $collectionName = 'images', ?string $conversionName = null): ?string
+    {
+        return $this->getMediaUrlRelative($collectionName, $conversionName);
+    }
 }
 

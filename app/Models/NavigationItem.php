@@ -95,7 +95,20 @@ class NavigationItem extends Model
             return $rawUrl;
         }
 
-        // 2. Try route_name if it exists
+        // 1.5. If a direct URL is explicitly set (not empty), use it before trying routes
+        // This allows admins to override route-based URLs with direct URLs
+        // Check if it looks like a direct URL (starts with http://, https://, /, or #)
+        if ($rawUrl && !empty(trim($rawUrl)) && $rawUrl !== '#') {
+            if (str_starts_with($rawUrl, 'http://') || 
+                str_starts_with($rawUrl, 'https://') || 
+                str_starts_with($rawUrl, '/') ||
+                str_starts_with($rawUrl, '#')) {
+                // Direct URL is set and looks valid - use it immediately
+                return $rawUrl;
+            }
+        }
+
+        // 2. Try route_name if it exists (only if no direct URL was set above)
         if ($this->route_name) {
             try {
                 // Check if route exists before using it

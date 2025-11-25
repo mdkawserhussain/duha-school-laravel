@@ -8,24 +8,19 @@
     // Link to /about-us/about per PRD FR-5.3.6
     $buttonLink = $introSection?->button_link ?? route('about.show', ['page' => 'about'], false);
     
-    // Get images from section or use defaults (FR-5.2.7)
+    // Get first image only (single image)
     $image1 = null;
-    $image2 = null;
     if ($introSection && $introSection->hasMedia('images')) {
         // Get WebP URLs if available (FR-5.2.4) - FIXED: Using proper method with asset()
         $image1 = $introSection->getMediaUrl('images', 'webp') ?: $introSection->getMediaUrl('images', 'large');
-        $secondMedia = $introSection->getMedia('images')->skip(1)->first();
-        if ($secondMedia) {
-            $image2 = $introSection->getMediaUrl('images', 'webp') ?: $introSection->getMediaUrl('images', 'large');
-        }
     }
 @endphp
 
 <section class="py-16 lg:py-24" style="background: linear-gradient(180deg, #ffffff 0%, #f0fdf4 50%, #ffffff 100%);">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-            {{-- Left Side: Images --}}
-            <div class="space-y-6 slide-left">
+            {{-- Left Side: Single Image --}}
+            <div class="slide-left">
                 @if($image1)
                 <div class="rounded-xl overflow-hidden shadow-lg">
                     <picture>
@@ -48,31 +43,6 @@
                 @else
                 <div class="rounded-xl overflow-hidden shadow-lg bg-za-green-light h-64 flex items-center justify-center">
                     <span class="text-za-green-primary">Building Image</span>
-                </div>
-                @endif
-                
-                @if($image2)
-                <div class="rounded-xl overflow-hidden shadow-lg">
-                    <picture>
-                        @php
-                            $secondMedia = $introSection && $introSection->hasMedia('images') 
-                                ? $introSection->getMedia('images')->skip(1)->first() 
-                                : null;
-                        @endphp
-                        @if($secondMedia && $secondMedia->hasGeneratedConversion('webp'))
-                            <source srcset="{{ $introSection->getMediaUrl('images', 'webp') }}" type="image/webp">
-                        @endif
-                        <img 
-                            src="{{ $image2 }}" 
-                            alt="Zaitoon Academy Activities"
-                            class="w-full h-auto object-cover"
-                            loading="lazy"
-                        >
-                    </picture>
-                </div>
-                @else
-                <div class="rounded-xl overflow-hidden shadow-lg bg-za-green-light h-48 flex items-center justify-center">
-                    <span class="text-za-green-primary">Activity Image</span>
                 </div>
                 @endif
             </div>

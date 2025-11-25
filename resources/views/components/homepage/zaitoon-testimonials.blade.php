@@ -3,10 +3,20 @@
     // Get testimonials from homepage sections (FR-11.4)
     $homePageSections = $homePageSections ?? collect([]);
     $testimonialSection = $homePageSections->get('testimonials') ?? $homePageSections->get('parent_testimonials');
+    
+    // Check if section is active
+    if ($testimonialSection && !$testimonialSection->is_active) {
+        return; // Don't render if section is inactive
+    }
+    
     $testimonials = [];
     if ($testimonialSection && isset($testimonialSection->data)) {
         $testimonials = $testimonialSection->data['testimonials'] ?? [];
     }
+    
+    // Get section title and description from database
+    $sectionTitle = $testimonialSection?->title ?? 'What Parents Say About Zaitoon Academy';
+    $sectionDescription = $testimonialSection?->description ?? null;
     
     // Default testimonial if none provided (FR-11.4.4)
     if (empty($testimonials)) {
@@ -97,10 +107,15 @@
     
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {{-- Section Header (FR-11.1) --}}
-        <div class="text-center mb-16">
+        <div class="text-center mb-16 fade-in">
             <h2 class="text-2xl sm:text-3xl font-bold" style="color: #008236;">
-                What Parents Say About Zaitoon Academy
+                {{ $sectionTitle }}
             </h2>
+            @if($sectionDescription)
+            <p class="text-sm sm:text-base text-gray-600 max-w-3xl mx-auto mt-4">
+                {{ $sectionDescription }}
+            </p>
+            @endif
         </div>
         
         {{-- Testimonial Carousel (FR-11.2, FR-11.3) --}}

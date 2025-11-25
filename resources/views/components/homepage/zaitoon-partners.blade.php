@@ -3,10 +3,20 @@
     // Get partners from homepage sections (FR-12.4)
     $homePageSections = $homePageSections ?? collect([]);
     $partnerSection = $homePageSections->get('partners') ?? $homePageSections->get('our_partners');
+    
+    // Check if section is active
+    if ($partnerSection && !$partnerSection->is_active) {
+        return; // Don't render if section is inactive
+    }
+    
     $partners = [];
     if ($partnerSection && isset($partnerSection->data)) {
         $partners = $partnerSection->data['partners'] ?? [];
     }
+    
+    // Get section title and description from database
+    $sectionTitle = $partnerSection?->title ?? 'Our Partners';
+    $sectionDescription = $partnerSection?->description ?? 'We are proud to be associated with leading organizations worldwide.';
     
     // Default partners if none provided (FR-12.4.4)
     if (empty($partners)) {
@@ -24,12 +34,12 @@
 <section class="py-16 lg:py-24 bg-gray-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {{-- Section Header (FR-12.1) --}}
-        <div class="text-center mb-16">
+        <div class="text-center mb-16 fade-in">
             <h2 class="text-3xl sm:text-4xl font-serif font-bold mb-3" style="color: #008236;">
-                🤝 Our Partners
+                🤝 {{ $sectionTitle }}
             </h2>
             <p class="text-base text-gray-600 max-w-2xl mx-auto">
-                We are proud to be associated with leading organizations worldwide.
+                {{ $sectionDescription }}
             </p>
         </div>
         

@@ -6,6 +6,7 @@ use App\Repositories\NavigationRepository;
 use App\Models\NavigationItem;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Artisan;
 
 class NavigationService
 {
@@ -58,6 +59,7 @@ class NavigationService
             Cache::forget('navigation_all_' . $section);
             Cache::forget('navigation_root_' . $section);
         } else {
+            // Clear all navigation caches
             Cache::forget('navigation_main');
             Cache::forget('navigation_all_main');
             Cache::forget('navigation_root_main');
@@ -65,5 +67,15 @@ class NavigationService
             Cache::forget('navigation_all_footer');
             Cache::forget('navigation_root_footer');
         }
+        
+        // Clear tagged cache if supported
+        try {
+            Cache::tags(['navigation'])->flush();
+        } catch (\Exception $e) {
+            // Tags not supported by cache driver, that's okay
+        }
+        
+        // Clear view cache to ensure navigation updates are reflected
+        Artisan::call('view:clear');
     }
 }

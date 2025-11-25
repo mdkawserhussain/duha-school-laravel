@@ -96,6 +96,25 @@ class SiteSettingsHelper
         try {
             $settings = static::all();
 
+            // Ensure media relationship is loaded
+            if ($settings && !$settings->relationLoaded('media')) {
+                $settings->load('media');
+            }
+
+            // First, try direct media access
+            if ($settings && $settings->hasMedia('logo')) {
+                $media = $settings->getFirstMedia('logo');
+                if ($media) {
+                    // Try WebP conversion first, then fallback to original
+                    if ($media->hasGeneratedConversion('webp')) {
+                        $url = $media->getUrl('webp');
+                        if ($url) return $url;
+                    }
+                    $url = $media->getUrl();
+                    if ($url) return $url;
+                }
+            }
+
             // Use the logo_url accessor which now uses relative paths with asset()
             if ($settings && $settings->logo_url) {
                 return $settings->logo_url;

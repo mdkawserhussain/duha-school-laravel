@@ -98,6 +98,9 @@ class HomePageContentController extends BaseController
                 ->toMediaCollection('background_image');
         }
 
+        // Refresh the model to ensure data is up to date
+        $homepageContent->refresh();
+
         $this->clearHomepageCache();
 
         return redirect()->route('admin.homepage-contents.index')
@@ -116,6 +119,17 @@ class HomePageContentController extends BaseController
 
     protected function clearHomepageCache(): void
     {
+        // Clear homepage cache
         Cache::forget('homepage_v2_data');
+        
+        // Clear tagged cache if supported
+        try {
+            Cache::tags(['homepage', 'homepage_content'])->flush();
+        } catch (\Exception $e) {
+            // Tags not supported by cache driver, that's okay
+        }
+        
+        // Clear view cache
+        \Artisan::call('view:clear');
     }
 }

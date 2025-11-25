@@ -1,5 +1,10 @@
 @php
-    // Create 10 placeholder slides with images
+    // Use database slides from admin dashboard
+    $heroSlides = $heroSlides ?? collect([]);
+    $allSlides = $heroSlides->where('is_active', true)->sortBy('sort_order')->take(10)->values();
+    
+    // Fallback to placeholder if no slides exist
+    if ($allSlides->isEmpty()) {
     $placeholderImages = [
         asset('storage/hero_slide_1_1763981315182.png'),
         asset('storage/hero_slide_2_1763981346399.png'),
@@ -21,15 +26,8 @@
         ];
     });
     
-    // FORCE USE OF PLACEHOLDERS (comment out to use database slides)
     $allSlides = $placeholderSlides;
-    
-    // Uncomment below to use database slides instead:
-    // $heroSlides = $heroSlides ?? collect([]);
-    // $allSlides = $heroSlides->where('is_active', true)->take(10)->values();
-    // if ($allSlides->isEmpty()) {
-    //     $allSlides = $placeholderSlides;
-    // }
+    }
 @endphp
 
 <style>
@@ -85,18 +83,47 @@
     {{-- Full-Screen Image Slides --}}
     @foreach($allSlides as $index => $slide)
         @php
-            $title = $slide->title ?? 'Slide ' . ($index + 1);
-            
-            // Get hero image - check placeholder first, then model media
+            // Get slide data - handle both Eloquent models and placeholder objects
+            $title = null;
+            $subtitle = null;
+            $description = null;
+            $buttonText = null;
+            $buttonLink = null;
+            $badge = null;
             $heroImage = null;
+            $videoUrl = null;
+            $videoPoster = null;
             
-            // Check if slide has a direct image property (placeholder slides)
-            if (isset($slide->image) && $slide->image) {
-                $heroImage = $slide->image;
-            }
-            // Otherwise check if it's an Eloquent model with media
-            elseif ($slide instanceof \Illuminate\Database\Eloquent\Model && method_exists($slide, 'hasMedia') && $slide->hasMedia('images')) {
-                $heroImage = $slide->getMediaUrl('images', 'webp') ?: $slide->getMediaUrl('images');
+            // Check if it's an Eloquent model (database slide)
+            if ($slide instanceof \Illuminate\Database\Eloquent\Model) {
+                $title = $slide->title;
+                $subtitle = $slide->subtitle;
+                $description = $slide->description;
+                $buttonText = $slide->button_text;
+                $buttonLink = $slide->button_link;
+                
+                // Get data from JSON field
+                $slideData = $slide->data ?? [];
+                $badge = data_get($slideData, 'badge');
+                $videoUrl = data_get($slideData, 'video_url');
+                
+                // Get media
+                if ($slide->hasMedia('images')) {
+                    $heroImage = $slide->getWebPMediaUrl('images', 'large') 
+                              ?: $slide->getWebPMediaUrl('images')
+                              ?: $slide->getMediaUrlRelative('images');
+                }
+                
+                if ($slide->hasMedia('video_poster')) {
+                    $videoPoster = $slide->getWebPMediaUrl('video_poster', 'large')
+                                ?: $slide->getWebPMediaUrl('video_poster')
+                                ?: $slide->getMediaUrlRelative('video_poster');
+                }
+            } 
+            // Otherwise it's a placeholder object
+            else {
+                $title = $slide->title ?? 'Slide ' . ($index + 1);
+                $heroImage = $slide->image ?? null;
             }
             
             // Gradient colors for placeholders (green theme variations)
