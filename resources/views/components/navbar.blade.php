@@ -74,9 +74,9 @@
         $youtube = $socialLinks['youtube'] ?? '#';
     @endphp
     <div class="bg-za-green-dark text-white py-2 hidden lg:block">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between">
-                {{-- Left: Social Media Icons --}}
+        <div class="w-full pl-2 sm:pl-0 pr-4 sm:pr-6 lg:pr-8">
+            <div class="flex items-center">
+                {{-- Left: Social Media Icons (aligned with logo below) --}}
                 <div class="flex items-center gap-4">
                     @if($facebook && $facebook !== '#')
                     <a href="{{ $facebook }}" target="_blank" rel="noopener noreferrer" 
@@ -112,8 +112,8 @@
                     @endif
                 </div>
                 
-                {{-- Right: Phone and Email --}}
-                <div class="flex items-center gap-6">
+                {{-- Right: Phone and Email (pushed to right with ml-auto) --}}
+                <div class="flex items-center gap-6 ml-auto">
                     @if($phone)
                     <a href="tel:{{ preg_replace('/[^0-9+]/', '', $phone) }}" 
                        class="text-white hover:text-za-yellow-accent transition-colors text-sm flex items-center gap-2">
@@ -192,10 +192,10 @@
         role="navigation"
         aria-label="Main navigation"
     >
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="w-full pl-2 sm:pl-0 pr-4 sm:pr-6 lg:pr-8">
             <div class="flex items-center h-16 lg:h-20 relative">
-                {{-- Logo --}}
-                <div class="flex-shrink-0 z-10">
+                {{-- Logo + School Name (Compact Zaitoon Style) --}}
+                <div class="flex items-center gap-2 flex-shrink-0 z-10">
                     <a
                         href="{{ route('home') }}"
                         class="navbar-logo navbar-focus focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg p-1"
@@ -210,16 +210,25 @@
                             $siteName = \App\Helpers\SiteSettingsHelper::websiteName();
                         @endphp
                         <img
-                            class="h-8 sm:h-10 lg:h-12 w-auto transition-all duration-300"
+                            class="h-10 sm:h-11 lg:h-12 w-auto transition-all duration-300"
                             src="{{ $logoUrl ?? asset('images/logo.svg') }}"
                             alt="{{ $siteName }} Logo"
                             onerror="this.onerror=null; this.src='{{ asset('images/logo.svg') }}'"
                         >
                     </a>
+                    <span 
+                        class="text-lg lg:text-xl font-semibold transition-colors whitespace-nowrap"
+                        :class="{
+                            'text-white': transparent,
+                            'text-gray-900': !transparent
+                        }"
+                    >
+                        {{ $siteName }}
+                    </span>
                 </div>
 
-                {{-- Desktop Navigation - Centered (only on xl screens and above) --}}
-                <div class="hidden xl:flex items-center gap-1 2xl:gap-2 flex-1 justify-center min-w-0 px-4 2xl:px-6">
+                {{-- Desktop Navigation - Left-aligned (only on xl screens and above) --}}
+                <div class="hidden xl:flex items-center gap-2 2xl:gap-3 justify-start min-w-0 px-2 2xl:px-3">
                     {{-- Dynamic Navigation Items --}}
                     @foreach($navigationItems as $navItem)
                         @php
@@ -247,7 +256,7 @@
                                 <button
                                     @click="open = !open"
                                     @keydown.escape="open = false"
-                                    class="nav-link flex items-center gap-1 px-2 2xl:px-3 py-2 text-xs 2xl:text-sm font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors whitespace-nowrap"
+                                    class="nav-link flex items-center gap-1 px-2 2xl:px-3 py-2 text-sm 2xl:text-base font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors whitespace-nowrap"
                                     :class="{
                                         'text-white hover:bg-white/10 focus:ring-white': transparent,
                                         'text-gray-900 hover:bg-gray-100 focus:ring-gray-900': !transparent,
@@ -328,7 +337,7 @@
                             {{-- Simple Link Menu Item --}}
                             <a
                                 href="{{ $navUrl }}"
-                                class="nav-link flex items-center gap-1 px-2 2xl:px-3 py-2 text-xs 2xl:text-sm font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors whitespace-nowrap"
+                                class="nav-link flex items-center gap-1 px-2 2xl:px-3 py-2 text-sm 2xl:text-base font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors whitespace-nowrap"
                                 :class="{
                                     'text-white hover:bg-white/10 focus:ring-white': transparent,
                                     'text-gray-900 hover:bg-gray-100 focus:ring-gray-900': !transparent,
@@ -348,7 +357,7 @@
                 </div>
 
                 {{-- Right Side: Apply Online Button & Login --}}
-                <div class="hidden lg:flex items-center space-x-4 flex-shrink-0 z-10">
+                <div class="hidden lg:flex items-center space-x-4 flex-shrink-0 z-10 ml-auto">
                     {{-- Apply Online Button --}}
                     <a href="{{ route('admission.index', [], false) ?? '#' }}" 
                        class="bg-za-yellow-accent hover:bg-za-yellow-dark text-za-green-dark font-semibold px-6 py-2.5 rounded-full transition-all duration-200 hover:scale-105 shadow-md hover:shadow-lg">

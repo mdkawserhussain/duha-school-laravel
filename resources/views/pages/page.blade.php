@@ -69,7 +69,7 @@
     </section>
 
     <!-- Page Content -->
-    <section class="py-12 sm:py-16 md:py-20 lg:py-24 bg-white relative overflow-hidden">
+    <section class="py-12 sm:py-16 md:py-20 lg:py-24 relative overflow-hidden" style="background: linear-gradient(180deg, #ffffff 0%, #f0fdf4 100%);">
         {{-- Decorative Background Elements --}}
         <div class="absolute top-0 right-0 w-64 h-64 bg-[#E8F5E9]/20 rounded-full opacity-20 -translate-x-32 -translate-y-32"></div>
         <div class="absolute bottom-0 left-0 w-96 h-96 bg-[#008236]/5 rounded-full opacity-20 translate-x-48 translate-y-48"></div>
@@ -131,6 +131,13 @@
                     </div>
                 </div>
             </div>
+        </div>
+        
+        {{-- Wave decoration at bottom for smooth transition to footer --}}
+        <div class="absolute bottom-0 left-0 w-full overflow-hidden pointer-events-none" style="line-height: 0; transform: translateY(1px);">
+            <svg viewBox="0 0 1440 60" preserveAspectRatio="none" class="relative block w-full" style="height: 60px;">
+                <path d="M0,0 L0,30 Q360,60 720,30 T1440,30 L1440,0 Z" fill="#ffffff"></path>
+            </svg>
         </div>
     </section>
 

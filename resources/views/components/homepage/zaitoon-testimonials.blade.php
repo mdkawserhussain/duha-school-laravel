@@ -119,14 +119,14 @@
         </div>
         
         {{-- Testimonial Carousel (FR-11.2, FR-11.3) --}}
-        <div class="max-w-4xl mx-auto">
+        <div class="max-w-4xl mx-auto relative" style="min-height: 400px;">
             <template x-for="(testimonial, index) in {{ json_encode($testimonials) }}" :key="index">
                 <div 
                     x-show="currentTestimonial === index"
                     x-transition:enter="transition ease-out duration-500"
-                    x-transition:enter-start="opacity-0 translate-y-4"
-                    x-transition:enter-end="opacity-100 translate-y-0"
-                    x-transition:leave="transition ease-in duration-300"
+                    x-transition:enter-start="opacity-0"
+                    x-transition:enter-end="opacity-100"
+                    x-transition:leave="transition ease-in duration-300 absolute inset-0"
                     x-transition:leave-start="opacity-100"
                     x-transition:leave-end="opacity-0"
                     class="text-center px-8"

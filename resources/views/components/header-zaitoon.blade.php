@@ -80,7 +80,7 @@
     @endphp
     <div class="text-white py-2 text-xs relative z-60" style="background-color: #008236;">
         {{-- Desktop Top Bar --}}
-        <div class="hidden lg:block px-6 lg:px-12">
+        <div class="hidden lg:block w-full pl-4 pr-6 lg:pr-12">
             <div class="flex items-center justify-between">
                 {{-- Left: Social Media Icons --}}
                 <div class="flex items-center gap-3">
@@ -327,8 +327,8 @@
         role="navigation"
         aria-label="Main navigation"
     >
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16 lg:h-18">
+        <div class="w-full pl-4 pr-4 sm:pr-6 lg:pr-8">
+            <div class="flex items-center justify-between h-16 lg:h-20">
                 
                 {{-- Logo --}}
                 <div class="flex-shrink-0">
@@ -379,7 +379,7 @@
                                     @click="open = !open"
                                     @mouseenter="open = true"
                                     @mouseleave="open = false"
-                                    class="flex items-center gap-1 px-2 py-1 text-sm font-semibold transition-colors duration-200 focus:outline-none hover:text-za-green-primary"
+                                    class="flex items-center gap-1 px-2 py-1 text-sm 2xl:text-base font-semibold transition-colors duration-200 focus:outline-none hover:text-za-green-primary"
                                     :style="'color: ' + ({{ $activeState ? 'true' : 'false' }} ? '#008236' : '#1f2937')"
                                     :aria-expanded="open"
                                 >
@@ -425,7 +425,7 @@
                             {{-- Simple Link --}}
                             <a
                                 href="{{ $navUrl }}"
-                                class="px-2 py-1 text-sm font-semibold transition-colors duration-200 focus:outline-none hover:text-za-green-primary"
+                                class="px-2 py-1 text-sm 2xl:text-base font-semibold transition-colors duration-200 focus:outline-none hover:text-za-green-primary"
                                 :style="'color: ' + ({{ $activeState ? 'true' : 'false' }} ? '#008236' : '#1f2937')"
                                 {!! $linkAttrs !!}
                             >

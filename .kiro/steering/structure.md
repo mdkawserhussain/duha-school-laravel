@@ -469,3 +469,544 @@ public function test_event_generates_slug() {
 - ❌ Skipping role checks in admin controllers - Use `EnsureUserHasRole` middleware
 - ❌ Using `is_visible` instead of `is_active` for HomePageSection
 - ❌ Forgetting to clear `homepage_v2_data` cache when updating content
+
+
+## Recent Structural Changes (Nov 26, 2025)
+
+### Homepage Redesign Architecture
+
+**Complete visual overhaul** to match beta.zaitoonacademy.com reference design.
+
+**Key Architectural Changes:**
+1. **Color System**: Migrated to exact hex values (#0d5a47, #fbbf24)
+2. **Animation System**: Implemented native Intersection Observer
+3. **Component Standardization**: All sections follow consistent pattern
+4. **Performance**: Hardware-accelerated animations, optimized queries
+
+### Homepage Component Pattern
+
+All homepage sections now follow this standardized structure:
+
+```html
+<section class="py-16 lg:py-24" 
+         style="background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%);">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Section Header -->
+        <div class="text-center mb-12 fade-in">
+            <h2 class="text-3xl lg:text-4xl font-bold" 
+                style="color: #0d5a47;">
+                {{ $section->data['title'] ?? 'Section Title' }}
+            </h2>
+            @if(!empty($section->data['subtitle']))
+            <p class="mt-4 text-lg text-gray-600">
+                {{ $section->data['subtitle'] }}
+            </p>
+            @endif
+        </div>
+        
+        <!-- Section Content with Animations -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            @foreach($items as $item)
+            <div class="stagger-item">
+                <!-- Card content -->
+            </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+```
+
+### Animation Implementation Strategy
+
+**Animation Classes by Use Case:**
+- **Section headers**: `fade-in` - Subtle entrance
+- **Images/left content**: `slide-left` - Directional flow
+- **Text/right content**: `slide-right` - Balanced layout
+- **Cards in grids**: `stagger-item` - Auto-cascading effect (100ms delay per item)
+- **Featured content**: `zoom-in` - Draw attention
+- **List items**: `slide-up` - Bottom-to-top reveal
+
+**Implementation Example:**
+```html
+<!-- Hero Section -->
+<div class="fade-in">
+    <h1>Welcome to Zaitoon Academy</h1>
+</div>
+
+<!-- Two-column Layout -->
+<div class="grid grid-cols-2 gap-8">
+    <div class="slide-left">
+        <img src="..." alt="...">
+    </div>
+    <div class="slide-right">
+        <p>Content text...</p>
+    </div>
+</div>
+
+<!-- Card Grid -->
+<div class="grid grid-cols-3 gap-6">
+    <div class="stagger-item">Card 1</div>
+    <div class="stagger-item">Card 2</div>
+    <div class="stagger-item">Card 3</div>
+</div>
+```
+
+### Header Structure (Updated)
+
+**File:** `resources/views/components/header-zaitoon.blade.php`
+
+**Two-tier structure:**
+
+1. **Top Bar** (`h-10`, background: `#0d5a47`):
+   - Left: Contact info (phone, email with icons)
+   - Right: 5 action buttons (Notice, News, Careers, FAQ, Apply Online)
+   - All buttons: Yellow background (#fbbf24) with green text
+
+2. **Main Navigation** (`h-16 lg:h-18`, background: white):
+   - Logo: `h-10 lg:h-12`
+   - Nav links: Dark gray (#1f2937), hover to green (#0d5a47)
+   - CTA button: Yellow "Apply Online"
+   - Mobile: Hamburger menu with Alpine.js
+
+**Removed Elements:**
+- Announcement ticker bar
+- Social media icons in top bar
+- Multiple redundant action buttons
+
+### Footer Structure (Updated)
+
+**File:** `resources/views/components/footer-zaitoon.blade.php`
+
+**Structure:**
+- Wave SVG decoration (fill: #0d5a47)
+- Background: #0d5a47 (green)
+- Newsletter signup: Yellow button with green text
+- Links: White with 90% opacity
+- Back-to-top button: Yellow with green text
+- Social media icons: White
+
+### Data Flow Architecture
+
+**Homepage Data Loading:**
+```php
+// HomeController.php
+public function index() {
+    $data = Cache::remember('homepage_v2_data', 3600, function() {
+        return [
+            'sections' => HomePageSection::active()
+                ->ordered()
+                ->with('media')
+                ->get(),
+            'events' => Event::published()
+                ->with('media')
+                ->latest()
+                ->take(6)
+                ->get(),
+            'notices' => Notice::published()
+                ->with('media')
+                ->latest()
+                ->take(5)
+                ->get(),
+            // ... other data
+        ];
+    });
+    
+    return view('pages.home', $data);
+}
+```
+
+**Cache Invalidation:**
+```php
+// EventObserver.php, NoticeObserver.php, etc.
+public function saved($model): void {
+    Cache::forget('homepage_v2_data');
+    Cache::tags(['events'])->flush();
+}
+
+public function deleted($model): void {
+    Cache::forget('homepage_v2_data');
+    Cache::tags(['events'])->flush();
+}
+```
+
+### Component Visibility Control
+
+**CRITICAL:** Always check `is_active` (not `is_visible`):
+
+```php
+// ✅ CORRECT
+@if($section?->is_active)
+    <x-homepage.section-name :section="$section" />
+@endif
+
+// ❌ WRONG
+@if($section?->is_visible)
+    <x-homepage.section-name :section="$section" />
+@endif
+```
+
+**Reason:** `HomePageSection` model uses `is_active` field for visibility control.
+
+### Media Handling Pattern
+
+**Always provide fallbacks:**
+
+```php
+// ✅ CORRECT - With fallback
+$imageUrl = $event->getFirstMediaUrl('featured_image', 'medium') 
+    ?: asset('images/placeholder.svg');
+
+// ✅ CORRECT - In Blade
+<img src="{{ $event->getFirstMediaUrl('featured_image', 'medium') ?: asset('images/placeholder.svg') }}" 
+     alt="{{ $event->title }}"
+     loading="lazy">
+
+// ❌ WRONG - No fallback
+<img src="{{ $event->getFirstMediaUrl('featured_image', 'medium') }}" 
+     alt="{{ $event->title }}">
+```
+
+### Query Optimization Patterns
+
+**N+1 Prevention:**
+
+```php
+// ✅ GOOD - Eager loading
+$events = Event::with(['media', 'author'])
+    ->published()
+    ->latest()
+    ->get();
+
+// ✅ GOOD - Nested eager loading
+$sections = HomePageSection::with([
+    'media',
+    'contents' => function($query) {
+        $query->ordered();
+    }
+])->active()->ordered()->get();
+
+// ❌ BAD - N+1 queries
+$events = Event::published()->get();
+foreach ($events as $event) {
+    $event->media; // Separate query!
+    $event->author; // Another query!
+}
+```
+
+**Repository Caching:**
+
+```php
+// EventRepository.php
+public function getPublished(int $perPage = 10) {
+    return Cache::remember(
+        "events.published.{$perPage}", 
+        1800, // 30 minutes
+        fn() => $this->model
+            ->with('media')
+            ->published()
+            ->latest()
+            ->paginate($perPage)
+    );
+}
+
+public function getFeatured(int $limit = 6) {
+    return Cache::remember(
+        "events.featured.{$limit}",
+        1800,
+        fn() => $this->model
+            ->with('media')
+            ->published()
+            ->where('is_featured', true)
+            ->latest()
+            ->take($limit)
+            ->get()
+    );
+}
+```
+
+### Slug Generation Pattern (CRITICAL)
+
+**Slug generation MUST be in model's `boot()` method, NOT in observers:**
+
+```php
+// ✅ CORRECT - In Model boot()
+protected static function boot() {
+    parent::boot();
+    
+    static::creating(function ($model) {
+        if (empty($model->slug) && !empty($model->title)) {
+            $model->slug = static::generateUniqueSlug($model->title);
+        }
+    });
+    
+    static::updating(function ($model) {
+        if ($model->isDirty('title') && (empty($model->slug) || is_null($model->slug))) {
+            $model->slug = static::generateUniqueSlug($model->title);
+        }
+    });
+}
+
+protected static function generateUniqueSlug(string $title): string {
+    $title = trim($title);
+    if (empty($title)) {
+        $title = 'model-' . time();
+    }
+    
+    $slug = Str::slug($title);
+    if (empty($slug)) {
+        $slug = 'model-' . time();
+    }
+    
+    $originalSlug = $slug;
+    $counter = 1;
+    
+    while (static::where('slug', $slug)->exists()) {
+        $slug = $originalSlug . '-' . $counter;
+        $counter++;
+    }
+    
+    return $slug;
+}
+
+// ❌ WRONG - In Observer
+// Observers should only normalize existing slugs, not generate them
+```
+
+**Observer Role (Slug Normalization Only):**
+
+```php
+// EventObserver.php
+public function saving(Event $event): void {
+    // Only normalize if slug already exists
+    if (!empty($event->slug)) {
+        $slug = Str::slug(trim($event->slug));
+        
+        // Ensure uniqueness
+        $originalSlug = $slug;
+        $count = 1;
+        
+        while (Event::where('slug', $slug)
+            ->where('id', '!=', $event->id ?? 0)
+            ->exists()) {
+            $slug = $originalSlug . '-' . $count;
+            $count++;
+        }
+        
+        $event->slug = $slug;
+    }
+}
+```
+
+### Admin Interface Patterns
+
+**Controller Structure:**
+
+```php
+// app/Http/Controllers/Admin/EventController.php
+class EventController extends Controller
+{
+    public function __construct(
+        protected EventService $eventService,
+        protected EventRepository $eventRepository
+    ) {
+        $this->middleware(['auth', 'role:admin|editor']);
+    }
+    
+    public function index() {
+        $events = $this->eventRepository->paginate(15);
+        return view('admin.events.index', compact('events'));
+    }
+    
+    public function store(StoreEventRequest $request) {
+        $event = $this->eventService->create($request->validated());
+        return redirect()
+            ->route('admin.events.index')
+            ->with('success', 'Event created successfully');
+    }
+    
+    public function update(UpdateEventRequest $request, Event $event) {
+        $this->eventService->update($event, $request->validated());
+        return redirect()
+            ->route('admin.events.index')
+            ->with('success', 'Event updated successfully');
+    }
+}
+```
+
+**View Structure:**
+
+```php
+// resources/views/admin/events/index.blade.php
+@extends('admin.layouts.app')
+
+@section('content')
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold">Events</h1>
+        <a href="{{ route('admin.events.create') }}" 
+           class="btn btn-primary">
+            Create Event
+        </a>
+    </div>
+    
+    <div class="bg-white rounded-lg shadow">
+        <table class="min-w-full">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($events as $event)
+                <tr>
+                    <td>{{ $event->title }}</td>
+                    <td>
+                        <span class="badge {{ $event->is_published ? 'badge-success' : 'badge-warning' }}">
+                            {{ $event->is_published ? 'Published' : 'Draft' }}
+                        </span>
+                    </td>
+                    <td>{{ $event->start_date->format('M d, Y') }}</td>
+                    <td>
+                        <a href="{{ route('admin.events.edit', $event) }}">Edit</a>
+                        <form action="{{ route('admin.events.destroy', $event) }}" 
+                              method="POST" 
+                              class="inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" 
+                                    onclick="return confirm('Are you sure?')">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+        
+        <div class="p-4">
+            {{ $events->links() }}
+        </div>
+    </div>
+</div>
+@endsection
+```
+
+### Testing Patterns
+
+**Feature Test Example:**
+
+```php
+// tests/Feature/EventTest.php
+public function test_user_can_view_published_event()
+{
+    $event = Event::factory()->create([
+        'is_published' => true,
+        'published_at' => now()->subDay(),
+    ]);
+    
+    $response = $this->get(route('events.show', $event));
+    
+    $response->assertOk();
+    $response->assertSee($event->title);
+    $response->assertSee($event->excerpt);
+}
+
+public function test_user_cannot_view_unpublished_event()
+{
+    $event = Event::factory()->create([
+        'is_published' => false,
+    ]);
+    
+    $response = $this->get(route('events.show', $event));
+    
+    $response->assertNotFound();
+}
+```
+
+**Unit Test Example:**
+
+```php
+// tests/Unit/EventTest.php
+public function test_event_generates_unique_slug()
+{
+    $event1 = Event::factory()->create(['title' => 'Test Event']);
+    $event2 = Event::factory()->create(['title' => 'Test Event']);
+    
+    $this->assertEquals('test-event', $event1->slug);
+    $this->assertEquals('test-event-1', $event2->slug);
+}
+
+public function test_event_scope_published_only_returns_published_events()
+{
+    Event::factory()->create(['is_published' => true]);
+    Event::factory()->create(['is_published' => false]);
+    
+    $publishedEvents = Event::published()->get();
+    
+    $this->assertCount(1, $publishedEvents);
+    $this->assertTrue($publishedEvents->first()->is_published);
+}
+```
+
+### File Organization Best Practices
+
+**Component Organization:**
+```
+resources/views/components/
+├── homepage/              # Homepage-specific sections
+│   ├── zaitoon-*.blade.php
+│   ├── advisors-section.blade.php
+│   └── board-members-section.blade.php
+├── layouts/              # Layout wrappers
+│   ├── app.blade.php
+│   └── guest.blade.php
+├── molecules/            # Small reusable components
+│   ├── card.blade.php
+│   └── button.blade.php
+├── organisms/            # Complex components
+│   ├── event-grid.blade.php
+│   └── staff-list.blade.php
+└── utilities/            # Helper components
+    ├── loading.blade.php
+    └── error.blade.php
+```
+
+**Service Organization:**
+```
+app/Services/
+├── EventService.php      # Event business logic
+├── NoticeService.php     # Notice business logic
+├── PageService.php       # Page business logic
+├── SearchService.php     # Search functionality
+└── MediaService.php      # Media processing
+```
+
+**Repository Organization:**
+```
+app/Repositories/
+├── EventRepository.php   # Event data access
+├── NoticeRepository.php  # Notice data access
+├── PageRepository.php    # Page data access
+└── BaseRepository.php    # Shared repository logic
+```
+
+### Common Pitfalls (UPDATED)
+
+- ❌ N+1 queries - Always eager load relationships with `->with()`
+- ❌ Hardcoded text - Use `__('common.key')` for all user-facing text
+- ❌ Missing cache invalidation - Add to observers' `saved()` and `deleted()` methods
+- ❌ Direct model queries in controllers - Use repositories
+- ❌ Slug generation in observers - Should be in model's `boot()` method
+- ❌ Forgetting media fallbacks - Always provide placeholder: `?: asset('images/placeholder.svg')`
+- ❌ Skipping role checks in admin controllers - Use `EnsureUserHasRole` middleware
+- ❌ Using `is_visible` instead of `is_active` for HomePageSection
+- ❌ Forgetting to clear `homepage_v2_data` cache when updating content
+- ❌ Not using animation classes on new sections
+- ❌ Using Tailwind colors instead of exact hex values for brand colors
+- ❌ Forgetting to include scroll-animations.js in new layouts
+- ❌ Not testing scroll animations on mobile devices
+- ❌ Missing `loading="lazy"` on images below the fold
