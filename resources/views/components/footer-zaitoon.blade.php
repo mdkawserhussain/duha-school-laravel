@@ -15,15 +15,15 @@
     $logoUrl = \App\Helpers\SiteSettingsHelper::logoUrl();
 @endphp
 
-<footer class="relative text-white" style="margin-top: -1px; background-color: #008236;">
-    {{-- Curved Wave at Top --}}
-    <div class="absolute top-0 left-0 w-full overflow-hidden pointer-events-none" style="line-height: 0; transform: translateY(-1px);">
-        <svg viewBox="0 0 1440 120" preserveAspectRatio="none" class="relative block w-full h-20 lg:h-24">
-            <path d="M0,0 C480,100 960,100 1440,0 L1440,120 L0,120 Z" style="fill: #008236;"></path>
+<footer class="relative text-white" style="margin-top: -1px; background-color: #0d5a47;">
+    {{-- Curved Wave at Top - Smooth Transition --}}
+    {{-- <div class="absolute top-0 left-0 w-full overflow-hidden pointer-events-none" style="line-height: 0; transform: translateY(-1px); z-index: 10;">
+        <svg viewBox="0 0 1440 60" preserveAspectRatio="none" class="relative block w-full" style="height: 60px;">
+            <path d="M0,0 L0,30 Q360,60 720,30 T1440,30 L1440,0 Z" fill="#ffffff"></path>
         </svg>
-    </div>
+    </div> --}}
 
-    <div class="relative pt-24 lg:pt-32 pb-8">
+    <div class="relative pt-20 lg:pt-24 pb-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
             {{-- Newsletter Section --}}
@@ -115,69 +115,37 @@
             @endif
 
             {{-- Footer Grid (FR-13.1.3) --}}
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mb-12">
                 
                 {{-- Column 1: Logo & Important Links (FR-13.2) --}}
                 <div>
-                    <a href="{{ route('home', [], false) }}" class="inline-block mb-6">
+                    <a href="{{ route('home', [], false) }}" class="inline-block mb-6 flex items-center gap-3">
                         <img 
+                            class="h-12 w-auto transition-all duration-300" 
                             src="{{ $logoUrl ?? asset('images/logo.svg') }}" 
-                            alt="{{ $siteName }} Logo" 
-                            class="h-14 w-auto brightness-0 invert"
-                            onerror="this.onerror=null; this.src='{{ asset('images/logo.svg') }}';"
-                            loading="lazy"
-                            style="max-width: 200px; object-fit: contain;"
+                            alt="{{ $siteName }} Logo"
+                            onerror="this.onerror=null; this.src='{{ asset('images/logo.svg') }}'"
                         >
+                        <div>
+                            <h2 class="text-xl font-bold leading-tight text-white">{{ $siteName }}</h2>
+                            <p class="text-sm text-gray-300">Excellence in Education</p>
+                        </div>
                     </a>
                     
                     {{-- Important Links (FR-13.2.2, FR-13.2.3) --}}
-                    <h4 class="text-lg font-bold mb-4 text-za-yellow-accent uppercase tracking-wide">Important Links</h4>
+                    <h4 class="text-lg font-bold mb-4 uppercase tracking-wide" style="color: #fbbf24;">Important Links</h4>
                     <ul class="space-y-3">
-                        <li><a href="{{ route('about.index', [], false) }}" class="text-white/90 hover:text-white transition-colors duration-200 block">About Us</a></li>
-                        <li><a href="#" class="text-white/90 hover:text-white transition-colors duration-200 block">Payment Instruction</a></li>
-                        <li><a href="{{ route('notices.index', [], false) }}" class="text-white/90 hover:text-white transition-colors duration-200 block">News</a></li>
-                        <li><a href="#" class="text-white/90 hover:text-white transition-colors duration-200 block">FAQ</a></li>
-                        <li><a href="{{ route('contact.index', [], false) }}" class="text-white/90 hover:text-white transition-colors duration-200 block">Contact</a></li>
+                        <li><a href="{{ route('about.index', [], false) }}" class="text-white/90 hover:text-yellow-300 transition-colors duration-200 block">About Us</a></li>
+                        <li><a href="{{ route('academics.index', [], false) }}" class="text-white/90 hover:text-yellow-300 transition-colors duration-200 block">Academics</a></li>
+                        <li><a href="{{ route('admission.index', [], false) }}" class="text-white/90 hover:text-yellow-300 transition-colors duration-200 block">Admissions</a></li>
+                        <li><a href="{{ route('notices.index', [], false) }}" class="text-white/90 hover:text-yellow-300 transition-colors duration-200 block">News & Notices</a></li>
+                        <li><a href="{{ route('contact.index', [], false) }}" class="text-white/90 hover:text-yellow-300 transition-colors duration-200 block">Contact Us</a></li>
                     </ul>
-                </div>
-
-                {{-- Column 2: Find Us (FR-13.3) --}}
-                <div>
-                    <h4 class="text-lg font-bold mb-6 text-za-yellow-accent uppercase tracking-wide">Find Us</h4>
-                    @php
-                        // Get Google Maps embed URL from SiteSettings (FR-13.3.4)
-                        try {
-                            $mapEmbedUrl = \App\Helpers\SiteSettingsHelper::get('google_maps_embed_url');
-                        } catch (\Exception $e) {
-                            $mapEmbedUrl = null;
-                        }
-                        // Fallback map URL (Chattogram, Bangladesh)
-                        $mapUrl = $mapEmbedUrl ?: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3689.8!2d91.8!3d22.3!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjLCsDE4JzAwLjAiTiA5McKwNDgnMDAuMCJF!5e0!3m2!1sen!2sbd!4v1234567890123!5m2!1sen!2sbd';
-                    @endphp
-                    @if($mapEmbedUrl || $mapUrl)
-                    <div class="aspect-video rounded-lg overflow-hidden shadow-lg">
-                        <iframe 
-                            src="{{ $mapEmbedUrl ?? $mapUrl }}"
-                            width="100%" 
-                            height="100%" 
-                            style="border:0;" 
-                            allowfullscreen="" 
-                            loading="lazy" 
-                            referrerpolicy="no-referrer-when-downgrade"
-                            title="Zaitoon Academy Location"
-                        ></iframe>
-                    </div>
-                    @else
-                    {{-- Fallback if no map URL (FR-13.3.5) --}}
-                    <div class="aspect-video rounded-lg overflow-hidden shadow-lg bg-gray-800 flex items-center justify-center">
-                        <p class="text-gray-400 text-sm">Map not available</p>
-                    </div>
-                    @endif
                 </div>
 
                 {{-- Column 3: Contact Info (FR-13.4) --}}
                 <div>
-                    <h4 class="text-lg font-bold mb-6 text-za-yellow-accent uppercase tracking-wide">Contact Info</h4>
+                    <h4 class="text-lg font-bold mb-6 uppercase tracking-wide" style="color: #fbbf24;">Contact Info</h4>
                     <ul class="space-y-4">
                         @if($physicalAddress)
                         <li class="flex items-start gap-3">

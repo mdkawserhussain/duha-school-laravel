@@ -31,11 +31,11 @@
     }
 @endphp
 
-<section class="py-16 lg:py-24 bg-gray-50">
+<section class="py-16 lg:py-24" style="background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%);">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {{-- Section Header (FR-12.1) --}}
         <div class="text-center mb-16 fade-in">
-            <h2 class="text-3xl sm:text-4xl font-serif font-bold mb-3" style="color: #008236;">
+            <h2 class="text-3xl sm:text-4xl font-serif font-bold mb-3" style="color: #0d5a47;">
                 🤝 {{ $sectionTitle }}
             </h2>
             <p class="text-base text-gray-600 max-w-2xl mx-auto">

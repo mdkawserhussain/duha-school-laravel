@@ -1,58 +1,86 @@
 @php
     // Use database slides from admin dashboard
     $heroSlides = $heroSlides ?? collect([]);
-    $allSlides = $heroSlides->where('is_active', true)->sortBy('sort_order')->take(10)->values();
+    $dbSlides = $heroSlides->where('is_active', true)->sortBy('sort_order')->take(10)->values();
     
-    // Fallback to placeholder if no slides exist
-    if ($allSlides->isEmpty()) {
-    $placeholderImages = [
-        asset('storage/hero_slide_1_1763981315182.png'),
-        asset('storage/hero_slide_2_1763981346399.png'),
-        asset('storage/hero_slide_3_1763981370818.png'),
-        asset('storage/hero_slide_4_1763981401621.png'),
-        asset('storage/hero_slide_5_1763981431354.png'),
-        asset('storage/hero_slide_6_1763981461720.png'),
-        asset('storage/hero_slide_7_1763981485308.png'),
-        null, // Gradient placeholder
-        null, // Gradient placeholder
-        null, // Gradient placeholder
-    ];
+    // Check if database slides have images
+    $hasImages = $dbSlides->filter(function($slide) {
+        return $slide instanceof \Illuminate\Database\Eloquent\Model && $slide->hasMedia('images');
+    })->isNotEmpty();
     
-    $placeholderSlides = collect(range(1, 10))->map(function($num) use ($placeholderImages) {
-        return (object)[
-            'id' => $num,
-            'title' => 'Islamic School Excellence ' . $num,
-            'image' => $placeholderImages[$num - 1] ?? null,
-        ];
-    });
-    
-    $allSlides = $placeholderSlides;
+    // If no database slides OR database slides don't have images, use storage images
+    if ($dbSlides->isEmpty() || !$hasImages) {
+        $storageImages = [];
+        $storagePath = public_path('storage');
+        
+        // Scan for image files in storage directory
+        if (is_dir($storagePath)) {
+            $files = glob($storagePath . '/*.{jpg,jpeg,png,webp,gif}', GLOB_BRACE);
+            
+            if ($files !== false && !empty($files)) {
+                // Filter for hero slide images and sort them
+                $heroFiles = array_filter($files, function($file) {
+                    return strpos(basename($file), 'hero_slide_') === 0;
+                });
+                
+                // Sort naturally (hero_slide_1, hero_slide_2, etc.)
+                natsort($heroFiles);
+                
+                // Convert to asset URLs
+                foreach ($heroFiles as $file) {
+                    $storageImages[] = asset('storage/' . basename($file));
+                }
+            }
+        }
+        
+        // If we found images in storage, use them
+        if (!empty($storageImages)) {
+            $placeholderSlides = collect($storageImages)->map(function($imageUrl, $index) {
+                return (object)[
+                    'id' => $index + 1,
+                    'title' => 'Zaitoon Academy - Slide ' . ($index + 1),
+                    'image' => $imageUrl,
+                ];
+            });
+        } else {
+            // Ultimate fallback: Use hardcoded image paths
+            $hardcodedImages = [
+                asset('storage/hero_slide_1_1763981315182.png'),
+                asset('storage/hero_slide_2_1763981346399.png'),
+                asset('storage/hero_slide_3_1763981370818.png'),
+                asset('storage/hero_slide_4_1763981401621.png'),
+                asset('storage/hero_slide_5_1763981431354.png'),
+                asset('storage/hero_slide_6_1763981461720.png'),
+                asset('storage/hero_slide_7_1763981485308.png'),
+            ];
+            
+            $placeholderSlides = collect($hardcodedImages)->map(function($imageUrl, $index) {
+                return (object)[
+                    'id' => $index + 1,
+                    'title' => 'Zaitoon Academy - Slide ' . ($index + 1),
+                    'image' => $imageUrl,
+                ];
+            });
+        }
+        
+        $allSlides = $placeholderSlides;
+    } else {
+        // Use database slides
+        $allSlides = $dbSlides;
     }
 @endphp
 
 <style>
-    /* Responsive Hero Heights */
+    /* Full Viewport Hero - Covers entire screen */
     .hero-slider {
-        height: calc(100vh - 40px);
-        min-height: 500px;
-    }
-    
-    @media (min-width: 640px) {
-        .hero-slider {
-            min-height: 600px;
-        }
-    }
-    
-    @media (min-width: 1024px) {
-        .hero-slider {
-            min-height: 700px;
-        }
+        width: 100%;
+        height: 100vh; /* Full viewport height */
+        min-height: 500px; /* Minimum height for very small screens */
     }
 </style>
 
 <section 
     class="hero-slider relative w-full overflow-hidden" 
-    style="margin: 0 !important; padding: 0 !important; position: relative; margin-top: 0 !important; padding-top: 0 !important;"
     x-data="{
         currentSlide: 0,
         totalSlides: {{ $allSlides->count() }},
@@ -151,11 +179,11 @@
             x-transition:leave="transition ease-in duration-300"
             x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0"
-            class="absolute inset-0 w-full h-full"
+            class="absolute inset-0 w-full h-full bg-za-green-dark"
             {!! $index === 0 ? 'style="display: block;"' : 'style="display: none;"' !!}
         >
             @if($heroImage)
-            {{-- Full-Screen Image --}}
+            {{-- Full Width Image - Covers entire container, maintains height --}}
             <img 
                 src="{{ $heroImage }}" 
                 alt="{{ $title }}"
