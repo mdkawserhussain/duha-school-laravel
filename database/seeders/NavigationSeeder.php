@@ -112,7 +112,7 @@ class NavigationSeeder extends Seeder
         if (isset($parentItems['About'])) {
             $aboutChildren = [
                 ['title' => 'About Duha', 'route_name' => null, 'slug' => 'about', 'sort_order' => 1],
-                ['title' => 'Chairman Message', 'route_name' => null, 'slug' => 'chairman-message', 'sort_order' => 2],
+                ['title' => 'Directors Message', 'route_name' => null, 'slug' => 'directors-message', 'sort_order' => 2],
                 ['title' => 'Principal Message', 'route_name' => null, 'slug' => 'principal-message', 'sort_order' => 3],
                 ['title' => 'Governing Body', 'route_name' => null, 'slug' => 'governing-body', 'sort_order' => 4],
                 ['title' => 'Academic Committee', 'route_name' => null, 'slug' => 'academic-committee', 'sort_order' => 5],

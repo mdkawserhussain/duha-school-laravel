@@ -3,15 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Services\PageService;
+use App\Services\StaffService;
 use Illuminate\Http\Request;
 
 class PageController extends Controller
 {
     protected PageService $pageService;
+    protected StaffService $staffService;
 
-    public function __construct(PageService $pageService)
+    public function __construct(PageService $pageService, StaffService $staffService)
     {
         $this->pageService = $pageService;
+        $this->staffService = $staffService;
     }
 
     public function show($slug = null)
@@ -43,10 +46,23 @@ class PageController extends Controller
             return view('pages.category', compact('page', 'children'));
         }
 
-        // Use leadership template for specific pages
+        // Special handling for principal-message page
+        if ($slug === 'principal-message') {
+            // Get principal from Staff model
+            $principal = \App\Models\Staff::where('is_active', true)
+                ->where(function($query) {
+                    $query->where('position', 'like', '%Principal%')
+                          ->orWhere('position', 'like', '%principal%');
+                })
+                ->with('media')
+                ->first();
+            
+            return view('pages.principal-message', compact('page', 'principal'));
+        }
+        
+        // Use leadership template for other leadership pages
         $leadershipPages = [
             'founder-director-message',
-            'principal-message',
             'founder-message',
             'director-message',
         ];
@@ -124,10 +140,23 @@ class PageController extends Controller
                 abort(404);
             }
             
-            // Use leadership template for specific pages
+            // Special handling for principal-message page
+            if ($pageSlug === 'principal-message') {
+                // Get principal from Staff model
+                $principal = \App\Models\Staff::where('is_active', true)
+                    ->where(function($query) {
+                        $query->where('position', 'like', '%Principal%')
+                              ->orWhere('position', 'like', '%principal%');
+                    })
+                    ->with('media')
+                    ->first();
+                
+                return view('pages.principal-message', compact('page', 'principal'));
+            }
+            
+            // Use leadership template for other leadership pages
             $leadershipPages = [
                 'founder-director-message',
-                'principal-message',
                 'founder-message',
                 'director-message',
             ];

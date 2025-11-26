@@ -157,21 +157,21 @@ class PagesSeeder extends Seeder
             ]
         );
 
-        // Chairman Message (Alias for Founder-Director Message)
+        // Directors Message (Alias for Founder-Director Message)
         Page::updateOrCreate(
-            ['slug' => 'chairman-message'],
+            ['slug' => 'directors-message'],
             [
-                'title' => 'Chairman\'s Message',
+                'title' => 'Directors\' Message',
                 'parent_id' => $aboutUs->id,
                 'page_category' => 'about-us',
-                'menu_title' => 'Chairman Message',
+                'menu_title' => 'Directors Message',
                 'menu_order' => 2,
                 'show_in_menu' => false, // Hidden since founder-director-message already exists
                 'menu_section' => 'main',
                 'hero_badge' => 'Hasan Mahmud - Founder & President',
                 'excerpt' => 'Message from our Founder & President on the school\'s commitment to Islamic education.',
                 'content' => '<div class="text-center mb-8"><p class="text-lg font-semibold text-aisd-midnight">Hasan Mahmud</p><p class="text-gray-600">Founder & President</p></div><p><strong>In the Name of Allah, the Most Gracious, the Most Merciful.</strong></p><p>All praise is due to Allah, who created us as human beings and honored us with the role of His representatives on earth. May endless peace and blessings be upon our beloved Prophet Muhammad (peace and blessings be upon him), who illuminated our lives with the guidance of truth, wisdom, and goodness.</p><p>At Duha International School, we firmly believe that knowledge is a sacred trust from Allah. He has elevated humankind through intellect and learning, guiding us through the light of the Divine Book — the Qur\'an. Inspired by this eternal guidance, we have built the foundation of our education on the essence of Divine knowledge.</p><p>Our motto, <strong>"Build the Nation with the Light of Divine Knowledge,"</strong> reflects our mission to nurture a generation grounded in faith, enriched with knowledge, and empowered to lead with integrity.</p><p>We aspire to develop our students into successful individuals — both in this world and the Hereafter. To achieve this, we emphasize a balanced approach that cultivates the mind, body, and soul. Alongside strong moral and spiritual education, our curriculum integrates both national and international standards.</p><p>Our students engage in modern learning experiences such as science experiments, problem-solving, public speaking, coding, and AI — ensuring they are equipped with the skills needed for the future while remaining rooted in Islamic values.</p><p>Our vision is to raise productive, confident, and conscientious young Muslims who will bring prosperity and positive change to their families, society, nation, and the entire Ummah.</p><p>We warmly welcome you to join us in this noble journey of learning, faith, and excellence.</p>',
-                'meta_title' => 'Chairman\'s Message - Duha International School',
+                'meta_title' => 'Directors\' Message - Duha International School',
                 'meta_description' => 'Read the message from Hasan Mahmud, Founder & President of Duha International School.',
                 'is_published' => true,
                 'is_featured' => true,

@@ -4,7 +4,7 @@
     <div class="absolute inset-0 opacity-5">
         <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;80&quot; height=&quot;80&quot; viewBox=&quot;0 0 80 80&quot;><g fill-rule=&quot;evenodd&quot;><g fill=&quot;%23ffffff&quot; fill-opacity=&quot;0.05&quot;><path d=&quot;M0 0h80v80H0V0zm20 20v40h40V20H20zm20 35a15 15 0 100-30 15 15 0 000 30z&quot;/></g></g></svg>'); background-size: 80px 80px;"></div>
     </div>
-    
+
     <!-- Main Footer Content -->
     <div class="container mx-auto px-6 lg:px-12 py-16 relative z-10">
         <div class="grid lg:grid-cols-4 gap-8 mb-12">
@@ -26,7 +26,7 @@
                     </p>
                     @endif
                 </div>
-                
+
                 <!-- Contact Info -->
                 <div class="space-y-4">
                     @if($physicalAddress)
@@ -42,7 +42,7 @@
                         </div>
                     </div>
                     @endif
-                    
+
                     @if($primaryPhone)
                     <div class="flex items-start space-x-3">
                         <div class="w-6 h-6 bg-aisd-gold/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-1 border border-aisd-gold/30">
@@ -58,7 +58,7 @@
                         </div>
                     </div>
                     @endif
-                    
+
                     @if($primaryEmail)
                     <div class="flex items-start space-x-3">
                         <div class="w-6 h-6 bg-aisd-gold/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-1 border border-aisd-gold/30">
@@ -76,7 +76,7 @@
                     </div>
                     @endif
                 </div>
-                
+
                 <!-- Social Links -->
                 <div>
                     <div class="font-semibold mb-3 text-white">Follow Us</div>
@@ -99,7 +99,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Quick Links -->
             <div>
                 <h4 class="text-lg font-bold mb-6 text-white">Quick Links</h4>
@@ -113,7 +113,7 @@
                     <li><a href="#contact" class="text-white/70 hover:text-aisd-gold transition-colors">Contact</a></li>
                 </ul>
             </div>
-            
+
             <!-- Important Info -->
             <div>
                 <h4 class="text-lg font-bold mb-6 text-white">Important</h4>
@@ -128,40 +128,10 @@
                 </ul>
             </div>
         </div>
-        
+
         <!-- Newsletter Signup - AISD Style -->
-        <div class="bg-gradient-to-r from-aisd-ocean/50 to-aisd-cobalt/50 rounded-2xl p-8 mb-12 border border-white/10 backdrop-blur-sm">
-            <div class="grid md:grid-cols-2 gap-6 items-center">
-                <div>
-                    <h4 class="text-2xl font-bold mb-2 text-white">Stay Connected</h4>
-                    <p class="text-white/80">Get the latest updates about school events, achievements, and important announcements. Join our Islamic schooling community newsletter.</p>
-                </div>
-                <form action="{{ route('newsletter.subscribe') }}" method="POST" class="flex flex-col sm:flex-row gap-3">
-                    @csrf
-                    <input 
-                        type="text" 
-                        name="name" 
-                        placeholder="Your name (optional)" 
-                        class="flex-1 px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-aisd-gold focus:border-aisd-gold backdrop-blur-sm"
-                    >
-                    <input 
-                        type="email" 
-                        name="email" 
-                        placeholder="Enter your email" 
-                        required
-                        class="flex-1 px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-aisd-gold focus:border-aisd-gold backdrop-blur-sm"
-                    >
-                    <button 
-                        type="submit"
-                        class="bg-aisd-gold hover:bg-aisd-gold/90 text-aisd-midnight font-bold px-6 py-3 rounded-lg transition-all whitespace-nowrap shadow-lg hover:shadow-aisd-gold/50"
-                    >
-                        Subscribe
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-    
+
+
     <!-- Bottom Bar -->
     <div class="border-t border-white/10">
         <div class="container mx-auto px-6 lg:px-12 py-6 relative z-10">

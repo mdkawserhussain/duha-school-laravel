@@ -37,6 +37,13 @@ Route::get('/feed/events.atom', [EventController::class, 'feed'])->name('events.
 // Notices
 Route::get('/notices', [NoticeController::class, 'index'])->name('notices.index');
 Route::get('/notices/{notice:slug}', [NoticeController::class, 'show'])->name('notices.show');
+// Aliases for topbar
+Route::get('/all-notice', function () {
+    return redirect()->route('notices.index');
+})->name('all-notice');
+Route::get('/all-news', function () {
+    return redirect()->route('notices.index');
+})->name('all-news');
 
 // Admission
 Route::get('/admission', [AdmissionController::class, 'index'])->name('admission.index');
@@ -45,6 +52,10 @@ Route::post('/admission', [AdmissionController::class, 'store'])->name('admissio
 // Careers
 Route::get('/careers', [CareerController::class, 'index'])->name('careers.index');
 Route::post('/careers', [CareerController::class, 'store'])->name('careers.store')->middleware('throttle:5,1');
+// Alias for topbar
+Route::get('/career', function () {
+    return redirect()->route('careers.index');
+})->name('career');
 
 // Contact
 Route::get('/contact-us', [ContactController::class, 'index'])->name('contact.index');
@@ -83,14 +94,14 @@ Route::get('/privacy-policy', [PageController::class, 'show'])->name('privacy.sh
 Route::get('/terms-of-service', [PageController::class, 'show'])->name('terms.show');
 // Explicit leadership routes
 Route::get('/principal-message', [PageController::class, 'show'])->name('principal.message')->defaults('slug', 'principal-message');
-Route::get('/chairman-message', [PageController::class, 'show'])->name('chairman.message')->defaults('slug', 'chairman-message');
+Route::get('/directors-message', [PageController::class, 'show'])->name('directors.message')->defaults('slug', 'directors-message');
 // Generic page route
 Route::get('/pages/{page:slug}', [PageController::class, 'show'])->name('pages.show');
 
 // Direct page access by slug (catch-all for navigation items)
 // Must come after all specific routes but before authenticated routes
 Route::get('/{slug}', [PageController::class, 'show'])
-    ->where('slug', '^(?!admin|api|login|register|password|email|verification|two-factor|logout|dashboard|profile|search|events|notices|admission|careers|contact-us|newsletter|about|about-us|academics|facilities|activities-programs|admissions|parent-engagement|principal-message|chairman-message|pages|staff|media|sitemap|zaitoon-demo|lang|favicon|robots).*')
+    ->where('slug', '^(?!admin|api|login|register|password|email|verification|two-factor|logout|dashboard|profile|search|events|notices|admission|careers|contact-us|newsletter|about|about-us|academics|facilities|activities-programs|admissions|parent-engagement|principal-message|directors-message|pages|staff|media|sitemap|zaitoon-demo|lang|favicon|robots).*')
     ->name('page.direct');
 
 // Staff Directory

@@ -23,7 +23,7 @@
 <!-- Introduction Section: Islamic Scholars -->
 @include('components.homepage.zaitoon-introduction')
 
-<!-- Recent Notices & Chairman's Message (Two Columns) -->
+<!-- Recent Notices & Director's Message (Two Columns) -->
 @include('components.homepage.zaitoon-notices-chairman')
 
 <!-- Explore Our Services -->

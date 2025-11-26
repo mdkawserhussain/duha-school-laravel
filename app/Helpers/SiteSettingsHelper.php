@@ -101,26 +101,13 @@ class SiteSettingsHelper
                 $settings->load('media');
             }
 
-            // First, try direct media access
-            if ($settings && $settings->hasMedia('logo')) {
-                $media = $settings->getFirstMedia('logo');
-                if ($media) {
-                    // Try WebP conversion first, then fallback to original
-                    if ($media->hasGeneratedConversion('webp')) {
-                        $url = $media->getUrl('webp');
-                        if ($url) return $url;
-                    }
-                    $url = $media->getUrl();
-                    if ($url) return $url;
-                }
-            }
-
-            // Use the logo_url accessor which now uses relative paths with asset()
+            // Use the logo_url accessor which uses relative paths with asset()
+            // This method properly converts storage paths to asset() URLs
             if ($settings && $settings->logo_url) {
                 return $settings->logo_url;
             }
 
-            // Fallback to static method which also uses relative paths
+            // Fallback to static method which also uses relative paths with asset()
             return SiteSettings::getLogoUrl();
         } catch (\Exception $e) {
             Log::error('Error getting logo URL: ' . $e->getMessage());

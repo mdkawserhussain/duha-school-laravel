@@ -11,29 +11,8 @@
     $siteName = \App\Helpers\SiteSettingsHelper::websiteName();
     $copyright = \App\Helpers\SiteSettingsHelper::copyrightNotice();
     
-    // Get logo URL - ensure media relationship is loaded
-    try {
-        $settings = \App\Models\SiteSettings::getSettings();
-        if (!$settings->relationLoaded('media')) {
-            $settings->load('media');
-        }
-        $logoUrl = \App\Helpers\SiteSettingsHelper::logoUrl();
-        
-        // Fallback: try direct media access
-        if (!$logoUrl && $settings->hasMedia('logo')) {
-            $logoMedia = $settings->getFirstMedia('logo');
-            if ($logoMedia) {
-                $logoUrl = $logoMedia->getUrl('webp') ?: $logoMedia->getUrl();
-            }
-        }
-        
-        // Final fallback to placeholder
-        if (!$logoUrl) {
-            $logoUrl = asset('images/logo.svg');
-        }
-    } catch (\Exception $e) {
-        $logoUrl = asset('images/logo.svg');
-    }
+    // Get logo URL - same approach as header
+    $logoUrl = \App\Helpers\SiteSettingsHelper::logoUrl();
 @endphp
 
 <footer class="relative text-white" style="margin-top: -1px; background-color: #008236;">
@@ -142,13 +121,13 @@
                 <div>
                     <a href="{{ route('home', [], false) }}" class="inline-block mb-6">
                         <img 
-                            src="{{ $logoUrl }}" 
+                            src="{{ $logoUrl ?? asset('images/logo.svg') }}" 
                             alt="{{ $siteName }} Logo" 
                             class="h-14 w-auto brightness-0 invert"
-                            onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='block';"
+                            onerror="this.onerror=null; this.src='{{ asset('images/logo.svg') }}';"
                             loading="lazy"
+                            style="max-width: 200px; object-fit: contain;"
                         >
-                        <h3 class="text-2xl font-serif font-bold" style="display: none;">{{ $siteName }}</h3>
                     </a>
                     
                     {{-- Important Links (FR-13.2.2, FR-13.2.3) --}}

@@ -169,35 +169,35 @@
                     
                     {{-- Desktop Quick Action Buttons --}}
                     <div class="hidden lg:flex items-center gap-2">
-                        <a href="/all-notice" 
+                        <a href="{{ route('all-notice') }}" 
                            class="px-3 py-1 text-xs font-medium rounded transition-colors"
                            style="background-color: #fbbf24; color: #008236;"
                            onmouseover="this.style.backgroundColor='#f59e0b'"
                            onmouseout="this.style.backgroundColor='#fbbf24'">
                             Notice
                         </a>
-                        <a href="/all-news" 
+                        <a href="{{ route('all-news') }}" 
                            class="px-3 py-1 text-xs font-medium rounded transition-colors"
                            style="background-color: #fbbf24; color: #008236;"
                            onmouseover="this.style.backgroundColor='#f59e0b'"
                            onmouseout="this.style.backgroundColor='#fbbf24'">
                             News
                         </a>
-                        <a href="/career" 
+                        <a href="{{ route('career') }}" 
                            class="px-3 py-1 text-xs font-medium rounded transition-colors"
                            style="background-color: #fbbf24; color: #008236;"
                            onmouseover="this.style.backgroundColor='#f59e0b'"
                            onmouseout="this.style.backgroundColor='#fbbf24'">
                             Career
                         </a>
-                        <a href="/faq" 
+                        <a href="{{ route('page.direct', 'faq') }}" 
                            class="px-3 py-1 text-xs font-medium rounded transition-colors"
                            style="background-color: #fbbf24; color: #008236;"
                            onmouseover="this.style.backgroundColor='#f59e0b'"
                            onmouseout="this.style.backgroundColor='#fbbf24'">
                             FAQ
                         </a>
-                        <a href="/choose-apply" 
+                        <a href="{{ route('page.direct', 'choose-apply') }}" 
                            class="px-3 py-1 text-xs font-medium rounded transition-colors"
                            style="background-color: #fbbf24; color: #008236;"
                            onmouseover="this.style.backgroundColor='#f59e0b'"
@@ -214,21 +214,21 @@
             <div class="px-4 py-2 flex items-center justify-between">
                 {{-- Mobile Action Buttons (Always Visible) --}}
                 <div class="flex items-center gap-2 flex-1">
-                    <a href="/all-notice" 
+                    <a href="{{ route('all-notice') }}" 
                        class="px-2 py-1 text-xs font-medium rounded transition-colors"
                        style="background-color: #fbbf24; color: #008236;"
                        onmouseover="this.style.backgroundColor='#f59e0b'"
                        onmouseout="this.style.backgroundColor='#fbbf24'">
                         Notice
                     </a>
-                    <a href="/all-news" 
+                    <a href="{{ route('all-news') }}" 
                        class="px-2 py-1 text-xs font-medium rounded transition-colors"
                        style="background-color: #fbbf24; color: #008236;"
                        onmouseover="this.style.backgroundColor='#f59e0b'"
                        onmouseout="this.style.backgroundColor='#fbbf24'">
                         News
                     </a>
-                    <a href="/choose-apply" 
+                    <a href="{{ route('page.direct', 'choose-apply') }}" 
                        class="px-2 py-1 text-xs font-medium rounded transition-colors"
                        style="background-color: #fbbf24; color: #008236;"
                        onmouseover="this.style.backgroundColor='#f59e0b'"
