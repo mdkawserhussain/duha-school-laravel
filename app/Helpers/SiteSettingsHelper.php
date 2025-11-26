@@ -23,7 +23,7 @@ class SiteSettingsHelper
                 'default_currency' => 'USD',
                 'default_language' => 'en',
                 'timezone' => 'UTC',
-                'primary_color' => '#0F4C81',
+                'primary_color' => '#008236',
                 'secondary_color' => '#1E3A8A',
                 'accent_color' => '#F4C430',
             ]);
@@ -96,12 +96,18 @@ class SiteSettingsHelper
         try {
             $settings = static::all();
 
-            // Use the logo_url accessor which now uses relative paths with asset()
+            // Ensure media relationship is loaded
+            if ($settings && !$settings->relationLoaded('media')) {
+                $settings->load('media');
+            }
+
+            // Use the logo_url accessor which uses relative paths with asset()
+            // This method properly converts storage paths to asset() URLs
             if ($settings && $settings->logo_url) {
                 return $settings->logo_url;
             }
 
-            // Fallback to static method which also uses relative paths
+            // Fallback to static method which also uses relative paths with asset()
             return SiteSettings::getLogoUrl();
         } catch (\Exception $e) {
             Log::error('Error getting logo URL: ' . $e->getMessage());
@@ -327,7 +333,7 @@ class SiteSettingsHelper
      */
     public static function primaryColor(): string
     {
-        return static::get('primary_color', '#0F4C81');
+        return static::get('primary_color', '#008236');
     }
 
     /**

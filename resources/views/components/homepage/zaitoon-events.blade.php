@@ -1,5 +1,23 @@
 {{-- Zaitoon Academy: Campus Activities & Events (FR-8) --}}
 @php
+    // Get settings from HomePageSection
+    $homePageSections = $homePageSections ?? collect([]);
+    $eventsSection = $homePageSections->get('events');
+    $sectionData = $eventsSection?->data ?? [];
+    
+    // Get settings with defaults
+    $titleOverride = $sectionData['title_override'] ?? null;
+    $itemsCount = (int) ($sectionData['items_count'] ?? 12);
+    $layoutStyle = $sectionData['layout_style'] ?? 'carousel';
+    $buttonText = $eventsSection?->button_text ?? 'View All Events';
+    $buttonLink = $eventsSection?->button_link ?? route('events.index', [], false);
+    $sectionTitle = $titleOverride ?? $eventsSection?->title ?? 'Campus Activities & Events';
+    
+    // Check if section is active
+    if ($eventsSection && !$eventsSection->is_active) {
+        return; // Don't render if section is inactive
+    }
+    
     // Pull events from Event model (FR-8.6)
     $upcomingEvents = $upcomingEvents ?? collect([]);
     $featuredEvents = $featuredEvents ?? collect([]);
@@ -7,8 +25,8 @@
     if ($events->isEmpty() && $featuredEvents->isNotEmpty()) {
         $events = $featuredEvents;
     }
-    // Get more events for carousel (need at least 4 for desktop view)
-    $allEvents = $events->take(12); // Get more for carousel scrolling
+    // Get events for carousel based on database setting
+    $allEvents = $events->take($itemsCount);
     $totalEvents = $allEvents->count();
 @endphp
 
@@ -53,13 +71,19 @@
                 <svg class="w-8 h-8" style="color: #fbbf24;" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
                 </svg>
-                <h2 class="text-3xl sm:text-4xl font-bold" style="color: #0d5a47;">
-                    Campus Activities & Events
+                <h2 class="text-3xl sm:text-4xl font-bold" style="color: #008236;">
+                    {{ $sectionTitle }}
                 </h2>
             </div>
+            @if($eventsSection && $eventsSection->description)
+            <p class="text-sm sm:text-base text-gray-600 max-w-3xl mx-auto">
+                {{ $eventsSection->description }}
+            </p>
+            @else
             <p class="text-sm sm:text-base text-gray-600 max-w-3xl mx-auto">
                 Explore the latest events, cultural programs, and activities happening at our campus. Stay engaged and celebrate every moment of learning and fun!
             </p>
+            @endif
         </div>
         
         @if($allEvents->isNotEmpty())
@@ -123,7 +147,7 @@
                                     </div>
                                     <a href="{{ route('events.show', $event->slug ?? $event->id, false) }}" 
                                        class="text-xs font-medium hover:underline"
-                                       style="color: #0d5a47;">
+                                       style="color: #008236;">
                                         Read More →
                                     </a>
                                 </div>
@@ -166,15 +190,17 @@
         @endif
         
         {{-- View All Events Button --}}
+        @if($buttonText && $buttonLink)
         <div class="text-center mt-10">
-            <a href="{{ route('events.index', [], false) }}" 
+            <a href="{{ $buttonLink }}" 
                class="inline-flex items-center justify-center text-white font-semibold px-8 py-3 rounded-full transition-all duration-200 hover:shadow-lg"
-               style="background-color: #0d5a47;"
+               style="background-color: #008236;"
                onmouseover="this.style.backgroundColor='#0a4536'"
-               onmouseout="this.style.backgroundColor='#0d5a47'">
-                View All Events
+               onmouseout="this.style.backgroundColor='#008236'">
+                {{ $buttonText }}
             </a>
         </div>
+        @endif
         @else
         <div class="text-center py-12 bg-white rounded-xl">
             <p class="text-gray-500">No events available at the moment.</p>

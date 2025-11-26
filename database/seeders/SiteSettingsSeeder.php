@@ -23,22 +23,22 @@ class SiteSettingsSeeder extends Seeder
                 'site_description' => 'A leading international school providing quality Islamic and Cambridge curriculum education in Chittagong, Bangladesh.', // Backward compatibility
                 
                 // Contact Information
-                'primary_email' => 'info@duhainternationalschool.com',
+                'primary_email' => 'Duhaacademy.bd@gmail.com',
                 'secondary_email' => null,
-                'primary_phone' => '+880-1766-500001',
-                'secondary_phone' => '+880-1835-318137',
+                'primary_phone' => '+880 1748806492',
+                'secondary_phone' => null,
                 'physical_address' => 'House-131/1, Road-01, South Khulshi, Chittagong, Bangladesh',
                 'business_hours' => "Sun-Thu: 9AM - 5PM\nFri & Sat: Closed",
-                'contact_email' => 'info@duhainternationalschool.com', // Backward compatibility
-                'contact_phone' => '+880-1766-500001, +880-1835-318137', // Backward compatibility
+                'contact_email' => 'Duhaacademy.bd@gmail.com', // Backward compatibility
+                'contact_phone' => '+880 1748806492', // Backward compatibility
                 'address' => 'House-131/1, Road-01, South Khulshi, Chittagong, Bangladesh', // Backward compatibility
                 
                 // Social Media Links
                 'social_media_links' => [
-                    'facebook' => null,
+                    'facebook' => 'https://www.facebook.com/Duhactg/',
                     'twitter' => null,
                     'instagram' => null,
-                    'youtube' => null,
+                    'youtube' => 'https://www.youtube.com/@DuhaAcademy',
                     'linkedin' => null,
                 ],
                 
@@ -65,7 +65,7 @@ class SiteSettingsSeeder extends Seeder
                 // Additional Settings
                 'footer_text' => null,
                 'copyright_notice' => '© {year} Duha International School. All rights reserved.',
-                'primary_color' => '#0F4C81',
+                'primary_color' => '#008236',
                 'secondary_color' => '#1E3A8A',
                 'accent_color' => '#F4C430',
                 'google_analytics_id' => null,

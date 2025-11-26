@@ -135,7 +135,7 @@
             <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
                 <div>
                     <label for="primary_color" class="block text-sm font-medium text-gray-700">Primary Color</label>
-                    <input type="color" name="primary_color" id="primary_color" value="{{ old('primary_color', $settings->primary_color ?? '#0F4C81') }}" class="mt-1 block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-za-green-primary focus:ring-za-green-primary">
+                    <input type="color" name="primary_color" id="primary_color" value="{{ old('primary_color', $settings->primary_color ?? '#008236') }}" class="mt-1 block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-za-green-primary focus:ring-za-green-primary">
                     @error('primary_color')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -162,7 +162,7 @@
         <!-- Form Actions -->
         <div class="bg-gray-50 border-t border-gray-200 shadow-lg rounded-lg p-6 mt-6 sticky bottom-0 z-10">
             <div class="flex items-center justify-end">
-                <button type="submit" class="px-6 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors shadow-md hover:shadow-lg">
+                <button type="submit" class="px-6 py-2 text-white font-semibold rounded-lg transition-colors shadow-md hover:shadow-lg" style="background-color: #008236;" onmouseover="this.style.backgroundColor='#0a4536'" onmouseout="this.style.backgroundColor='#008236'">
                     Save Settings
                 </button>
             </div>

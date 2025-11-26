@@ -3,15 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Services\PageService;
+use App\Services\StaffService;
 use Illuminate\Http\Request;
 
 class PageController extends Controller
 {
     protected PageService $pageService;
+    protected StaffService $staffService;
 
-    public function __construct(PageService $pageService)
+    public function __construct(PageService $pageService, StaffService $staffService)
     {
         $this->pageService = $pageService;
+        $this->staffService = $staffService;
     }
 
     public function show($slug = null)
@@ -43,10 +46,23 @@ class PageController extends Controller
             return view('pages.category', compact('page', 'children'));
         }
 
-        // Use leadership template for specific pages
+        // Special handling for principal-message page
+        if ($slug === 'principal-message') {
+            // Get principal from Staff model
+            $principal = \App\Models\Staff::where('is_active', true)
+                ->where(function($query) {
+                    $query->where('position', 'like', '%Principal%')
+                          ->orWhere('position', 'like', '%principal%');
+                })
+                ->with('media')
+                ->first();
+            
+            return view('pages.principal-message', compact('page', 'principal'));
+        }
+        
+        // Use leadership template for other leadership pages
         $leadershipPages = [
             'founder-director-message',
-            'principal-message',
             'founder-message',
             'director-message',
         ];
@@ -78,6 +94,8 @@ class PageController extends Controller
             'admissions.show' => 'admissions',
             'parent-engagement.index' => 'parent-engagement',
             'parent-engagement.show' => 'parent-engagement',
+            'faculty.index' => 'faculty',
+            'faculty.show' => 'faculty',
         ];
         
         // Try to get category from route name first
@@ -96,6 +114,7 @@ class PageController extends Controller
                 'activities-programs' => 'activities-programs',
                 'admissions' => 'admissions',
                 'parent-engagement' => 'parent-engagement',
+                'faculty' => 'faculty',
             ];
             
             $pageCategory = $pathToCategoryMap[$firstSegment] ?? $firstSegment;
@@ -109,13 +128,35 @@ class PageController extends Controller
             // Show specific child page
             $page = $this->pageService->findCategoryChildPage($pageCategory, $pageSlug);
             if (!$page) {
+                // Check if the slug matches a route name (e.g., 'about' -> route('about'))
+                // This handles cases like /about-us/about where 'about' is a route, not a page
+                try {
+                    if (\Illuminate\Support\Facades\Route::has($pageSlug)) {
+                        return redirect()->route($pageSlug);
+                    }
+                } catch (\Exception $e) {
+                    // Route doesn't exist, continue to 404
+                }
                 abort(404);
             }
             
-            // Use leadership template for specific pages
+            // Special handling for principal-message page
+            if ($pageSlug === 'principal-message') {
+                // Get principal from Staff model
+                $principal = \App\Models\Staff::where('is_active', true)
+                    ->where(function($query) {
+                        $query->where('position', 'like', '%Principal%')
+                              ->orWhere('position', 'like', '%principal%');
+                    })
+                    ->with('media')
+                    ->first();
+                
+                return view('pages.principal-message', compact('page', 'principal'));
+            }
+            
+            // Use leadership template for other leadership pages
             $leadershipPages = [
                 'founder-director-message',
-                'principal-message',
                 'founder-message',
                 'director-message',
             ];

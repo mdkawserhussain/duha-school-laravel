@@ -45,6 +45,26 @@ class PageService
             return $this->pageRepository->findCategoryChildPage($category, $pageSlug);
         });
     }
+    /**
+     * Find a page by slug regardless of publication status.
+     */
+    public function findBySlug(string $slug): ?Page
+    {
+        $cacheKey = 'page_all_' . md5($slug);
+        $cacheTime = 3600;
+
+        return Cache::remember($cacheKey, $cacheTime, function () use ($slug) {
+            return $this->pageRepository->findBySlug($slug);
+        });
+    }
+
+    /**
+     * Get a published page by slug (wrapper for findPublishedPageBySlug).
+     */
+    public function getPublishedPage(string $slug): ?Page
+    {
+        return $this->findPublishedPageBySlug($slug);
+    }
 
     public function getPublishedPages(): Collection
     {

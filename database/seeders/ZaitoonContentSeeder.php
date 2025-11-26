@@ -80,7 +80,7 @@ class ZaitoonContentSeeder extends Seeder
                 'og_description' => 'Zaitoon Academy provides quality Islamic and modern education. Our curriculum combines traditional Islamic teachings with contemporary academic excellence.',
                 
                 // Brand Colors (Zaitoon Green and Yellow)
-                'primary_color' => '#1a5e4a', // za-green-primary
+                'primary_color' => '#008236', // za-green-primary
                 'secondary_color' => '#0f3d30', // za-green-dark
                 'accent_color' => '#fbbf24', // za-yellow-accent
                 

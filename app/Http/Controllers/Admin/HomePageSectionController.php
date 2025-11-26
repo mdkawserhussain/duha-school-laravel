@@ -111,6 +111,9 @@ class HomePageSectionController extends BaseController
                 ->toMediaCollection('video_poster');
         }
 
+        // Refresh the model to ensure data is up to date
+        $homepageSection->refresh();
+
         $this->clearHomepageCache();
 
         return redirect()->route('admin.homepage-sections.index')
@@ -146,6 +149,17 @@ class HomePageSectionController extends BaseController
 
     protected function clearHomepageCache(): void
     {
+        // Clear homepage cache
         Cache::forget('homepage_v2_data');
+        
+        // Clear tagged cache if supported
+        try {
+            Cache::tags(['homepage', 'homepage_sections'])->flush();
+        } catch (\Exception $e) {
+            // Tags not supported by cache driver, that's okay
+        }
+        
+        // Clear view cache
+        \Artisan::call('view:clear');
     }
 }

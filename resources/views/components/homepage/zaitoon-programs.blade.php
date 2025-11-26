@@ -44,7 +44,7 @@
 <section class="py-16 lg:py-24 relative overflow-hidden" style="background: linear-gradient(180deg, #ffffff 0%, #f0fdf4 100%);">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div class="text-center mb-12 fade-in">
-            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold mb-4" style="color: #0d5a47;">
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold mb-4" style="color: #008236;">
                 Our Academic Programs
             </h2>
             <p class="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
@@ -72,7 +72,7 @@
                         {{ $program['description'] }}
                     </p>
                     
-                    <a href="#" class="inline-flex items-center font-semibold transition-colors" style="color: #0d5a47;">
+                    <a href="#" class="inline-flex items-center font-semibold transition-colors" style="color: #008236;">
                         Learn More
                         <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -86,7 +86,7 @@
         <div class="text-center mt-12">
             <a href="{{ route('admission.index') }}" 
                class="inline-flex items-center justify-center font-bold px-8 py-4 rounded-full transition-all duration-200 hover:scale-105 shadow-md hover:shadow-lg"
-               style="background-color: #fbbf24; color: #0d5a47;">
+               style="background-color: #fbbf24; color: #008236;">
                 Apply for Admission
                 <svg class="ml-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />

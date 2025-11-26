@@ -1,0 +1,55 @@
+# Tasks: Navigation Pages Implementation
+
+## Relevant Files
+
+- `app/Models/Page.php` - Model for dynamic pages, needs to support slugs and relationships.
+- `database/migrations/xxxx_xx_xx_create_pages_table.php` - Migration for pages table.
+- `routes/web.php` - Route definitions for static and dynamic page routing.
+- `app/Http/Controllers/PageController.php` - Controller to handle page display logic.
+- `resources/views/pages/page.blade.php` - Standard page template.
+- `resources/views/pages/leadership.blade.php` - Template for Principal/Chairman messages.
+- `resources/views/pages/category.blade.php` - Template for category listing pages.
+- `database/seeders/PagesSeeder.php` - Seeder to populate page content.
+
+## Instructions for Completing Tasks
+
+**IMPORTANT:** As you complete each task, you must check it off in this markdown file by changing `- [ ]` to `- [x]`. This helps track progress and ensures you don't skip any steps.
+
+## Tasks
+
+- [ ] 1.0 Database & Model Configuration
+  - [x] 1.1 Verify and update `create_pages_table` migration. Ensure columns exist: `slug` (indexed), `page_category` (indexed), `parent_id` (foreign key), `is_published`, `published_at`, `hero_image`, `featured_image`, `meta_title`, `meta_description`, `seo_keywords`, `content`, `hero_badge`, `hero_subtitle`.
+  - [x] 1.2 Update `App\Models\Page`. Implement `getRouteKeyName()` to return 'slug'. Add `fillable` attributes. Add `casts` for `seo_keywords` (array) and `is_published` (boolean).
+  - [x] 1.3 Implement relationships in `Page` model. `parent()` (belongsTo self) and `children()` (hasMany self).
+  - [x] 1.4 Ensure `Page` model implements `HasMedia` and uses `InteractsWithMedia` trait if media handling is required via Spatie Media Library.
+
+- [ ] 2.0 Route & Controller Logic
+  - [x] 2.1 Create `App\Services\PageService`. Implement methods: `findBySlug($slug)`, `getCategoryPages($category)`, `getPublishedPage($slug)`.
+  - [ ] 2.2 Update `routes/web.php`. Define routes in order:
+    - Specific named routes (e.g., `/principal-message` if strictly required by PRD FR-1.2/3.3, though slug-based is preferred).
+    - Category routes: `Route::get('/{category}/{page}', [PageController::class, 'show'])`.
+    - Catch-all/Generic route: `Route::get('/pages/{page}', [PageController::class, 'show'])` or root level if no conflict.
+  - [ ] 2.3 Update `App\Http\Controllers\PageController`. Implement `show` method.
+    - Use `PageService` to retrieve page.
+    - Handle 404 if not found or not published (check `is_published` and `published_at`).
+    - Determine view template based on page type/category (FR-2.1).
+
+- [ ] 3.0 View Template Development
+  - [ ] 3.1 Create/Update `resources/views/pages/page.blade.php`. Standard content template. Include `<x-page-hero>`, breadcrumbs, and prose content area.
+  - [ ] 3.2 Create/Update `resources/views/pages/leadership.blade.php`. Specialized template for Principal/Chairman. Include hero badge, subtitle/quote styling.
+  - [ ] 3.3 Create/Update `resources/views/pages/category.blade.php`. Template to list child pages or category overview.
+  - [ ] 3.4 Ensure all views are responsive and use the design system colors (`#008236`, `#1E3A8A`) and Tailwind typography.
+
+- [ ] 4.0 Content Population (Seeding)
+  - [ ] 4.1 Update `database/seeders/PagesSeeder.php`. Define array of all navigation pages from PRD FR-3.1 (About, Admission, Academic, Faculty, Facilities).
+  - [ ] 4.2 Implement `updateOrCreate` logic in seeder to prevent duplicates.
+  - [ ] 4.3 Populate "Principal Message" and "Chairman Message" with content from `plan/adbook.md` (FR-3.3, FR-3.4).
+  - [ ] 4.4 Populate "Fees" page with structured table data (FR-3.5).
+  - [ ] 4.5 Populate "Academic Program" pages with content from `adbook.md` (FR-3.6).
+  - [ ] 4.6 Run seeder `php artisan db:seed --class=PagesSeeder` and verify data in database.
+
+- [ ] 5.0 Final Verification & SEO
+  - [ ] 5.1 Verify all navigation links on the frontend work (no 404s).
+  - [ ] 5.2 Verify SEO meta tags (`title`, `description`) are correctly rendered in the `<head>`.
+  - [ ] 5.3 Test mobile responsiveness for all new page templates.
+  - [ ] 5.4 Verify 404 page appears for invalid slugs.

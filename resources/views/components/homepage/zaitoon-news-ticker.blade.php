@@ -1,17 +1,49 @@
 {{-- Zaitoon Academy News Ticker --}}
 @php
+    // Get news ticker settings from HomePageSection
+    $homePageSections = $homePageSections ?? collect([]);
+    $newsTickerSection = $homePageSections->get('news_ticker');
+    
+    // Get settings with defaults
+    $isEnabled = true;
+    $itemsCount = 10;
+    $showFeaturedOnly = false;
+    $animationSpeed = 40;
+    
+    if ($newsTickerSection) {
+        $data = $newsTickerSection->data ?? [];
+        // Ensure proper type casting (handle string "1" from checkboxes)
+        $isEnabled = filter_var(data_get($data, 'is_enabled', true), FILTER_VALIDATE_BOOLEAN);
+        $itemsCount = (int) data_get($data, 'items_count', 10);
+        $showFeaturedOnly = filter_var(data_get($data, 'show_featured_only', false), FILTER_VALIDATE_BOOLEAN);
+        $animationSpeed = (int) data_get($data, 'animation_speed', 40);
+        
+        // Check if section is active
+        if (!$newsTickerSection->is_active || !$isEnabled) {
+            return;
+        }
+    }
+    
     // Pull news items from Notice model
     $newsItems = collect([]);
     try {
         if (!app()->bound('exception')) {
-            $newsItems = \App\Models\Notice::where(function($query) {
-                $query->where('is_featured', true)
+            $query = \App\Models\Notice::query();
+            
+            if ($showFeaturedOnly) {
+                $query->where('is_featured', true);
+            } else {
+                $query->where(function($q) {
+                    $q->where('is_featured', true)
                       ->orWhere('is_published', true);
-            })
+                });
+            }
+            
+            $newsItems = $query
             ->whereNotNull('published_at')
             ->where('published_at', '<=', now())
             ->orderBy('published_at', 'DESC')
-            ->limit(10)
+                ->limit($itemsCount)
             ->get();
         }
     } catch (\Throwable $e) {
@@ -49,7 +81,6 @@
     .ticker-content {
         display: inline-flex;
         white-space: nowrap;
-        animation: ticker-scroll 40s linear infinite;
         will-change: transform;
     }
     
@@ -60,7 +91,7 @@
 
 <section 
     class="text-white py-3 overflow-hidden relative"
-    style="background-color: #0d5a47;"
+    style="background-color: #008236;"
     role="region"
     aria-label="Latest news ticker"
 >
@@ -75,7 +106,7 @@
             
             {{-- Scrolling News Items --}}
             <div class="ticker-wrapper flex-1">
-                <div class="ticker-content">
+                <div class="ticker-content" style="animation: ticker-scroll {{ $animationSpeed }}s linear infinite;">
                     {{-- Repeat news items 4 times for smooth continuous scroll --}}
                     @foreach(range(1, 4) as $iteration)
                         @foreach($newsItems as $notice)

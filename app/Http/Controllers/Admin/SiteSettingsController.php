@@ -12,7 +12,7 @@ class SiteSettingsController extends BaseController
     {
         $settings = SiteSettings::firstOrCreate([], [
             'website_name' => config('app.name'),
-            'primary_color' => '#0F4C81',
+            'primary_color' => '#008236',
             'secondary_color' => '#1E3A8A',
             'accent_color' => '#F4C430',
         ]);

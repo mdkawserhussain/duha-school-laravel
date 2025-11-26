@@ -23,6 +23,7 @@ class PagesSeeder extends Seeder
         $this->seedActivitiesPages();
         $this->seedAdmissionsPages();
         $this->seedParentEngagementPages();
+        $this->seedStandalonePages();
         $this->seedFuturePages();
     }
 
@@ -155,6 +156,133 @@ class PagesSeeder extends Seeder
                 'published_at' => null,
             ]
         );
+
+        // Directors Message (Alias for Founder-Director Message)
+        Page::updateOrCreate(
+            ['slug' => 'directors-message'],
+            [
+                'title' => 'Directors\' Message',
+                'parent_id' => $aboutUs->id,
+                'page_category' => 'about-us',
+                'menu_title' => 'Directors Message',
+                'menu_order' => 2,
+                'show_in_menu' => false, // Hidden since founder-director-message already exists
+                'menu_section' => 'main',
+                'hero_badge' => 'Hasan Mahmud - Founder & President',
+                'excerpt' => 'Message from our Founder & President on the school\'s commitment to Islamic education.',
+                'content' => '<div class="text-center mb-8"><p class="text-lg font-semibold text-aisd-midnight">Hasan Mahmud</p><p class="text-gray-600">Founder & President</p></div><p><strong>In the Name of Allah, the Most Gracious, the Most Merciful.</strong></p><p>All praise is due to Allah, who created us as human beings and honored us with the role of His representatives on earth. May endless peace and blessings be upon our beloved Prophet Muhammad (peace and blessings be upon him), who illuminated our lives with the guidance of truth, wisdom, and goodness.</p><p>At Duha International School, we firmly believe that knowledge is a sacred trust from Allah. He has elevated humankind through intellect and learning, guiding us through the light of the Divine Book — the Qur\'an. Inspired by this eternal guidance, we have built the foundation of our education on the essence of Divine knowledge.</p><p>Our motto, <strong>"Build the Nation with the Light of Divine Knowledge,"</strong> reflects our mission to nurture a generation grounded in faith, enriched with knowledge, and empowered to lead with integrity.</p><p>We aspire to develop our students into successful individuals — both in this world and the Hereafter. To achieve this, we emphasize a balanced approach that cultivates the mind, body, and soul. Alongside strong moral and spiritual education, our curriculum integrates both national and international standards.</p><p>Our students engage in modern learning experiences such as science experiments, problem-solving, public speaking, coding, and AI — ensuring they are equipped with the skills needed for the future while remaining rooted in Islamic values.</p><p>Our vision is to raise productive, confident, and conscientious young Muslims who will bring prosperity and positive change to their families, society, nation, and the entire Ummah.</p><p>We warmly welcome you to join us in this noble journey of learning, faith, and excellence.</p>',
+                'meta_title' => 'Directors\' Message - Duha International School',
+                'meta_description' => 'Read the message from Hasan Mahmud, Founder & President of Duha International School.',
+                'is_published' => true,
+                'is_featured' => true,
+                'published_at' => now(),
+            ]
+        );
+
+        // Governing Body
+        Page::updateOrCreate(
+            ['slug' => 'governing-body'],
+            [
+                'title' => 'Governing Body',
+                'parent_id' => $aboutUs->id,
+                'page_category' => 'about-us',
+                'menu_title' => 'Governing Body',
+                'menu_order' => 6,
+                'show_in_menu' => true,
+                'menu_section' => 'main',
+                'excerpt' => 'Meet the governing body members who guide Duha International School\'s strategic direction and policies.',
+                'content' => '<h2>Governing Body</h2><p>The Governing Body of Duha International School comprises dedicated individuals who bring diverse expertise and a shared commitment to providing quality Islamic education. Our board members guide the school\'s strategic direction, ensuring that we remain true to our mission and vision.</p><h3>Our Responsibilities</h3><ul><li><strong>Strategic Planning:</strong> Setting long-term goals and direction for the school</li><li><strong>Policy Development:</strong> Establishing policies that align with Islamic values and educational excellence</li><li><strong>Financial Oversight:</strong> Ensuring responsible stewardship of school resources</li><li><strong>Quality Assurance:</strong> Monitoring academic standards and student welfare</li><li><strong>Community Engagement:</strong> Building partnerships with parents and the wider community</li></ul><h3>Governance Structure</h3><p>Our governing body meets regularly to review school performance, approve major decisions, and provide guidance to the school leadership. We are committed to transparency, accountability, and continuous improvement in all aspects of school management.</p><p class="mt-6 text-gray-600">For inquiries related to governance matters, please contact the school administration office.</p>',
+                'meta_title' => 'Governing Body - Duha International School',
+                'meta_description' => 'Meet the governing body members who guide Duha International School\'s strategic direction and policies.',
+                'is_published' => true,
+                'is_featured' => false,
+                'published_at' => now(),
+            ]
+        );
+
+        // Academic Committee
+        Page::updateOrCreate(
+            ['slug' => 'academic-committee'],
+            [
+                'title' => 'Academic Committee',
+                'parent_id' => $aboutUs->id,
+                'page_category' => 'about-us',
+                'menu_title' => 'Academic Committee',
+                'menu_order' => 7,
+                'show_in_menu' => true,
+                'menu_section' => 'main',
+                'excerpt' => 'Learn about our Academic Committee that ensures curriculum quality and academic excellence.',
+                'content' => '<h2>Academic Committee</h2><p>The Academic Committee at Duha International School is responsible for maintaining and enhancing the quality of education across all curricula offered at our institution. Our committee comprises experienced educators, curriculum specialists, and academic leaders.</p><h3>Key Responsibilities</h3><ul><li><strong>Curriculum Development:</strong> Ensuring our curricula meet national and international standards while integrating Islamic education</li><li><strong>Academic Standards:</strong> Maintaining high academic standards across all grade levels</li><li><strong>Teacher Development:</strong> Coordinating professional development programs for teaching staff</li><li><strong>Assessment Design:</strong> Developing fair and comprehensive assessment systems</li><li><strong>Educational Innovation:</strong> Introducing modern teaching methodologies and technologies</li><li><strong>Student Progress Monitoring:</strong> Tracking and supporting student academic achievement</li></ul><h3>Areas of Focus</h3><h4>Islamic Curriculum Integration</h4><p>Ensuring seamless integration of Islamic studies with academic subjects, maintaining balance between faith-based and modern education.</p><h4>National & Cambridge Curricula</h4><p>Overseeing the implementation of both National Curriculum (English Version) and Cambridge International Curriculum, ensuring students receive globally recognized education.</p><h4>Hifz Program Oversight</h4><p>Monitoring the Hifzul Quran program to ensure students progress steadily in memorization while maintaining academic excellence.</p><h3>Meeting Schedule</h3><p>The Academic Committee meets monthly to review academic performance, discuss curriculum updates, and plan educational initiatives for continuous improvement.</p>',
+                'meta_title' => 'Academic Committee - Duha International School',
+                'meta_description' => 'Learn about our Academic Committee that ensures curriculum quality and academic excellence at Duha International School.',
+                'is_published' => true,
+                'is_featured' => false,
+                'published_at' => now(),
+            ]
+        );
+
+        // Campus Facilities
+        Page::updateOrCreate(
+            ['slug' => 'campus-facilities'],
+            [
+                'title' => 'Campus Facilities',
+                'parent_id' => $aboutUs->id,
+                'page_category' => 'about-us',
+                'menu_title' => 'Campus Facilities',
+                'menu_order' => 8,
+                'show_in_menu' => true,
+                'menu_section' => 'main',
+                'excerpt' => 'Explore our modern campus facilities designed to support learning, development, and spiritual growth.',
+                'content' => '<h2>Campus Facilities</h2><p>At Duha International School, we provide a range of modern facilities to support our students\' learning, development, and spiritual growth.</p><h3>Academic Facilities</h3><h4>1. Spacious Classrooms</h4><p>Well-lit and air-conditioned rooms equipped with multimedia facilities for interactive learning. Each classroom is designed to accommodate different learning styles and promote student engagement.</p><h4>2. Science Laboratories</h4><p>Fully equipped labs for practical experiments in physics, chemistry, and biology. Students gain hands-on experience with modern scientific equipment and safe laboratory practices.</p><h4>3. Computer Lab</h4><p>State-of-the-art computer facilities with high-speed internet access for ICT education and research. Students learn coding, digital literacy, and technology skills essential for the modern world.</p><h4>4. Library</h4><p>A well-stocked library with a wide range of books, periodicals, and digital resources. Our collection includes Islamic literature, academic references, and age-appropriate reading materials for all students.</p><h3>Spiritual Facilities</h3><h4>5. Prayer Rooms</h4><p>Dedicated spaces for daily prayers, fostering spiritual growth. Separate prayer facilities for male and female students ensure a comfortable environment for worship.</p><h3>Recreational Facilities</h3><h4>6. Playground</h4><p>A large outdoor area for sports and physical activities. Students engage in cricket, football, badminton, and other sports that promote physical fitness and teamwork.</p><h4>10. Recreation Room</h4><p>A dedicated space for creative ideas and activities. This multipurpose room hosts art projects, cultural programs, and indoor games.</p><h3>Support Facilities</h3><h4>7. Cafeteria</h4><p>Providing nutritious and healthy meals for students and staff. Our cafeteria follows strict hygiene standards and offers balanced meal options.</p><h4>8. Medical Room</h4><p>A fully equipped first-aid facility with a qualified medical professional on duty. We ensure prompt medical attention for any health concerns or emergencies.</p><h4>9. Multimedia Room</h4><p>For audio-visual presentations and educational screenings. This facility enhances learning through visual media, documentaries, and educational videos.</p><h4>11. Transport Facility</h4><p>We have transport facilities for far areas (AC bus) and near areas (Non-AC). Safe, reliable, and supervised transportation ensures students travel comfortably to and from school.</p><h3>Safety & Security</h3><p>Our campus is equipped with CCTV surveillance, secure entry points, and trained security personnel to ensure a safe learning environment for all students and staff.</p>',
+                'meta_title' => 'Campus Facilities - Duha International School',
+                'meta_description' => 'Explore our modern campus facilities including classrooms, labs, library, prayer rooms, playground, and transport services.',
+                'is_published' => true,
+                'is_featured' => false,
+                'published_at' => now(),
+            ]
+        );
+
+        // School Uniform
+        Page::updateOrCreate(
+            ['slug' => 'school-uniform'],
+            [
+                'title' => 'School Uniform',
+                'parent_id' => $aboutUs->id,
+                'page_category' => 'about-us',
+                'menu_title' => 'School Uniform',
+                'menu_order' => 9,
+                'show_in_menu' => true,
+                'menu_section' => 'main',
+                'excerpt' => 'Information about Duha International School uniform requirements and dress code policy.',
+                'content' => '<h2>School Uniform</h2><p>At Duha International School, we believe that a proper uniform creates a sense of belonging, promotes equality, and maintains a focused learning environment. Our uniform policy is designed to reflect Islamic values of modesty while ensuring comfort and practicality for students.</p><h3>Uniform Requirements</h3><h4>Boys\' Uniform</h4><ul><li><strong>Shirt:</strong> White/school-designated color shirt with school logo</li><li><strong>Pants:</strong> Navy blue/school-designated color pants</li><li><strong>Shoes:</strong> Black leather shoes with white/black socks</li><li><strong>Belt:</strong> Black leather belt</li><li><strong>Winter:</strong> School-designated sweater/blazer</li></ul><h4>Girls\' Uniform</h4><ul><li><strong>Tunic/Kameez:</strong> School-designated modest dress with school logo</li><li><strong>Pants/Salwar:</strong> Matching color pants/salwar</li><li><strong>Hijab:</strong> School-designated color hijab (mandatory)</li><li><strong>Shoes:</strong> Black leather shoes with white/black socks</li><li><strong>Winter:</strong> School-designated sweater/cardigan</li></ul><h3>Physical Education (PE) Uniform</h3><ul><li>School-designated tracksuit for boys</li><li>School-designated modest activewear for girls</li><li>White sports shoes</li></ul><h3>Uniform Guidelines</h3><ul><li>All uniforms must be clean, pressed, and in good condition</li><li>School badge/logo must be prominently displayed</li><li>Hair should be neatly groomed; boys should have short hair, girls should tie long hair</li><li>Jewelry should be minimal and modest</li><li>Nail polish and makeup are not permitted</li></ul><h3>Where to Purchase</h3><p>Official school uniforms can be purchased from our authorized tailors:</p><ul><li><strong>Belbond Tailors</strong></li><li><strong>Rabia Tailors</strong></li></ul><p>For new admissions, the school office will provide contact details and sizing information for uniform orders.</p><h3>Special Occasions</h3><p>On special Islamic occasions and cultural programs, traditional Islamic dress is encouraged. The school will inform parents in advance about any specific dress requirements for special events.</p>',
+                'meta_title' => 'School Uniform - Duha International School',
+                'meta_description' => 'Information about Duha International School uniform requirements and dress code policy for students.',
+                'is_published' => true,
+                'is_featured' => false,
+                'published_at' => now(),
+            ]
+        );
+
+        // FAQ
+        Page::updateOrCreate(
+            ['slug' => 'faq'],
+            [
+                'title' => 'Frequently Asked Questions (FAQ)',
+                'parent_id' => $aboutUs->id,
+                'page_category' => 'about-us',
+                'menu_title' => 'FAQ',
+                'menu_order' => 10,
+                'show_in_menu' => true,
+                'menu_section' => 'main',
+                'excerpt' => 'Find answers to commonly asked questions about Duha International School.',
+                'content' => '<h2>Frequently Asked Questions</h2><h3>General Questions</h3><h4>Q1: What makes Duha International School different from other schools?</h4><p>Duha International School uniquely combines Islamic education with modern academic curricula (National and Cambridge). We emphasize character building, Quranic education, and academic excellence in a supportive Islamic environment.</p><h4>Q2: Where is the school located?</h4><p>Duha International School is located in Chattogram, Bangladesh. Please contact our admissions office for the exact address and directions.</p><h4>Q3: What age groups do you accept?</h4><p>We accept students from Pre-Play (3 years) through Grade 9 (15 years), covering early years, primary, and secondary education.</p><h3>Admission Questions</h3><h4>Q4: When does the admission process start?</h4><p>Admissions are open throughout the year, but we recommend applying early as spaces are limited. The main admission period is before the start of the academic year.</p><h4>Q5: What documents are required for admission?</h4><p>Required documents include: Admission form, previous academic records, birth certificate, passport-size photographs, and parent/guardian identification.</p><h4>Q6: Is there an entrance assessment?</h4><p>Yes, students participate in an age-appropriate entrance assessment to evaluate their academic readiness and help us understand their strengths.</p><h3>Curriculum Questions</h3><h4>Q7: What curricula do you offer?</h4><p>We offer three curriculum tracks: National Curriculum (English Version), Cambridge International Curriculum, and Hifzul Quran Program integrated with general education.</p><h4>Q8: Can students switch between curriculum tracks?</h4><p>Switching between curricula may be possible depending on the student\'s grade level and academic performance. Please consult with the academic office for specific cases.</p><h4>Q9: How is Islamic education integrated?</h4><p>Islamic education is integrated into all curricula through daily Quranic studies, Islamic Studies, Arabic language, and character development programs based on Islamic values.</p><h3>Facilities & Services</h3><h4>Q10: Do you provide transportation?</h4><p>Yes, we provide safe transportation services with AC buses for far areas and Non-AC buses for near areas. Transportation fees apply separately.</p><h4>Q11: What are the class timings?</h4><p>Class timings vary by grade level and curriculum. Please refer to our Class Timings page or contact the school office for specific schedules.</p><h4>Q12: Do you provide meals?</h4><p>Yes, our cafeteria provides nutritious and healthy meals. Students can also bring their own lunch from home.</p><h3>Parent Engagement</h3><h4>Q13: How do you communicate with parents?</h4><p>We maintain regular communication through parent-teacher meetings, progress reports, school events, and digital communication platforms.</p><h4>Q14: Can parents visit the school?</h4><p>Yes, parents are welcome to visit. We recommend scheduling an appointment with the admissions office for a proper campus tour and consultation.</p><h3>Financial Questions</h3><h4>Q15: What are the fee structures?</h4><p>Fee structures vary by curriculum and grade level. Please refer to our Fee Structure pages for detailed information on admission fees, tuition fees, and other costs.</p><h4>Q16: Are payment plans available?</h4><p>Please contact our accounts office to discuss payment arrangements and available options.</p><h3>Contact</h3><p>If you have additional questions not answered here, please contact our school office or visit our Contact Us page.</p>',
+                'meta_title' => 'FAQ - Duha International School',
+                'meta_description' => 'Find answers to commonly asked questions about admissions, curriculum, facilities, and more at Duha International School.',
+                'is_published' => true,
+                'is_featured' => false,
+                'published_at' => now(),
+            ]
+        );
     }
 
     protected function seedAcademicsPages(): void
@@ -262,6 +390,258 @@ class PagesSeeder extends Seeder
                 'published_at' => now(),
             ]
         );
+
+        // Academic Program (Navigation slug: academic-program)
+        Page::updateOrCreate(
+            ['slug' => 'academic-program'],
+            [
+                'title' => 'Academic Program',
+                'parent_id' => $academics->id,
+                'page_category' => 'academics',
+                'menu_title' => 'Academic Program',
+                'menu_order' => 5,
+                'show_in_menu' => true,
+                'menu_section' => 'main',
+                'excerpt' => 'Overview of our comprehensive academic programs combining Islamic education with modern curricula.',
+                'content' => '<h2>Academic Program at Duha International School</h2><p>Our academic program is designed to provide students with a balanced education that integrates Islamic knowledge with modern academic excellence. We offer multiple curriculum tracks to meet diverse family needs while maintaining high educational standards.</p><h3>Program Structure</h3><p>Our academic year runs from January to December, divided into two semesters with regular assessments, parent-teacher meetings, and progress reports.</p><h3>Curriculum Tracks</h3><ul><li><strong>National Curriculum (English Version):</strong> Government-recognized curriculum preparing students for SSC exams</li><li><strong>Cambridge International Curriculum:</strong> Globally recognized qualification with IGCSE pathway</li><li><strong>Hifzul Quran Program:</strong> Quran memorization integrated with general education</li><li><strong>Islamic Curriculum:</strong> Comprehensive Islamic studies including Quran, Hadith, Fiqh, and Arabic</li></ul><h3>Teaching Methodology</h3><p>We employ modern teaching methods including interactive learning, project-based education, technology integration, hands-on experiments, and collaborative group work.</p>',
+                'meta_title' => 'Academic Program - Duha International School',
+                'meta_description' => 'Explore our comprehensive academic programs combining Islamic education with National and Cambridge curricula.',
+                'is_published' => true,
+                'is_featured' => false,
+                'published_at' => now(),
+            ]
+        );
+
+        // Academic Calendar
+        Page::updateOrCreate(
+            ['slug' => 'academic-calendar'],
+            [
+                'title' => 'Academic Calendar',
+                'parent_id' => $academics->id,
+                'page_category' => 'academics',
+                'menu_title' => 'Academic Calendar',
+                'menu_order' => 6,
+                'show_in_menu' => true,
+                'menu_section' => 'main',
+                'excerpt' => 'View our academic calendar including term dates, holidays, exams, and important school events.',
+                'content' => '<h2>Academic Calendar 2025</h2><p>Our academic year is structured to provide balanced learning periods with appropriate breaks for students to rest and recharge.</p><h3>Academic Year Structure</h3><ul><li><strong>Academic Year:</strong> January - December</li><li><strong>First Semester:</strong> January - June</li><li><strong>Second Semester:</strong> July - December</li></ul><h3>Term Dates</h3><p><strong>First Term (Spring):</strong> January - March</p><p><strong>Second Term (Summer):</strong> April - June</p><p><strong>Third Term (Autumn):</strong> August - October</p><p><strong>Fourth Term (Winter):</strong> November - December</p><h3>Major Holidays</h3><ul><li>Winter Break: Mid-January</li><li>Eid-ul-Fitr Break: As per Islamic Calendar</li><li>Summer Break: July</li><li>Eid-ul-Adha Break: As per Islamic Calendar</li><li>Victory Day Break: December 16</li></ul><h3>Examination Periods</h3><ul><li>Mid-term Exams: March, September</li><li>Final Exams: June, December</li></ul><h3>Parent-Teacher Meetings</h3><p>Scheduled quarterly after each term assessment period.</p><p><strong>Note:</strong> Calendar dates may be adjusted based on government holidays and Islamic calendar. Updates will be communicated to parents via school communication channels.</p>',
+                'meta_title' => 'Academic Calendar - Duha International School',
+                'meta_description' => 'View our academic calendar including term dates, holidays, exams, and important school events.',
+                'is_published' => true,
+                'is_featured' => false,
+                'published_at' => now(),
+            ]
+        );
+
+        // Subjects We Teach
+        Page::updateOrCreate(
+            ['slug' => 'subjects'],
+            [
+                'title' => 'Subjects We Teach',
+                'parent_id' => $academics->id,
+                'page_category' => 'academics',
+                'menu_title' => 'Subjects We Teach',
+                'menu_order' => 7,
+                'show_in_menu' => true,
+                'menu_section' => 'main',
+                'excerpt' => 'Comprehensive list of subjects offered at Duha International School across all grade levels.',
+                'content' => '<h2>Subjects We Teach</h2><p>Duha International School offers a comprehensive range of subjects across all grade levels, combining core academic subjects with Islamic studies.</p><h3>Islamic Studies</h3><ul><li>Quranic Studies & Tajweed</li><li>Hifzul Quran (memorization)</li><li>Islamic Studies (Aqeedah, Fiqh, Seerah)</li><li>Arabic Language</li><li>Hadith Studies</li></ul><h3>Core Academic Subjects</h3><ul><li>English Language & Literature</li><li>Bangla Language & Literature</li><li>Mathematics</li><li>Science (Physics, Chemistry, Biology)</li><li>Social Studies / Bangladesh & Global Studies</li></ul><h3>Additional Subjects</h3><ul><li>Information & Communication Technology (ICT)</li><li>Arts & Crafts</li><li>Physical Education & Sports</li><li>Life Skills & Moral Education</li></ul><h3>Cambridge Subjects (for Cambridge Track)</h3><ul><li>English as a Second Language</li><li>Mathematics (Core & Extended)</li><li>Sciences (Combined Science / Separate Sciences)</li><li>Global Perspectives</li></ul><p>Subject offerings may vary by grade level and curriculum track. For detailed subject information by grade, please refer to our Grades & Subjects Overview page.</p>',
+                'meta_title' => 'Subjects We Teach - Duha International School',
+                'meta_description' => 'Comprehensive list of subjects offered at Duha International School including Islamic studies, core academics, and additional subjects.',
+                'is_published' => true,
+                'is_featured' => false,
+                'published_at' => now(),
+            ]
+        );
+
+        // Tahfeez Program (Navigation slug: tahfeez-program)
+        Page::updateOrCreate(
+            ['slug' => 'tahfeez-program'],
+            [
+                'title' => 'Tahfeez Program',
+                'parent_id' => $academics->id,
+                'page_category' => 'academics',
+                'menu_title' => 'Tahfeez Program',
+                'menu_order' => 8,
+                'show_in_menu' => true,
+                'menu_section' => 'main',
+                'excerpt' => 'Our Tahfeez (Quran memorization) program allows students to become Hafiz while pursuing general education.',
+                'content' => '<h2>Tahfeez Program</h2><p>The Tahfeez Program at Duha International School is a specialized track for students who wish to complete Hifzul Quran (memorization of the entire Quran) while maintaining their general academic education.</p><h3>Program Features</h3><ul><li><strong>Structured Memorization Schedule:</strong> Daily Hifz sessions with qualified teachers</li><li><strong>Revision System:</strong> Regular Sabaq, Sabqi, and Manzil revision to ensure retention</li><li><strong>Tajweed Excellence:</strong> Emphasis on correct pronunciation and recitation rules</li><li><strong>Academic Integration:</strong> Flexible timetable allowing students to complete general education</li></ul><h3>Curriculum Options</h3><p>Students can pursue Tahfeez alongside:</p><ul><li>National Curriculum (English Version)</li><li>Cambridge International Curriculum</li></ul><h3>Program Duration</h3><p>Typically 4-6 years depending on student\'s starting age, dedication, and memorization pace.</p><h3>Teaching Methodology</h3><ul><li>One-on-one Hifz sessions with qualified Qari/Qariah</li><li>Small group revision classes</li><li>Daily memorization target setting</li><li>Monthly progress assessment</li></ul><h3>Graduation Requirements</h3><ul><li>Complete memorization of 30 Juz of Quran</li><li>Pass oral examination with full recitation</li><li>Demonstrate proficiency in Tajweed rules</li></ul><p>Upon successful completion, students receive Hafiz certification and participate in a special graduation ceremony.</p>',
+                'meta_title' => 'Tahfeez Program - Duha International School',
+                'meta_description' => 'Learn about our Tahfeez (Quran memorization) program that allows students to become Hafiz while pursuing general education.',
+                'is_published' => true,
+                'is_featured' => true,
+                'published_at' => now(),
+            ]
+        );
+
+        // Tahili Program
+        Page::updateOrCreate(
+            ['slug' => 'tahili-program'],
+            [
+                'title' => 'Tahili Program',
+                'parent_id' => $academics->id,
+                'page_category' => 'academics',
+                'menu_title' => 'Tahili Program',
+                'menu_order' => 9,
+                'show_in_menu' => true,
+                'menu_section' => 'main',
+                'excerpt' => 'Our Tahili program focuses on Quranic understanding, interpretation, and application alongside recitation.',
+                'content' => '<h2>Tahili Program</h2><p>The Tahili Program at Duha International School focuses on understanding and applying the teachings of the Quran in daily life, complementing the memorization focus of the Tahfeez program.</p><h3>Program Components</h3><h4>1. Quranic Recitation (Tilawah)</h4><p>Proper recitation with correct Tajweed rules, without necessarily memorizing the entire Quran.</p><h4>2. Tafsir (Quranic Interpretation)</h4><p>Age-appropriate understanding of Quranic meanings, contexts, and lessons. Students learn the stories of prophets, moral lessons, and practical guidance from the Quran.</p><h4>3. Thematic Studies</h4><p>Study of Quranic themes such as justice, compassion, patience, gratitude, and social responsibility.</p><h4>4. Practical Application</h4><p>How to apply Quranic teachings in daily life, character development, and decision-making.</p><h3>Learning Outcomes</h3><ul><li>Deep understanding of Quranic message and teachings</li><li>Ability to read Quran with proper Tajweed</li><li>Understanding of context and reasons for revelation (Asbab al-Nuzul)</li><li>Application of Quranic principles in modern life</li><li>Strong moral and ethical foundation based on Quranic values</li></ul><h3>For Whom?</h3><p>The Tahili program is ideal for students who:</p><ul><li>Want to understand the Quran deeply rather than memorize entirely</li><li>Wish to focus more on academic subjects while maintaining strong Islamic education</li><li>Are older students who may find full Hifz challenging alongside academics</li></ul><p>Both Tahfeez and Tahili students receive comprehensive Islamic education; the difference lies in the memorization requirement.</p>',
+                'meta_title' => 'Tahili Program - Duha International School',
+                'meta_description' => 'Learn about our Tahili program focusing on Quranic understanding, interpretation, and application alongside recitation.',
+                'is_published' => true,
+                'is_featured' => false,
+                'published_at' => now(),
+            ]
+        );
+
+        // Future Progression
+        Page::updateOrCreate(
+            ['slug' => 'future-progression'],
+            [
+                'title' => 'Future Progression',
+                'parent_id' => $academics->id,
+                'page_category' => 'academics',
+                'menu_title' => 'Future Progression',
+                'menu_order' => 10,
+                'show_in_menu' => true,
+                'menu_section' => 'main',
+                'excerpt' => 'Pathways and opportunities available to Duha International School graduates for higher education and career development.',
+                'content' => '<h2>Future Progression for Our Students</h2><p>At Duha International School, we prepare students not just for exams, but for life. Our graduates are well-positioned for success in higher education and various career paths.</p><h3>Academic Progression Pathways</h3><h4>National Curriculum Students</h4><ul><li>Progression to Class 9-10 (SSC preparation)</li><li>Admission to renowned colleges in Bangladesh for HSC</li><li>University admission through public/private universities</li><li>Professional education (Medicine, Engineering, Business, etc.)</li></ul><h4>Cambridge Curriculum Students</h4><ul><li>Progression to IGCSE and A-Levels</li><li>International university admissions</li><li>Study abroad opportunities in UK, USA, Canada, Australia</li><li>Globally recognized qualifications</li></ul><h4>Hafiz/Tahfeez Students</h4><ul><li>Continue higher Islamic education at Islamic universities</li><li>Pursue academic degrees with Hifz certificate advantage</li><li>Teaching positions in Islamic institutions</li><li>Leadership roles in Muslim communities</li></ul><h3>Career Readiness</h3><p>Our students develop skills for various career paths:</p><ul><li>Science & Technology fields</li><li>Medical & Healthcare professions</li><li>Engineering & Architecture</li><li>Business & Entrepreneurship</li><li>Education & Research</li><li>Islamic Studies & Da\'wah work</li><li>Arts & Creative industries</li></ul><h3>Support for Progression</h3><ul><li>Career counseling and guidance</li><li>University admission preparation</li><li>Scholarship information and application support</li><li>Alumni network and mentorship</li></ul><h3>Success Stories</h3><p>Our graduates have successfully gained admission to top universities in Bangladesh and abroad, pursuing diverse fields while maintaining strong Islamic values and identity.</p>',
+                'meta_title' => 'Future Progression - Duha International School',
+                'meta_description' => 'Learn about pathways and opportunities available to Duha International School graduates for higher education and career development.',
+                'is_published' => true,
+                'is_featured' => false,
+                'published_at' => now(),
+            ]
+        );
+
+        // Duha Curriculum
+        Page::updateOrCreate(
+            ['slug' => 'curriculum'],
+            [
+                'title' => 'Duha Curriculum',
+                'parent_id' => $academics->id,
+                'page_category' => 'academics',
+                'menu_title' => 'Duha Curriculum',
+                'menu_order' => 11,
+                'show_in_menu' => true,
+                'menu_section' => 'main',
+                'excerpt' => 'Overview of our unique curriculum framework that integrates Islamic education with modern academic standards.',
+                'content' => '<h2>Duha Curriculum Framework</h2><p>The Duha Curriculum represents our unique approach to education - a balanced integration of Islamic knowledge with modern academic excellence.</p><h3>Curriculum Philosophy</h3><p>Our curriculum is built on the motto: <strong>"Build the Nation with the Light of Divine Knowledge"</strong></p><p>We believe education should nurture:</p><ul><li>Strong Islamic faith and character</li><li>Academic excellence and critical thinking</li><li>Physical health and wellbeing</li><li>Social responsibility and leadership</li><li>Creativity and innovation</li></ul><h3>Curriculum Components</h3><h4>1. Islamic Foundation (30% of time)</h4><ul><li>Quran (recitation, memorization, or understanding)</li><li>Islamic Studies</li><li>Arabic Language</li><li>Character development</li></ul><h4>2. Academic Excellence (60% of time)</h4><ul><li>Core subjects (English, Mathematics, Science, Social Studies)</li><li>Language skills (English, Bangla)</li><li>ICT and technology</li></ul><h4>3. Holistic Development (10% of time)</h4><ul><li>Physical Education & Sports</li><li>Arts & Culture</li><li>Life Skills & Community Service</li></ul><h3>Curriculum Standards</h3><p>Our curriculum aligns with:</p><ul><li>National Curriculum of Bangladesh (NCTB)</li><li>Cambridge International Education (CIE)</li><li>Islamic education standards</li></ul><h3>Assessment & Evaluation</h3><p>We use continuous assessment methods including:</p><ul><li>Formative assessments (regular quizzes, classwork)</li><li>Summative assessments (term exams)</li><li>Project-based evaluation</li><li>Oral presentations</li><li>Practical demonstrations</li></ul><p>Our balanced curriculum ensures students excel academically while remaining grounded in Islamic values.</p>',
+                'meta_title' => 'Duha Curriculum - Duha International School',
+                'meta_description' => 'Overview of our unique curriculum framework integrating Islamic education with modern academic standards.',
+                'is_published' => true,
+                'is_featured' => false,
+                'published_at' => now(),
+            ]
+        );
+
+        // Exam System
+        Page::updateOrCreate(
+            ['slug' => 'exam-system'],
+            [
+                'title' => 'Exam System',
+                'parent_id' => $academics->id,
+                'page_category' => 'academics',
+                'menu_title' => 'Exam System',
+                'menu_order' => 12,
+                'show_in_menu' => true,
+                'menu_section' => 'main',
+                'excerpt' => 'Information about our examination system, assessment methods, and grading policies.',
+                'content' => '<h2>Examination System</h2><p>Duha International School employs a comprehensive assessment system designed to accurately measure student learning and progress.</p><h3>Assessment Structure</h3><h4>Continuous Assessment (40%)</h4><ul><li>Class participation and attendance</li><li>Homework and assignments</li><li>Quizzes and short tests</li><li>Project work</li><li>Presentations</li></ul><h4>Term Examinations (60%)</h4><ul><li>Mid-term Exams (20%)</li><li>Final Term Exams (40%)</li></ul><h3>Exam Schedule</h3><p><strong>First Semester:</strong></p><ul><li>Mid-term: March</li><li>Final: June</li></ul><p><strong>Second Semester:</strong></p><ul><li>Mid-term: September</li><li>Final: December</li></ul><h3>Grading System</h3><div class="overflow-x-auto mt-4"><table class="w-full border-collapse border border-gray-300"><thead><tr class="bg-gray-100"><th class="border border-gray-300 px-4 py-2">Marks Range</th><th class="border border-gray-300 px-4 py-2">Grade</th><th class="border border-gray-300 px-4 py-2">Grade Point</th></tr></thead><tbody><tr><td class="border border-gray-300 px-4 py-2">80-100</td><td class="border border-gray-300 px-4 py-2">A+</td><td class="border border-gray-300 px-4 py-2">5.00</td></tr><tr><td class="border border-gray-300 px-4 py-2">70-79</td><td class="border border-gray-300 px-4 py-2">A</td><td class="border border-gray-300 px-4 py-2">4.00</td></tr><tr><td class="border border-gray-300 px-4 py-2">60-69</td><td class="border border-gray-300 px-4 py-2">A-</td><td class="border border-gray-300 px-4 py-2">3.50</td></tr><tr><td class="border border-gray-300 px-4 py-2">50-59</td><td class="border border-gray-300 px-4 py-2">B</td><td class="border border-gray-300 px-4 py-2">3.00</td></tr><tr><td class="border border-gray-300 px-4 py-2">40-49</td><td class="border border-gray-300 px-4 py-2">C</td><td class="border border-gray-300 px-4 py-2">2.00</td></tr><tr><td class="border border-gray-300 px-4 py-2">33-39</td><td class="border border-gray-300 px-4 py-2">D</td><td class="border border-gray-300 px-4 py-2">1.00</td></tr><tr><td class="border border-gray-300 px-4 py-2">0-32</td><td class="border border-gray-300 px-4 py-2">F</td><td class="border border-gray-300 px-4 py-2">0.00</td></tr></tbody></table></div><h3>Progress Reports</h3><p>Parents receive detailed progress reports after each assessment period showing:</p><ul><li>Marks and grades for each subject</li><li>Teacher comments</li><li>Attendance record</li><li>Areas of strength and improvement</li></ul><h3>Special Assessments</h3><ul><li><strong>Hifz Assessments:</strong> Monthly Hifz progress tests</li><li><strong>Tajweed Tests:</strong> Regular Tajweed proficiency checks</li><li><strong>Practical Exams:</strong> For Science, ICT, and Arts subjects</li></ul><p>Our exam system is designed to be fair, comprehensive, and supportive of student learning.</p>',
+                'meta_title' => 'Exam System - Duha International School',
+                'meta_description' => 'Information about our examination system, assessment methods, grading policies, and progress reporting.',
+                'is_published' => true,
+                'is_featured' => false,
+                'published_at' => now(),
+            ]
+        );
+
+        // ZA Policies
+        Page::updateOrCreate(
+            ['slug' => 'policies'],
+            [
+                'title' => 'School Policies',
+                'parent_id' => $academics->id,
+                'page_category' => 'academics',
+                'menu_title' => 'ZA Policies',
+                'menu_order' => 13,
+                'show_in_menu' => true,
+                'menu_section' => 'main',
+                'excerpt' => 'Important school policies and guidelines for students, parents, and staff.',
+                'content' => '<h2>School Policies & Guidelines</h2><p>Duha International School maintains clear policies to ensure a safe, respectful, and productive learning environment for all students.</p><h3>Academic Policies</h3><h4>Attendance Policy</h4><ul><li>Minimum 80% attendance required for exam eligibility</li><li>Parents must notify school of absences</li><li>Medical certificates required for extended absences</li></ul><h4>Homework Policy</h4><ul><li>Age-appropriate homework assignments</li><li>Due dates must be respected</li><li>Parents encouraged to monitor homework completion</li></ul><h4>Assessment Policy</h4><ul><li>Fair and transparent assessment methods</li><li>Multiple assessment opportunities</li><li>Feedback provided for improvement</li></ul><h3>Behavioral Policies</h3><h4>Code of Conduct</h4><ul><li>Respect for teachers, staff, and fellow students</li><li>Islamic etiquette in speech and behavior</li><li>No bullying, harassment, or discrimination</li><li>Proper use of school property</li></ul><h4>Discipline Policy</h4><ul><li>Progressive discipline approach</li><li>Parent involvement in behavioral issues</li><li>Counseling and support for struggling students</li></ul><h3>Safety & Security Policies</h3><ul><li>CCTV surveillance for student safety</li><li>Controlled entry and exit points</li><li>Emergency procedures and drills</li><li>Child protection protocols</li></ul><h3>Health & Wellness Policies</h3><ul><li>Nutritious meals in cafeteria</li><li>Medical room with qualified staff</li><li>Medication administration protocols</li><li>Mental health support available</li></ul><h3>Communication Policy</h3><ul><li>Regular parent-teacher meetings</li><li>Digital communication through school platforms</li><li>Emergency contact procedures</li></ul><h3>Technology Policy</h3><ul><li>Acceptable use of school technology</li><li>Mobile phone restrictions during school hours</li><li>Internet safety guidelines</li></ul><p>For detailed policy documents, please contact the school office.</p>',
+                'meta_title' => 'School Policies - Duha International School',
+                'meta_description' => 'Important school policies and guidelines covering academics, behavior, safety, health, and communication.',
+                'is_published' => true,
+                'is_featured' => false,
+                'published_at' => now(),
+            ]
+        );
+
+        // Class Routine
+        Page::updateOrCreate(
+            ['slug' => 'class-routine'],
+            [
+                'title' => 'Class Routine',
+                'parent_id' => $academics->id,
+                'page_category' => 'academics',
+                'menu_title' => 'Class Routine',
+                'menu_order' => 14,
+                'show_in_menu' => true,
+                'menu_section' => 'main',
+                'excerpt' => 'Daily class schedules and routine information for different grade levels.',
+                'content' => '<h2>Class Routine</h2><p>Duha International School follows a structured daily routine designed to maximize learning while ensuring balanced development of students.</p><h3>Daily Schedule Structure</h3><h4>Morning Assembly (15 minutes)</h4><ul><li>Quran recitation</li><li>Islamic Dua</li><li>Announcements</li><li>Motivational talks</li></ul><h4>Academic Sessions</h4><p>Classes are conducted in periods of 40-45 minutes with 5-10 minute breaks between periods.</p><h4>Prayer Time</h4><ul><li>Zuhr prayer break for all students</li><li>Separate prayer facilities for boys and girls</li><li>Supervised prayer time</li></ul><h4>Lunch Break (30-40 minutes)</h4><ul><li>Time for lunch and socialization</li><li>Supervised activities in playground</li></ul><h3>Sample Daily Routine (Primary Level)</h3><div class="overflow-x-auto mt-4"><table class="w-full border-collapse border border-gray-300"><thead><tr class="bg-gray-100"><th class="border border-gray-300 px-4 py-2">Time</th><th class="border border-gray-300 px-4 py-2">Activity</th></tr></thead><tbody><tr><td class="border border-gray-300 px-4 py-2">8:00 - 8:15</td><td class="border border-gray-300 px-4 py-2">Morning Assembly</td></tr><tr><td class="border border-gray-300 px-4 py-2">8:15 - 9:00</td><td class="border border-gray-300 px-4 py-2">Period 1 (Quran/Islamic Studies)</td></tr><tr><td class="border border-gray-300 px-4 py-2">9:00 - 9:45</td><td class="border border-gray-300 px-4 py-2">Period 2 (English)</td></tr><tr><td class="border border-gray-300 px-4 py-2">9:45 - 10:00</td><td class="border border-gray-300 px-4 py-2">Break</td></tr><tr><td class="border border-gray-300 px-4 py-2">10:00 - 10:45</td><td class="border border-gray-300 px-4 py-2">Period 3 (Mathematics)</td></tr><tr><td class="border border-gray-300 px-4 py-2">10:45 - 11:30</td><td class="border border-gray-300 px-4 py-2">Period 4 (Science)</td></tr><tr><td class="border border-gray-300 px-4 py-2">11:30 - 12:10</td><td class="border border-gray-300 px-4 py-2">Lunch & Prayer Break</td></tr><tr><td class="border border-gray-300 px-4 py-2">12:10 - 12:55</td><td class="border border-gray-300 px-4 py-2">Period 5 (Bangla/Arabic)</td></tr><tr><td class="border border-gray-300 px-4 py-2">12:55 - 1:30</td><td class="border border-gray-300 px-4 py-2">Period 6 (Co-curricular)</td></tr></tbody></table></div><p><strong>Note:</strong> Actual routine varies by grade level and curriculum track. Please contact the school office for grade-specific routines.</p><h3>Special Days</h3><ul><li><strong>Friday:</strong> Jumu\'ah prayer arrangements</li><li><strong>Sports Day:</strong> Weekly dedicated sports period</li><li><strong>Library Period:</strong> Weekly library visit</li></ul><p>Class routines are designed to ensure balanced attention to all subjects while prioritizing Islamic education and character development.</p>',
+                'meta_title' => 'Class Routine - Duha International School',
+                'meta_description' => 'Daily class schedules and routine information for different grade levels at Duha International School.',
+                'is_published' => true,
+                'is_featured' => false,
+                'published_at' => now(),
+            ]
+        );
+
+        // Sports & Recreation
+        Page::updateOrCreate(
+            ['slug' => 'sports'],
+            [
+                'title' => 'Sports & Recreation',
+                'parent_id' => $academics->id,
+                'page_category' => 'academics',
+                'menu_title' => 'Sports & Recreation',
+                'menu_order' => 15,
+                'show_in_menu' => true,
+                'menu_section' => 'main',
+                'excerpt' => 'Sports programs and recreational activities promoting physical fitness and teamwork.',
+                'content' => '<h2>Sports & Recreation at Duha International School</h2><p>Physical education and sports are integral parts of our holistic education approach. We believe in developing physically healthy students alongside their academic and spiritual growth.</p><h3>Sports Facilities</h3><ul><li>Large outdoor playground</li><li>Indoor sports facilities</li><li>Sports equipment for various games</li><li>Dedicated PE teachers</li></ul><h3>Sports Offered</h3><h4>Outdoor Sports</h4><ul><li>Cricket</li><li>Football</li><li>Badminton</li><li>Basketball</li><li>Volleyball</li><li>Track & Field</li></ul><h4>Indoor Sports</h4><ul><li>Table Tennis</li><li>Chess</li><li>Carrom</li><li>Indoor games</li></ul><h3>Physical Education Program</h3><ul><li>Weekly PE classes for all students</li><li>Age-appropriate activities</li><li>Skill development and team sports</li><li>Fitness assessments</li></ul><h3>Special Programs</h3><ul><li><strong>Martial Arts:</strong> Weekly self-defense training</li><li><strong>Swimming:</strong> Affiliated with Radisson Blu for swimming lessons</li><li><strong>Yoga & Exercise:</strong> Fitness and flexibility training</li></ul><h3>Annual Sports Day</h3><p>Our annual sports day celebrates athleticism and sportsmanship with:</p><ul><li>Track and field events</li><li>Team sports competitions</li><li>Inter-house competitions</li><li>Awards and recognition</li></ul><h3>Health & Safety</h3><ul><li>Qualified coaches and supervisors</li><li>Safety equipment and first aid</li><li>Regular health check-ups</li><li>Hydration and nutrition guidance</li></ul><p>Through sports, we develop teamwork, discipline, perseverance, and healthy competition while maintaining Islamic values of fair play and respect.</p>',
+                'meta_title' => 'Sports & Recreation - Duha International School',
+                'meta_description' => 'Sports programs and recreational activities promoting physical fitness, teamwork, and healthy living.',
+                'is_published' => true,
+                'is_featured' => false,
+                'published_at' => now(),
+            ]
+        );
+
+        // Events & Activities
+        Page::updateOrCreate(
+            ['slug' => 'events-activities'],
+            [
+                'title' => 'Events & Activities',
+                'parent_id' => $academics->id,
+                'page_category' => 'academics',
+                'menu_title' => 'Events & Activities',
+                'menu_order' => 16,
+                'show_in_menu' => true,
+                'menu_section' => 'main',
+                'excerpt' => 'School events, extracurricular activities, and special programs throughout the academic year.',
+                'content' => '<h2>Events & Activities</h2><p>Duha International School organizes a vibrant calendar of events and activities that enrich student learning and foster a strong school community.</p><h3>Islamic Events</h3><ul><li><strong>Ramadan Programs:</strong> Special Iftar gatherings, Taraweeh, Quran competitions</li><li><strong>Eid Celebrations:</strong> Eid prayers, cultural programs, charity drives</li><li><strong>Islamic Months:</strong> Special programs for Muharram, Rabi-ul-Awwal, etc.</li><li><strong>Hajj Simulation:</strong> Educational program teaching Hajj rituals</li></ul><h3>Academic Events</h3><ul><li>Science Fairs & Exhibitions</li><li>Math Olympiad preparation and competitions</li><li>Spelling Bee contests</li><li>Debate competitions</li><li>Book fairs and reading challenges</li><li>Academic award ceremonies</li></ul><h3>Cultural Programs</h3><ul><li>Annual Cultural Day</li><li>Nasheed performances</li><li>Islamic drama and skits</li><li>Art exhibitions</li><li>Poetry recitations</li></ul><h3>Sports Events</h3><ul><li>Annual Sports Day</li><li>Inter-house competitions</li><li>Inter-school sports meets</li><li>Martial arts demonstrations</li></ul><h3>Community Service</h3><ul><li>Charity drives (food, clothing)</li><li>Environmental clean-up campaigns</li><li>Visit to orphanages</li><li>Iftar distribution in Ramadan</li></ul><h3>Parent Engagement Events</h3><ul><li>Parent-Teacher meetings</li><li>Parenting workshops</li><li>Family days</li><li>Pitha Festival</li><li>Tea with Principal/Director</li></ul><h3>Special Days</h3><ul><li>International Mother Language Day (Feb 21)</li><li>Independence Day (Mar 26)</li><li>Victory Day (Dec 16)</li><li>Teacher Appreciation Day</li><li>International Days celebrations</li></ul><h3>Extracurricular Clubs</h3><ul><li>Quran Club</li><li>Science Club</li><li>Debate & Public Speaking Club</li><li>Arts & Crafts Club</li><li>Technology & Coding Club</li><li>Environmental Club</li></ul><p>Our events and activities are designed to provide students with diverse opportunities for growth, leadership, creativity, and community engagement while staying grounded in Islamic values.</p>',
+                'meta_title' => 'Events & Activities - Duha International School',
+                'meta_description' => 'School events, extracurricular activities, Islamic programs, and special celebrations throughout the academic year.',
+                'is_published' => true,
+                'is_featured' => false,
+                'published_at' => now(),
+            ]
+        );
     }
 
     protected function seedFacilitiesPages(): void
@@ -280,6 +660,134 @@ class PagesSeeder extends Seeder
                 'content' => '<p>At Duha International School, we provide a range of modern facilities to support our students\' learning, development, and spiritual growth.</p><h3>1. Spacious Classrooms</h3><p>Well-lit and air-conditioned rooms equipped with multimedia facilities for interactive learning.</p><h3>2. Science Laboratories</h3><p>Fully equipped labs for practical experiments in physics, chemistry, and biology.</p><h3>3. Computer Lab</h3><p>State-of-the-art computer facilities with high speed internet access for ICT education and research.</p><h3>4. Library</h3><p>A well-stocked library with a wide range of books, periodicals, and digital resources.</p><h3>5. Prayer Rooms</h3><p>Dedicated spaces for daily prayers, fostering spiritual growth.</p><h3>6. Playground</h3><p>A large outdoor area for sports and physical activities.</p><h3>7. Cafeteria</h3><p>Providing nutritious and healthy meals for students and staff.</p><h3>8. Medical Room</h3><p>A fully equipped first-aid facility with a qualified doctor on duty.</p><h3>9. Multimedia Room</h3><p>For audio-visual presentations and educational screenings.</p><h3>10. Recreation Room</h3><p>A dedicated space for creative ideas and activities.</p><h3>11. Transport Facility</h3><p>We have transport facilities for far area (AC bus), near (Non-AC).</p>',
                 'meta_title' => 'Facilities - Duha International School',
                 'meta_description' => 'Discover our modern facilities including classrooms, labs, library, prayer rooms, playground, and transport services.',
+                'is_published' => true,
+                'is_featured' => false,
+                'published_at' => now(),
+            ]
+        );
+
+        // Create parent variable for child pages
+        $facilities = Page::where('slug', 'facilities')->first();
+
+        // Residential Facilities
+        Page::updateOrCreate(
+            ['slug' => 'residential-facilities'],
+            [
+                'title' => 'Residential Facilities',
+                'parent_id' => $facilities?->id,
+                'page_category' => 'facilities',
+                'menu_title' => 'Residential Facilities',
+                'menu_order' => 1,
+                'show_in_menu' => true,
+                'menu_section' => 'main',
+                'excerpt' => 'Information about residential and boarding facilities for students at Duha International School.',
+                'content' => '<h2>Residential Facilities</h2><p>Duha International School is planning to offer residential facilities for students who come from distant areas or require boarding arrangements.</p><h3>Future Residential Program</h3><p>We are in the process of developing comprehensive residential facilities that will provide:</p><ul><li><strong>Safe Accommodation:</strong> Secure dormitories with 24/7 supervision</li><li><strong>Comfortable Living Spaces:</strong> Well-furnished rooms with modern amenities</li><li><strong>Nutritious Meals:</strong> Three meals daily plus snacks, prepared with proper hygiene</li><li><strong>Study Areas:</strong> Dedicated spaces for homework and study sessions</li><li><strong>Recreational Facilities:</strong> Indoor and outdoor activities for residents</li><li><strong>Islamic Environment:</strong> Prayer facilities and Islamic guidance</li><li><strong>Health Services:</strong> 24/7 medical support and emergency care</li><li><strong>Security:</strong> Controlled access, CCTV surveillance, trained security staff</li></ul><h3>Supervision & Care</h3><p>Our residential program will include:</p><ul><li>Dedicated house parents and supervisors</li><li>Gender-segregated accommodation</li><li>Structured daily routine balancing academics and activities</li><li>Regular communication with parents</li><li>Pastoral care and counseling support</li></ul><h3>Current Status</h3><p>Residential facilities are currently under development. For the latest information on availability, fees, and admission procedures for boarding students, please contact our admissions office.</p><p><strong>Contact:</strong> admissions@duhaschool.com</p>',
+                'meta_title' => 'Residential Facilities - Duha International School',
+                'meta_description' => 'Information about residential and boarding facilities for students at Duha International School.',
+                'is_published' => true,
+                'is_featured' => false,
+                'published_at' => now(),
+            ]
+        );
+
+        // Support for Learning
+        Page::updateOrCreate(
+            ['slug' => 'support-learning'],
+            [
+                'title' => 'Support for Learning and Spiritual Development',
+                'parent_id' => $facilities?->id,
+                'page_category' => 'facilities',
+                'menu_title' => 'Support for Learning',
+                'menu_order' => 2,
+                'show_in_menu' => true,
+                'menu_section' => 'main',
+                'excerpt' => 'Comprehensive support services for academic learning and spiritual development of students.',
+                'content' => '<h2>Support for Learning and Spiritual Development</h2><p>At Duha International School, we provide comprehensive support to ensure every student succeeds academically and grows spiritually.</p><h3>Academic Support Services</h3><h4>1. Remedial Classes</h4><p>Additional support for students who need extra help with specific subjects. Small group or one-on-one sessions with experienced teachers.</p><h4>2. Advanced Learner Programs</h4><p>Enrichment activities and advanced materials for students excelling in their studies.</p><h4>3. Learning Resource Center</h4><p>Access to educational materials, books, digital resources, and study aids.</p><h4>4. Tutoring Support</h4><p>After-school tutoring sessions for students needing additional academic assistance.</p><h4>5. Special Educational Needs</h4><p>Support for students with learning differences, including individualized learning plans and accommodations.</p><h3>Spiritual Development Support</h3><h4>1. Hifz Support Program</h4><p>Specialized support for students memorizing the Quran, including:</p><ul><li>One-on-one revision sessions</li><li>Memory retention techniques</li><li>Tajweed correction</li><li>Motivation and encouragement</li></ul><h4>2. Islamic Counseling</h4><p>Guidance from qualified Islamic scholars on spiritual matters, character development, and Islamic lifestyle.</p><h4>3. Moral Education Sessions</h4><p>Regular tarbiyah (moral training) sessions focusing on Islamic values, ethics, and character building.</p><h4>4. Prayer Support</h4><p>Assistance with learning proper prayer methods, memorizing duas, and understanding the spiritual significance of worship.</p><h3>Counseling Services</h3><ul><li><strong>Academic Counseling:</strong> Guidance on subject choices, study skills, and career planning</li><li><strong>Personal Counseling:</strong> Support for personal challenges, stress management, and emotional wellbeing</li><li><strong>Behavioral Support:</strong> Positive behavior reinforcement and conflict resolution</li></ul><h3>Parent Support</h3><ul><li>Regular progress updates and reports</li><li>Parent workshops on supporting children\'s learning</li><li>Home-school communication platforms</li><li>Resources for parents to support Islamic education at home</li></ul><h3>Technology Support</h3><ul><li>Digital learning platforms</li><li>Online resources and educational apps</li><li>Technology training for students and parents</li></ul><p>Our comprehensive support system ensures no student is left behind and every student has the resources needed to excel academically and spiritually.</p>',
+                'meta_title' => 'Support for Learning & Spiritual Development - Duha International School',
+                'meta_description' => 'Comprehensive academic and spiritual support services including remedial classes, Hifz support, counseling, and learning resources.',
+                'is_published' => true,
+                'is_featured' => false,
+                'published_at' => now(),
+            ]
+        );
+
+        // Parent Teacher Association
+        Page::updateOrCreate(
+            ['slug' => 'parent-association'],
+            [
+                'title' => 'Parent Teacher Association (PTA)',
+                'parent_id' => $facilities?->id,
+                'page_category' => 'facilities',
+                'menu_title' => 'Parent Teacher Association',
+                'menu_order' => 3,
+                'show_in_menu' => true,
+                'menu_section' => 'main',
+                'excerpt' => 'Learn about our Parent Teacher Association and how parents can actively participate in school activities.',
+                'content' => '<h2>Parent Teacher Association (PTA)</h2><p>The Parent Teacher Association at Duha International School serves as a vital bridge between parents and the school, fostering collaboration for the benefit of our students.</p><h3>PTA Mission</h3><p>To promote partnership between parents, teachers, and school administration in supporting student education, character development, and overall school improvement.</p><h3>PTA Objectives</h3><ul><li>Facilitate effective communication between parents and school</li><li>Support school programs and activities</li><li>Organize parent education workshops</li><li>Raise funds for school improvement projects</li><li>Represent parent voice in school decisions</li><li>Build a strong school community</li></ul><h3>PTA Structure</h3><h4>Executive Committee</h4><ul><li>President</li><li>Vice President</li><li>Secretary</li><li>Treasurer</li><li>Class Representatives</li></ul><h4>Sub-Committees</h4><ul><li>Academic Support Committee</li><li>Islamic Activities Committee</li><li>Events & Cultural Committee</li><li>Fundraising Committee</li><li>Communication Committee</li></ul><h3>PTA Activities</h3><h4>Regular Activities</h4><ul><li>Monthly PTA meetings</li><li>Parent-teacher conferences</li><li>School newsletter contributions</li><li>Volunteer coordination</li></ul><h4>Annual Events</h4><ul><li>Welcome Back to School event</li><li>Family Fun Days</li><li>Cultural programs support</li><li>Sports Day participation</li><li>Graduation ceremonies</li><li>Charity drives and community service</li></ul><h3>Parent Workshops</h3><p>The PTA organizes educational workshops on topics such as:</p><ul><li>Parenting in an Islamic way</li><li>Supporting children\'s academic success</li><li>Understanding adolescent development</li><li>Technology and screen time management</li><li>Nutrition and healthy lifestyle</li><li>Mental health awareness</li></ul><h3>How to Get Involved</h3><ul><li><strong>Become a Member:</strong> All parents are automatically PTA members</li><li><strong>Attend Meetings:</strong> Participate in monthly PTA meetings</li><li><strong>Volunteer:</strong> Help with events, activities, and committees</li><li><strong>Class Representative:</strong> Serve as your child\'s class representative</li><li><strong>Share Skills:</strong> Contribute your expertise to school programs</li><li><strong>Provide Feedback:</strong> Share suggestions and concerns</li></ul><h3>Contact PTA</h3><p>To get involved or learn more about PTA activities:</p><ul><li><strong>Email:</strong> pta@duhaschool.com</li><li><strong>Meeting Schedule:</strong> First Friday of each month</li><li><strong>Location:</strong> School Conference Room</li></ul><p>Your involvement makes a difference! Join the PTA and be part of your child\'s educational journey.</p>',
+                'meta_title' => 'Parent Teacher Association (PTA) - Duha International School',
+                'meta_description' => 'Learn about our Parent Teacher Association, how to get involved, PTA activities, and parent participation opportunities.',
+                'is_published' => true,
+                'is_featured' => false,
+                'published_at' => now(),
+            ]
+        );
+
+        // Faculty - Main Category Page
+        $faculty = Page::updateOrCreate(
+            ['slug' => 'faculty'],
+            [
+                'title' => 'Faculty',
+                'page_category' => 'faculty',
+                'menu_title' => 'Faculty',
+                'menu_order' => 5,
+                'show_in_menu' => true,
+                'menu_section' => 'main',
+                'excerpt' => 'Meet our dedicated faculty members who guide and inspire our students with quality Islamic and academic education.',
+                'content' => '<h2>Our Faculty</h2><p>At Duha International School, we are proud of our team of dedicated, qualified, and experienced educators who are committed to providing quality Islamic and academic education to our students.</p><h3>Faculty Excellence</h3><p>Our teaching staff comprises:</p><ul><li>Qualified Islamic scholars (Alim/Fazil and Alimah/Fazilah degrees)</li><li>University graduates in their subject specializations</li><li>Experienced teachers with proven track records</li><li>Teachers trained by Alokito Teachers program</li><li>Hafiz-ul-Quran and Hafizah-tul-Quran for Quran instruction</li></ul><h3>Our Faculty Structure</h3><p>We maintain appropriate gender separation in line with Islamic values while ensuring all students receive excellent education from highly qualified teachers.</p><div class="grid md:grid-cols-2 gap-6 mt-6"><div class="bg-white p-6 rounded-lg shadow-md border border-gray-200"><h4 class="text-xl font-semibold text-aisd-midnight mb-3">Male Faculty</h4><p class="text-gray-600 mb-4">Our male faculty members provide quality instruction in Islamic Studies, Arabic, and general academic subjects for male students.</p><a href="/faculty/male-faculty" class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition-colors">Meet Our Male Faculty →</a></div><div class="bg-white p-6 rounded-lg shadow-md border border-gray-200"><h4 class="text-xl font-semibold text-aisd-midnight mb-3">Female Faculty</h4><p class="text-gray-600 mb-4">Our female faculty members provide nurturing education in Islamic Studies, Arabic, and general academic subjects for female students.</p><a href="/faculty/female-faculty" class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition-colors">Meet Our Female Faculty →</a></div></div><h3>Professional Development</h3><p>Our faculty members participate in regular professional development including:</p><ul><li>Teaching methodology workshops</li><li>Classroom management training</li><li>Subject-specific professional development</li><li>Technology integration training</li><li>Islamic pedagogy workshops</li></ul><h3>Commitment to Excellence</h3><p>Our faculty members serve as role models, demonstrating Islamic character, academic excellence, and dedication to student success. They are committed to nurturing both the academic and spiritual growth of every student.</p>',
+                'meta_title' => 'Faculty - Duha International School',
+                'meta_description' => 'Meet our dedicated faculty members who provide quality Islamic and academic education at Duha International School.',
+                'is_published' => true,
+                'is_featured' => false,
+                'published_at' => now(),
+            ]
+        );
+
+        // Male Faculty
+        Page::updateOrCreate(
+            ['slug' => 'male-faculty'],
+            [
+                'title' => 'Male Faculty',
+                'parent_id' => $faculty->id,
+                'page_category' => 'faculty',
+                'menu_title' => 'Male Faculty',
+                'menu_order' => 1,
+                'show_in_menu' => true,
+                'menu_section' => 'main',
+                'excerpt' => 'Meet our dedicated male faculty members who guide and inspire our students.',
+                'content' => '<h2>Male Faculty</h2><p>Our male faculty comprises experienced and qualified educators dedicated to providing quality Islamic and academic education.</p><h3>Faculty Qualifications</h3><p>Our male teaching staff includes:</p><ul><li>Qualified Islamic scholars with Alim/Fazil degrees</li><li>University graduates in their subject specializations</li><li>Experienced teachers with proven track records</li><li>Teachers trained by Alokito Teachers program</li><li>Hafiz-ul-Quran for Quran and Tajweed instruction</li></ul><h3>Departments</h3><h4>Islamic Studies Department</h4><ul><li>Quran & Tajweed teachers</li><li>Hifz instructors</li><li>Islamic Studies teachers</li><li>Arabic language teachers</li></ul><h4>Academic Department</h4><ul><li>English language teachers</li><li>Mathematics teachers</li><li>Science teachers (Physics, Chemistry, Biology)</li><li>Social Studies teachers</li><li>Bangla language teachers</li></ul><h4>Specialized Faculty</h4><ul><li>ICT & Technology instructors</li><li>Physical Education teachers</li><li>Arts teachers</li><li>Special Education coordinators</li></ul><h3>Professional Development</h3><p>Our male faculty participate in:</p><ul><li>Regular training workshops</li><li>Subject-specific professional development</li><li>Teaching methodology updates</li><li>Classroom management training</li><li>Technology integration workshops</li></ul><h3>Faculty Responsibilities</h3><ul><li>Delivering quality instruction</li><li>Assessing student progress</li><li>Maintaining discipline with Islamic etiquette</li><li>Communicating with parents</li><li>Participating in school activities</li><li>Continuous self-improvement</li></ul><p>Our male faculty members serve as role models, demonstrating Islamic character, academic excellence, and dedication to student success.</p>',
+                'meta_title' => 'Male Faculty - Duha International School',
+                'meta_description' => 'Meet our dedicated male faculty members providing quality Islamic and academic education at Duha International School.',
+                'is_published' => true,
+                'is_featured' => false,
+                'published_at' => now(),
+            ]
+        );
+
+        // Female Faculty
+        Page::updateOrCreate(
+            ['slug' => 'female-faculty'],
+            [
+                'title' => 'Female Faculty',
+                'parent_id' => $faculty->id,
+                'page_category' => 'faculty',
+                'menu_title' => 'Female Faculty',
+                'menu_order' => 2,
+                'show_in_menu' => true,
+                'menu_section' => 'main',
+                'excerpt' => 'Meet our dedicated female faculty members who nurture and educate our students.',
+                'content' => '<h2>Female Faculty</h2><p>Our female faculty consists of qualified, experienced, and compassionate educators committed to nurturing students\' academic and spiritual growth.</p><h3>Faculty Qualifications</h3><p>Our female teaching staff includes:</p><ul><li>Qualified Islamic scholars with Alimah/Fazilah degrees</li><li>University graduates in their subject specializations</li><li>Experienced teachers with proven expertise</li><li>Teachers trained by Alokito Teachers program</li><li>Hafizah-tul-Quran for Quran and Tajweed instruction</li></ul><h3>Departments</h3><h4>Islamic Studies Department</h4><ul><li>Quran & Tajweed teachers (Qariah)</li><li>Hifz instructors</li><li>Islamic Studies teachers</li><li>Arabic language teachers</li></ul><h4>Academic Department</h4><ul><li>English language teachers</li><li>Mathematics teachers</li><li>Science teachers</li><li>Social Studies teachers</li><li>Bangla language teachers</li></ul><h4>Early Years & Primary</h4><ul><li>Pre-school and KG teachers</li><li>Primary grade teachers</li><li>Special Education coordinators</li></ul><h4>Specialized Faculty</h4><ul><li>Arts & Crafts instructors</li><li>Home Economics teachers</li><li>Counseling staff</li></ul><h3>Professional Development</h3><p>Our female faculty engage in:</p><ul><li>Regular training workshops</li><li>Subject-specific professional development</li><li>Early childhood education training</li><li>Classroom management techniques</li><li>Islamic pedagogy workshops</li></ul><h3>Faculty Responsibilities</h3><ul><li>Delivering quality instruction with care</li><li>Nurturing student emotional and spiritual wellbeing</li><li>Assessing and supporting student progress</li><li>Creating positive learning environments</li><li>Building strong relationships with students and parents</li><li>Serving as role models for female students</li></ul><h3>Gender-Separated Environment</h3><p>In line with Islamic values, we maintain appropriate gender separation while ensuring all students receive excellent education from highly qualified teachers of their gender where possible.</p><p>Our female faculty members embody Islamic character, professionalism, and dedication, serving as inspiring role models for our students.</p>',
+                'meta_title' => 'Female Faculty - Duha International School',
+                'meta_description' => 'Meet our dedicated female faculty members providing nurturing Islamic and academic education at Duha International School.',
                 'is_published' => true,
                 'is_featured' => false,
                 'published_at' => now(),
@@ -542,6 +1050,27 @@ class PagesSeeder extends Seeder
             ]
         );
 
+        // Fees - Index Page (links to both fee structures)
+        Page::updateOrCreate(
+            ['slug' => 'fees'],
+            [
+                'title' => 'Fees',
+                'parent_id' => $admissions->id,
+                'page_category' => 'admissions',
+                'menu_title' => 'Fees',
+                'menu_order' => 4,
+                'show_in_menu' => true,
+                'menu_section' => 'main',
+                'excerpt' => 'Complete fee information for National Curriculum and Cambridge Curriculum programs at Duha International School.',
+                'content' => '<h2>Fee Information</h2><p>At Duha International School, we offer transparent and affordable fee structures for both National Curriculum and Cambridge Curriculum programs. Our fees are designed to make quality Islamic education accessible to families.</p><h3>Fee Structures</h3><p>We provide detailed fee information for two curriculum options:</p><div class="grid md:grid-cols-2 gap-6 mt-6"><div class="bg-white p-6 rounded-lg shadow-md border border-gray-200"><h4 class="text-xl font-semibold text-aisd-midnight mb-3">National Curriculum</h4><p class="text-gray-600 mb-4">Complete fee structure for National Curriculum (English Version) including General and Islamic Curriculum options for all grades from Pre-Play through Grade 9.</p><a href="/admissions/fee-structure-national-curriculum" class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition-colors">View National Curriculum Fees →</a></div><div class="bg-white p-6 rounded-lg shadow-md border border-gray-200"><h4 class="text-xl font-semibold text-aisd-midnight mb-3">Cambridge Curriculum</h4><p class="text-gray-600 mb-4">Complete fee structure for Cambridge and Islamic Curriculum including EYFS, KS-1, and KS-2 for all year levels.</p><a href="/admissions/fee-structure-cambridge-curriculum" class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition-colors">View Cambridge Curriculum Fees →</a></div></div><h3 class="mt-8">Additional Fees</h3><ul><li><strong>Transport Fees:</strong> Available for both near and far areas. <a href="/admissions/transport-fees-policy" class="text-indigo-600 hover:underline">View transport fees →</a></li><li><strong>Exam Fees:</strong> Included in annual session fees</li><li><strong>Books & Supplies:</strong> Approximate costs provided in detailed fee structures</li><li><strong>Uniform:</strong> Available from Belbond Tailors and Rabia Tailors</li></ul><h3>Payment Information</h3><ul><li>Admission fees are one-time payments</li><li>Session fees are paid yearly</li><li>Monthly tuition fees are paid monthly</li><li>All fees are subject to annual review</li></ul><p class="mt-6 text-gray-600">For detailed fee information specific to your chosen curriculum, please select the appropriate fee structure above or contact our Admissions Office for personalized assistance.</p>',
+                'meta_title' => 'Fees - Duha International School',
+                'meta_description' => 'Complete fee information for National Curriculum and Cambridge Curriculum programs at Duha International School.',
+                'is_published' => true,
+                'is_featured' => false,
+                'published_at' => now(),
+            ]
+        );
+
         // Class Timings
         Page::updateOrCreate(
             ['slug' => 'class-timings'],
@@ -625,6 +1154,70 @@ class PagesSeeder extends Seeder
                 'published_at' => now(),
             ]
         );
+
+        // Why Us (Why Choose Duha)
+        Page::updateOrCreate(
+            ['slug' => 'why-us'],
+            [
+                'title' => 'Why Choose Duha International School',
+                'parent_id' => $admissions->id,
+                'page_category' => 'admissions',
+                'menu_title' => 'Why Us?',
+                'menu_order' => 2,
+                'show_in_menu' => true,
+                'menu_section' => 'main',
+                'excerpt' => 'Discover what makes Duha International School the ideal choice for your child\'s educational journey.',
+                'content' => '<h2>Why Choose Duha International School?</h2><p>Choosing the right school for your child is one of the most important decisions you will make as a parent. At Duha International School, we offer a unique educational experience that combines Islamic values with academic excellence. Here\'s why families choose us:</p><h3>1. Balanced Islamic & Academic Education</h3><p>We provide a unique blend of Islamic education with modern academic curricula. Our students study the Quran, Islamic Studies, and Arabic alongside National Curriculum or Cambridge International programs, preparing them for success in both this world and the Hereafter.</p><h3>2. Hifzul Quran Program</h3><p>Our Hifzul Quran program allows students to memorize the Quran while pursuing their general education. This flexible approach ensures students can achieve both spiritual and academic goals without compromise.</p><h3>3. Qualified & Experienced Teachers</h3><p>Our teaching staff comprises experienced educators trained in both Islamic and general subjects. Teachers affiliated with Alokito Teachers receive ongoing professional development in teaching methodology, classroom management, and modern educational technology.</p><h3>4. Modern Facilities & Resources</h3><p>We provide state-of-the-art facilities including spacious classrooms with multimedia equipment, fully-equipped science labs, computer lab with high-speed internet, well-stocked library, prayer rooms, playground, cafeteria, and medical facilities.</p><h3>5. Character Development Focus</h3><p>Beyond academics, we emphasize character building through Islamic values. Our students develop integrity, empathy, responsibility, leadership skills, and a strong moral compass that guides them throughout life.</p><h3>6. Comprehensive Extracurricular Activities</h3><p>We offer diverse activities including sports, arts, technology, community service, Islamic activities, and leadership programs. These activities promote holistic development and help students discover their talents and passions.</p><h3>7. Safe & Supportive Environment</h3><p>Our school provides a secure, nurturing environment where students feel valued and supported. With CCTV surveillance, trained security personnel, and caring staff, parents can have peace of mind about their children\'s safety and wellbeing.</p><h3>8. Strong Parent-School Partnership</h3><p>We believe in close collaboration with parents through regular meetings, workshops, and events. Our open communication ensures parents stay informed and involved in their child\'s educational journey.</p><h3>9. Multiple Curriculum Options</h3><p>Families can choose from National Curriculum (English Version), Cambridge International Curriculum, or Hifzul Quran Program, each integrated with comprehensive Islamic education. This flexibility allows you to select the path that best suits your child\'s needs and future goals.</p><h3>10. Affordable Quality Education</h3><p>We strive to make quality Islamic education accessible to families. Our transparent fee structure and various curriculum options provide families with choices that fit their educational aspirations and budget.</p><h3>11. Proven Track Record</h3><p>Our students consistently demonstrate academic excellence, strong Islamic values, and leadership qualities. Our alumni go on to succeed in higher education and various fields while maintaining their Islamic identity.</p><p class="text-center text-xl font-bold text-aisd-midnight mt-8">Join the Duha family today and give your child the gift of balanced education that prepares them for a successful future in both worlds!</p>',
+                'meta_title' => 'Why Choose Duha International School - Excellence in Islamic Education',
+                'meta_description' => 'Discover why Duha International School is the ideal choice for your child - balanced Islamic and academic education, qualified teachers, modern facilities, and character development.',
+                'is_published' => true,
+                'is_featured' => true,
+                'published_at' => now(),
+            ]
+        );
+
+        // Choose & Apply (Enroll Online)
+        Page::updateOrCreate(
+            ['slug' => 'choose-apply'],
+            [
+                'title' => 'Enroll Online',
+                'parent_id' => $admissions->id,
+                'page_category' => 'admissions',
+                'menu_title' => 'Enroll Online',
+                'menu_order' => 3,
+                'show_in_menu' => true,
+                'menu_section' => 'main',
+                'external_url' => '/admission',
+                'excerpt' => 'Start your admission journey by enrolling online at Duha International School.',
+                'content' => '<h2>Enroll Online at Duha International School</h2><p>We have made the admission process simple and convenient for you. You can now submit your admission application online from the comfort of your home.</p><h3>How to Enroll Online</h3><ol><li><strong>Visit Our Admission Page:</strong> Click the button below to access our online admission form</li><li><strong>Fill Out the Form:</strong> Provide accurate information about your child and family</li><li><strong>Submit Documents:</strong> Upload required documents (birth certificate, previous academic records, photos)</li><li><strong>Submit Application:</strong> Review and submit your completed application</li><li><strong>Confirmation:</strong> You will receive an email confirmation with next steps</li><li><strong>Assessment & Interview:</strong> Our admissions team will contact you to schedule an entrance assessment and family interview</li></ol><div class="text-center mt-8 mb-8"><a href="/admission" class="inline-flex items-center px-8 py-4 bg-[#008236] text-white text-lg font-semibold rounded-xl hover:bg-[#006B2D] transition-colors duration-200 shadow-lg hover:shadow-xl">Start Your Application Now →</a></div><h3>What You\'ll Need</h3><ul><li>Student\'s birth certificate</li><li>Recent passport-size photographs (student and parents)</li><li>Previous academic records (if applicable)</li><li>Parent/guardian identification (NID/Passport)</li><li>Contact information (email, phone number)</li></ul><h3>Need Help?</h3><p>If you need assistance with the online application process, please contact our Admissions Office:</p><ul><li><strong>Phone:</strong> [Contact Number]</li><li><strong>Email:</strong> admissions@duhaschool.com</li><li><strong>Visit:</strong> You can also visit our campus to get help with the application</li></ul><p class="text-center text-xl font-bold text-aisd-midnight mt-8">We look forward to welcoming your child to the Duha family!</p>',
+                'meta_title' => 'Enroll Online - Duha International School',
+                'meta_description' => 'Start your admission journey by enrolling online at Duha International School. Simple, convenient online application process.',
+                'is_published' => true,
+                'is_featured' => false,
+                'published_at' => now(),
+            ]
+        );
+
+        // Year Group (Student Year Group and Age Range)
+        Page::updateOrCreate(
+            ['slug' => 'year-group'],
+            [
+                'title' => 'Student Year Group and Age Range',
+                'parent_id' => $admissions->id,
+                'page_category' => 'admissions',
+                'menu_title' => 'Student Year Group and Age Range',
+                'menu_order' => 8,
+                'show_in_menu' => true,
+                'menu_section' => 'main',
+                'excerpt' => 'Find the appropriate year group for your child based on their age at Duha International School.',
+                'content' => '<h2>Student Year Group and Age Range Guide</h2><p>At Duha International School, we offer education from early years through secondary level. Use this guide to determine the appropriate year group for your child based on their age.</p><h3>National Curriculum (English Version)</h3><div class="overflow-x-auto mt-4"><table class="w-full border-collapse border border-gray-300"><thead><tr class="bg-gray-100"><th class="border border-gray-300 px-4 py-2 text-left">Grade</th><th class="border border-gray-300 px-4 py-2 text-left">Age Range</th><th class="border border-gray-300 px-4 py-2 text-left">Year Group</th></tr></thead><tbody><tr><td class="border border-gray-300 px-4 py-2">Pre-Play</td><td class="border border-gray-300 px-4 py-2">3 years</td><td class="border border-gray-300 px-4 py-2">Pre-Primary</td></tr><tr><td class="border border-gray-300 px-4 py-2">Play</td><td class="border border-gray-300 px-4 py-2">4 years</td><td class="border border-gray-300 px-4 py-2">Pre-Primary</td></tr><tr><td class="border border-gray-300 px-4 py-2">Nursery</td><td class="border border-gray-300 px-4 py-2">5 years</td><td class="border border-gray-300 px-4 py-2">Pre-Primary</td></tr><tr><td class="border border-gray-300 px-4 py-2">KG</td><td class="border border-gray-300 px-4 py-2">6 years</td><td class="border border-gray-300 px-4 py-2">Pre-Primary</td></tr><tr><td class="border border-gray-300 px-4 py-2">Grade 1</td><td class="border border-gray-300 px-4 py-2">6-7 years</td><td class="border border-gray-300 px-4 py-2">Primary</td></tr><tr><td class="border border-gray-300 px-4 py-2">Grade 2</td><td class="border border-gray-300 px-4 py-2">7-8 years</td><td class="border border-gray-300 px-4 py-2">Primary</td></tr><tr><td class="border border-gray-300 px-4 py-2">Grade 3</td><td class="border border-gray-300 px-4 py-2">8-9 years</td><td class="border border-gray-300 px-4 py-2">Primary</td></tr><tr><td class="border border-gray-300 px-4 py-2">Grade 4</td><td class="border border-gray-300 px-4 py-2">9-10 years</td><td class="border border-gray-300 px-4 py-2">Primary</td></tr><tr><td class="border border-gray-300 px-4 py-2">Grade 5</td><td class="border border-gray-300 px-4 py-2">10-11 years</td><td class="border border-gray-300 px-4 py-2">Primary</td></tr><tr><td class="border border-gray-300 px-4 py-2">Grade 6</td><td class="border border-gray-300 px-4 py-2">11-12 years</td><td class="border border-gray-300 px-4 py-2">Secondary</td></tr><tr><td class="border border-gray-300 px-4 py-2">Grade 7</td><td class="border border-gray-300 px-4 py-2">12-13 years</td><td class="border border-gray-300 px-4 py-2">Secondary</td></tr><tr><td class="border border-gray-300 px-4 py-2">Grade 8</td><td class="border border-gray-300 px-4 py-2">13-14 years</td><td class="border border-gray-300 px-4 py-2">Secondary</td></tr><tr><td class="border border-gray-300 px-4 py-2">Grade 9</td><td class="border border-gray-300 px-4 py-2">14-15 years</td><td class="border border-gray-300 px-4 py-2">Secondary</td></tr></tbody></table></div><h3>Cambridge and Islamic Curriculum</h3><div class="overflow-x-auto mt-4"><table class="w-full border-collapse border border-gray-300"><thead><tr class="bg-gray-100"><th class="border border-gray-300 px-4 py-2 text-left">Year/Stage</th><th class="border border-gray-300 px-4 py-2 text-left">Age Range</th><th class="border border-gray-300 px-4 py-2 text-left">Cambridge Stage</th></tr></thead><tbody><tr><td class="border border-gray-300 px-4 py-2">EYFS Day Care</td><td class="border border-gray-300 px-4 py-2">2-3.5 years</td><td class="border border-gray-300 px-4 py-2">Early Years</td></tr><tr><td class="border border-gray-300 px-4 py-2">Pre-Play</td><td class="border border-gray-300 px-4 py-2">2.5-3.5 years</td><td class="border border-gray-300 px-4 py-2">Early Years Foundation Stage</td></tr><tr><td class="border border-gray-300 px-4 py-2">Play</td><td class="border border-gray-300 px-4 py-2">3.5-4.5 years</td><td class="border border-gray-300 px-4 py-2">EYFS</td></tr><tr><td class="border border-gray-300 px-4 py-2">Nursery</td><td class="border border-gray-300 px-4 py-2">4.5-5.5 years</td><td class="border border-gray-300 px-4 py-2">EYFS</td></tr><tr><td class="border border-gray-300 px-4 py-2">Reception</td><td class="border border-gray-300 px-4 py-2">5.5-6.5 years</td><td class="border border-gray-300 px-4 py-2">EYFS</td></tr><tr><td class="border border-gray-300 px-4 py-2">Year 1</td><td class="border border-gray-300 px-4 py-2">6.5-7.5 years</td><td class="border border-gray-300 px-4 py-2">Key Stage 1</td></tr><tr><td class="border border-gray-300 px-4 py-2">Year 2</td><td class="border border-gray-300 px-4 py-2">7.5-8.5 years</td><td class="border border-gray-300 px-4 py-2">Key Stage 1</td></tr><tr><td class="border border-gray-300 px-4 py-2">Year 3</td><td class="border border-gray-300 px-4 py-2">8.5-9.5 years</td><td class="border border-gray-300 px-4 py-2">Key Stage 2</td></tr><tr><td class="border border-gray-300 px-4 py-2">Year 4</td><td class="border border-gray-300 px-4 py-2">9.5-10.5 years</td><td class="border border-gray-300 px-4 py-2">Key Stage 2</td></tr><tr><td class="border border-gray-300 px-4 py-2">Year 5</td><td class="border border-gray-300 px-4 py-2">10.5-11.5 years</td><td class="border border-gray-300 px-4 py-2">Key Stage 2</td></tr><tr><td class="border border-gray-300 px-4 py-2">Year 6</td><td class="border border-gray-300 px-4 py-2">11.5-12.5 years</td><td class="border border-gray-300 px-4 py-2">Key Stage 2</td></tr></tbody></table></div><h3>Important Notes</h3><ul><li>Age requirements are based on the child\'s age as of January 1st of the academic year</li><li>For students transferring from other schools, grade placement may vary based on academic assessment</li><li>Students joining mid-year may require an evaluation to determine the appropriate year group</li><li>If your child\'s age falls between two year groups, please contact our admissions office for guidance</li></ul><h3>Need Help Determining the Right Year Group?</h3><p>If you\'re unsure which year group is appropriate for your child, or if your child has special circumstances (early/late birthday, transfer from another curriculum), please contact our Admissions Office. We\'ll be happy to assess your child and recommend the best placement.</p><p><strong>Contact Admissions:</strong> admissions@duhaschool.com</p>',
+                'meta_title' => 'Student Year Group and Age Range - Duha International School',
+                'meta_description' => 'Find the appropriate year group for your child based on their age at Duha International School. Complete age range guide for National and Cambridge curricula.',
+                'is_published' => true,
+                'is_featured' => false,
+                'published_at' => now(),
+            ]
+        );
     }
 
     protected function seedParentEngagementPages(): void
@@ -645,6 +1238,30 @@ class PagesSeeder extends Seeder
                 'meta_description' => 'Learn about our parent engagement programs including parent-teacher meetings, workshops, and special events.',
                 'is_published' => true,
                 'is_featured' => false,
+                'published_at' => now(),
+            ]
+        );
+    }
+
+    protected function seedStandalonePages(): void
+    {
+        // Tahfeez - Standalone Page (not under any category)
+        Page::updateOrCreate(
+            ['slug' => 'tahfeez'],
+            [
+                'title' => 'Tahfeez (Quran Memorization)',
+                'parent_id' => null,
+                'page_category' => null, // Standalone page
+                'menu_title' => 'Tahfeez',
+                'menu_order' => 7,
+                'show_in_menu' => true,
+                'menu_section' => 'main',
+                'excerpt' => 'Comprehensive Tahfeez (Quran memorization) program combining Hifz with general academic education.',
+                'content' => '<h2>Tahfeez Program at Duha International School</h2><p>The Tahfeez (Hifzul Quran) program at Duha International School offers students the precious opportunity to memorize the entire Quran while pursuing their general academic education.</p><h3>Program Overview</h3><p>Our Tahfeez program is designed to balance Quranic memorization with academic studies, ensuring students excel in both their spiritual and worldly education. This unique approach allows students to become Hafiz (one who has memorized the Quran) while earning recognized academic qualifications.</p><h3>Why Choose Our Tahfeez Program?</h3><ul><li><strong>Qualified Instructors:</strong> Experienced Huffaz (plural of Hafiz) with Ijazah (certification) in Quran recitation and memorization</li><li><strong>Structured Methodology:</strong> Proven memorization techniques ensuring steady progress and long-term retention</li><li><strong>Flexible Integration:</strong> Available alongside both National Curriculum and Cambridge International programs</li><li><strong>Small Class Sizes:</strong> Individualized attention with low student-teacher ratios</li><li><strong>Regular Assessment:</strong> Continuous monitoring of memorization progress and revision</li><li><strong>Supportive Environment:</strong> Islamic atmosphere encouraging spiritual growth</li></ul><h3>Curriculum Tracks</h3><p>Students can pursue Tahfeez with:</p><ul><li><strong>National Curriculum (English Version):</strong> Complete Hifz while preparing for SSC exams</li><li><strong>Cambridge International Curriculum:</strong> Combine Hifz with globally recognized qualifications</li></ul><h3>Daily Schedule</h3><p>A typical day for Tahfeez students includes:</p><ul><li><strong>Morning Session (6:00 AM - 8:00 AM):</strong> New memorization (Sabaq) and immediate revision</li><li><strong>Regular School Hours:</strong> Academic subjects following chosen curriculum</li><li><strong>Afternoon Session:</strong> Revision of recent memorization (Sabqi) and older portions (Manzil)</li></ul><h3>Memorization Method</h3><h4>1. New Memorization (Sabaq)</h4><p>Daily memorization of new verses with proper Tajweed under direct supervision of qualified teacher.</p><h4>2. Recent Revision (Sabqi)</h4><p>Regular revision of recently memorized portions to ensure retention.</p><h4>3. Long-term Revision (Manzil)</h4><p>Systematic revision of earlier memorized Juz (parts) to maintain entire Hifz.</p><h4>4. Tajweed Excellence</h4><p>Continuous focus on proper pronunciation, articulation, and Tajweed rules throughout memorization.</p><h3>Program Duration</h3><p>Typical completion time: <strong>4-6 years</strong></p><p>Duration varies based on:</p><ul><li>Student\'s starting age</li><li>Prior Quranic knowledge</li><li>Daily dedication and consistency</li><li>Memory capacity and retention ability</li></ul><h3>Admission Requirements</h3><ul><li>Ability to read Quran with basic Tajweed</li><li>Commitment to daily attendance and homework</li><li>Parent support and encouragement at home</li><li>Entrance assessment to determine starting point</li></ul><h3>Support Services</h3><ul><li>One-on-one revision sessions</li><li>Extra support for struggling students</li><li>Memory enhancement techniques training</li><li>Parent workshops on supporting Hifz at home</li><li>Regular progress reports</li></ul><h3>Graduation & Certification</h3><p>Upon successful completion, students:</p><ul><li>Receive Hafiz/Hafizah certification</li><li>Participate in special graduation ceremony</li><li>Complete full revision (Dawrah) before graduation</li><li>Pass comprehensive oral examination</li></ul><h3>Beyond Graduation</h3><p>Hafiz students can:</p><ul><li>Continue to higher Islamic education</li><li>Pursue university degrees with Hifz advantage</li><li>Teach Quran in Islamic institutions</li><li>Lead prayers in mosques</li><li>Serve as role models in their communities</li></ul><h3>Parent Involvement</h3><p>Success in Hifz requires strong parent support:</p><ul><li>Ensuring daily home revision</li><li>Attending monthly parent meetings</li><li>Creating conducive home environment</li><li>Encouraging and motivating your child</li><li>Monitoring progress and attendance</li></ul><h3>Admission Process</h3><ol><li><strong>Initial Inquiry:</strong> Contact admissions office for information</li><li><strong>Assessment:</strong> Student Quran reading and Tajweed assessment</li><li><strong>Interview:</strong> Meeting with Hifz coordinator and family</li><li><strong>Enrollment:</strong> Complete admission formalities</li><li><strong>Orientation:</strong> Attend program orientation session</li></ol><h3>Fees & Investment</h3><p>Tahfeez program fees vary by curriculum track chosen. Please refer to our fee structure pages or contact admissions for detailed fee information.</p><h3>Contact Us</h3><p>For more information about our Tahfeez program:</p><ul><li><strong>Email:</strong> tahfeez@duhaschool.com</li><li><strong>Phone:</strong> [Contact Number]</li><li><strong>Visit:</strong> Schedule a visit to meet our Hifz instructors</li></ul><p class="text-center text-xl font-bold text-aisd-midnight mt-8">Give your child the gift of carrying the Quran in their heart - Enroll in our Tahfeez program today!</p>',
+                'meta_title' => 'Tahfeez (Quran Memorization) Program - Duha International School',
+                'meta_description' => 'Comprehensive Tahfeez program at Duha International School combining Quran memorization (Hifz) with general academic education in National or Cambridge curriculum.',
+                'is_published' => true,
+                'is_featured' => true,
                 'published_at' => now(),
             ]
         );

@@ -15,7 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('slug')->unique();
-            $table->longText('content');
+            $table->string('page_category')->nullable()->index();
+            $table->foreignId('parent_id')->nullable()->constrained('pages')->nullOnDelete();
+            $table->longText('content')->nullable();
+            $table->string('hero_image')->nullable();
+            $table->string('featured_image')->nullable();
+            $table->string('hero_badge')->nullable();
+            $table->string('hero_subtitle')->nullable();
             $table->string('meta_title')->nullable();
             $table->text('meta_description')->nullable();
             $table->json('seo_keywords')->nullable();

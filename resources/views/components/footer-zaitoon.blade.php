@@ -10,14 +10,16 @@
     $socialLinks = \App\Helpers\SiteSettingsHelper::socialLinks();
     $siteName = \App\Helpers\SiteSettingsHelper::websiteName();
     $copyright = \App\Helpers\SiteSettingsHelper::copyrightNotice();
+    
+    // Get logo URL - same approach as header
     $logoUrl = \App\Helpers\SiteSettingsHelper::logoUrl();
 @endphp
 
-<footer class="relative text-white" style="margin-top: -1px; background-color: #0d5a47;">
+<footer class="relative text-white" style="margin-top: -1px; background-color: #008236;">
     {{-- Curved Wave at Top --}}
     <div class="absolute top-0 left-0 w-full overflow-hidden pointer-events-none" style="line-height: 0; transform: translateY(-1px);">
         <svg viewBox="0 0 1440 120" preserveAspectRatio="none" class="relative block w-full h-20 lg:h-24">
-            <path d="M0,0 C480,100 960,100 1440,0 L1440,120 L0,120 Z" style="fill: #0d5a47;"></path>
+            <path d="M0,0 C480,100 960,100 1440,0 L1440,120 L0,120 Z" style="fill: #008236;"></path>
         </svg>
     </div>
 
@@ -88,7 +90,7 @@
                         <button 
                             type="submit"
                             class="px-8 py-4 font-bold rounded-full transition-all duration-200 hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
-                            style="background-color: #fbbf24; color: #0d5a47;"
+                            style="background-color: #fbbf24; color: #008236;"
                             :disabled="loading"
                         >
                             <span x-show="!loading">Subscribe</span>
@@ -118,15 +120,14 @@
                 {{-- Column 1: Logo & Important Links (FR-13.2) --}}
                 <div>
                     <a href="{{ route('home', [], false) }}" class="inline-block mb-6">
-                        @if($logoUrl)
                         <img 
-                            src="{{ $logoUrl }}" 
+                            src="{{ $logoUrl ?? asset('images/logo.svg') }}" 
                             alt="{{ $siteName }} Logo" 
                             class="h-14 w-auto brightness-0 invert"
+                            onerror="this.onerror=null; this.src='{{ asset('images/logo.svg') }}';"
+                            loading="lazy"
+                            style="max-width: 200px; object-fit: contain;"
                         >
-                        @else
-                        <h3 class="text-2xl font-serif font-bold">{{ $siteName }}</h3>
-                        @endif
                     </a>
                     
                     {{-- Important Links (FR-13.2.2, FR-13.2.3) --}}
@@ -241,7 +242,7 @@
         @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
         x-transition
         class="fixed bottom-8 right-8 w-12 h-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110 flex items-center justify-center z-40"
-        style="background-color: #fbbf24; color: #0d5a47; display: none;"
+        style="background-color: #fbbf24; color: #008236; display: none;"
         aria-label="Back to top"
     >
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

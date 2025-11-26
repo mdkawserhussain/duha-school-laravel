@@ -1,5 +1,23 @@
 {{-- Zaitoon Academy: Recent News (FR-10) --}}
 @php
+    // Get settings from HomePageSection
+    $homePageSections = $homePageSections ?? collect([]);
+    $newsSection = $homePageSections->get('news');
+    $sectionData = $newsSection?->data ?? [];
+    
+    // Get settings with defaults
+    $titleOverride = $sectionData['title_override'] ?? null;
+    $itemsCount = (int) ($sectionData['items_count'] ?? 12);
+    $layoutStyle = $sectionData['layout_style'] ?? 'carousel';
+    $buttonText = $newsSection?->button_text ?? 'View All News';
+    $buttonLink = $newsSection?->button_link ?? route('notices.index', [], false);
+    $sectionTitle = $titleOverride ?? $newsSection?->title ?? 'Recent News';
+    
+    // Check if section is active
+    if ($newsSection && !$newsSection->is_active) {
+        return; // Don't render if section is inactive
+    }
+    
     // Get recent news/notices (FR-10.4)
     $recentNotices = $recentNotices ?? collect([]);
     $importantNotices = $importantNotices ?? collect([]);
@@ -7,8 +25,8 @@
     if ($news->isEmpty() && $importantNotices->isNotEmpty()) {
         $news = $importantNotices;
     }
-    // Get more news items for carousel
-    $allNews = $news->take(12); // Get 12 items for carousel (4 visible at a time)
+    // Get news items for carousel based on database setting
+    $allNews = $news->take($itemsCount);
     $totalNews = $allNews->count();
 @endphp
 
@@ -50,16 +68,22 @@
          ">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {{-- Section Header (FR-10.1) --}}
-        <div class="text-center mb-12">
+        <div class="text-center mb-12 fade-in">
             <div class="flex items-center justify-center gap-3 mb-4">
                 <span class="text-4xl" role="img" aria-label="News icon">📰</span>
-                <h2 class="text-3xl sm:text-4xl font-serif font-bold text-gray-800">
-                    Recent News
+                <h2 class="text-3xl sm:text-4xl font-serif font-bold" style="color: #008236;">
+                    {{ $sectionTitle }}
                 </h2>
             </div>
+            @if($newsSection && $newsSection->description)
+            <p class="text-sm sm:text-base text-gray-500 max-w-3xl mx-auto">
+                {{ $newsSection->description }}
+            </p>
+            @else
             <p class="text-sm sm:text-base text-gray-500 max-w-3xl mx-auto">
                 Stay updated with the latest announcements, updates, and happenings from our institution.
             </p>
+            @endif
         </div>
         
         @if($allNews->isNotEmpty())
@@ -112,7 +136,7 @@
                             </div>
                             @endif
                             <div class="p-5">
-                                <h3 class="text-base font-bold mb-2 line-clamp-2 leading-snug" style="color: #0d5a47;">
+                                <h3 class="text-base font-bold mb-2 line-clamp-2 leading-snug" style="color: #008236;">
                                     {{ $item->title }}
                                 </h3>
                                 @if($item->content)
@@ -173,13 +197,17 @@
         @endif
         
         {{-- View All News Button (FR-10.5) --}}
+        @if($buttonText && $buttonLink)
         <div class="text-center mt-10">
-            <a href="{{ route('notices.index', [], false) }}" 
-               class="inline-flex items-center justify-center bg-za-green-primary hover:bg-za-green-dark text-white font-semibold px-8 py-3 rounded-full transition-all duration-200 hover:scale-105 shadow-md hover:shadow-lg"
-               style="background-color: #0d5a47;">
-                View All News
+            <a href="{{ $buttonLink }}" 
+               class="inline-flex items-center justify-center text-white font-semibold px-8 py-3 rounded-full transition-all duration-200 hover:scale-105 shadow-md hover:shadow-lg"
+               style="background-color: #008236;"
+               onmouseover="this.style.backgroundColor='#0a4536'"
+               onmouseout="this.style.backgroundColor='#008236'">
+                {{ $buttonText }}
             </a>
         </div>
+        @endif
         @else
         <div class="text-center py-12 bg-white rounded-xl">
             <p class="text-gray-500">No news available at the moment.</p>

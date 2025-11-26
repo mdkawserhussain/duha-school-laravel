@@ -47,7 +47,7 @@
                 </select>
             </div>
             <div class="flex items-end space-x-2">
-                <button type="submit" class="flex-1 px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-md">
+                <button type="submit" class="flex-1 px-4 py-2 text-white font-semibold rounded-lg transition-colors shadow-md" style="background-color: #008236;" onmouseover="this.style.backgroundColor='#0a4536'" onmouseout="this.style.backgroundColor='#008236'">
                     Filter
                 </button>
                 <a href="{{ route('admin.pages.index') }}" class="px-4 py-2 bg-gray-200 text-gray-800 font-semibold rounded-lg hover:bg-gray-300 transition-colors border border-gray-300">

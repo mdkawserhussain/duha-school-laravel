@@ -1,5 +1,15 @@
-{{-- Zaitoon Academy: Recent Notices & Chairman's Message (Two Columns) --}}
+{{-- Zaitoon Academy: Recent Notices & Director's Message (Two Columns) --}}
 @php
+    // Get settings from HomePageSection
+    $noticesChairmanSection = $homePageSections['notices_chairman'] ?? null;
+    $sectionData = $noticesChairmanSection?->data ?? [];
+    
+    // Get settings with defaults
+    $showNotices = filter_var($sectionData['show_notices'] ?? true, FILTER_VALIDATE_BOOLEAN);
+    $noticesCount = (int) ($sectionData['notices_count'] ?? 5);
+    $showChairman = filter_var($sectionData['show_chairman'] ?? true, FILTER_VALIDATE_BOOLEAN);
+    $chairmanExcerptLimit = (int) ($sectionData['chairman_excerpt_limit'] ?? 150);
+    
     // Get recent notices
     $recentNotices = $recentNotices ?? collect([]);
     $importantNotices = $importantNotices ?? collect([]);
@@ -7,32 +17,34 @@
     if ($notices->isEmpty() && $importantNotices->isNotEmpty()) {
         $notices = $importantNotices;
     }
-    $notices = $notices->take(5);
+    $notices = $notices->take($noticesCount);
     
-    // Get Chairman's message from staff or page
+    // Get Director's message from staff or page
     $featuredStaff = $featuredStaff ?? collect([]);
-    $chairman = null;
+    $director = null;
     if ($featuredStaff->isNotEmpty()) {
-        $chairman = $featuredStaff->firstWhere('position', 'like', '%Chairman%') 
+        $director = $featuredStaff->firstWhere('position', 'like', '%Director%') 
                  ?? $featuredStaff->firstWhere('position', 'like', '%Principal%')
                  ?? $featuredStaff->first();
     }
     
-    $chairmanMessage = $chairman?->bio ?? 'Zaitoon Academy is committed to providing excellence in both Islamic and modern education. Our curriculum is designed to nurture well-rounded individuals who excel academically while maintaining strong Islamic values.';
-    $chairmanName = $chairman?->name ?? 'Chairman';
-    // Get chairman image with WebP support (FR-6.3.2) - FIXED: Using proper method with asset()
-    $chairmanImage = null;
-    $chairmanMedia = null;
-    if ($chairman && $chairman->hasMedia('photo')) {
-        $chairmanMedia = $chairman->getFirstMedia('photo');
-        $chairmanImage = $chairman->getMediaUrl('photo', 'webp') ?: $chairman->getMediaUrl('photo', 'medium');
+    $directorMessage = $director?->bio ?? 'Zaitoon Academy is committed to providing excellence in both Islamic and modern education. Our curriculum is designed to nurture well-rounded individuals who excel academically while maintaining strong Islamic values.';
+    $directorName = $director?->name ?? 'Director';
+    // Get director image with WebP support (FR-6.3.2) - FIXED: Using proper method with asset()
+    $directorImage = null;
+    $directorMedia = null;
+    if ($director && $director->hasMedia('photo')) {
+        $directorMedia = $director->getFirstMedia('photo');
+        $directorImage = $director->getMediaUrl('photo', 'webp') ?: $director->getMediaUrl('photo', 'medium');
     }
 @endphp
 
+@if($showNotices || $showChairman)
 <section class="py-16 lg:py-24 bg-gray-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+        <div class="grid grid-cols-1 {{ ($showNotices && $showChairman) ? 'lg:grid-cols-2' : '' }} gap-8 lg:gap-12">
             {{-- Left Column: Recent Notices --}}
+            @if($showNotices)
             <div class="bg-white rounded-2xl p-6 lg:p-8 shadow-lg">
                 <div class="flex items-center gap-3 mb-6">
                     <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
@@ -70,19 +82,21 @@
                     </svg>
                 </a>
             </div>
+            @endif
             
-            {{-- Right Column: Chairman's Message --}}
+            {{-- Right Column: Director's Message --}}
+            @if($showChairman)
             <div class="bg-white rounded-2xl p-6 lg:p-8 shadow-lg">
                 <div class="flex items-start gap-6 mb-6">
-                    @if($chairmanImage && $chairmanMedia)
+                    @if($directorImage && $directorMedia)
                     <div class="flex-shrink-0">
                         <picture>
-                            @if($chairmanMedia->hasGeneratedConversion('webp'))
-                                <source srcset="{{ $chairman->getMediaUrl('photo', 'webp') }}" type="image/webp">
+                            @if($directorMedia->hasGeneratedConversion('webp'))
+                                <source srcset="{{ $director->getMediaUrl('photo', 'webp') }}" type="image/webp">
                             @endif
                             <img 
-                                src="{{ $chairmanImage }}" 
-                                alt="{{ $chairmanName }}"
+                                src="{{ $directorImage }}" 
+                                alt="{{ $directorName }}"
                                 class="w-24 h-24 rounded-full object-cover border-4 border-za-green-light"
                                 loading="lazy"
                             >
@@ -90,20 +104,20 @@
                     </div>
                     @else
                     <div class="flex-shrink-0 w-24 h-24 rounded-full bg-za-green-light border-4 border-za-green-light flex items-center justify-center">
-                        <span class="text-za-green-primary text-2xl font-bold">{{ substr($chairmanName, 0, 1) }}</span>
+                        <span class="text-za-green-primary text-2xl font-bold">{{ substr($directorName, 0, 1) }}</span>
                     </div>
                     @endif
                     <div class="flex-1">
-                        <h2 class="text-2xl sm:text-3xl font-bold text-za-green-primary mb-2">Chairman's Message</h2>
-                        <p class="text-gray-600 font-medium">{{ $chairmanName }}</p>
+                        <h2 class="text-2xl sm:text-3xl font-bold text-za-green-primary mb-2">Director's Message</h2>
+                        <p class="text-gray-600 font-medium">{{ $directorName }}</p>
                     </div>
                 </div>
                 
                 <p class="text-gray-700 leading-relaxed mb-6">
-                    {{ \Illuminate\Support\Str::limit($chairmanMessage, 250) }}
+                    {{ \Illuminate\Support\Str::limit($directorMessage, $chairmanExcerptLimit) }}
                 </p>
                 
-                <a href="{{ route('about.show', ['page' => 'about']) }}" 
+                <a href="{{ route('directors.message', [], false) }}" 
                    class="inline-flex items-center justify-center bg-za-green-primary hover:bg-za-green-dark text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 hover:scale-105">
                     Read More
                     <svg class="ml-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -111,7 +125,9 @@
                     </svg>
                 </a>
             </div>
+            @endif
         </div>
     </div>
 </section>
+@endif
 
