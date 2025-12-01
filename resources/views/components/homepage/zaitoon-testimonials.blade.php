@@ -15,70 +15,14 @@
     }
     
     // Get section title and description from database
-    $sectionTitle = $testimonialSection?->title ?? 'What Parents Say About Zaitoon Academy';
+    $sectionTitle = $testimonialSection?->title ?? 'What Parents Say About Duha International School';
     $sectionDescription = $testimonialSection?->description ?? null;
     
-    // Default testimonial if none provided (FR-11.4.4)
+    // No default testimonials - only show if testimonials exist
     if (empty($testimonials)) {
-        $testimonials = [
-            [
-                'quote' => 'My child\'s academic progress at Zaitoon Academy has been truly impressive. The standard of Islamic education is excellent and aligns perfectly with our family values. The school environment is serene and supportive, contributing positively to the students\' mental and moral development. The teachers are genuinely caring and helpful, providing individual attention to each student. I\'m grateful to Zaitoon Academy and wish them continued success in their noble mission.',
-                'author' => 'Md. Akther Hossain Chowdhury',
-                'student' => 'Nuwaira Hossain Afrin Class-3',
-                'role' => 'Parent',
-                'avatar' => null,
-            ],
-            [
-                'quote' => 'Zaitoon Academy has provided excellent education for my child. The combination of Islamic and modern curriculum is outstanding. Teachers are dedicated and the environment is very nurturing.',
-                'author' => 'Md. Shamimul Islam',
-                'student' => 'Aisha Rahman Class-5',
-                'role' => 'Parent',
-                'avatar' => null,
-            ],
-            [
-                'quote' => 'The holistic approach to education at Zaitoon Academy is remarkable. My son has grown both academically and spiritually. The facilities are excellent and the staff is very supportive.',
-                'author' => 'Fatima Begum',
-                'student' => 'Abdullah Khan Class-4',
-                'role' => 'Parent',
-                'avatar' => null,
-            ],
-            [
-                'quote' => 'I am extremely satisfied with the quality of education my daughter receives. The Islamic values integrated with modern subjects create a perfect balance for her development.',
-                'author' => 'Abdul Karim',
-                'student' => 'Zainab Karim Class-6',
-                'role' => 'Parent',
-                'avatar' => null,
-            ],
-            [
-                'quote' => 'Zaitoon Academy has exceeded our expectations. The teachers are knowledgeable, caring, and dedicated to each child\'s success. Highly recommended!',
-                'author' => 'Ayesha Siddique',
-                'student' => 'Yusuf Siddique Class-2',
-                'role' => 'Parent',
-                'avatar' => null,
-            ],
-            [
-                'quote' => 'The moral and ethical values taught at Zaitoon Academy are exceptional. Our child has become more confident and responsible thanks to the wonderful environment.',
-                'author' => 'Mohammad Hasan',
-                'student' => 'Maryam Hasan Class-7',
-                'role' => 'Parent',
-                'avatar' => null,
-            ],
-            [
-                'quote' => 'Best decision we made for our children\'s education. The blend of Islamic teachings with academic excellence is what sets Zaitoon Academy apart.',
-                'author' => 'Nusrat Jahan',
-                'student' => 'Ibrahim Mahmud Class-3',
-                'role' => 'Parent',
-                'avatar' => null,
-            ],
-            [
-                'quote' => 'The individual attention and care provided to each student is truly remarkable. My daughter loves going to school every day!',
-                'author' => 'Sadia Rahman',
-                'student' => 'Hafsa Rahman Class-5',
-                'role' => 'Parent',
-                'avatar' => null,
-            ],
-        ];
+        return; // Don't render section if no testimonials
     }
+    
     $totalTestimonials = count($testimonials);
 @endphp
 

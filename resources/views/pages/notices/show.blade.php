@@ -51,14 +51,15 @@
                     @if($notice->hasMedia('featured_image'))
                     <div class="mb-8">
                         @php
-                            $featuredImage = $notice->getWebPMediaUrl('featured_image', 'large');
-                            $originalImage = $notice->getFirstMediaUrl('featured_image');
+                            $featuredImageUrl = $notice->getWebPMediaUrl('featured_image', 'large') 
+                                             ?: $notice->getFirstMediaUrl('featured_image', 'large')
+                                             ?: $notice->getFirstMediaUrl('featured_image');
                         @endphp
                         <picture>
-                            @if($featuredImage)
-                                <source srcset="{{ $featuredImage }}" type="image/webp">
+                            @if($notice->getWebPMediaUrl('featured_image', 'large'))
+                                <source srcset="{{ $notice->getWebPMediaUrl('featured_image', 'large') }}" type="image/webp">
                             @endif
-                            <img src="{{ $originalImage }}" alt="{{ $notice->title }}" class="w-full h-64 md:h-80 object-cover rounded-lg shadow-lg" loading="lazy">
+                            <img src="{{ $featuredImageUrl }}" alt="{{ $notice->title }}" class="w-full h-64 md:h-80 object-cover rounded-lg shadow-lg" loading="lazy">
                         </picture>
                     </div>
                     @endif

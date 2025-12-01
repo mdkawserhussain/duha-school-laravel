@@ -12,11 +12,11 @@ class ZaitoonContentSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     * This seeder populates Zaitoon Academy-specific content.
+     * This seeder populates Duha International School-specific content.
      */
     public function run(): void
     {
-        $this->command->info('Seeding Zaitoon Academy content...');
+        $this->command->info('Seeding Duha International School content...');
 
         // 1. Update Site Settings
         $this->updateSiteSettings();
@@ -39,7 +39,7 @@ class ZaitoonContentSeeder extends Seeder
         // 7. Update Chairman/Staff
         $this->updateChairman();
 
-        $this->command->info('Zaitoon Academy content seeded successfully!');
+        $this->command->info('Duha International School content seeded successfully!');
     }
 
     protected function updateSiteSettings(): void
@@ -49,11 +49,11 @@ class ZaitoonContentSeeder extends Seeder
         $settings = SiteSettings::first();
         if ($settings) {
             $settings->update([
-                'website_name' => 'Zaitoon Academy',
+                'website_name' => 'Duha International School',
                 'website_tagline' => 'Nurturing Brilliance, One Child at a Time',
-                'website_description' => 'Zaitoon Academy was established with the vision of providing quality Islamic and modern education. Our curriculum combines traditional Islamic teachings with contemporary academic excellence.',
-                'site_name' => 'Zaitoon Academy',
-                'site_description' => 'Zaitoon Academy was established with the vision of providing quality Islamic and modern education.',
+                'website_description' => 'Duha International School was established with the vision of providing quality Islamic and modern education. Our curriculum combines traditional Islamic teachings with contemporary academic excellence.',
+                'site_name' => 'Duha International School',
+                'site_description' => 'Duha International School was established with the vision of providing quality Islamic and modern education.',
                 
                 // Contact Information (from reference image)
                 'primary_email' => 'info@zaitoonacademy.com',
@@ -73,11 +73,11 @@ class ZaitoonContentSeeder extends Seeder
                 ],
                 
                 // SEO Settings
-                'meta_title' => 'Zaitoon Academy - Nurturing Brilliance, One Child at a Time',
-                'meta_description' => 'Zaitoon Academy provides quality Islamic and modern education. Our curriculum combines traditional Islamic teachings with contemporary academic excellence.',
-                'meta_keywords' => 'Zaitoon Academy, Islamic Education, Modern Education, Chattogram, Bangladesh, Islamic School',
-                'og_title' => 'Zaitoon Academy - Nurturing Brilliance, One Child at a Time',
-                'og_description' => 'Zaitoon Academy provides quality Islamic and modern education. Our curriculum combines traditional Islamic teachings with contemporary academic excellence.',
+                'meta_title' => 'Duha International School - Nurturing Brilliance, One Child at a Time',
+                'meta_description' => 'Duha International School provides quality Islamic and modern education. Our curriculum combines traditional Islamic teachings with contemporary academic excellence.',
+                'meta_keywords' => 'Duha International School, Islamic Education, Modern Education, Chattogram, Bangladesh, Islamic School',
+                'og_title' => 'Duha International School - Nurturing Brilliance, One Child at a Time',
+                'og_description' => 'Duha International School provides quality Islamic and modern education. Our curriculum combines traditional Islamic teachings with contemporary academic excellence.',
                 
                 // Brand Colors (Zaitoon Green and Yellow)
                 'primary_color' => '#008236', // za-green-primary
@@ -85,13 +85,13 @@ class ZaitoonContentSeeder extends Seeder
                 'accent_color' => '#fbbf24', // za-yellow-accent
                 
                 // Copyright
-                'copyright_notice' => '© {year} Zaitoon Academy. All Rights Reserved.',
+                'copyright_notice' => '© {year} Duha International School. All Rights Reserved.',
             ]);
         } else {
             SiteSettings::create([
-                'website_name' => 'Zaitoon Academy',
+                'website_name' => 'Duha International School',
                 'website_tagline' => 'Nurturing Brilliance, One Child at a Time',
-                'website_description' => 'Zaitoon Academy was established with the vision of providing quality Islamic and modern education.',
+                'website_description' => 'Duha International School was established with the vision of providing quality Islamic and modern education.',
                 'primary_email' => 'info@zaitoonacademy.com',
                 'primary_phone' => '+880 1748306492',
                 'physical_address' => 'Jalalabad H/S, Jalalabad Housing Society, Sector-1, Road-1, House-10, Khulshi, Chattogram, Bangladesh',
@@ -111,7 +111,7 @@ class ZaitoonContentSeeder extends Seeder
                 'section_key' => 'hero',
                 'title' => 'Nurturing Brilliance,',
                 'subtitle' => 'One Child at a Time',
-                'description' => 'Zaitoon Academy provides quality Islamic and modern education that nurtures future leaders with strong moral character and academic excellence.',
+                'description' => 'Duha International School provides quality Islamic and modern education that nurtures future leaders with strong moral character and academic excellence.',
                 'button_text' => 'Learn More',
                 'button_link' => '/about-us',
                 'data' => [
@@ -166,8 +166,8 @@ class ZaitoonContentSeeder extends Seeder
             [
                 'section_type' => 'content',
                 'title' => 'To create a group of specialized Islamic scholars.',
-                'description' => 'Zaitoon Academy was established with the vision of providing quality Islamic and modern education. Our curriculum combines traditional Islamic teachings with contemporary academic excellence.',
-                'content' => '<p>Zaitoon Academy was conceived with a clear vision: to create a group of specialized Islamic scholars who are well-versed in both traditional Islamic knowledge and modern academic disciplines. Our founders recognized the need for an educational institution that bridges the gap between Islamic scholarship and contemporary learning.</p><p>The academy commenced its operations with a commitment to excellence in both Islamic and modern education. We believe that true education must encompass both spiritual and intellectual development, preparing students to excel in this world while maintaining strong connections to their faith and values.</p>',
+                'description' => 'Duha International School was established with the vision of providing quality Islamic and modern education. Our curriculum combines traditional Islamic teachings with contemporary academic excellence.',
+                'content' => '<p>Duha International School was conceived with a clear vision: to create a group of specialized Islamic scholars who are well-versed in both traditional Islamic knowledge and modern academic disciplines. Our founders recognized the need for an educational institution that bridges the gap between Islamic scholarship and contemporary learning.</p><p>The academy commenced its operations with a commitment to excellence in both Islamic and modern education. We believe that true education must encompass both spiritual and intellectual development, preparing students to excel in this world while maintaining strong connections to their faith and values.</p>',
                 'button_text' => 'Read More',
                 'button_link' => '/about-us',
                 'data' => [],
@@ -183,7 +183,7 @@ class ZaitoonContentSeeder extends Seeder
 
         $testimonials = [
             [
-                'quote' => 'Zaitoon Academy has provided excellent education for my child. The combination of Islamic and modern curriculum is outstanding. My child has shown remarkable improvement in both academic performance and character development.',
+                'quote' => 'Duha International School has provided excellent education for my child. The combination of Islamic and modern curriculum is outstanding. My child has shown remarkable improvement in both academic performance and character development.',
                 'author' => 'Md. Shamimul Islam',
                 'role' => 'Parent',
                 'avatar' => null,
@@ -195,7 +195,7 @@ class ZaitoonContentSeeder extends Seeder
                 'avatar' => null,
             ],
             [
-                'quote' => 'Zaitoon Academy has created a perfect balance between Islamic education and modern learning. My children are thriving academically while maintaining strong Islamic principles.',
+                'quote' => 'Duha International School has created a perfect balance between Islamic education and modern learning. My children are thriving academically while maintaining strong Islamic principles.',
                 'author' => 'Ahmed Hassan',
                 'role' => 'Parent',
                 'avatar' => null,
@@ -206,8 +206,8 @@ class ZaitoonContentSeeder extends Seeder
             ['section_key' => 'testimonials'],
             [
                 'section_type' => 'testimonials',
-                'title' => 'What Parents Say About Zaitoon Academy',
-                'description' => 'Hear from parents about their experience with Zaitoon Academy',
+                'title' => 'What Parents Say About Duha International School',
+                'description' => 'Hear from parents about their experience with Duha International School',
                 'data' => [
                     'testimonials' => $testimonials,
                 ],
@@ -308,7 +308,7 @@ class ZaitoonContentSeeder extends Seeder
             [
                 'name' => 'Chairman',
                 'position' => 'Chairman',
-                'bio' => 'Zaitoon Academy is committed to providing excellence in both Islamic and modern education. Our curriculum is designed to nurture well-rounded individuals who excel academically while maintaining strong Islamic values. We believe in creating a learning environment where students can grow intellectually, spiritually, and morally, preparing them to be future leaders who contribute positively to society.',
+                'bio' => 'Duha International School is committed to providing excellence in both Islamic and modern education. Our curriculum is designed to nurture well-rounded individuals who excel academically while maintaining strong Islamic values. We believe in creating a learning environment where students can grow intellectually, spiritually, and morally, preparing them to be future leaders who contribute positively to society.',
                 'email' => 'chairman@zaitoonacademy.com',
                 'phone' => '+880 1748306492',
                 'is_active' => true,
@@ -324,7 +324,7 @@ class ZaitoonContentSeeder extends Seeder
             [
                 'name' => 'Principal',
                 'position' => 'Principal',
-                'bio' => 'Leading Zaitoon Academy with dedication and commitment to educational excellence.',
+                'bio' => 'Leading Duha International School with dedication and commitment to educational excellence.',
                 'email' => 'principal@zaitoonacademy.com',
                 'phone' => '+880 1748306492',
                 'is_active' => true,

@@ -1,4 +1,6 @@
 @php
+    use Illuminate\Support\Facades\File;
+    
     // Use database slides from admin dashboard
     $heroSlides = $heroSlides ?? collect([]);
     $dbSlides = $heroSlides->where('is_active', true)->sortBy('sort_order')->take(10)->values();
@@ -15,9 +17,16 @@
         
         // Scan for image files in storage directory
         if (is_dir($storagePath)) {
-            $files = glob($storagePath . '/*.{jpg,jpeg,png,webp,gif}', GLOB_BRACE);
+            $extensions = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+            $files = [];
+            foreach ($extensions as $ext) {
+                $found = File::glob($storagePath . '/*.' . $ext);
+                if ($found !== false) {
+                    $files = array_merge($files, $found);
+                }
+            }
             
-            if ($files !== false && !empty($files)) {
+            if (!empty($files)) {
                 // Filter for hero slide images and sort them
                 $heroFiles = array_filter($files, function($file) {
                     return strpos(basename($file), 'hero_slide_') === 0;
@@ -38,29 +47,13 @@
             $placeholderSlides = collect($storageImages)->map(function($imageUrl, $index) {
                 return (object)[
                     'id' => $index + 1,
-                    'title' => 'Zaitoon Academy - Slide ' . ($index + 1),
+                    'title' => 'Duha International School - Slide ' . ($index + 1),
                     'image' => $imageUrl,
                 ];
             });
         } else {
-            // Ultimate fallback: Use hardcoded image paths
-            $hardcodedImages = [
-                asset('storage/hero_slide_1_1763981315182.png'),
-                asset('storage/hero_slide_2_1763981346399.png'),
-                asset('storage/hero_slide_3_1763981370818.png'),
-                asset('storage/hero_slide_4_1763981401621.png'),
-                asset('storage/hero_slide_5_1763981431354.png'),
-                asset('storage/hero_slide_6_1763981461720.png'),
-                asset('storage/hero_slide_7_1763981485308.png'),
-            ];
-            
-            $placeholderSlides = collect($hardcodedImages)->map(function($imageUrl, $index) {
-                return (object)[
-                    'id' => $index + 1,
-                    'title' => 'Zaitoon Academy - Slide ' . ($index + 1),
-                    'image' => $imageUrl,
-                ];
-            });
+            // No fallback - return empty collection
+            $placeholderSlides = collect([]);
         }
         
         $allSlides = $placeholderSlides;

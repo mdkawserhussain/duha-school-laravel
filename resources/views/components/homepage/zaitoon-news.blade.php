@@ -26,8 +26,8 @@
         $news = $importantNotices;
     }
     
-    // FORCE DUMMY DATA FOR TESTING - Add dummy news with hero images
-    if (true) { // Change to: if ($news->isEmpty()) { when done testing
+    // Use dummy data only if no real news/notices available
+    if ($news->isEmpty()) { // Changed from: if (true)
         // Get hero slide images from storage
         $heroImages = [
             asset('storage/hero_slide_1_1763981315182.png'),
@@ -210,7 +210,7 @@
                     <div class="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 shrink-0 px-3 mb-4">
                         <a href="{{ route('notices.show', $item->slug ?? $item->id, false) }}" 
                            class="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 block h-full flex flex-col transform hover:-translate-y-2">
-                            @if((method_exists($item, 'hasMedia') && $item->hasMedia('images')) || (isset($item->image) && $item->image))
+                            @if((method_exists($item, 'hasMedia') && $item->hasMedia('featured_image')) || (isset($item->image) && $item->image))
                             <div class="relative h-56 overflow-hidden">
                                 @if(isset($item->image) && $item->image)
                                     {{-- Direct image URL (for dummy data) --}}
@@ -223,12 +223,12 @@
                                 @else
                                     {{-- Media library image --}}
                                     @php
-                                        $webpUrl = $item->getMediaUrl('images', 'webp');
-                                        $imageUrl = $item->getMediaUrl('images', 'medium');
+                                        $webpUrl = $item->getMediaUrl('featured_image', 'webp');
+                                        $imageUrl = $item->getMediaUrl('featured_image', 'medium');
                                     @endphp
                                     <picture>
                                         @if($webpUrl)
-                                            <source srcset="{{ $item->getMediaUrl('images', 'webp') }}" type="image/webp">
+                                            <source srcset="{{ $item->getMediaUrl('featured_image', 'webp') }}" type="image/webp">
                                         @endif
                                         <img 
                                             src="{{ $imageUrl }}" 

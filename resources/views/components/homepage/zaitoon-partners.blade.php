@@ -18,16 +18,9 @@
     $sectionTitle = $partnerSection?->title ?? 'Our Partners';
     $sectionDescription = $partnerSection?->description ?? 'We are proud to be associated with leading organizations worldwide.';
     
-    // Default partners if none provided (FR-12.4.4)
+    // No default partners - only show if partners exist
     if (empty($partners)) {
-        $partners = [
-            ['name' => 'VISION', 'logo' => null, 'website' => null],
-            ['name' => 'ILANNOOR', 'logo' => null, 'website' => null],
-            ['name' => 'PARTNER 3', 'logo' => null, 'website' => null],
-            ['name' => 'SADAQAH TV', 'logo' => null, 'website' => null],
-            ['name' => 'SADAQAH', 'logo' => null, 'website' => null],
-            ['name' => 'PARTNER 6', 'logo' => null, 'website' => null],
-        ];
+        return; // Don't render section if no partners
     }
 @endphp
 

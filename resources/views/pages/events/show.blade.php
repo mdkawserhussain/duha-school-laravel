@@ -64,9 +64,14 @@
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-12">
                 <!-- Main Content -->
                 <div class="lg:col-span-2 order-2 lg:order-1">
-                    @if($event->featured_image)
+                    @if($event->hasMedia('featured_image'))
                     <div class="mb-8">
-                        <img src="{{ $event->featured_image }}" alt="{{ $event->title }}" class="w-full h-64 md:h-96 object-cover rounded-lg shadow-lg" loading="lazy">
+                        @php
+                            $featuredImageUrl = $event->getWebPMediaUrl('featured_image', 'large') 
+                                             ?: $event->getFirstMediaUrl('featured_image', 'large')
+                                             ?: $event->getFirstMediaUrl('featured_image');
+                        @endphp
+                        <img src="{{ $featuredImageUrl }}" alt="{{ $event->title }}" class="w-full h-64 md:h-96 object-cover rounded-lg shadow-lg" loading="lazy">
                     </div>
                     @endif
 

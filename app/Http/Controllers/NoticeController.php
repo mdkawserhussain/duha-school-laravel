@@ -54,12 +54,18 @@ class NoticeController extends Controller
                 abort(404);
             }
 
-            // Fetch related notices
+            // Eager load media if not already loaded
+            if (!$notice->relationLoaded('media')) {
+                $notice->load('media');
+            }
+
+            // Fetch related notices with media
             $relatedNotices = \App\Models\Notice::published()
                 ->where('id', '!=', $notice->id)
                 ->when($notice->category, function($query) use ($notice) {
                     return $query->where('category', $notice->category);
                 })
+                ->with('media') // Eager load media for related notices
                 ->orderBy('published_at', 'desc')
                 ->limit(3)
                 ->get();

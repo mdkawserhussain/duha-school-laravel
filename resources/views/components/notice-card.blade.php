@@ -2,7 +2,12 @@
 
 <div class="event-card relative bg-white rounded-2xl shadow-md overflow-hidden border border-slate-200/80 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
     @if($notice->hasMedia('featured_image'))
-        <img src="{{ $notice->getFirstMediaUrl('featured_image', 'medium') }}" alt="{{ $notice->title }}" class="w-full h-40 sm:h-48 object-cover" loading="lazy">
+        @php
+            $featuredImageUrl = $notice->getWebPMediaUrl('featured_image', 'medium') 
+                             ?: $notice->getFirstMediaUrl('featured_image', 'medium')
+                             ?: $notice->getFirstMediaUrl('featured_image');
+        @endphp
+        <img src="{{ $featuredImageUrl }}" alt="{{ $notice->title }}" class="w-full h-40 sm:h-48 object-cover" loading="lazy">
     @else
         <div class="w-full h-40 sm:h-48 bg-gradient-to-r from-green-500 to-green-600 flex items-center justify-center">
             <svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 20 20">

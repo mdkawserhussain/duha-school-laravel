@@ -50,19 +50,7 @@
         $newsItems = collect([]);
     }
     
-    // Add placeholder news if empty
-    if ($newsItems->isEmpty()) {
-        $newsItems = collect([
-            (object)['id' => 1, 'title' => '📚 New Academic Year Registration Open - Enroll Now!', 'published_at' => now(), 'slug' => '#'],
-            (object)['id' => 2, 'title' => '🎓 Outstanding Results in Cambridge Examinations 2024', 'published_at' => now()->subDays(1), 'slug' => '#'],
-            (object)['id' => 3, 'title' => '🕌 Ramadan Schedule: Special Prayer Times Announced', 'published_at' => now()->subDays(2), 'slug' => '#'],
-            (object)['id' => 4, 'title' => '🏆 Students Win National Quran Competition', 'published_at' => now()->subDays(3), 'slug' => '#'],
-            (object)['id' => 5, 'title' => '📢 Parent-Teacher Conference Scheduled for Next Week', 'published_at' => now()->subDays(4), 'slug' => '#'],
-            (object)['id' => 6, 'title' => '🌟 New Science Lab Facilities Now Open', 'published_at' => now()->subDays(5), 'slug' => '#'],
-            (object)['id' => 7, 'title' => '📖 Arabic Language Competition Registration Starts', 'published_at' => now()->subDays(6), 'slug' => '#'],
-            (object)['id' => 8, 'title' => '🎨 Annual Art Exhibition Featuring Student Work', 'published_at' => now()->subDays(7), 'slug' => '#'],
-        ]);
-    }
+    // No placeholder news - only show if real news exists
 @endphp
 
 @if($newsItems->isNotEmpty())
