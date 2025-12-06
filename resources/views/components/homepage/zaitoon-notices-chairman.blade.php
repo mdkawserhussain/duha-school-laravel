@@ -3,13 +3,13 @@
     // Get settings from HomePageSection
     $noticesChairmanSection = $homePageSections['notices_chairman'] ?? null;
     $sectionData = $noticesChairmanSection?->data ?? [];
-    
+
     // Get settings with defaults
     $showNotices = filter_var($sectionData['show_notices'] ?? true, FILTER_VALIDATE_BOOLEAN);
     $noticesCount = (int) ($sectionData['notices_count'] ?? 5);
     $showChairman = filter_var($sectionData['show_chairman'] ?? true, FILTER_VALIDATE_BOOLEAN);
     $chairmanExcerptLimit = (int) ($sectionData['chairman_excerpt_limit'] ?? 150);
-    
+
     // Get recent notices
     $recentNotices = $recentNotices ?? collect([]);
     $importantNotices = $importantNotices ?? collect([]);
@@ -18,16 +18,16 @@
         $notices = $importantNotices;
     }
     $notices = $notices->take($noticesCount);
-    
+
     // Get Director's message from staff or page
     $featuredStaff = $featuredStaff ?? collect([]);
     $director = null;
     if ($featuredStaff->isNotEmpty()) {
-        $director = $featuredStaff->firstWhere('position', 'like', '%Director%') 
+        $director = $featuredStaff->firstWhere('position', 'like', '%Director%')
                  ?? $featuredStaff->firstWhere('position', 'like', '%Principal%')
                  ?? $featuredStaff->first();
     }
-    
+
     $directorMessage = $director?->bio ?? 'Zaitoon Academy is committed to providing excellence in both Islamic and modern education. Our curriculum is designed to nurture well-rounded individuals who excel academically while maintaining strong Islamic values.';
     $directorName = $director?->name ?? 'Director';
     // Get director image with WebP support (FR-6.3.2) - FIXED: Using proper method with asset()
@@ -54,7 +54,7 @@
                     </div>
                     <h2 class="text-2xl sm:text-3xl font-bold" style="color: #0d5a47;">Recent Notices</h2>
                 </div>
-                
+
                 <div class="space-y-4 mb-6">
                     @forelse($notices as $notice)
                     <div class="border-l-4 pl-4 py-2 hover:bg-gray-50 transition-colors rounded-r" style="border-color: #0d5a47;">
@@ -73,8 +73,8 @@
                     </div>
                     @endforelse
                 </div>
-                
-                <a href="{{ route('notices.index', [], false) }}" 
+
+                <a href="{{ route('notices.index', [], false) }}"
                    class="inline-flex items-center justify-center w-full sm:w-auto text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 hover:scale-105"
                    style="background-color: #0d5a47;"
                    onmouseover="this.style.backgroundColor='#0a4536'"
@@ -86,7 +86,7 @@
                 </a>
             </div>
             @endif
-            
+
             {{-- Right Column: Director's Message --}}
             @if($showChairman)
             <div class="bg-white rounded-2xl p-6 lg:p-8 shadow-lg slide-right">
@@ -97,8 +97,8 @@
                             @if($directorMedia->hasGeneratedConversion('webp'))
                                 <source srcset="{{ $director->getMediaUrl('photo', 'webp') }}" type="image/webp">
                             @endif
-                            <img 
-                                src="{{ $directorImage }}" 
+                            <img
+                                src="{{ $directorImage }}"
                                 alt="{{ $directorName }}"
                                 class="w-24 h-24 rounded-full object-cover border-4"
                                 style="border-color: #f0fdf4;"
@@ -113,15 +113,15 @@
                     @endif
                     <div class="flex-1">
                         <h2 class="text-2xl sm:text-3xl font-bold mb-2" style="color: #0d5a47;">Director's Message</h2>
-                        <p class="text-gray-600 font-medium">{{ $directorName }}</p>
+                        <p class="text-gray-600 font-medium">Director, Duha International School  </p>
                     </div>
                 </div>
-                
+
                 <p class="text-gray-700 leading-relaxed mb-6">
                     {{ \Illuminate\Support\Str::limit($directorMessage, $chairmanExcerptLimit) }}
                 </p>
-                
-                <a href="{{ route('directors.message', [], false) }}" 
+
+                <a href="{{ route('directors.message', [], false) }}"
                    class="inline-flex items-center justify-center text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 hover:scale-105"
                    style="background-color: #0d5a47;"
                    onmouseover="this.style.backgroundColor='#0a4536'"

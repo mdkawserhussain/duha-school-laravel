@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
             EventSeeder::class,
             NoticeSeeder::class,
             StaffSeeder::class,
-            ZaitoonContentSeeder::class, // Zaitoon Academy-specific content (overrides defaults)
+            ZaitoonContentSeeder::class, // Duha International School-specific content (overrides defaults)
         ]);
     }
 }

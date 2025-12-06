@@ -186,7 +186,7 @@
             {{-- Footer with proper spacing --}}
             <div class="relative" style="margin-top: 0;">
                 @if($useZaitoonHeader)
-                    <x-footer-zaitoon />
+                    <x-footer-zaitoon :showNewsletter="false" />
                 @else
                     <x-footer />
                 @endif

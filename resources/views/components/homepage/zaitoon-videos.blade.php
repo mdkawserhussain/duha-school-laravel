@@ -10,43 +10,15 @@
         $recentVideos = $videoSection->data['recent_videos'] ?? [];
     }
     
-    // Default video if none provided (FR-9.5)
-    if (!$mainVideo) {
-        $mainVideo = [
-            'title' => 'Upgrade Your Islamic Vocabularies | NUSAIFA AMATULLAH ASMATH & Sayra Binte Gias | Class Two',
-            'youtube_id' => 'dQw4w9WgXcQ',
-            'thumbnail' => null,
-        ];
+    // No default videos - only show if videos exist in database
+    if (!$mainVideo && empty($recentVideos)) {
+        return; // Don't render section if no videos
     }
     
-    // Default recent videos
-    if (empty($recentVideos)) {
-        $recentVideos = [
-            [
-                'title' => 'Arabic Speech by Afra Binte Aman on My Hobby',
-                'youtube_id' => 'dQw4w9WgXcQ'
-            ],
-            [
-                'title' => 'Hadith Memorization Exam | Abrar Md. Muhtadi Amin | Student of Tahfeez Section',
-                'youtube_id' => 'dQw4w9WgXcQ'
-            ],
-            [
-                'title' => 'Naat by Mehrima Binte Faruk | Seerah Competition - 2025',
-                'youtube_id' => 'dQw4w9WgXcQ'
-            ],
-            [
-                'title' => 'Annual Sports Day Highlights | Zaitoon Academy 2025',
-                'youtube_id' => 'dQw4w9WgXcQ'
-            ],
-            [
-                'title' => 'Quran Recitation Competition | Champion Performance',
-                'youtube_id' => 'dQw4w9WgXcQ'
-            ],
-            [
-                'title' => 'Science Fair Project Presentation | Grade 5 Students',
-                'youtube_id' => 'dQw4w9WgXcQ'
-            ],
-        ];
+    // Use first recent video as main if no main video specified
+    if (!$mainVideo && !empty($recentVideos)) {
+        $mainVideo = $recentVideos[0];
+        $recentVideos = array_slice($recentVideos, 1);
     }
     
     // Combine main video with recent videos for switching

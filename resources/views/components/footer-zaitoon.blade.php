@@ -1,5 +1,5 @@
 {{-- Zaitoon Academy Footer Component --}}
-@props(['showNewsletter' => true])
+@props(['showNewsletter' => false])  {{-- Changed default to false --}}
 
 @php
     // Get site settings
@@ -26,93 +26,8 @@
     <div class="relative pt-20 lg:pt-24 pb-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
-            {{-- Newsletter Section --}}
-            @if($showNewsletter)
-            <div class="mb-16 pb-12 border-b border-white/10">
-                <div class="max-w-3xl mx-auto text-center">
-                    <h3 class="text-2xl md:text-3xl font-serif font-bold mb-4">Stay Connected</h3>
-                    <p class="text-gray-300 mb-6">Subscribe to our newsletter for updates on admissions, events, and academic news.</p>
-                    
-                    <form 
-                        x-data="{
-                            email: '',
-                            loading: false,
-                            success: false,
-                            error: '',
-                            
-                            async submit() {
-                                if (!this.email) {
-                                    this.error = 'Please enter your email address';
-                                    return;
-                                }
-                                
-                                this.loading = true;
-                                this.error = '';
-                                
-                                try {
-                                    const response = await fetch('/newsletter/subscribe', {
-                                        method: 'POST',
-                                        headers: {
-                                            'Content-Type': 'application/json',
-                                            'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content
-                                        },
-                                        body: JSON.stringify({ email: this.email })
-                                    });
-                                    
-                                    const data = await response.json();
-                                    
-                                    if (response.ok) {
-                                        this.success = true;
-                                        this.email = '';
-                                    } else {
-                                        this.error = data.message || 'Subscription failed';
-                                    }
-                                } catch (e) {
-                                    this.error = 'Network error. Please try again.';
-                                } finally {
-                                    this.loading = false;
-                                }
-                            }
-                        }"
-                        @submit.prevent="submit()"
-                        class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
-                    >
-                        <div class="flex-grow">
-                            <input 
-                                x-model="email"
-                                type="email" 
-                                placeholder="Enter your email"
-                                class="w-full px-6 py-4 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-za-yellow-accent focus:border-transparent transition-all"
-                                :disabled="loading"
-                                required
-                            >
-                        </div>
-                        <button 
-                            type="submit"
-                            class="px-8 py-4 font-bold rounded-full transition-all duration-200 hover:scale-105 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
-                            style="background-color: #fbbf24; color: #008236;"
-                            :disabled="loading"
-                        >
-                            <span x-show="!loading">Subscribe</span>
-                            <span x-show="loading" class="inline-flex items-center">
-                                <svg class="animate-spin h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                </svg>
-                                Subscribing...
-                            </span>
-                        </button>
-                    </form>
-                    
-                    <div class="mt-4">
-                        <p x-show="success" x-transition class="text-za-yellow-accent font-semibold">
-                            ✓ Successfully subscribed! Check your email for confirmation.
-                        </p>
-                        <p x-show="error" x-text="error" x-transition class="text-red-300"></p>
-                    </div>
-                </div>
-            </div>
-            @endif
+            {{-- Newsletter Section - REMOVED --}}
+            {{-- Newsletter section has been removed as requested --}}
 
             {{-- Footer Grid (FR-13.1.3) --}}
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mb-12">

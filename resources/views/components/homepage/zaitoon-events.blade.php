@@ -26,8 +26,8 @@
         $events = $featuredEvents;
     }
     
-    // FORCE DUMMY DATA FOR TESTING - Always use dummy events to test carousel
-    if (true) { // Change to: if ($events->isEmpty()) { when done testing
+    // Use dummy data only if no real events available
+    if ($events->isEmpty()) {
         // Get hero slide images from storage
         $heroImages = [
             asset('storage/hero_slide_1_1763981315182.png'),
@@ -223,7 +223,7 @@
                     @foreach($allEvents as $event)
                     <div class="w-full sm:w-1/2 lg:w-1/4 flex-shrink-0 px-3 mb-4">
                         <div class="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 h-full flex flex-col transform hover:-translate-y-2">
-                            @if((method_exists($event, 'hasMedia') && $event->hasMedia('images')) || (isset($event->image) && $event->image))
+                            @if((method_exists($event, 'hasMedia') && $event->hasMedia('featured_image')) || (isset($event->image) && $event->image))
                             <div class="relative h-56 overflow-hidden">
                                 @if(isset($event->image) && $event->image)
                                     {{-- Direct image URL (for dummy data) --}}
@@ -236,12 +236,14 @@
                                 @else
                                     {{-- Media library image --}}
                                     @php
-                                        $webpUrl = $event->getMediaUrl('images', 'webp');
-                                        $imageUrl = $event->getMediaUrl('images', 'medium');
+                                        $webpUrl = $event->getWebPMediaUrl('featured_image', 'medium');
+                                        $imageUrl = $event->getWebPMediaUrl('featured_image', 'medium') 
+                                                 ?: $event->getFirstMediaUrl('featured_image', 'medium')
+                                                 ?: $event->getFirstMediaUrl('featured_image');
                                     @endphp
                                     <picture>
                                         @if($webpUrl)
-                                            <source srcset="{{ $event->getMediaUrl('images', 'webp') }}" type="image/webp">
+                                            <source srcset="{{ $webpUrl }}" type="image/webp">
                                         @endif
                                         <img 
                                             src="{{ $imageUrl }}" 

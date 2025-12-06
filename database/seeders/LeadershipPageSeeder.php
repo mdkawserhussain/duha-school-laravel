@@ -18,8 +18,8 @@ class LeadershipPageSeeder extends Seeder
                 'is_published' => true,
                 'published_at' => now(),
                 'content' => $this->getContent(),
-                'meta_title' => "Founder & Director's Message - Zaitoon Academy",
-                'meta_description' => 'Read the inspiring message from our Founder & Director about the vision, mission, and values that guide Zaitoon Academy.',
+                'meta_title' => "Founder & Director's Message - Duha International School",
+                'meta_description' => 'Read the inspiring message from our Founder & Director about the vision, mission, and values that guide Duha International School.',
             ]
         );
         
@@ -47,7 +47,7 @@ class LeadershipPageSeeder extends Seeder
 "Build the Nations with the Light of Divine Knowledge" — Our mission is to nurture a generation grounded in faith, enriched with knowledge, and empowered to lead with integrity.
 </blockquote>
 
-<p>We aspire to develop our students into successful individuals — both in this world and the Hereafter. To achieve this, we emphasize a balanced approach that cultivates the mind, body, and soul. Alongside their academic and spiritual education, our curriculum integrates both traditional and modern disciplines, including English and computer science. For parents seeking a comprehensive education for their children — one that encompasses becoming a Hafiz of the Quran, a knowledgeable Islamic scholar, and a well-rounded individual— <strong>Zaitoon Academy</strong> is an excellent choice.</p>
+<p>We aspire to develop our students into successful individuals — both in this world and the Hereafter. To achieve this, we emphasize a balanced approach that cultivates the mind, body, and soul. Alongside their academic and spiritual education, our curriculum integrates both traditional and modern disciplines, including English and computer science. For parents seeking a comprehensive education for their children — one that encompasses becoming a Hafiz of the Quran, a knowledgeable Islamic scholar, and a well-rounded individual— <strong>Duha International School</strong> is an excellent choice.</p>
 
 <h3>Our Academic Approach</h3>
 

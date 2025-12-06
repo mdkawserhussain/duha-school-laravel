@@ -42,7 +42,7 @@ class HomeController extends Controller
             // This ensures we get the latest events from the database
             // The EventService handles its own caching, but we want fresh data here
             // when the homepage cache is regenerated
-            $upcomingEvents = $this->eventService->getUpcomingEvents(3);
+            $upcomingEvents = $this->eventService->getUpcomingEvents(12); // Changed from 3 to 12
             
             // Ensure events have media relationships loaded
             if ($upcomingEvents->isNotEmpty() && !$upcomingEvents->first()->relationLoaded('media')) {

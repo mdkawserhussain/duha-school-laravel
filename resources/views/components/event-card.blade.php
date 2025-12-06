@@ -1,8 +1,13 @@
 @props(['event'])
 
 <div class="event-card bg-white rounded-2xl shadow-md overflow-hidden border border-slate-200/80 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-    @if($event->featured_image)
-        <img src="{{ $event->featured_image }}" alt="{{ $event->title }}" class="w-full h-40 sm:h-48 object-cover">
+    @if($event->hasMedia('featured_image'))
+        @php
+            $featuredImageUrl = $event->getWebPMediaUrl('featured_image', 'medium') 
+                             ?: $event->getFirstMediaUrl('featured_image', 'medium')
+                             ?: $event->getFirstMediaUrl('featured_image');
+        @endphp
+        <img src="{{ $featuredImageUrl }}" alt="{{ $event->title }}" class="w-full h-40 sm:h-48 object-cover">
     @else
         <div class="w-full h-40 sm:h-48 bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center">
             <svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 20 20">

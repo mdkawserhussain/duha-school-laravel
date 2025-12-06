@@ -7,11 +7,11 @@
     if (!str_starts_with($primaryColor, '#')) {
         $primaryColor = '#' . ltrim($primaryColor, '#');
     }
-    
+
     // Get announcements safely
     $announcements = collect([]);
     try {
-        if (!app()->bound('exception') && 
+        if (!app()->bound('exception') &&
             !str_contains(request()->path() ?? '', 'errors') &&
             !str_contains(request()->path() ?? '', '_dusk') &&
             !str_contains(request()->path() ?? '', 'telescope')) {
@@ -20,7 +20,7 @@
     } catch (\Throwable $e) {
         $announcements = collect([]);
     }
-    
+
     // Get navigation items
     $navigationItems = collect([]);
     try {
@@ -31,7 +31,7 @@
     } catch (\Throwable $e) {
         $navigationItems = collect([]);
     }
-    
+
     // Helper function to check if navigation item is active
     $isActive = function($navItem) {
         if (!$navItem || !$navItem->route_name) return false;
@@ -44,7 +44,7 @@
 @endphp
 
 <header
-    x-data="{ 
+    x-data="{
         mobileMenuOpen: false,
         transparent: {{ $transparent ? 'true' : 'false' }},
         scrolled: false,
@@ -87,9 +87,9 @@
                     @if(is_array($socialLinks) && !empty($socialLinks))
                         @foreach($socialLinks as $platform => $url)
                             @if(!empty($url))
-                                <a href="{{ $url }}" 
-                                   target="_blank" 
-                                   rel="noopener noreferrer" 
+                                <a href="{{ $url }}"
+                                   target="_blank"
+                                   rel="noopener noreferrer"
                                    class="text-white/90 hover:text-white transition-colors"
                                    aria-label="{{ ucfirst($platform) }}">
                                     @if(strtolower($platform) === 'facebook')
@@ -144,20 +144,20 @@
                         </a>
                     @endif
                 </div>
-                
+
                 {{-- Right: Contact Info & Action Buttons --}}
                 <div class="flex items-center gap-4">
                     {{-- Contact Info --}}
                     <div class="flex items-center gap-4 border-r border-white/20 pr-4">
-                        <a href="tel:{{ preg_replace('/[^0-9+]/', '', $phone) }}" 
+                        <a href="tel:{{ preg_replace('/[^0-9+]/', '', $phone) }}"
                            class="text-white/90 hover:text-white transition-colors flex items-center gap-1.5" aria-label="Call us">
                             <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
                             </svg>
                             <span>{{ $phone }}</span>
                         </a>
-                        
-                        <a href="mailto:{{ $email }}" 
+
+                        <a href="mailto:{{ $email }}"
                            class="text-white/90 hover:text-white transition-colors flex items-center gap-1.5" aria-label="Email us">
                             <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
@@ -166,43 +166,44 @@
                             <span>{{ $email }}</span>
                         </a>
                     </div>
-                    
+
                     {{-- Desktop Quick Action Buttons --}}
                     <div class="hidden lg:flex items-center gap-2">
-                        <a href="{{ route('all-notice') }}" 
+                        <a href="{{ route('all-notice') }}"
                            class="px-3 py-1 text-xs font-medium rounded transition-colors"
                            style="background-color: #fbbf24; color: #008236;"
                            onmouseover="this.style.backgroundColor='#f59e0b'"
                            onmouseout="this.style.backgroundColor='#fbbf24'">
                             Notice
                         </a>
-                        <a href="{{ route('all-news') }}" 
-                           class="px-3 py-1 text-xs font-medium rounded transition-colors"
-                           style="background-color: #fbbf24; color: #008236;"
-                           onmouseover="this.style.backgroundColor='#f59e0b'"
-                           onmouseout="this.style.backgroundColor='#fbbf24'">
-                            News
-                        </a>
-                        <a href="{{ route('career') }}" 
+
+                        <a href="{{ route('career') }}"
                            class="px-3 py-1 text-xs font-medium rounded transition-colors"
                            style="background-color: #fbbf24; color: #008236;"
                            onmouseover="this.style.backgroundColor='#f59e0b'"
                            onmouseout="this.style.backgroundColor='#fbbf24'">
                             Career
                         </a>
-                        <a href="{{ route('page.direct', 'faq') }}" 
+                        <a href="{{ route('page.direct', 'faq') }}"
                            class="px-3 py-1 text-xs font-medium rounded transition-colors"
                            style="background-color: #fbbf24; color: #008236;"
                            onmouseover="this.style.backgroundColor='#f59e0b'"
                            onmouseout="this.style.backgroundColor='#fbbf24'">
                             FAQ
                         </a>
-                        <a href="{{ route('page.direct', 'choose-apply') }}" 
+                        <a href="{{ route('page.direct', 'choose-apply') }}"
                            class="px-3 py-1 text-xs font-medium rounded transition-colors"
                            style="background-color: #fbbf24; color: #008236;"
                            onmouseover="this.style.backgroundColor='#f59e0b'"
                            onmouseout="this.style.backgroundColor='#fbbf24'">
                             Apply Online
+                        </a>
+                        <a href="https://duhais.eduexpert24.com/login"
+                           class="px-3 py-1 text-xs font-medium rounded transition-colors"
+                           style="background-color: #ffffff; color: #008236;"
+                           onmouseover="this.style.backgroundColor='#f59e0b'"
+                           onmouseout="this.style.backgroundColor='#fbbf24'">
+                            Log In
                         </a>
                     </div>
                 </div>
@@ -214,21 +215,21 @@
             <div class="px-4 py-2 flex items-center justify-between">
                 {{-- Mobile Action Buttons (Always Visible) --}}
                 <div class="flex items-center gap-2 flex-1">
-                    <a href="{{ route('all-notice') }}" 
+                    <a href="{{ route('all-notice') }}"
                        class="px-2 py-1 text-xs font-medium rounded transition-colors"
                        style="background-color: #fbbf24; color: #008236;"
                        onmouseover="this.style.backgroundColor='#f59e0b'"
                        onmouseout="this.style.backgroundColor='#fbbf24'">
                         Notice
                     </a>
-                    <a href="{{ route('all-news') }}" 
+                    <a href="{{ route('all-news') }}"
                        class="px-2 py-1 text-xs font-medium rounded transition-colors"
                        style="background-color: #fbbf24; color: #008236;"
                        onmouseover="this.style.backgroundColor='#f59e0b'"
                        onmouseout="this.style.backgroundColor='#fbbf24'">
                         News
                     </a>
-                    <a href="{{ route('page.direct', 'choose-apply') }}" 
+                    <a href="{{ route('page.direct', 'choose-apply') }}"
                        class="px-2 py-1 text-xs font-medium rounded transition-colors"
                        style="background-color: #fbbf24; color: #008236;"
                        onmouseover="this.style.backgroundColor='#f59e0b'"
@@ -267,9 +268,9 @@
                         @if(is_array($socialLinks) && !empty($socialLinks))
                             @foreach($socialLinks as $platform => $url)
                                 @if(!empty($url) && $url !== '#')
-                                    <a href="{{ $url }}" 
-                                       target="_blank" 
-                                       rel="noopener noreferrer" 
+                                    <a href="{{ $url }}"
+                                       target="_blank"
+                                       rel="noopener noreferrer"
                                        class="text-white/90 hover:text-white transition-colors"
                                        aria-label="{{ ucfirst($platform) }}">
                                         @if(strtolower($platform) === 'facebook')
@@ -297,7 +298,7 @@
 
                     {{-- Contact Info --}}
                     <div class="flex items-center gap-3 text-xs">
-                        <a href="tel:{{ preg_replace('/[^0-9+]/', '', $phone) }}" 
+                        <a href="tel:{{ preg_replace('/[^0-9+]/', '', $phone) }}"
                            class="text-white/90 hover:text-white transition-colors flex items-center gap-1"
                            aria-label="Call us">
                             <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
@@ -305,7 +306,7 @@
                             </svg>
                             <span class="hidden sm:inline">{{ $phone }}</span>
                         </a>
-                        <a href="mailto:{{ $email }}" 
+                        <a href="mailto:{{ $email }}"
                            class="text-white/90 hover:text-white transition-colors flex items-center gap-1"
                            aria-label="Email us">
                             <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
@@ -329,7 +330,7 @@
     >
         <div class="w-full pl-4 pr-4 sm:pr-6 lg:pr-8">
             <div class="flex items-center justify-between h-16 lg:h-20">
-                
+
                 {{-- Logo --}}
                 <div class="flex-shrink-0">
                     <a href="{{ route('home') }}" class="flex items-center gap-2">
@@ -502,7 +503,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </button>
-                        <div 
+                        <div
                             x-show="open"
                             x-transition:enter="transition ease-out duration-200"
                             x-transition:enter-start="opacity-0 max-h-0"
@@ -556,12 +557,12 @@
         0% { transform: translateX(0%); }
         100% { transform: translateX(-50%); }
     }
-    
+
     .animate-marquee {
         display: inline-block;
         animation: marquee 20s linear infinite;
     }
-    
+
     .animate-marquee:hover {
         animation-play-state: paused;
     }
