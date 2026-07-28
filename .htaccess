@@ -1,0 +1,32 @@
+# Set PHP Version to 8.2 for this Laravel project
+# For LiteSpeed Web Server
+#PHP82
+
+# For Apache/mod_php (if using AddHandler)
+<IfModule mod_php.c>
+    # Uncomment and adjust based on your server's PHP handler path
+    # AddHandler application/x-httpd-php82 .php
+</IfModule>
+
+# For FastCGI/PHP-FPM (most common on shared hosting)
+<IfModule mod_fcgid.c>
+    # This will be handled by cPanel's PHP Selector, but you can force it here
+    # AddHandler fcgid-script .php
+    # FCGIWrapper /usr/local/cpanel/scripts/php82 .php
+</IfModule>
+
+# Alternative: Use cPanel's PHP Selector via .htaccess
+# Create a .htaccess in public_html with: AddHandler application/x-httpd-php82 .php
+# Or use cPanel's "Select PHP Version" tool and choose 8.2, then "Set as current"
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Exclude api folder from Laravel routing (let it use its own PHP version)
+    RewriteCond %{REQUEST_URI} ^/api/
+    RewriteRule ^ - [L]
+
+    # Redirect everything to public/ except if already in public/
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>

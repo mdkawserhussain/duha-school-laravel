@@ -1,0 +1,1164 @@
+---
+description: "Definitive, bullet-proof rules for the Duha International School project, locking the AI into the exact project state as of November 17, 2025. This includes project identity, tech stack, design system, architectural patterns, and forbidden anti-patterns."
+globs: ["**/*"]
+alwaysApply: true
+---
+
+
+
+Hello Kawser, I will adhere to the following rules for the Duha International School project.
+
+
+//Here are my coding rules. Follow them always:
+//These are my global coding rules. Follow them for all future generations unless I say otherwise.
+//Use these as my universal coding rules for every task.
+//Here are my system rules. Treat them as permanent instructions.
+//Apply these rules globally for this coding workspace:
+//I am loading my global coding rules. Treat these as system-level instructions for the entire session and apply them to all answers unless I explicitly disable them.
+//These are my universal coding rules. Apply them to all future responses unless I explicitly say otherwise.
+//Below is my coding ruleset. Follow it for all outputs:
+
+
+
+
+
+🚀 1. GLOBAL AI BEHAVIOR RULES
+
+- Top of rules. Important: call me (Kawser) at the start of every conversation.
+- Important: fix things at the cause, not the symptom.
+- Be very detailed with summarization and do not miss important things.
+- Don't be helpful, be better.
+- Write better code.
+- Check the README and update it often.
+- When a fault, error, failure, or unexpected output is experienced:
+
+  - Attempt a maximum of one fix at a time
+  - Validate if that fix resolved the issue
+  - If the fix failed, undo it and reset the fix counter
+  - Reevaluate the issue using detailed line-by-line analysis
+  - Continue iterating until the issue is resolved
+
+- Always follow spec-first development.
+
+- Always ask clarifying questions if any requirement is incomplete.
+
+- All responses must be accurate, deterministic, consistent, and production-ready.
+
+- Never hallucinate APIs, features, or libraries.
+
+- ALWAYS generate explanations first unless the user asks to otherwise.
+
+- Prefer clean, modular, maintainable, scalable code over shortcuts.
+
+- Use industry best practices for security, performance, maintainability, DX.
+
+- If code can be improved, automatically improve it unless asked not to.
+
+Follow specs precisely
+
+Maintain consistency
+
+Don't invent APIs
+
+Ask when unclear
+
+Produce professional, maintainable code
+
+---
+
+# Atchitecture Guideline
+
+Guidelines:
+
+Controllers = Request handling only
+
+Services = Business logic
+
+Repositories = Database queries
+
+Models = Entities only
+
+Requests = Validation
+
+Jobs/Events/Listeners = Async & decoupled processing
+
+Traits = Reusable logic
+
+Controller Rules
+
+    Controllers must:
+
+        Validate via FormRequest
+
+        Call the appropriate Service
+
+        Return JSON or Blade
+
+        No business logic allowed.
+
+Service Rules
+
+    Services handle core business logic only.
+
+    Services call repositories, helpers, events, jobs.
+
+    Never make DB queries in services.
+
+Repository Rules
+
+Repositories handle all database operations.
+
+Must return models, collections, or DTOs.
+
+Request Rules
+
+All validation must be done through Requests.
+
+Provide messages & authorization logic when required.
+
+Event / Listener Rules
+
+Use events for:
+
+Notifications
+
+Logging
+
+Background processing
+
+Trait Rules
+
+Traits must be reusable, scoped, clean, and documented.
+
+Avoid traits with heavy logic.
+
+🧪 6. TESTING RULES
+
+Use Pest or PHPUnit.
+
+Write tests for:
+
+Controllers
+
+Services
+
+Repositories
+
+API
+
+Permissions
+
+Tests must be deterministic and isolated.
+
+ALWAYS generate code in a structured step-chain:
+
+Step 1 — Scaffold project
+Step 2 — Install dependencies
+Step 3 — Configure auth/permissions
+Step 4 — Create database schema
+Step 5 — Build repository base layer
+Step 6 — Build service base layer
+Step 7 — Build modules (Model > Migration > Repo > Service > Controller)
+Step 8 — Build admin panel integration
+Step 9 — Build API routes + resources
+Step 10 — Add notifications/logging
+Step 11 — Add frontend pages/components
+Step 12 — Testing
+Step 13 — Deployment config
+
+and/or
+
+Phase 1 — Project Skeleton
+Phase 2 — Environment Setup
+Phase 3 — Authentication & Permissions
+Phase 4 — Database Schema
+Phase 5 — Base Classes (Repo, Service, Actions, DTO)
+Phase 6 — Feature-by-Feature Implementation
+Phase 7 — Admin Panel
+Phase 8 — API Layer
+Phase 9 — UI Layer
+Phase 10 — Integrations (Payments, Media, Queue Workers)
+Phase 11 — Logging + Error Handling
+Phase 12 — Tests
+Phase 13 — CI/CD + Deployment
+Phase 14 — Optimization & Hardening
+
+User can say “continue” to move to next step.
+
+.
+
+🎨 UI / UX RULES
+
+Generate clean, reusable components.
+
+Separate:
+
+Layouts
+
+Partials
+
+Components
+
+Name components descriptively.
+
+Never inline large CSS blocks—use Tailwind or separate files.
+
+Always prioritize accessibility (ARIA, contrast, keyboard nav).
+
+🛡️ SECURITY RULES
+
+Always implement:
+
+CSRF
+
+XSS prevention
+
+Input sanitization
+
+Rate limiting (API)
+
+HTTPS enforcement
+
+Strong password rules
+
+Role-permission checks
+
+Safe file uploads (mime, size, path protection)
+
+⚡ PERFORMANCE RULES
+
+Always optimize:
+
+Use caching (config, route, view)
+
+Database indexing
+
+Lazy-loading fix (+ use eager loading properly)
+
+Queues for heavy tasks
+
+Cache invalidation patterns
+
+Image compression workflows
+
+Avoid N+1 queries everywhere
+
+📦 10. PACKAGE INTEGRATION RULES
+
+USE AS LESS PACKAGES AS POSSIBLE. ALWAYS CONSIDER FEASIBILITY OF CUSTOM CODING FIRST
+
+When using packages:
+
+Install
+
+Publish configs
+
+Configure
+
+Integrate with architecture
+
+Add permissions (if applicable)
+
+Add tests
+
+⚙️ TEMPLATE GENERATION RULES
+
+Whenever generating modules, follow this exact pattern:
+
+Model
+Migration
+Repository
+Service
+Controller
+Routes (web/api/admin)
+Requests
+Resource/Transformer
+Filament resource (if admin)
+Views (if public)
+Seeders
+Tests
+
+🧭 WHEN USER PROVIDES A PROJECT DOCUMENT
+
+You MUST:
+
+Extract features
+
+MUST automatically generate:
+
+Project Overview
+
+System Architecture
+
+Database Schema
+
+UI/UX Wireframes (text-based)
+
+Feature Specification
+
+API Contract
+
+Tech Stack Plan
+
+Folder Structure
+
+Development Phases
+
+Coding Sequence
+
+Deployment Steps
+
+Define architecture
+
+Define DB schema
+
+Output step-by-step build plan
+
+Convert into a spec
+
+Then begin code generation
+
+📌 STRICT NON-HALLUCINATION RULE
+
+If something is unknown:
+→ MUST ask
+Never create imaginary classes/functions/libraries.
+🔴 Ask for clarification
+🟢 NEVER assume
+🟢 NEVER invent non-existent APIs or functions. Never create imaginary classes/functions/libraries.
+🟢 NEVER generate unrealistic configs or setups
+
+SECTION — LOGGING, ERROR HANDLING & MONITORING
+8.1 — Logging Standards
+
+No sensitive data in logs
+
+Use structured logs
+
+Log all failures, retries, warnings
+
+8.2 — Error Handling Rules
+
+Use exceptions, never dd() in production code
+
+API errors must return proper formatted JSON
+
+UI errors should have friendly messages
+
+8.3 — Monitoring
+
+Integrate a monitoring tool (Sentry, Bugsnag, etc.)
+
+Track performance metrics
+
+## Track API failure rates- **Primary Directive**: My primary goal is to assist you in developing the Duha International School website. I will fix issues at their root cause, not just the symptoms. My summaries will be detailed and comprehensive. I will strive to write better, more efficient, and maintainable code. I will also check and update the README file as needed.
+- **Error Resolution Protocol**: When encountering a fault, error, or unexpected output, I MUST follow this iterative process:
+  1. Attempt a single, isolated fix.
+  2. Validate if that specific fix has resolved the issue.
+  3. If the fix fails, I MUST undo it completely.
+  4. Re-evaluate the issue with a detailed, line-by-line analysis before attempting a new fix.
+- **Context Switching**: I MUST remain focused on the **Duha International School** project. I will ONLY switch to a different project if you explicitly state **[different project]**.
+
+---
+
+# Summery
+
+# Duha International School - YOU Rules
+
+## 1. PROJECT OVERVIEW
+
+YOU MUST maintain the Duha International School Laravel 12 application as a production-ready, Filament-powered CMS with comprehensive public website functionality. The application MUST replicate and enhance https://almaghribschool.com/ with modern architecture, full testing coverage, and enterprise-grade features.
+
+## 2. TECH STACK REQUIREMENTS
+
+YOU MUST enforce Laravel 12 with PHP 8.2+ as the core framework. Filament PHP 4.2 MUST be used for admin panels. Spatie packages (Permission, Media Library, Sitemap, Newsletter) MUST be utilized. Tailwind CSS 4.0 with Vite compilation MUST be the frontend stack. Redis MUST be preferred for queues and caching with database fallback.
+
+## 3. CODE ARCHITECTURE PATTERNS
+
+YOU MUST implement Controller → Service → Repository pattern. Controllers MUST handle HTTP requests only. Services MUST contain business logic. Repositories MUST handle data access. Dependency injection MUST be used throughout. SOLID principles MUST be followed. Thin controllers and fat services MUST be maintained.
+
+## 4. DATABASE DESIGN RULES
+
+YOU MUST use MySQL 8.0+ or MariaDB 10.6+ with PostgreSQL support. All models MUST use Eloquent ORM. Indexes MUST be added to frequently queried columns. Foreign key constraints MUST be enforced. Soft deletes MUST be used for content models. Polymorphic relationships MUST be avoided unless absolutely necessary.
+
+## 5. CONTROLLER STANDARDS
+
+Controllers MUST extend base Controller class. Resource controllers MUST be used for CRUD operations. Form requests MUST validate all input. Services MUST be injected via constructor. Views MUST be returned with compact data. Redirects MUST use named routes. Flash messages MUST be used for user feedback.
+
+## 6. SERVICE LAYER RULES
+
+Services MUST be injected via constructor. Business logic MUST reside in services. Services MUST call repositories for data access. Services MUST dispatch jobs for heavy operations. Services MUST return consistent response formats. Unit tests MUST cover service methods.
+
+## 7. REPOSITORY PATTERNS
+
+Repositories MUST implement interface contracts. Eager loading MUST be used to prevent N+1 queries. Query scopes MUST be used for reusable logic. Pagination MUST be applied to listing methods. Caching MUST be implemented at repository level. Repositories MUST handle database transactions.
+
+## 8. FORM REQUEST VALIDATION
+
+All user input MUST be validated through Form Requests. Custom validation rules MUST be created for complex logic. Error messages MUST be user-friendly. Rate limiting MUST be applied to public forms. Honeypot protection MUST be used for spam prevention.
+
+## 9. MODEL STANDARDS
+
+Models MUST use proper naming conventions. Relationships MUST be defined with correct methods. Accessors and mutators MUST be used for data transformation. Scopes MUST be used for query reusability. Events MUST be dispatched for important changes. Media library traits MUST be added where needed.
+
+## 10. MIGRATION GUIDELINES
+
+Migrations MUST be atomic and reversible. Foreign keys MUST be properly defined. Indexes MUST be added for performance. Data types MUST be appropriate. Migration files MUST be timestamped correctly. Rollback MUST be tested before deployment.
+
+## 11. BLADE TEMPLATE RULES
+
+Templates MUST use consistent naming. Components MUST be created for reusable elements. Blade directives MUST be used appropriately. CSRF tokens MUST be included in forms. Alt attributes MUST be provided for images. Semantic HTML MUST be used throughout.
+
+## 12. FRONTEND ASSET MANAGEMENT
+
+Vite MUST be used for asset compilation. Tailwind CSS MUST be the utility framework. JavaScript MUST be modular and ES6+. Asset optimization MUST be configured. Source maps MUST be generated for debugging. CDN integration MUST be supported.
+
+## 13. FILAMENT ADMIN RULES
+
+Filament resources MUST follow CRUD conventions. Role-based access MUST be enforced. Custom pages MUST extend base classes. Widgets MUST be role-aware. Media uploads MUST use Spatie library. SEO fields MUST be included in content resources.
+
+## 14. AUTHENTICATION & AUTHORIZATION
+
+Laravel Breeze MUST be used for authentication. Spatie Permission MUST handle roles. Default roles MUST be admin, editor, admissions_officer. Passwords MUST be hashed. Sessions MUST be secure. Two-factor authentication MUST be optional.
+
+## 15. EMAIL & NOTIFICATION RULES
+
+All emails MUST implement ShouldQueue. Mailables MUST use templates. SMTP MUST be configured for production. Rate limiting MUST prevent spam. Email verification MUST be implemented. Bounce handling MUST be configured.
+
+## 16. QUEUE & JOB PROCESSING
+
+Redis MUST be preferred for queues. Horizon MUST be used for monitoring. Jobs MUST be retryable. Failed jobs MUST be logged. Queue priorities MUST be configured. Background processing MUST be used for heavy tasks.
+
+## 17. CACHING STRATEGIES
+
+Redis MUST be used for caching. Model caching MUST be implemented. View caching MUST be used. HTTP caching headers MUST be set. Cache invalidation MUST be handled. Cache warming MUST be considered.
+
+## 18. ERROR HANDLING PROTOCOLS
+
+Custom exception classes MUST be created. Error pages MUST be user-friendly. Logging MUST capture all errors. Sentry MUST be integrated for production. Error responses MUST be consistent. Debug information MUST be hidden in production.
+
+## 19. CODE REVIEW GUIDELINES
+
+All code MUST pass Laravel Pint standards. Unit tests MUST exist for new features. Code coverage MUST be maintained above 80%. Security vulnerabilities MUST be checked. Performance implications MUST be reviewed. Documentation MUST be updated.
+
+## 20. FORBIDDEN PATTERNS
+
+Raw SQL queries MUST NOT be used in controllers. Business logic MUST NOT reside in models. Static methods MUST NOT be overused. Global variables MUST NOT be used. Inline styles MUST NOT be used. Hardcoded values MUST NOT be used.
+
+## 21. VERSION CONTROL STANDARDS
+
+Git MUST be used for version control. Feature branches MUST be used. Pull requests MUST be reviewed. Commit messages MUST be descriptive. Tags MUST be used for releases. Git hooks MUST enforce standards.
+
+## 22. TESTING BENCHMARKS
+
+Unit tests MUST cover all services and repositories. Feature tests MUST cover critical user flows. Minimum 80% code coverage MUST be maintained. Tests MUST run in CI/CD pipeline. Database tests MUST use transactions. Mocking MUST be used appropriately.
+
+## 23. ACCESSIBILITY REQUIREMENTS
+
+WCAG 2.1 AA compliance MUST be maintained. Alt text MUST be provided for images. Keyboard navigation MUST work. Color contrast MUST meet standards. Screen reader compatibility MUST be tested. Focus indicators MUST be visible.
+
+## 24. SEO & PERFORMANCE RULES
+
+Meta tags MUST be dynamic per page. Structured data MUST use JSON-LD. Sitemap MUST be auto-generated. Canonical URLs MUST be set. Page speed MUST be optimized. Core Web Vitals MUST be monitored.
+
+## 25. SECURITY PROTOCOLS
+
+CSRF protection MUST be enabled. XSS prevention MUST be implemented. SQL injection MUST be prevented. File uploads MUST be validated. Rate limiting MUST be enforced. Security headers MUST be configured. Regular security audits MUST be performed.
+
+## 26. DEPLOYMENT STANDARDS
+
+Zero-downtime deployment MUST be supported. Environment variables MUST be used. Database migrations MUST be run. Asset compilation MUST be automated. Cache clearing MUST be performed. Health checks MUST be implemented.
+
+## 27. MONITORING & LOGGING
+
+Application logs MUST be centralized. Performance metrics MUST be tracked. Error alerting MUST be configured. Queue monitoring MUST be active. Database monitoring MUST be implemented. User analytics MUST be collected.
+
+## 28. DOCUMENTATION REQUIREMENTS
+
+README MUST be comprehensive. API documentation MUST exist. Deployment guides MUST be current. Environment setup MUST be documented. Troubleshooting guides MUST be maintained. Code comments MUST be meaningful.
+
+## 29. CHANGE LOG
+
+**Version 1.0.0** - Initial production release
+
+- Complete Laravel 12 implementation
+- Filament admin panel with role-based access
+- Public website with responsive design
+- Comprehensive testing suite
+- Production deployment configuration
+- SEO optimization and performance tuning
+
+## 30. GLOSSARY
+
+**Controller**: HTTP request handler that delegates to services
+**Service**: Business logic container that orchestrates operations
+**Repository**: Data access layer implementing database queries
+**Form Request**: Laravel validation class for user input
+**Migration**: Database schema change file
+**Seeder**: Database population script
+**Factory**: Model data generation class
+**Mailable**: Email template class
+**Job**: Queued background task
+**Middleware**: HTTP request/response filter
+**Blade**: Laravel templating engine
+**Eloquent**: Laravel ORM for database interaction
+**Filament**: Admin panel package for Laravel
+**Horizon**: Queue monitoring dashboard
+**Scout**: Search functionality package
+**Pint**: Laravel code style fixer
+
+AGAIN-
+
+— Deterministic Behavior
+
+ALWAYS follow this rules file when generating ANY code, architecture, config, or documentation.
+
+NEVER hallucinate functions, APIs, endpoints, components, or classes.
+
+If ANY requirement is missing or unclear → stop and ask.
+
+ALWAYS generate production-grade code.
+
+No pseudo-code unless requested.
+
+Use industry best practices across all stacks.
+
+0.2 — Code Quality Expectations
+
+Enterprise-level maintainability
+
+High cohesion, low coupling
+
+Clean Architecture
+
+SOLID + DRY + KISS
+
+Consistent naming conventions
+
+Modular, testable, scalable components
+
+#### PROJECT DETAILS FOR REFERENCE
+
+# **1. PROJECT OVERVIEW & GOALS**
+
+- **High-level Overview**: This project is the development of a modern, production-ready Laravel 12 website for the **Duha International School** (formerly Al-Maghrib). The application serves as a comprehensive content management system (CMS) for school administrators and a public-facing informational website for parents, students, and prospective applicants.
+- **Project Purpose**: To replace the school's existing custom-built, React-like website with a robust, secure, and easy-to-manage platform built on the Laravel ecosystem. The new system prioritizes maintainability, performance, and ease of use for non-technical staff.
+- **Goals & Success Criteria**:
+  - **MUST** replicate all public-facing features of the original site.
+  - **MUST** provide a secure, role-based admin panel (Filament) for managing all dynamic content.
+  - **MUST** be fast, responsive (mobile-first), and accessible (WCAG 2.1 AA).
+  - **MUST** be optimized for SEO, including meta tags, structured data, and a sitemap.
+  - **MUST** be scalable, using queues for long-running tasks and supporting cloud storage (S3) and a CDN.
+  - **MUST NOT** implement a full Learning Management System (LMS) in the initial MVP.
+
+---
+
+# **2. PROJECT SUMMARY**
+
+The Duha International School website is a Laravel 12 application that provides a dual interface: a public-facing site and a private admin panel. The backend is powered by PHP 8.3 and a MySQL database, following a standard Controller-Service-Repository pattern. The frontend is built with Blade templates, styled with Tailwind CSS, and uses Alpine.js for minor interactivity. The admin panel is built with Filament, offering administrators CRUD functionality for all major data models like Events, Notices, Staff, and Pages. The system is designed for performance, with Redis-based caching, queued jobs for notifications, and optimized media handling through Spatie Media Library.
+
+---
+
+# **3. FEATURES LIST**
+
+### Core Features (Public-Facing)
+
+- **Homepage**: Hero section with CTA, featured events, latest notices, and staff highlights.
+- **Dynamic Pages**: For "About Us" (Principal's Message, Vision) and "Academics" (Curriculum, Policies).
+- **Events**: Filterable list (category, upcoming/past), detail pages, and ICS calendar export.
+- **Notices**: School news and announcements board with categories and detail pages.
+- **Staff Directory**: Profiles with bios, photos, and contact information.
+- **Admissions**: Information page with an online application form (with file attachments).
+- **Careers**: Job listings with an online application form (with resume uploads).
+- **Contact Form**: With spam protection (honeypot and rate limiting).
+- **Newsletter**: Subscription form integrated with Mailchimp or a local database.
+- **Media Gallery**: Responsive image gallery with lazy loading and lightbox.
+
+### Admin Panel (Filament)
+
+- **Content Management**: Full CRUD for Pages, Events, Notices, and Staff.
+- **Application Management**: View, manage, and update the status of Admission and Career applications.
+- **Media Library**: Centralized image uploads with automatic optimization (WebP conversion, responsive sizes).
+- **Role-Based Access Control (RBAC)**: Pre-defined roles (Admin, Editor, Admissions Officer) using `spatie/laravel-permission`.
+- **Dashboard**: Widgets for key statistics, such as pending applications, upcoming events, and quick actions.
+- **Rich Content Editing**: WYSIWYG editor for page and post content.
+- **Publishing Workflow**: Draft/publish statuses and scheduled publishing for posts.
+- **SEO Management**: Dedicated fields for meta title, description, and OG image for all relevant models.
+
+### Advanced Features
+
+- **Search**: Full-text search powered by Laravel Scout, with a fallback to database search.
+- **Queued Jobs**: All emails and notifications are processed in the background using Laravel Horizon for a non-blocking user experience.
+- **Multi-language Support**: Implemented for English and Bangla, with a language switcher.
+- **Social Sharing**: Component for sharing events and notices on social media.
+- **Error Tracking & Monitoring**: Integrated with Sentry for error tracking and provides health check endpoints for uptime monitoring.
+
+---
+
+# **4. TECHNICAL ARCHITECTURE**
+
+### System Architecture Diagram (Text-based)
+
+```
+      +-----------------+      +----------------+      +-----------------+
+User  |   Web Browser   |----->|     Nginx      |----->|    PHP-FPM      |
+      +-----------------+      +----------------+      +-----------------+
+                                      |                      |
+                                      | (Assets)             | (App Logic)
+                                      |                      |
+      +-----------------+      +----------------+      +-----------------+
+      | Cloudflare CDN  |<-----|   Laravel 12   |----->|      MySQL      |
+      +-----------------+      | (Blade/Tailwind) |      +-----------------+
+                               +----------------+
+                                      |       |
+      +-----------------+      +-----------------+
+      |   AWS S3        |<---->|      Redis      |
+      | (Media Storage) |      | (Cache/Queues)  |
+      +-----------------+      +-----------------+
+```
+
+### Backend Architecture
+
+- **Framework**: Laravel 12.
+- **Pattern**: Follows the **Controller -> Service -> Repository** pattern.
+  - **Controllers**: Handle HTTP request validation (using Form Requests) and response generation. They are lightweight and orchestrate calls to services.
+  - **Services**: Contain the core business logic, coordinating between repositories and dispatching jobs or events.
+  - **Repositories**: Abstract the data layer. All Eloquent queries and database interactions MUST be placed here to keep controllers and services clean.
+- **Queues**: Laravel Horizon manages Redis-backed queues for all asynchronous tasks like sending emails and processing images.
+
+### Frontend Architecture
+
+- **Templating**: Server-side rendered Blade templates.
+- **Styling**: **Tailwind CSS** is the primary and ONLY CSS framework.
+- **JavaScript**: **Alpine.js** is used for minimal, lightweight interactivity (e.g., dropdowns, modals). NO other JS frameworks like Vue or React are to be introduced.
+- **Asset Bundling**: Vite MUST be used for compiling all CSS and JS assets.
+
+### Deployment Architecture
+
+- **Server**: A VPS (e.g., DigitalOcean) running Nginx and PHP-FPM is the target.
+- **CI/CD**: GitHub Actions are used to run tests and code style checks on every push. A deployment script (`scripts/deploy.sh`) handles the production deployment.
+- **Infrastructure Management**: Supervisor is used to keep queue workers (`php artisan horizon`) running persistently. Cron is used for scheduled tasks.
+
+### Request Lifecycle Flow
+
+1.  Request hits Nginx.
+2.  Static assets are served directly, potentially via Cloudflare's cache.
+3.  Dynamic requests are passed to PHP-FPM.
+4.  Laravel's kernel handles the request, passing it through middleware (Security, RBAC).
+5.  The router dispatches the request to a Controller.
+6.  The Controller validates input via a FormRequest and calls a Service.
+7.  The Service executes business logic, using a Repository to fetch/persist data from MySQL.
+8.  Data is retrieved from Redis cache if available.
+9.  The Service may dispatch a Job to the Redis queue (e.g., `SendAdmissionEmail`).
+10. The Controller receives data from the Service and returns a Blade view.
+11. The Blade view is rendered into HTML and sent back as the response.
+
+---
+
+# **5. RECOMMENDED TECH STACK**
+
+| Category          | Technology & Version                              | Remarks                                                    |
+| ----------------- | ------------------------------------------------- | ---------------------------------------------------------- |
+| **Backend**       | Laravel 12, PHP 8.3+                              | MUST adhere to Laravel best practices.                     |
+| **Frontend**      | Blade, Tailwind CSS, Alpine.js                    | MUST NOT introduce other frameworks like React/Vue.        |
+| **Admin Panel**   | Filament 4.2                                      | The ONLY admin panel to be used.                           |
+| **Database**      | MySQL 8.0+ / MariaDB 10.6+                        |                                                            |
+| **Caching**       | Redis                                             | Used for application cache, sessions, and queues.          |
+| **Queue Manager** | Laravel Horizon                                   | MUST be used to monitor Redis queues.                      |
+| **Media**         | `spatie/laravel-medialibrary` 11.17               | For all file uploads.                                      |
+| **Permissions**   | `spatie/laravel-permission` 6.23                  | For RBAC in both frontend and Filament.                    |
+| **Search**        | `laravel/scout` 10.21                             | With database driver as fallback. Meilisearch is optional. |
+| **DevOps Tools**  | Docker (local), Supervisor (prod), Nginx, Certbot | `docker-compose.yml` is provided for local setup.          |
+| **Asset Bundler** | Vite 7.0+                                         | Configured via `vite.config.js`.                           |
+
+---
+
+# **6. PROJECT STRUCTURE**
+
+The project follows the standard Laravel directory structure, with specific conventions for this project.
+
+```
+/
+├── app/
+│   ├── Console/Commands/       # Custom Artisan commands (e.g., GenerateSitemap)
+│   ├── Filament/               # MUST contain all Filament Resources, Pages, and Widgets
+│   │   ├── Resources/
+│   │   └── Widgets/
+│   ├── Http/
+│   │   ├── Controllers/        # Thin controllers for web and API routes
+│   │   ├── Middleware/         # Custom middleware (e.g., RoleCheck, SecurityHeaders)
+│   │   └── Requests/           # FormRequest classes for ALL form validation
+│   ├── Mail/                   # Mailable classes for all outgoing emails
+│   ├── Models/                 # Eloquent models with relationships and casts
+│   ├── Providers/              # Service Providers
+│   ├── Repositories/           # Data access layer; ALL database queries go here
+│   └── Services/               # Core business logic
+├── config/                     # Configuration files (app, database, filament, spatie)
+├── database/
+│   ├── factories/              # Model factories for testing and seeding
+│   ├── migrations/             # Database schema migrations
+│   └── seeders/                # Database seeders (Roles, Admin User, Sample Content)
+├── public/                     # Publicly accessible files (index.php, assets)
+├── resources/
+│   ├── css/                    # Main app.css for Tailwind
+│   ├── js/                     # Main app.js for Alpine.js
+│   └── views/
+│       ├── components/         # Reusable Blade components (e.g., event-card)
+│       ├── layouts/            # Main app layout
+│       └── pages/              # Blade files for public pages
+├── routes/
+│   ├── web.php                 # All web routes
+│   └── auth.php                # Auth routes from Laravel Breeze
+├── scripts/                    # Deployment and utility shell scripts
+├── storage/                    # App-generated files (logs, cache, media)
+└── tests/
+    ├── Feature/                # Feature tests for endpoints and user flows
+    └── Unit/                   # Unit tests for Services and Repositories
+```
+
+- **Modular Separation**: Logic is strictly separated. Controllers for HTTP, Services for business logic, Repositories for data access.
+- **Domain-driven Grouping**: Content-specific logic is grouped (e.g., all Event-related classes are named `Event*`).
+- **Naming Conventions**: MUST follow Laravel's naming conventions (e.g., `EventController`, `EventService`, `EventRepository`, `EventPolicy`).
+
+---
+
+# **7. DATABASE DESIGN**
+
+### ERD (Text-based Diagram)
+
+```
+[Users] 1--* [Events] (created_by)
+[Users] 1--* [Notices] (created_by)
+[Users] 1--* [Pages] (created_by)
+
+[Roles] *--* [Users] (role_user)
+
+[Events] *--* [Media] (media)
+[Notices] *--* [Media] (media)
+[Pages] *--* [Media] (media)
+[Staff] *--* [Media] (media)
+
+[AdmissionApplications]
+[CareerApplications]
+[Subscribers]
+[SiteSettings]
+```
+
+### Tables List
+
+- `users`: Stores admin user accounts.
+- `roles`, `permissions`, `model_has_roles`: For Spatie RBAC.
+- `pages`: For dynamic pages like "About Us".
+- `events`: School events.
+- `notices`: School announcements.
+- `staff`: Staff member profiles.
+- `admission_applications`: Submissions from the admission form.
+- `career_applications`: Submissions from the career form.
+- `subscribers`: Newsletter subscribers.
+- `media`: For Spatie Media Library.
+- `site_settings`: Global site settings.
+- `jobs`, `failed_jobs`, `job_batches`: For Laravel Queues.
+
+### Index Strategy
+
+- **MUST** have indexes on all foreign key columns.
+- **MUST** have indexes on frequently queried columns like `slug`, `published_at`, and `event_date`.
+- **MUST** have unique constraints on `slug` fields within their respective tables.
+
+---
+
+# **8. DATA MODEL (Eloquent Models & Key Fields)**
+
+- **`User`**: `name`, `email`, `password`. Uses `HasRoles` and `HasApiTokens` traits.
+- **`Page`**: `title`, `slug`, `content`, `status`, `published_at`, `meta_title`, `meta_description`. Implements `HasMedia`.
+- **`Event`**: `title`, `slug`, `start_at`, `end_at`, `excerpt`, `content`, `location`, `category`, `status`. Implements `HasMedia`.
+- **`Notice`**: `title`, `slug`, `content`, `category`, `published_at`, `status`. Implements `HasMedia`.
+- **`Staff`**: `name`, `role_title`, `bio`, `email`, `phone`, `social_links` (json). Implements `HasMedia`.
+- **`AdmissionApplication`**: `parent_name`, `child_name`, `child_dob`, `grade_applied`, `phone`, `email`, `documents` (json), `status`.
+- **`CareerApplication`**: `job_id`, `name`, `email`, `phone`, `resume_path`, `cover_letter`, `status`.
+- **`Subscriber`**: `email`, `name`, `subscribed_at`, `verified_at`.
+- **`SiteSettings`**: `key`, `value`.
+
+---
+
+# **9. MIGRATIONS**
+
+Migrations MUST be created for every table.
+
+- **`create_events_table`**: MUST include `title` (string), `slug` (string, unique), `start_at` (timestamp), `end_at` (timestamp), `content` (longText), and `status` (enum: 'draft', 'published', 'archived').
+- **`create_notices_table`**: MUST include `title` (string), `slug` (string, unique), `content` (longText), and `published_at` (timestamp).
+- **`create_staff_table`**: MUST include `name` (string), `role_title` (string), `bio` (text), and `social_links` (json).
+- **`create_admission_applications_table`**: MUST include fields for parent/child info, contact details, and a `status` column.
+- All tables MUST include `timestamps()` and `softDeletes()` where appropriate (e.g., for content models).
+
+---
+
+# **10. ROUTES**
+
+### Web Routes (`routes/web.php`)
+
+```php
+// Homepage
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// Dynamic Pages
+Route::get('/about/{page:slug}', [PageController::class, 'show'])->name('about.show');
+Route::get('/academics/{page:slug}', [PageController::class, 'show'])->name('academics.show');
+
+// Events
+Route::get('/events', [EventController::class, 'index'])->name('events.index');
+Route::get('/events/{event:slug}', [EventController::class, 'show'])->name('events.show');
+Route::get('/events/{event:slug}/ics', [EventController::class, 'exportIcs'])->name('events.ics');
+
+// Notices
+Route::get('/notices', [NoticeController::class, 'index'])->name('notices.index');
+Route::get('/notices/{notice:slug}', [NoticeController::class, 'show'])->name('notices.show');
+
+// Staff
+Route::get('/staff', [StaffController::class, 'index'])->name('staff.index');
+
+// Forms (with rate limiting)
+Route::get('/admission', [AdmissionController::class, 'index'])->name('admission.index');
+Route::post('/admission', [AdmissionController::class, 'store'])->middleware('throttle:5,1');
+Route::get('/careers', [CareerController::class, 'index'])->name('careers.index');
+Route::post('/careers', [CareerController::class, 'store'])->middleware('throttle:5,1');
+Route::get('/contact-us', [ContactController::class, 'index'])->name('contact.index');
+Route::post('/contact-us', [ContactController::class, 'send'])->middleware('throttle:5,1');
+Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->middleware('throttle:5,1')->name('newsletter.subscribe');
+
+// Search
+Route::get('/search', [SearchController::class, 'search'])->name('search');
+
+// Sitemap
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
+```
+
+### Auth Routes (`routes/auth.php`)
+
+- Provided by Laravel Breeze for login, password reset, etc., for the admin panel.
+
+### Admin Routes
+
+- Automatically handled by Filament. Access is at `/admin`.
+
+---
+
+# **11. CONTROLLERS — RESPONSIBILITIES**
+
+- **`HomeController`**: Fetches and caches data for the homepage (featured events, notices).
+- **`EventController`**: Handles listing, showing, and exporting events. Uses `EventService`.
+- **`NoticeController`**: Handles listing and showing notices. Uses `NoticeService`.
+- **`AdmissionController`**: Displays and processes the admission form. Uses `AdmissionService` and `StoreAdmissionApplicationRequest` for validation.
+- **`CareerController`**: Displays and processes the career form. Uses `CareerService` and `StoreCareerApplicationRequest`.
+- **`ContactController`**: Displays and processes the contact form. Uses `ContactService` and `SendContactRequest`.
+- **`NewsletterController`**: Handles newsletter subscriptions. Uses `NewsletterService` and `NewsletterSubscribeRequest`.
+- **`PageController`**: Displays dynamic pages fetched by slug.
+- **`SearchController`**: Handles search queries using Scout.
+
+---
+
+# **12. CODING PATTERNS**
+
+- **Controller → Service → Repository**: This pattern is MANDATORY.
+  - Controllers are for HTTP logic only.
+  - Services contain all business logic.
+  - Repositories handle all database interactions.
+- **FormRequest Validation**: ALL form submissions MUST be validated using dedicated `FormRequest` classes. Inline validation in controllers is FORBIDDEN.
+- **DTOs (Data Transfer Objects)**: Use DTOs for passing structured data between layers, especially for form submissions.
+- **Caching Strategy**:
+  - Use `Cache::remember()` in repositories or services to cache database queries.
+  - Cache keys MUST be descriptive and include identifiers (e.g., `events.all.page.1`, `event.show.my-event-slug`).
+  - Observers (`EventObserver`, `NoticeObserver`) MUST clear relevant caches on `created`, `updated`, `deleted` events.
+- **Queues/Jobs**: All external communication (emails) and long-running tasks (image processing) MUST be queued.
+- **Policy/Permission Structure**: Use Spatie's `HasRoles` trait on the `User` model. Access control in Filament resources and web routes MUST use middleware (`role:admin`) or policies.
+
+---
+
+# **13. ADMIN UI (FILAMENT SETUP)**
+
+- **Panel**: A single admin panel at `/admin`.
+- **Resources**:
+  - `PageResource`, `EventResource`, `NoticeResource`, `StaffResource`: Full CRUD.
+  - `AdmissionApplicationResource`, `CareerApplicationResource`: View-only with status updates.
+  - `SubscriberResource`: View and export.
+  - `UserResource`, `RoleResource`: For managing admin users and roles.
+- **Pages**: A custom "Site Settings" page for managing global settings like contact info and social links.
+- **Widgets**:
+  - `StatsOverview`: Key metrics (e.g., pending applications).
+  - `RecentApplications`: A table of the latest admission applications.
+  - `UpcomingEvents`: A list of upcoming events.
+- **Forms**: MUST use Filament's form components (`TextInput`, `RichEditor`, `SpatieMediaLibraryFileUpload`).
+- **Tables**: MUST use Filament's table components with filters and sortable columns.
+- **Media Upload Logic**: ALWAYS use `SpatieMediaLibraryFileUpload` for a consistent media library experience.
+
+---
+
+# **14. UI/UX DESIGN PLAN**
+
+- **Design System**: Clean, professional, and modern, reflecting the school's identity.
+- **Components**:
+  - **Navbar**: Transparent on top, becomes solid on scroll. MUST contain links to main sections and a search icon.
+  - **Hero**: Full-width background image with a text overlay and a prominent CTA button.
+  - **Cards**: For events and notices, with a consistent layout (image, title, date, excerpt).
+  - **Footer**: Multi-column layout with contact info, quick links, and a newsletter form.
+- **Color/Style Guidelines**:
+  - **Primary Color**: A professional blue.
+  - **Typography**: A clean sans-serif font for body text (e.g., Inter) and a distinct serif for headings.
+  - **Spacing**: Generous whitespace for readability.
+- **Page Layouts**:
+  - **Homepage**: Hero, followed by sections for featured content.
+  - **List Pages**: Grid-based layout (responsive).
+  - **Detail Pages**: Two-column layout (main content + sidebar for metadata).
+- **Mobile Responsiveness**: MUST be mobile-first. The grid collapses to a single column, and the navbar becomes a hamburger menu.
+
+---
+
+# **15. PUBLIC SITE STRUCTURE**
+
+- **All Pages**:
+  - Home, About, Academics, Admission, Events, Notices, Career, Contact, Media Gallery, Privacy Policy, Terms of Service.
+- **All URLs**: As defined in the Routes section.
+- **Menu Structure**:
+  - **Header**: Home, About (dropdown), Academics (dropdown), Admission, News & Media (dropdown: Events, Notices), Career, Contact.
+  - **Footer**: Quick Links, Contact Info, Social Media Links, Newsletter Signup.
+- **User Flows**:
+  - **Prospective Parent**: Homepage -> Academics -> Admission -> Fill Form.
+  - **Current Student/Parent**: Homepage -> Events/Notices.
+
+---
+
+# **16. SRS — FUNCTIONAL & NON-FUNCTIONAL REQUIREMENTS**
+
+### Functional Requirements
+
+- Admin MUST be able to CRUD all content types.
+- Users MUST be able to submit admission, career, and contact forms.
+- The system MUST send queued email notifications upon form submission.
+- The system MUST generate a valid `sitemap.xml`.
+- The system MUST provide an ICS file for events.
+
+### Non-Functional Requirements
+
+- **Performance**: Page load time MUST be under 2 seconds. The system should handle 1000 concurrent users with caching.
+- **Security**: MUST protect against common vulnerabilities (XSS, CSRF, SQLi). All user input MUST be validated. File uploads MUST be validated for MIME type and size.
+- **Scalability**: The architecture MUST be stateless to allow for horizontal scaling. Queues and cloud storage are mandatory for scalability.
+- **Usability**: The admin panel MUST be intuitive for non-technical users. The public site MUST be accessible (WCAG 2.1 AA).
+
+---
+
+# **17. BUSINESS LOGIC**
+
+- **Admissions Workflow**: A user submits an application -> The application is stored with "pending" status -> An email is queued to the admissions office -> An admin can view the application in Filament and update its status ("reviewed", "accepted", "rejected").
+- **Content Publishing Workflow**: An editor creates a post (Event/Notice) with a "draft" status -> An admin reviews and changes the status to "published" -> The post appears on the public site. Posts can also be scheduled to be published at a future date.
+- **Newsletter Workflow**: A user subscribes -> Their email is stored in the `subscribers` table -> A confirmation email can be sent (optional).
+
+---
+
+# **18. USE CASES**
+
+- **Actor**: Prospective Parent
+
+  - **Preconditions**: Access to the website.
+  - **Flow**:
+    1. Visits the homepage.
+    2. Navigates to the "Admission" page.
+    3. Fills out and submits the admission inquiry form.
+  - **Success Result**: Receives a "Thank You" message. The school's admission office receives an email notification.
+
+- **Actor**: School Administrator
+  - **Preconditions**: Logged into the Filament admin panel with the 'admin' role.
+  - **Flow**:
+    1. Navigates to the "Events" resource.
+    2. Clicks "New Event".
+    3. Fills in the event details, uploads an image, and sets the status to "Published".
+    4. Clicks "Create".
+  - **Success Result**: The new event is immediately visible on the public website's events page. The events cache is cleared.
+
+---
+
+# **19. AUTHENTICATION & ROLES**
+
+- **User Types**: Only admin users exist. There is NO public user registration.
+- **Role Permissions** (via `spatie/laravel-permission`):
+  - **Admin**: Super user. Can manage everything, including users and roles.
+  - **Editor**: Can CRUD content (Pages, Events, Notices, Staff). CANNOT manage applications or users.
+  - **Admissions Officer**: Can ONLY view and manage `AdmissionApplication` and `CareerApplication` resources.
+- **Middleware**: Routes in `web.php` and resources in Filament MUST be protected by `role` middleware.
+- **Access Control Matrix**:
+  | Role | Pages | Events | Notices | Staff | Applications | Users |
+  | ------------------- | :---: | :----: | :-----: | :---: | :----------: | :---: |
+  | Admin | RW | RW | RW | RW | RW | RW |
+  | Editor | RW | RW | RW | RW | - | - |
+  | Admissions Officer | - | - | - | - | RW | - |
+
+---
+
+# **20. NOTIFICATIONS & EMAIL**
+
+- **Events**: All emails MUST be triggered by events (e.g., `AdmissionApplicationSubmitted`).
+- **Notification Types**:
+  - `AdmissionApplicationReceived`: To admin.
+  - `CareerApplicationReceived`: To admin.
+  - `ContactMessageReceived`: To admin.
+  - `NewsletterSubscriptionConfirmation`: To subscriber.
+- **Email Templates**: All email templates MUST be responsive Blade views located in `resources/views/emails/`.
+- **Driver**: MUST use a queued connection (`QUEUE_CONNECTION=redis`). The default mailer is SMTP, configured via `.env`.
+
+---
+
+# **21. MEDIA & FILE HANDLING**
+
+- **Storage Strategy**:
+  - **Local**: `public` disk for local development.
+  - **Production**: **AWS S3** is the required storage disk for all user-uploaded media.
+- **File Naming**: Spatie Media Library handles file naming to avoid collisions.
+- **Image Optimization**: On upload, the `MediaObserver` MUST trigger a queued job to:
+  1. Generate responsive image sizes (e.g., thumb, medium, large).
+  2. Convert the original image to **WebP** format for web delivery.
+- **Media Library Usage**: All models with media attachments (`Page`, `Event`, etc.) MUST use the `HasMedia` trait and define their media collections.
+
+---
+
+# **22. SEO, SCHEMA & PERFORMANCE**
+
+- **Meta Tags**: The main layout (`app.blade.php`) MUST dynamically render `title` and `description` meta tags. All content models MUST have `meta_title` and `meta_description` fields.
+- **JSON-LD Structure**:
+  - `Organization` schema MUST be present on all pages.
+  - `Event` schema MUST be present on event detail pages.
+- **Sitemap**: A `sitemap.xml` MUST be generated weekly via a scheduled job (`php artisan sitemap:generate`).
+- **Cache Strategy**:
+  - **Application Cache**: Redis MUST be used. Repositories are responsible for caching query results.
+  - **HTTP Cache**: Use middleware to set `Cache-Control` headers for static assets.
+- **Query Optimization**: Repositories MUST use eager loading (`with()`) to prevent N+1 query problems.
+
+---
+
+# **23. TESTING & QA**
+
+- **Manual Testing Checklist**:
+  - Verify all public pages render correctly on desktop and mobile.
+  - Test every form submission and verify email delivery.
+  - Check all links for 404 errors.
+  - Test admin CRUD for every resource.
+  - Verify role permissions are correctly enforced.
+- **Automated Test Cases**:
+  - **Unit Tests**: For services and repository methods.
+  - **Feature Tests**:
+    - `tests/Feature/AdmissionFormTest.php`: MUST test form submission, validation, and that an email is queued.
+    - `tests/Feature/EventPageTest.php`: MUST test that the events list and detail pages load successfully.
+    - `tests/Feature/AdminSecurityTest.php`: MUST test that an 'editor' cannot access the 'users' resource.
+- **Minimum Coverage**: The project MUST have a minimum of 10 feature tests covering critical user flows.
+
+---
+
+# **24. DEVELOPMENT PHASES**
+
+- **Phase 1 — Architecture & Setup (Week 1)**: Laravel install, package setup, models & migrations, Filament install.
+- **Phase 2 — Backend APIs & Logic (Weeks 2-3)**: Build out services, repositories, and Filament resources for all models. Implement form validation and email mailables.
+- **Phase 3 — Admin Panel (Week 4)**: Refine Filament UI, add dashboard widgets, and configure role-based access.
+- **Phase 4 — UI/UX Front-end (Weeks 5-6)**: Develop all Blade templates and components with Tailwind CSS.
+- **Phase 5 — Integrations & Testing (Week 7)**: Connect frontend to backend, write all feature tests, and perform QA.
+- **Phase 6 — Deployment (Week 8)**: Deploy to staging, then production. Set up monitoring and backups.
+
+---
+
+# **25. MILESTONES & TIMELINE**
+
+- **Week 1**: Project scaffold complete. Admin user can log in.
+- **Week 3**: All backend logic for content and forms is complete.
+- **Week 4**: Filament admin panel is fully functional for all roles.
+- **Week 6**: Public-facing site is visually complete and responsive.
+- **Week 7**: All feature tests are passing.
+- **Week 8**: Project deployed to production and live.
+
+---
+
+# **26. DEPLOYMENT CHECKLIST**
+
+- **Server Setup**: Nginx, PHP 8.3, MySQL, Redis installed.
+- **Env Configuration**: `.env` file populated with production keys (DB, Mail, S3, etc.). `APP_ENV` MUST be `production` and `APP_DEBUG` MUST be `false`.
+- **Cron Jobs**: A cron job MUST be configured to run `php artisan schedule:run` every minute.
+- **Queue Workers**: Supervisor MUST be configured to run `php artisan horizon` and keep it alive.
+- **Database Backup**: A script (`scripts/backup.sh`) and a cron job MUST be set up for daily database backups.
+- **Final Commands**: Run `php artisan config:cache`, `php artisan route:cache`, `php artisan view:cache`, and `php artisan storage:link`.
+
+---
+
+# **27. REQUIRED PACKAGES**
+
+### Composer
+
+```json
+"require": {
+    "php": "^8.3",
+    "filament/filament": "^4.2",
+    "intervention/image": "^3.11",
+    "laravel/framework": "^12.0",
+    "laravel/horizon": "^5.39",
+    "laravel/scout": "^10.21",
+    "laravel/tinker": "^2.10.1",
+    "sentry/sentry-laravel": "^4.18",
+    "spatie/laravel-medialibrary": "^11.17",
+    "spatie/laravel-newsletter": "^5.3",
+    "spatie/laravel-permission": "^6.23",
+    "spatie/laravel-sitemap": "^7.3"
+},
+"require-dev": {
+    "fakerphp/faker": "^1.23",
+    "laravel/breeze": "^2.3",
+    "laravel/pint": "^1.24",
+    "laravel/sail": "^1.41",
+    "mockery/mockery": "^1.6",
+    "nunomaduro/collision": "^8.6",
+    "phpunit/phpunit": "^11.5.3"
+}
+```
+
+### NPM
+
+```json
+"devDependencies": {
+    "@tailwindcss/forms": "^0.5.2",
+    "alpinejs": "^3.4.2",
+    "autoprefixer": "^10.4.2",
+    "axios": "^1.11.0",
+    "laravel-vite-plugin": "^2.0.0",
+    "lightbox2": "^2.11.5",
+    "postcss": "^8.4.31",
+    "tailwindcss": "^4.1.17",
+    "vite": "^7.0.7"
+}
+```
+
+---
+
+# **28. TOOLS & COMMANDS CHEAT SHEET**
+
+- **`composer install`**: Install PHP dependencies.
+- **`npm install`**: Install JS dependencies.
+- **`npm run dev`**: Start Vite for local development.
+- **`npm run build`**: Build assets for production.
+- **`php artisan migrate --seed`**: Run migrations and seed the database.
+- **`php artisan make:filament-resource EventResource`**: Create a new Filament resource.
+- **`php artisan queue:work`**: Process queued jobs locally.
+- **`php artisan horizon`**: Start the Horizon dashboard.
+- **`vendor/bin/pint`**: Run code style fixer.
+- **`php artisan test`**: Run the entire test suite.
+
+---
+
+# **29. FUTURE ENHANCEMENTS**
+
+- **Student/Parent Portal**: An authenticated section for parents to view grades and for students to access course materials.
+- **LMS Integration**: Integrate with Moodle or build a lightweight LMS for online courses.
+- **Payment Gateway**: Integrate Stripe via Laravel Cashier to handle school fees or event tickets.
+- **Advanced Search**: Implement Meilisearch or Algolia for a faster, typo-tolerant search experience.
+
+---
+
+# **30. SECURITY, USABILITY, SCALABILITY & MAINTAINABILITY**
+
+- **Security**: Adherence to OWASP Top 10. All input is validated, all output is escaped. Role permissions are strictly enforced. Dependencies are kept up-to-date.
+- **Usability**: The public site MUST be fully responsive and accessible. The Filament admin panel provides an intuitive interface for content management, requiring no technical skill.
+- **Scalability**: The application is built to be stateless and horizontally scalable. Use of Redis for queues and sessions, and S3 for storage, are key architectural decisions for scalability.
+- **Maintainability**: The strict Controller-Service-Repository pattern, combined with comprehensive tests and adherence to Laravel conventions, ensures the codebase is clean, modular, and easy to maintain or extend in the future.

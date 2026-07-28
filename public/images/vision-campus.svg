@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bg-campus" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#0C1B3D;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#173B7A;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="building-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#F4C430;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#6EC1F5;stop-opacity:0.2" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="1000" fill="url(#bg-campus)"/>
+  
+  <!-- Campus Building Silhouette -->
+  <g opacity="0.9">
+    <!-- Main building -->
+    <rect x="150" y="400" width="500" height="500" fill="url(#building-gradient)" stroke="#F4C430" stroke-width="2"/>
+    
+    <!-- Windows grid -->
+    <g fill="#6EC1F5" opacity="0.6">
+      <rect x="200" y="450" width="60" height="80" rx="5"/>
+      <rect x="290" y="450" width="60" height="80" rx="5"/>
+      <rect x="380" y="450" width="60" height="80" rx="5"/>
+      <rect x="470" y="450" width="60" height="80" rx="5"/>
+      <rect x="560" y="450" width="60" height="80" rx="5"/>
+      
+      <rect x="200" y="560" width="60" height="80" rx="5"/>
+      <rect x="290" y="560" width="60" height="80" rx="5"/>
+      <rect x="380" y="560" width="60" height="80" rx="5"/>
+      <rect x="470" y="560" width="60" height="80" rx="5"/>
+      <rect x="560" y="560" width="60" height="80" rx="5"/>
+      
+      <rect x="200" y="670" width="60" height="80" rx="5"/>
+      <rect x="290" y="670" width="60" height="80" rx="5"/>
+      <rect x="380" y="670" width="60" height="80" rx="5"/>
+      <rect x="470" y="670" width="60" height="80" rx="5"/>
+      <rect x="560" y="670" width="60" height="80" rx="5"/>
+    </g>
+    
+    <!-- Entrance -->
+    <rect x="350" y="800" width="100" height="100" fill="#F4C430" opacity="0.8"/>
+    
+    <!-- Dome/Islamic architecture element -->
+    <ellipse cx="400" cy="400" rx="80" ry="60" fill="#F4C430" opacity="0.7"/>
+    <path d="M 400 340 L 390 370 L 410 370 Z" fill="#F4C430" opacity="0.9"/>
+  </g>
+  
+  <!-- Decorative pattern -->
+  <g opacity="0.15">
+    <circle cx="100" cy="200" r="80" fill="none" stroke="#F4C430" stroke-width="2"/>
+    <circle cx="700" cy="150" r="60" fill="none" stroke="#6EC1F5" stroke-width="2"/>
+    <circle cx="650" cy="300" r="40" fill="none" stroke="#F4C430" stroke-width="1.5"/>
+  </g>
+  
+  <!-- Text -->
+  <text x="400" y="950" font-family="Arial, sans-serif" font-size="24" fill="#F8F5EB" text-anchor="middle" opacity="0.8">
+    Campus Image Coming Soon
+  </text>
+</svg>

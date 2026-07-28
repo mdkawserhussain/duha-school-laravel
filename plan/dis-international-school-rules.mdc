@@ -1,0 +1,112 @@
+# Duha International School - Cursor AI Rules
+
+## 1. PROJECT OVERVIEW
+Cursor AI MUST maintain the Duha International School Laravel 12 application as a production-ready, Filament-powered CMS with comprehensive public website functionality. The application MUST replicate and enhance https://almaghribschool.com/ with modern architecture, full testing coverage, and enterprise-grade features.
+
+## 2. TECH STACK REQUIREMENTS
+Cursor AI MUST enforce Laravel 12 with PHP 8.2+ as the core framework. Filament PHP 4.2 MUST be used for admin panels. Spatie packages (Permission, Media Library, Sitemap, Newsletter) MUST be utilized. Tailwind CSS 4.0 with Vite compilation MUST be the frontend stack. Redis MUST be preferred for queues and caching with database fallback.
+
+## 3. CODE ARCHITECTURE PATTERNS
+Cursor AI MUST implement Controller → Service → Repository pattern. Controllers MUST handle HTTP requests only. Services MUST contain business logic. Repositories MUST handle data access. Dependency injection MUST be used throughout. SOLID principles MUST be followed. Thin controllers and fat services MUST be maintained.
+
+## 4. DATABASE DESIGN RULES
+Cursor AI MUST use MySQL 8.0+ or MariaDB 10.6+ with PostgreSQL support. All models MUST use Eloquent ORM. Indexes MUST be added to frequently queried columns. Foreign key constraints MUST be enforced. Soft deletes MUST be used for content models. Polymorphic relationships MUST be avoided unless absolutely necessary.
+
+## 5. CONTROLLER STANDARDS
+Controllers MUST extend base Controller class. Resource controllers MUST be used for CRUD operations. Form requests MUST validate all input. Services MUST be injected via constructor. Views MUST be returned with compact data. Redirects MUST use named routes. Flash messages MUST be used for user feedback.
+
+## 6. SERVICE LAYER RULES
+Services MUST be injected via constructor. Business logic MUST reside in services. Services MUST call repositories for data access. Services MUST dispatch jobs for heavy operations. Services MUST return consistent response formats. Unit tests MUST cover service methods.
+
+## 7. REPOSITORY PATTERNS
+Repositories MUST implement interface contracts. Eager loading MUST be used to prevent N+1 queries. Query scopes MUST be used for reusable logic. Pagination MUST be applied to listing methods. Caching MUST be implemented at repository level. Repositories MUST handle database transactions.
+
+## 8. FORM REQUEST VALIDATION
+All user input MUST be validated through Form Requests. Custom validation rules MUST be created for complex logic. Error messages MUST be user-friendly. Rate limiting MUST be applied to public forms. Honeypot protection MUST be used for spam prevention.
+
+## 9. MODEL STANDARDS
+Models MUST use proper naming conventions. Relationships MUST be defined with correct methods. Accessors and mutators MUST be used for data transformation. Scopes MUST be used for query reusability. Events MUST be dispatched for important changes. Media library traits MUST be added where needed.
+
+## 10. MIGRATION GUIDELINES
+Migrations MUST be atomic and reversible. Foreign keys MUST be properly defined. Indexes MUST be added for performance. Data types MUST be appropriate. Migration files MUST be timestamped correctly. Rollback MUST be tested before deployment.
+
+## 11. BLADE TEMPLATE RULES
+Templates MUST use consistent naming. Components MUST be created for reusable elements. Blade directives MUST be used appropriately. CSRF tokens MUST be included in forms. Alt attributes MUST be provided for images. Semantic HTML MUST be used throughout.
+
+## 12. FRONTEND ASSET MANAGEMENT
+Vite MUST be used for asset compilation. Tailwind CSS MUST be the utility framework. JavaScript MUST be modular and ES6+. Asset optimization MUST be configured. Source maps MUST be generated for debugging. CDN integration MUST be supported.
+
+## 13. FILAMENT ADMIN RULES
+Filament resources MUST follow CRUD conventions. Role-based access MUST be enforced. Custom pages MUST extend base classes. Widgets MUST be role-aware. Media uploads MUST use Spatie library. SEO fields MUST be included in content resources.
+
+## 14. AUTHENTICATION & AUTHORIZATION
+Laravel Breeze MUST be used for authentication. Spatie Permission MUST handle roles. Default roles MUST be admin, editor, admissions_officer. Passwords MUST be hashed. Sessions MUST be secure. Two-factor authentication MUST be optional.
+
+## 15. EMAIL & NOTIFICATION RULES
+All emails MUST implement ShouldQueue. Mailables MUST use templates. SMTP MUST be configured for production. Rate limiting MUST prevent spam. Email verification MUST be implemented. Bounce handling MUST be configured.
+
+## 16. QUEUE & JOB PROCESSING
+Redis MUST be preferred for queues. Horizon MUST be used for monitoring. Jobs MUST be retryable. Failed jobs MUST be logged. Queue priorities MUST be configured. Background processing MUST be used for heavy tasks.
+
+## 17. CACHING STRATEGIES
+Redis MUST be used for caching. Model caching MUST be implemented. View caching MUST be used. HTTP caching headers MUST be set. Cache invalidation MUST be handled. Cache warming MUST be considered.
+
+## 18. ERROR HANDLING PROTOCOLS
+Custom exception classes MUST be created. Error pages MUST be user-friendly. Logging MUST capture all errors. Sentry MUST be integrated for production. Error responses MUST be consistent. Debug information MUST be hidden in production.
+
+## 19. CODE REVIEW GUIDELINES
+All code MUST pass Laravel Pint standards. Unit tests MUST exist for new features. Code coverage MUST be maintained above 80%. Security vulnerabilities MUST be checked. Performance implications MUST be reviewed. Documentation MUST be updated.
+
+## 20. FORBIDDEN PATTERNS
+Raw SQL queries MUST NOT be used in controllers. Business logic MUST NOT reside in models. Static methods MUST NOT be overused. Global variables MUST NOT be used. Inline styles MUST NOT be used. Hardcoded values MUST NOT be used.
+
+## 21. VERSION CONTROL STANDARDS
+Git MUST be used for version control. Feature branches MUST be used. Pull requests MUST be reviewed. Commit messages MUST be descriptive. Tags MUST be used for releases. Git hooks MUST enforce standards.
+
+## 22. TESTING BENCHMARKS
+Unit tests MUST cover all services and repositories. Feature tests MUST cover critical user flows. Minimum 80% code coverage MUST be maintained. Tests MUST run in CI/CD pipeline. Database tests MUST use transactions. Mocking MUST be used appropriately.
+
+## 23. ACCESSIBILITY REQUIREMENTS
+WCAG 2.1 AA compliance MUST be maintained. Alt text MUST be provided for images. Keyboard navigation MUST work. Color contrast MUST meet standards. Screen reader compatibility MUST be tested. Focus indicators MUST be visible.
+
+## 24. SEO & PERFORMANCE RULES
+Meta tags MUST be dynamic per page. Structured data MUST use JSON-LD. Sitemap MUST be auto-generated. Canonical URLs MUST be set. Page speed MUST be optimized. Core Web Vitals MUST be monitored.
+
+## 25. SECURITY PROTOCOLS
+CSRF protection MUST be enabled. XSS prevention MUST be implemented. SQL injection MUST be prevented. File uploads MUST be validated. Rate limiting MUST be enforced. Security headers MUST be configured. Regular security audits MUST be performed.
+
+## 26. DEPLOYMENT STANDARDS
+Zero-downtime deployment MUST be supported. Environment variables MUST be used. Database migrations MUST be run. Asset compilation MUST be automated. Cache clearing MUST be performed. Health checks MUST be implemented.
+
+## 27. MONITORING & LOGGING
+Application logs MUST be centralized. Performance metrics MUST be tracked. Error alerting MUST be configured. Queue monitoring MUST be active. Database monitoring MUST be implemented. User analytics MUST be collected.
+
+## 28. DOCUMENTATION REQUIREMENTS
+README MUST be comprehensive. API documentation MUST exist. Deployment guides MUST be current. Environment setup MUST be documented. Troubleshooting guides MUST be maintained. Code comments MUST be meaningful.
+
+## 29. CHANGE LOG
+**Version 1.0.0** - Initial production release
+- Complete Laravel 12 implementation
+- Filament admin panel with role-based access
+- Public website with responsive design
+- Comprehensive testing suite
+- Production deployment configuration
+- SEO optimization and performance tuning
+
+## 30. GLOSSARY
+**Controller**: HTTP request handler that delegates to services
+**Service**: Business logic container that orchestrates operations
+**Repository**: Data access layer implementing database queries
+**Form Request**: Laravel validation class for user input
+**Migration**: Database schema change file
+**Seeder**: Database population script
+**Factory**: Model data generation class
+**Mailable**: Email template class
+**Job**: Queued background task
+**Middleware**: HTTP request/response filter
+**Blade**: Laravel templating engine
+**Eloquent**: Laravel ORM for database interaction
+**Filament**: Admin panel package for Laravel
+**Horizon**: Queue monitoring dashboard
+**Scout**: Search functionality package
+**Pint**: Laravel code style fixer
