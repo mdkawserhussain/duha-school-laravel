@@ -123,12 +123,29 @@ class EventObserver
             // This includes the cache used by EventService::getUpcomingEvents()
             $cache = \Illuminate\Support\Facades\Cache::getFacadeRoot();
             
-            // Clear specific event cache keys
+            
+               /** Clear specific event cache keys
             $eventCacheKeys = [
                 'events_upcoming_3',  // Used by homepage
                 'events_upcoming_5',  // Common limit
                 'events_featured_3',   // Featured events
+            ]; */
+            
+            
+            // Clear specific event cache keys
+            $eventCacheKeys = [
+                'events_upcoming_3',
+                'events_upcoming_5',
+                'events_upcoming_6',
+                'events_upcoming_10',
+                'events_upcoming_12',  // Used by homepage
+                'events_upcoming_15',
+                'events_upcoming_20',
+                'events_featured_3',
+                'events_featured_5',
+                'events_featured_6',
             ];
+
             
             foreach ($eventCacheKeys as $key) {
                 \Illuminate\Support\Facades\Cache::forget($key);
@@ -160,7 +177,7 @@ class EventObserver
                 // For non-Redis cache drivers (database, file), clear common pagination keys
                 // This is a best-effort approach since we can't pattern match with these drivers
                 for ($page = 1; $page <= 10; $page++) {
-                    for ($perPage = 12; $perPage <= 24; $perPage += 12) {
+                    for ($perPage = 6; $perPage <= 24; $perPage += 6) {
                         // Clear category-based caches
                         $categories = ['Academic', 'Social', 'Islamic', 'Sports', 'Cultural'];
                         foreach ($categories as $category) {

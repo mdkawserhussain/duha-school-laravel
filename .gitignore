@@ -50,6 +50,3 @@ Homestead.yaml
 
 # Admin credentials file
 ADMIN_CREDENTIALS.txt
-
-# Large archives
-*.zip

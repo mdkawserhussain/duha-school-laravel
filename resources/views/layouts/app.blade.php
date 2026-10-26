@@ -136,6 +136,8 @@
         <noscript>
             @vite('resources/css/fallback.css')
         </noscript>
+        
+        
 
         <style id="site-navy-no-green">
             header[role="banner"] > div.text-white { background-color: var(--site-chrome) !important; }
@@ -329,6 +331,17 @@ a.intro-cta:hover {
     color: #ffffff !important;
 }
         </style>
+        
+        <style>
+.lightbox-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center;z-index:9999;opacity:0;animation:lightboxFadeIn .3s ease-out forwards}
+@keyframes lightboxFadeIn{to{opacity:1}}
+.lightbox-container{position:relative;max-width:90vw;max-height:90vh;display:flex;align-items:center;justify-content:center}
+.lightbox-overlay img{max-width:100%;max-height:100%;object-fit:contain;border-radius:8px;box-shadow:0 25px 50px -12px rgba(0,0,0,.5)}
+.lightbox-close{position:absolute;top:-40px;right:-40px;background:rgba(255,255,255,.9);border:none;border-radius:50%;width:40px;height:40px;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s ease;color:#333}
+.lightbox-close:hover{background:#fff;transform:scale(1.1)}
+.lightbox-counter{position:absolute;bottom:-40px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,.9);color:#333;padding:8px 16px;border-radius:20px;font-size:14px;font-weight:500}
+@media(max-width:768px){.lightbox-close{top:10px;right:10px;width:35px;height:35px;font-size:20px}.lightbox-counter{bottom:10px;font-size:12px;padding:6px 12px}}
+</style>
 
     </head>
     <body class="font-sans antialiased">

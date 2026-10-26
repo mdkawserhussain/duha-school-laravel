@@ -86,15 +86,16 @@ class EventRepository
         $hasStartAt = Schema::hasColumn('events', 'start_at');
         
         $query = Event::published()
-            ->upcoming()
+            
             ->with('media'); // Eager load media relationships
 
-        // Order by date (prefer start_at, fallback to event_date)
+        // Order by date (prefer start_at, fallback to event_date) - latest first
         if ($hasStartAt) {
-            $query->orderByRaw('COALESCE(start_at, event_date) ASC');
+            $query->orderByRaw('COALESCE(start_at, event_date) DESC');
         } else {
-            $query->orderBy('event_date', 'asc');
+            $query->orderBy('event_date', 'desc');
         }
+
 
         return $query->limit($limit)->get();
     }
@@ -110,12 +111,13 @@ class EventRepository
             ->featured()
             ->with('media'); // Eager load media relationships
 
-        // Order by date (prefer start_at, fallback to event_date)
+               // Order by date (prefer start_at, fallback to event_date) - latest first
         if ($hasStartAt) {
-            $query->orderByRaw('COALESCE(start_at, event_date) ASC');
+            $query->orderByRaw('COALESCE(start_at, event_date) DESC');
         } else {
-            $query->orderBy('event_date', 'asc');
+            $query->orderBy('event_date', 'desc');
         }
+
 
         return $query->limit($limit)->get();
     }

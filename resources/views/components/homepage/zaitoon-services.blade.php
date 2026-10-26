@@ -99,7 +99,8 @@
         </div>
 
         {{-- Services Grid (3-3-1 layout) --}}
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 service-grid">
+        <div class="flex flex-wrap justify-center gap-6">
+
             @foreach($services as $service)
             @php
                 // Handle backward compatibility: use gradient if available, otherwise convert bgColor to gradient
