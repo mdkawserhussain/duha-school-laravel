@@ -22,7 +22,19 @@ class AdmissionController extends Controller
 
     public function store(StoreAdmissionApplicationRequest $request)
     {
-        $application = $this->admissionService->storeApplication($request->validated());
+        $validated = $request->validated();
+
+        // Map the public form's field names onto the database columns
+        // (admission_applications table / admin panel expectations).
+        $application = $this->admissionService->storeApplication([
+            'parent_name'      => $validated['parent_name'],
+            'parent_email'     => $validated['email'],
+            'parent_phone'     => $validated['phone'],
+            'student_name'     => $validated['child_name'],
+            'student_dob'      => $validated['child_dob'],
+            'applying_grade'   => $validated['grade_applied'],
+            'additional_notes' => $validated['message'] ?? null,
+        ]);
 
         return redirect()->back()->with('success', 'Your admission application has been submitted successfully. We will contact you soon.');
     }

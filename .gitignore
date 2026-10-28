@@ -50,3 +50,6 @@ Homestead.yaml
 
 # Admin credentials file
 ADMIN_CREDENTIALS.txt
+duhaisco_duha_school.sql.gz
+*.sql.gz
+backups/

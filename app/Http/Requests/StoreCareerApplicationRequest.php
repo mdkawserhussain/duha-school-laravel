@@ -17,15 +17,19 @@ class StoreCareerApplicationRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
+     * Field names here match what the public careers form actually posts
+     * (resources/views/pages/careers.blade.php). The controller maps them
+     * onto the database columns (full_name, position_applied).
+     *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
-            'full_name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
+            'job_title' => 'required|string|max:255',
+            'applicant_name' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
-            'position_applied' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
             'cover_letter' => 'required|string|max:2000',
             'resume' => 'required|file|mimes:pdf,doc,docx|max:5120', // 5MB max
             'experience' => 'nullable|string|max:1000',
@@ -40,11 +44,11 @@ class StoreCareerApplicationRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'full_name.required' => 'Full name is required.',
+            'job_title.required' => 'Position you are applying for is required.',
+            'applicant_name.required' => 'Full name is required.',
             'email.required' => 'Email address is required.',
             'email.email' => 'Please enter a valid email address.',
             'phone.required' => 'Phone number is required.',
-            'position_applied.required' => 'Position applied for is required.',
             'cover_letter.required' => 'Cover letter is required.',
             'resume.required' => 'Resume is required.',
             'resume.file' => 'Resume must be a valid file.',
