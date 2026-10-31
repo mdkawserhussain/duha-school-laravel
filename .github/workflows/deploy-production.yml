@@ -1,0 +1,57 @@
+name: deploy-production
+
+# Mirrors git-tracked changes to the production web server over SFTP.
+# Delta mode (push): uploads added/modified files, deletes removed ones.
+# Untracked server content (.env, vendor/, node_modules/, storage runtime)
+# is never touched.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'delta = apply last-commit changes; full = upload all tracked files'
+        required: false
+        default: 'delta'
+        type: choice
+        options:
+          - delta
+          - full
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (full history for diffs)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install paramiko
+        run: pip install --quiet 'paramiko>=3,<4'
+
+      - name: Deploy to production (SFTP)
+        env:
+          SFTP_HOST: ${{ secrets.SFTP_HOST }}
+          SFTP_PORT: ${{ secrets.SFTP_PORT }}
+          SFTP_USERNAME: ${{ secrets.SFTP_USERNAME }}
+          SFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
+          SFTP_BASE: ${{ secrets.SFTP_BASE }}
+        run: >
+          python scripts/gh-deploy.py
+          --mode ${{ github.event_name == 'workflow_dispatch' && (inputs.mode || 'delta') || 'delta' }}
+          --before '${{ github.event.before }}'
+          --after '${{ github.sha }}'
