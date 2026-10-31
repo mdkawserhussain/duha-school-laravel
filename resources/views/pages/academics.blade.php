@@ -4,7 +4,7 @@
     $siteName = \App\Helpers\SiteHelper::getSiteName();
 @endphp
 @section('title', 'Academics - ' . $siteName)
-@section('meta-description', 'Discover our comprehensive Islamic and Cambridge curriculum program at ' . $siteName . ', offering quality education from Kindergarten to Grade 12')
+@section('meta-description', 'Discover our comprehensive Islamic and Cambridge curriculum program at ' . $siteName . ', offering quality education from Pre-Play to Grade 9 and EYFS to Year 6')
 
 @section('content')
 
@@ -78,7 +78,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-8 sm:mb-12">
                 <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">Grade Levels</h2>
-                <p class="text-base sm:text-lg text-gray-600 px-4">Structured learning from Kindergarten to Grade 12</p>
+                <p class="text-base sm:text-lg text-gray-600 px-4">Structured learning from Pre-Play to Grade 9 and EYFS to Year 6</p>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">

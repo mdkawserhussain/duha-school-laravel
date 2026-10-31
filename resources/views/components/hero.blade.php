@@ -1,6 +1,6 @@
 @props([
     'title' => 'Welcome to ' . \App\Helpers\SiteSettingsHelper::websiteName(),
-    'description' => 'Providing quality Islamic and Cambridge curriculum education for students from Kindergarten to Grade 12',
+    'description' => 'Providing quality Islamic and Cambridge curriculum education for students from Pre-Play to Grade 9 and EYFS to Year 6',
     'primaryButton' => ['text' => 'Admission Going On', 'url' => null, 'route' => 'admission.index'],
     'secondaryButton' => ['text' => 'View Events', 'url' => null, 'route' => 'events.index'],
     'backgroundImage' => null,

@@ -32,7 +32,7 @@
                         </p>
                         <p>
                             Located in a serene environment conducive to learning, our campus provides a safe and
-                            inspiring atmosphere for students from Kindergarten to Grade 12.
+                            inspiring atmosphere for students from Pre-Play to Grade 9 and EYFS to Year 6.
                         </p>
                     </div>
                 </div>
