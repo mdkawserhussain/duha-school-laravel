@@ -111,7 +111,7 @@ class Deployer:
         )
         self.sftp = client.open_sftp()
         self._keepalive = client
-        self.mkdir_cache: set = set()
+        self.mkdir_cache: set = {self.base}
         self.uploaded = self.deleted = self.skipped = 0
         self.failures: list = []
 
@@ -119,13 +119,12 @@ class Deployer:
         return f"{self.base}/{rel}"
 
     def mkdirs(self, rel: str):
-        parent = posixpath.dirname(rel)
+        parent = posixpath.dirname(self.remote(rel))
         if parent in self.mkdir_cache:
             return
-        parts = parent.split("/") if parent else []
         cur = ""
-        for p in parts:
-            cur = f"{cur}/{p}" if cur else p
+        for p in parent.strip("/").split("/"):
+            cur = f"{cur}/{p}"
             if cur in self.mkdir_cache:
                 continue
             try:
