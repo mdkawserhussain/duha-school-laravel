@@ -24,6 +24,9 @@ class AdmissionController extends Controller
     {
         $validated = $request->validated();
 
+        $files = $request->file('documents');
+        $files = is_array($files) ? $files : ($files ? [$files] : []);
+
         // Map the public form's field names onto the database columns
         // (admission_applications table / admin panel expectations).
         $application = $this->admissionService->storeApplication([
@@ -34,7 +37,7 @@ class AdmissionController extends Controller
             'student_dob'      => $validated['child_dob'],
             'applying_grade'   => $validated['grade_applied'],
             'additional_notes' => $validated['message'] ?? null,
-        ]);
+        ], $files);
 
         return redirect()->back()->with('success', 'Your admission application has been submitted successfully. We will contact you soon.');
     }

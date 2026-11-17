@@ -94,6 +94,24 @@
         </div>
         @endif
 
+        <!-- Supporting Documents -->
+        @if($application->getMedia('documents')->isNotEmpty())
+        <div class="bg-white shadow rounded-lg p-6">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">Supporting Documents</h3>
+            <ul class="divide-y divide-gray-200">
+                @foreach($application->getMedia('documents') as $document)
+                    <li class="py-3 flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-900">{{ $document->file_name }}</p>
+                            <p class="text-xs text-gray-500">{{ $document->mime_type }} · {{ round($document->size / 1024) }} KB · {{ $document->created_at->format('M j, Y') }}</p>
+                        </div>
+                        <a href="{{ $document->getUrl() }}" target="_blank" rel="noopener" class="text-sm font-medium text-green-700 hover:underline">View / Download</a>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+
         <!-- Status Update -->
         <div class="bg-white shadow rounded-lg p-6">
             <h3 class="text-lg font-medium text-gray-900 mb-4">Update Status</h3>

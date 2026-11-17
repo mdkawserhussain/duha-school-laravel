@@ -24,15 +24,15 @@
         <div class="content">
             <p>Dear {{ $application->parent_name }},</p>
 
-            <p>We have successfully received your admission application for <strong>{{ $application->child_name }}</strong> for Grade {{ $application->grade_applied }}. Thank you for your interest in {{ $siteName ?? \App\Helpers\SiteHelper::getSiteName() }}.</p>
+            <p>We have successfully received your admission application for <strong>{{ $application->student_name }}</strong> for Grade {{ $application->applying_grade }}. Thank you for your interest in {{ $siteName ?? \App\Helpers\SiteHelper::getSiteName() }}.</p>
 
             <div class="info-box">
                 <h3>Application Details:</h3>
                 <ul>
                     <li><strong>Parent/Guardian:</strong> {{ $application->parent_name }}</li>
-                    <li><strong>Child:</strong> {{ $application->child_name }}</li>
-                    <li><strong>Date of Birth:</strong> {{ $application->child_dob->format('F j, Y') }}</li>
-                    <li><strong>Grade Applied:</strong> {{ $application->grade_applied }}</li>
+                    <li><strong>Child:</strong> {{ $application->student_name }}</li>
+                    <li><strong>Date of Birth:</strong> {{ $application->student_dob->format('F j, Y') }}</li>
+                    <li><strong>Grade Applied:</strong> {{ $application->applying_grade }}</li>
                     <li><strong>Application Date:</strong> {{ $application->created_at->format('F j, Y \a\t g:i A') }}</li>
                     <li><strong>Application ID:</strong> #{{ str_pad($application->id, 6, '0', STR_PAD_LEFT) }}</li>
                 </ul>

@@ -34,23 +34,23 @@ class AdmissionApplicationController extends BaseController
         return view('admin.admission-applications.index', compact('applications'));
     }
 
-    public function show(AdmissionApplication $admissionApplication)
+    public function show(AdmissionApplication $application)
     {
-        return view('admin.admission-applications.show', ['application' => $admissionApplication]);
+        return view('admin.admission-applications.show', ['application' => $application]);
     }
 
-    public function update(Request $request, AdmissionApplication $admissionApplication)
+    public function update(Request $request, AdmissionApplication $application)
     {
         $request->validate([
             'status' => ['required', 'string', 'in:pending,reviewed,accepted,rejected'],
         ]);
 
-        $admissionApplication->update([
+        $application->update([
             'status' => $request->status,
             'reviewed_at' => now(),
         ]);
 
-        return redirect()->route('admin.admission-applications.show', $admissionApplication)
+        return redirect()->route('admin.admission-applications.show', $application)
             ->with('success', 'Application status updated successfully.');
     }
 }

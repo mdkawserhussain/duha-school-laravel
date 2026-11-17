@@ -33,6 +33,8 @@ class StoreAdmissionApplicationRequest extends FormRequest
             'child_dob' => 'required|date|before:today',
             'grade_applied' => 'required|string|max:50',
             'message' => 'nullable|string|max:1000',
+            'documents' => 'nullable|array|max:5',
+            'documents.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
         ];
     }
 
@@ -50,6 +52,11 @@ class StoreAdmissionApplicationRequest extends FormRequest
             'child_dob.required' => 'Date of birth is required.',
             'child_dob.before' => 'Date of birth must be in the past.',
             'grade_applied.required' => 'Grade applying for is required.',
+            'documents.max' => 'You may upload a maximum of 5 documents.',
+            'documents.*.mimes' => 'Each document must be a PDF, JPG, JPEG, or PNG file (max 5MB each).',
+            'documents.*.max' => 'Each document must not exceed 5MB.',
+            'documents.*.file' => 'The document upload is not valid.',
+            'documents.*.required' => 'The document upload is not valid.',
         ];
     }
 }

@@ -34,23 +34,23 @@ class CareerApplicationController extends BaseController
         return view('admin.career-applications.index', compact('applications'));
     }
 
-    public function show(CareerApplication $careerApplication)
+    public function show(CareerApplication $application)
     {
-        return view('admin.career-applications.show', ['application' => $careerApplication]);
+        return view('admin.career-applications.show', ['application' => $application]);
     }
 
-    public function update(Request $request, CareerApplication $careerApplication)
+    public function update(Request $request, CareerApplication $application)
     {
         $request->validate([
             'status' => ['required', 'string', 'in:pending,reviewed,shortlisted,rejected'],
         ]);
 
-        $careerApplication->update([
+        $application->update([
             'status' => $request->status,
             'reviewed_at' => now(),
         ]);
 
-        return redirect()->route('admin.career-applications.show', $careerApplication)
+        return redirect()->route('admin.career-applications.show', $application)
             ->with('success', 'Application status updated successfully.');
     }
 }
